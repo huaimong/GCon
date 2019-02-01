@@ -1,0 +1,8 @@
+﻿dummy00:
+v2ray://ZHVtbXkwMA==
+vmess://ZHVtbXkwMA==
+ss://ZHVtbXkwMA==
+dummy01:
+v2ray://ZHVtbXkwMQ==
+vmess://ZHVtbXkwMQ==
+ss://ZHVtbXkwMQ==
