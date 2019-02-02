@@ -15,7 +15,7 @@ namespace V2RayGCon.Service
 {
     public class Setting :
         Model.BaseClass.SingletonService<Setting>,
-        VgcApis.Models.IServices.ISettingService
+        VgcApis.Models.IServices.ISettingsService
     {
         public event EventHandler OnRequireNotifyTextUpdate;
         Model.Data.UserSettings userSettings;

@@ -11,8 +11,8 @@ namespace V2RayGCon.Service
         Notifier notifier;
         Plugin.ApiServ apis = new Plugin.ApiServ();
 
-        Dictionary<string, VgcApis.IPlugin> plugins =
-            new Dictionary<string, VgcApis.IPlugin>();
+        Dictionary<string, VgcApis.Models.Interfaces.IPlugin> plugins =
+            new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
 
         PluginsServer() { }
 
@@ -64,7 +64,7 @@ namespace V2RayGCon.Service
         public void Cleanup()
         {
             CleanupPlugins(plugins.Keys.ToList());
-            plugins = new Dictionary<string, VgcApis.IPlugin>();
+            plugins = new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
         }
 
         public List<Model.Data.PluginInfoItem> GetterAllPluginsInfo()
@@ -109,12 +109,12 @@ namespace V2RayGCon.Service
                 null);
         }
 
-        public Dictionary<string, VgcApis.IPlugin> LoadAllPlugins()
+        public Dictionary<string, VgcApis.Models.Interfaces.IPlugin> LoadAllPlugins()
         {
             // Original design of plugins would load dll files from file system.
             // That is why loading logic looks so complex.
-            var pluginList = new Dictionary<string, VgcApis.IPlugin>();
-            var plugins = new VgcApis.IPlugin[] {
+            var pluginList = new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
+            var plugins = new VgcApis.Models.Interfaces.IPlugin[] {
 
 #if !V2RAYGCON_LITE
                 new Luna.Luna(),
@@ -158,7 +158,7 @@ namespace V2RayGCon.Service
         }
 
         List<Model.Data.PluginInfoItem> GetPluginInfoFrom(
-            Dictionary<string, VgcApis.IPlugin> pluginList)
+            Dictionary<string, VgcApis.Models.Interfaces.IPlugin> pluginList)
         {
             if (pluginList.Count <= 0)
             {

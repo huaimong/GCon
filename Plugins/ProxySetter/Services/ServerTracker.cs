@@ -103,7 +103,7 @@ namespace ProxySetter.Services
 
         void SearchForAvailableProxyServer(
             bool isGlobal,
-            List<VgcApis.Models.IControllers.ICoreCtrl> serverList)
+            List<VgcApis.Models.Interfaces.ICoreCtrl> serverList)
         {
             foreach (var serv in serverList)
             {
@@ -197,7 +197,7 @@ namespace ProxySetter.Services
         bool isServerStart;
         void TrackingHandler(object sender, VgcApis.Models.Datas.BoolEvent isServerStart)
         {
-            var server = sender as VgcApis.Models.IControllers.ICoreCtrl;
+            var server = sender as VgcApis.Models.Interfaces.ICoreCtrl;
             curServerConfig = server.GetConfig();
             this.isServerStart = isServerStart.Data;
             WakeupLazyProxyUpdater();

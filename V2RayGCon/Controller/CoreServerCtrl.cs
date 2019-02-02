@@ -12,7 +12,7 @@ using V2RayGCon.Resource.Resx;
 namespace V2RayGCon.Controller
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-    public class CoreServerCtrl : VgcApis.Models.IControllers.ICoreCtrl
+    public class CoreServerCtrl : VgcApis.Models.Interfaces.ICoreCtrl
     {
         Service.Cache cache;
         Service.Servers servers;
@@ -355,12 +355,7 @@ namespace V2RayGCon.Controller
             return true;
         }
 
-        public bool SetPropertyOnDemand(ref string property, string value) =>
-            SetPropertyOnDemandWorker(ref property, value);
-
-        public bool SetPropertyOnDemand<T>(ref T property, T value)
-            where T : struct =>
-            SetPropertyOnDemandWorker(ref property, value);
+        public long logTimeStamp { get; private set; } = DateTime.Now.Ticks;
 
         public void ToggleIsInjectSkipCnSite()
         {
@@ -832,7 +827,13 @@ namespace V2RayGCon.Controller
             return o;
         }
 
-        public long logTimeStamp { get; private set; } = DateTime.Now.Ticks;
+        bool SetPropertyOnDemand(ref string property, string value) =>
+           SetPropertyOnDemandWorker(ref property, value);
+
+        bool SetPropertyOnDemand<T>(ref T property, T value)
+            where T : struct =>
+            SetPropertyOnDemandWorker(ref property, value);
+
         void SendLog(string message)
         {
             logCache = message;

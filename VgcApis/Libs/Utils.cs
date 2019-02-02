@@ -34,7 +34,7 @@ namespace VgcApis.Libs
         public static void SavePluginSetting<T>(
             string pluginName,
             T userSettings,
-            Models.IServices.ISettingService vgcSetting)
+            Models.IServices.ISettingsService vgcSetting)
             where T : class
         {
             try
@@ -47,7 +47,7 @@ namespace VgcApis.Libs
 
         public static T LoadPluginSetting<T>(
             string pluginName,
-            Models.IServices.ISettingService vgcSetting)
+            Models.IServices.ISettingsService vgcSetting)
             where T : class, new()
         {
             var empty = new T();

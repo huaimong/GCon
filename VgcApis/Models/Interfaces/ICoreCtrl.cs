@@ -1,8 +1,7 @@
-﻿namespace VgcApis.Models.IControllers
+﻿namespace VgcApis.Models.Interfaces
 {
     public interface ICoreCtrl
     {
-        /* v1.1.8 */
         string GetCustomInbAddr();   // 127.0.0.1:1080
         int GetCustomInbType();           // 0 config 1 http 2 socks
         string GetMark();
@@ -12,7 +11,6 @@
         void RestartCoreAsync();
         void RunSpeedTestAsync();
         void StopCoreAsync();
-        /**********/
 
         string GetConfig(); // config.json
         double GetIndex();

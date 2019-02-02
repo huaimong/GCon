@@ -2,13 +2,13 @@
 
 namespace VgcApis.Models.BaseClasses
 {
-    public class Plugin : IPlugin
+    public class Plugin : Models.Interfaces.IPlugin
     {
         public virtual string Name => throw new NotImplementedException();
         public virtual string Version => throw new NotImplementedException();
         public virtual string Description => throw new NotImplementedException();
 
-        protected virtual void Start(IService api) { }
+        protected virtual void Start(Models.IServices.IAllServices api) { }
         protected virtual void Stop() { }
         protected virtual void Popup() { }
 
@@ -28,7 +28,7 @@ namespace VgcApis.Models.BaseClasses
             Stop();
         }
 
-        public void Run(IService api)
+        public void Run(Models.IServices.IAllServices api)
         {
             lock (isRunningLocker)
             {

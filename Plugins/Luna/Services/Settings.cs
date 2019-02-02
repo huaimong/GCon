@@ -4,7 +4,7 @@ namespace Luna.Services
 {
     public class Settings
     {
-        VgcApis.Models.IServices.ISettingService vgcSetting;
+        VgcApis.Models.IServices.ISettingsService vgcSetting;
         readonly string pluginName = Properties.Resources.Name;
         Models.Data.UserSettings userSettings;
         VgcApis.Libs.Sys.LazyGuy bookKeeper;
@@ -22,7 +22,7 @@ namespace Luna.Services
             => vgcSetting.IsShutdown();
 
         public void Run(
-            VgcApis.Models.IServices.ISettingService vgcSetting)
+            VgcApis.Models.IServices.ISettingsService vgcSetting)
         {
             this.vgcSetting = vgcSetting;
 

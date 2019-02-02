@@ -8,7 +8,7 @@ namespace Statistics.Services
 {
     public class Settings
     {
-        VgcApis.Models.IServices.ISettingService vgcSetting;
+        VgcApis.Models.IServices.ISettingsService vgcSetting;
         VgcApis.Models.IServices.IServersService vgcServers;
 
         Models.UserSettings userSettins;
@@ -51,7 +51,7 @@ namespace Statistics.Services
         }
 
         public void Run(
-            VgcApis.Models.IServices.ISettingService vgcSetting,
+            VgcApis.Models.IServices.ISettingsService vgcSetting,
             VgcApis.Models.IServices.IServersService vgcServers)
         {
             this.vgcSetting = vgcSetting;
@@ -224,7 +224,7 @@ namespace Statistics.Services
             }
         }
 
-        Models.StatsResult GetterCoreInfo(VgcApis.Models.IControllers.ICoreCtrl coreCtrl)
+        Models.StatsResult GetterCoreInfo(VgcApis.Models.Interfaces.ICoreCtrl coreCtrl)
         {
             var result = new Models.StatsResult();
             result.title = coreCtrl.GetTitle();

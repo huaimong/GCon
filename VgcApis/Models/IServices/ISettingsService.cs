@@ -1,6 +1,6 @@
 ﻿namespace VgcApis.Models.IServices
 {
-    public interface ISettingService
+    public interface ISettingsService
     {
         bool IsShutdown();
         void SendLog(string log);

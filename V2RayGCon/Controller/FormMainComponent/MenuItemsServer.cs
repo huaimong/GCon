@@ -92,7 +92,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 var list = servers
                     .GetServerList()
                     .Where(s => s.IsSelected())
-                    .Select(s => s as VgcApis.Models.IControllers.ICoreCtrl)
+                    .Select(s => s as VgcApis.Models.Interfaces.ICoreCtrl)
                     .ToList();
 
                 if (setting.isUseV4)

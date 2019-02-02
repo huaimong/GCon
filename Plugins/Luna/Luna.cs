@@ -5,9 +5,9 @@ namespace Luna
     // Using lunar not lua to void naming conflicts.
     public class Luna : VgcApis.Models.BaseClasses.Plugin
     {
-        VgcApis.IService api;
+        VgcApis.Models.IServices.IAllServices api;
         VgcApis.Models.IServices.IServersService vgcServers;
-        VgcApis.Models.IServices.ISettingService vgcSettings;
+        VgcApis.Models.IServices.ISettingsService vgcSettings;
 
         Views.WinForms.FormMain formMain = null;
         Services.Settings settings;
@@ -37,7 +37,7 @@ namespace Luna
             formMain.Show();
         }
 
-        protected override void Start(VgcApis.IService api)
+        protected override void Start(VgcApis.Models.IServices.IAllServices api)
         {
             this.api = api;
             vgcServers = api.GetVgcServersService();

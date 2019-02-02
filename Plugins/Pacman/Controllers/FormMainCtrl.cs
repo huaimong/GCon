@@ -99,7 +99,7 @@ namespace Pacman.Controllers
                 // https://www.codeproject.com/Articles/48411/Using-the-FlowLayoutPanel-and-Reordering-with-Drag
                 if (a.Data.GetDataPresent("V2RayGCon.Views.UserControls.ServerUI"))
                 {
-                    var item = (VgcApis.Models.IControllers.IDropableControl)a.Data.GetData("V2RayGCon.Views.UserControls.ServerUI");
+                    var item = (VgcApis.Models.Interfaces.IDropableControl)a.Data.GetData("V2RayGCon.Views.UserControls.ServerUI");
                     var bean = new Models.Data.Bean
                     {
                         title = item.GetTitle(),

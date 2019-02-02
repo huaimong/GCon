@@ -2,10 +2,10 @@
 
 namespace V2RayGCon.Plugin
 {
-    class ApiServ : VgcApis.IService
+    class ApiServ : VgcApis.Models.IServices.IAllServices
     {
         IServersService serversService;
-        ISettingService settingService;
+        ISettingsService settingService;
 
         public void Run(
             Service.Setting setting,
@@ -19,7 +19,7 @@ namespace V2RayGCon.Plugin
         public IServersService GetVgcServersService()
             => this.serversService;
 
-        public ISettingService GetVgcSettingService()
+        public ISettingsService GetVgcSettingService()
             => this.settingService;
         #endregion
     }

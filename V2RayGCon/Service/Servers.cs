@@ -58,25 +58,25 @@ namespace V2RayGCon.Service
         }
 
         #region interface for plugins
-        public ReadOnlyCollection<VgcApis.Models.IControllers.ICoreCtrl> GetTrackableServerList()
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreCtrl> GetTrackableServerList()
         {
             lock (serverListWriteLock)
             {
                 return serverList
                     .Where(s => s.IsCoreRunning() && !s.IsUntrack())
-                    .Select(s => s as VgcApis.Models.IControllers.ICoreCtrl)
+                    .Select(s => s as VgcApis.Models.Interfaces.ICoreCtrl)
                     .ToList()
                     .AsReadOnly();
             }
         }
 
 
-        public ReadOnlyCollection<VgcApis.Models.IControllers.ICoreCtrl> GetAllServersList()
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreCtrl> GetAllServersList()
         {
             lock (serverListWriteLock)
             {
                 return serverList
-                .Select(s => s as VgcApis.Models.IControllers.ICoreCtrl)
+                .Select(s => s as VgcApis.Models.Interfaces.ICoreCtrl)
                 .ToList()
                 .AsReadOnly();
             }
@@ -185,7 +185,7 @@ namespace V2RayGCon.Service
             return servUid;
         }
 
-        private JObject GenPackageV4Config(List<VgcApis.Models.IControllers.ICoreCtrl> servList, string packageName)
+        private JObject GenPackageV4Config(List<VgcApis.Models.Interfaces.ICoreCtrl> servList, string packageName)
         {
             var package = cache.tpl.LoadPackage("pkgV4Tpl");
             package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
@@ -1027,7 +1027,7 @@ namespace V2RayGCon.Service
         /// <param name="packageName"></param>
         /// <param name="servList"></param>
         public string PackServersIntoV4Package(
-            List<VgcApis.Models.IControllers.ICoreCtrl> servList,
+            List<VgcApis.Models.Interfaces.ICoreCtrl> servList,
             string orgUid,
             string packageName)
         {
@@ -1048,7 +1048,7 @@ namespace V2RayGCon.Service
         }
 
         public void PackServersIntoV3Package(
-            List<VgcApis.Models.IControllers.ICoreCtrl> servList)
+            List<VgcApis.Models.Interfaces.ICoreCtrl> servList)
         {
             var packages = JObject.Parse(@"{}");
             var serverNameList = new List<string>();

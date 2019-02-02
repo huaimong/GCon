@@ -6,13 +6,13 @@
         PacServer pacServer;
         ServerTracker serverTracker;
 
-        VgcApis.IService vgcApi;
+        VgcApis.Models.IServices.IAllServices vgcApi;
         Model.Data.ProxyRegKeyValue orgSysProxySetting;
         Views.WinForms.FormMain formMain;
 
         public PsLuncher() { }
 
-        public void Run(VgcApis.IService api)
+        public void Run(VgcApis.Models.IServices.IAllServices api)
         {
             orgSysProxySetting = Lib.Sys.ProxySetter.GetProxySetting();
             VgcApis.Libs.Sys.FileLog.Info("ProxySetter: save sys proxy settings");
