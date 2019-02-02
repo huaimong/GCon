@@ -36,15 +36,15 @@
             // 
             // rtBoxLogger
             // 
-            this.rtBoxLogger.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             resources.ApplyResources(this.rtBoxLogger, "rtBoxLogger");
+            this.rtBoxLogger.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.rtBoxLogger.Name = "rtBoxLogger";
             this.rtBoxLogger.ReadOnly = true;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.rtBoxLogger);
             resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Controls.Add(this.rtBoxLogger);
             this.panel1.Name = "panel1";
             // 
             // FormLog

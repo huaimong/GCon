@@ -293,15 +293,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Text File|*.txt|All File|*.* 的本地化字符串。
-        /// </summary>
-        internal static string ExtText {
-            get {
-                return ResourceManager.GetString("ExtText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 https://github.com/v2ray/v2ray-core/releases/latest 的本地化字符串。
         /// </summary>
         internal static string LatestCoreLink {

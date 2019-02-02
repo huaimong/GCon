@@ -132,7 +132,7 @@ namespace V2RayGCon.Service
 
             if (servers.IsEmpty())
             {
-                Views.WinForms.FormMain.GetForm();
+                Views.WinForms.FormMain.ShowForm();
             }
             else
             {

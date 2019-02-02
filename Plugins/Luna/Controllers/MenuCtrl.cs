@@ -37,9 +37,8 @@ namespace Luna.Controllers
                     return;
                 }
 
-                string script = VgcApis.Libs.UI.ShowReadFileDialog(
-                    VgcApis.Models.Consts.Files.LuaExt,
-                    out string filename);
+                string script = VgcApis.Libs.UI.ReadFileContentFromDialog(
+                    VgcApis.Models.Consts.Files.LuaExt);
 
                 // user cancelled.
                 if (script == null)
@@ -52,27 +51,9 @@ namespace Luna.Controllers
 
             miSaveAs.Click += (s, a) =>
             {
-                var script = editorCtrl.GetCurrentEditorContent();
-
-                var result = VgcApis.Libs.UI.ShowSaveFileDialog(
+                VgcApis.Libs.UI.SaveToFile(
                     VgcApis.Models.Consts.Files.LuaExt,
-                    script,
-                    out string filename);
-
-                switch (result)
-
-                {
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                        MessageBox.Show(I18N.Done);
-                        break;
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                        MessageBox.Show(I18N.WriteFileFail);
-                        break;
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                        // do nothing
-                        break;
-                }
-
+                    editorCtrl.GetCurrentEditorContent());
             };
         }
 

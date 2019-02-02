@@ -32,7 +32,8 @@ namespace V2RayGCon.Controller.FormMainComponent
         #region public method
         public void ImportServersFromTextFile()
         {
-            string v2rayLinks = VgcApis.Libs.UI.ShowReadFileDialog(StrConst.ExtText, out string filename);
+            string v2rayLinks = VgcApis.Libs.UI.ReadFileContentFromDialog(
+                VgcApis.Models.Consts.Files.TxtExt);
 
             if (v2rayLinks == null)
             {
@@ -62,21 +63,9 @@ namespace V2RayGCon.Controller.FormMainComponent
                 s += vlink + System.Environment.NewLine + System.Environment.NewLine;
             }
 
-            switch (VgcApis.Libs.UI.ShowSaveFileDialog(
-                StrConst.ExtText,
-                s,
-                out string filename))
-            {
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                    MessageBox.Show(I18N.Done);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                    MessageBox.Show(I18N.WriteFileFail);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                    // do nothing
-                    break;
-            }
+            VgcApis.Libs.UI.SaveToFile(
+                VgcApis.Models.Consts.Files.TxtExt,
+                s);
         }
 
         public override bool RefreshUI() { return false; }

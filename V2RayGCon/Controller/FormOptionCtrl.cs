@@ -65,26 +65,15 @@ namespace V2RayGCon.Controller
                     { "servers" ,serverString},
                 };
 
-            switch (VgcApis.Libs.UI.ShowSaveFileDialog(
-                StrConst.ExtText,
-                JsonConvert.SerializeObject(data),
-                out string filename))
-            {
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                    MessageBox.Show(I18N.Done);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                    MessageBox.Show(I18N.WriteFileFail);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                    // do nothing
-                    break;
-            }
+            VgcApis.Libs.UI.SaveToFile(
+                VgcApis.Models.Consts.Files.TxtExt,
+                JsonConvert.SerializeObject(data));
         }
 
         public void RestoreOptions()
         {
-            string backup = VgcApis.Libs.UI.ShowReadFileDialog(StrConst.ExtText, out string filename);
+            string backup = VgcApis.Libs.UI.ReadFileContentFromDialog(
+                VgcApis.Models.Consts.Files.TxtExt);
 
             if (backup == null)
             {

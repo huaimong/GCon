@@ -25,7 +25,7 @@ namespace V2RayGCon.Service
             {
                 if (a.Button == MouseButtons.Left)
                 {
-                    Views.WinForms.FormMain.GetForm();
+                    Views.WinForms.FormMain.ShowForm();
                 }
             };
 
@@ -139,7 +139,7 @@ namespace V2RayGCon.Service
                 new ToolStripMenuItem(
                     I18N.MainWin,
                     Properties.Resources.WindowsForm_16x,
-                    (s,a)=>Views.WinForms.FormMain.GetForm()),
+                    (s,a)=>Views.WinForms.FormMain.ShowForm()),
 
                 new ToolStripMenuItem(
                     I18N.OtherWin,

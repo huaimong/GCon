@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
     <Compile Include="Models\Consts\Files.cs" />
     <Compile Include="Models\Consts\Webs.cs" />
     <Compile Include="Models\Datas\Enum.cs" />

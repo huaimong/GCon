@@ -52,25 +52,10 @@ namespace V2RayGCon.Controller.ConfigerComponet
         #region private method
         void SaveCurrentContentToFile()
         {
-            switch (VgcApis.Libs.UI.ShowSaveFileDialog(
+            VgcApis.Libs.UI.SaveToFile(
                 VgcApis.Models.Consts.Files.JsonExt,
-                editor.Text,
-                out string filename))
-            {
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                    MessageBox.Show(I18N.Done);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                    MessageBox.Show(I18N.WriteFileFail);
-                    break;
-
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                // do nothing
-                default:
-                    break;
-            }
+                editor.Text);
         }
-
 
         void AttachEvent(
             Button btnExpand,

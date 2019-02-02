@@ -148,9 +148,11 @@ namespace V2RayGCon.Views.WinForms
                 return;
             }
 
-            string json = VgcApis.Libs.UI.ShowReadFileDialog(
-                VgcApis.Models.Consts.Files.JsonExt,
-                out string filename);
+            var tuple = VgcApis.Libs.UI.ReadFileFromDialog(
+                VgcApis.Models.Consts.Files.JsonExt);
+
+            var json = tuple.Item1;
+            var filename = tuple.Item2;
 
             // user cancelled.
             if (json == null)

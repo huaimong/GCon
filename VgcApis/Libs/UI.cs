@@ -50,12 +50,20 @@ namespace VgcApis.Libs
         #endregion
 
         #region file
-        /* return:
-         * 
-         * Null means cancelled.
-         * string.Empty means file is empty or error occurred.
-         */
-        public static string ShowReadFileDialog(string extension, out string fileName)
+        static public  string ReadFileContentFromDialog(string extension)
+        {
+            var tuple = ReadFileFromDialog(extension);
+            return tuple.Item1;
+        }
+
+        /// <summary>
+        /// <para>return(content, filename)</para>
+        /// <para>[content] Null: cancelled String.Empty: file is empty or read fail.</para>
+        /// </summary>
+        /// <param name="extension"></param>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        static public Tuple<string, string> ReadFileFromDialog(string extension)
         {
             OpenFileDialog readFileDialog = new OpenFileDialog
             {
@@ -67,11 +75,11 @@ namespace VgcApis.Libs
                 ShowHelp = true,
             };
 
-            fileName = string.Empty;
+            var fileName = string.Empty;
 
             if (readFileDialog.ShowDialog() != DialogResult.OK)
             {
-                return null;
+                return new Tuple<string,string>(null,fileName);
             }
 
             fileName = readFileDialog.FileName;
@@ -81,7 +89,35 @@ namespace VgcApis.Libs
                 content = File.ReadAllText(fileName);
             }
             catch { }
-            return content;
+            return new Tuple<string, string>( content,fileName);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="extentions"></param>
+        /// <returns>file name</returns>
+        static public string SaveToFile( string extentions, string content)
+        {
+            var err = ShowSaveFileDialog(
+                    extentions,
+                    content,
+                    out string filename);
+
+            switch (err)
+            {
+                case Models.Datas.Enum.SaveFileErrorCode.Success:
+                    MessageBox.Show(I18N.Done);
+                    break;
+                case Models.Datas.Enum.SaveFileErrorCode.Fail:
+                    MessageBox.Show(I18N.WriteFileFail);
+                    break;
+                case Models.Datas.Enum.SaveFileErrorCode.Cancel:
+                    // do nothing
+                    break;
+            }
+            return filename;
         }
 
         public static Models.Datas.Enum.SaveFileErrorCode ShowSaveFileDialog(
