@@ -112,19 +112,19 @@ namespace V2RayGCon.Views.UserControls
             VgcApis.Libs.UI.RunInUiThread(rtboxServerTitle, () =>
             {
                 Lib.UI.UpdateControlOnDemand(
-                    cboxInbound, serverItem.overwriteInboundType);
+                    cboxInbound, serverItem.GetCustomInbType());
 
                 Lib.UI.UpdateControlOnDemand(
                     rtboxServerTitle, serverItem.GetTitle());
 
                 Lib.UI.UpdateControlOnDemand(
-                    lbStatus, serverItem.status);
+                    lbStatus, serverItem.curStatusCache);
 
                 UpdateServerOptionTickStat();
                 UpdateInboundAddrOndemand();
                 UpdateMarkLable();
                 UpdateSelectedTickStat();
-                UpdateOnOffLabel(serverItem.server.isRunning);
+                UpdateOnOffLabel(serverItem.IsCoreRunning());
                 UpdateFilterMarkBox();
                 UpdateBorderFoldingStat();
                 UpdateToolsTip();
@@ -135,38 +135,39 @@ namespace V2RayGCon.Views.UserControls
         {
             Lib.UI.UpdateControlOnDemand(
                 globalImportToolStripMenuItem,
-                serverItem.isInjectImport);
+                serverItem.IsInjectImport());
 
             Lib.UI.UpdateControlOnDemand(
                 skipCNWebsiteToolStripMenuItem,
-                serverItem.isInjectSkipCNSite);
+                serverItem.IsInjectSkipCnSite());
 
             Lib.UI.UpdateControlOnDemand(
                 autorunToolStripMenuItem,
-                serverItem.isAutoRun);
+                serverItem.IsAutoRun());
 
             Lib.UI.UpdateControlOnDemand(
                 untrackToolStripMenuItem,
-                serverItem.isUntrack);
+                serverItem.IsUntrack());
         }
 
         void UpdateInboundAddrOndemand()
         {
-            if (!Lib.Utils.TryParseIPAddr(tboxInboundAddr.Text, out string ip, out int port))
+            if (!Lib.Utils.TryParseIPAddr(
+                tboxInboundAddr.Text, out string ip, out int port))
             {
                 return;
             }
 
-            var text = serverItem.inboundIP + ":" + serverItem.inboundPort.ToString();
-            if (tboxInboundAddr.Text != text)
+            var addr = serverItem.GetCustomInbAddr();
+            if (tboxInboundAddr.Text != addr)
             {
-                tboxInboundAddr.Text = text;
+                tboxInboundAddr.Text = addr;
             }
         }
 
         private void UpdateToolsTip()
         {
-            var status = serverItem.status;
+            var status = serverItem.curStatusCache;
             if (toolTip1.GetToolTip(lbStatus) != status)
             {
                 toolTip1.SetToolTip(lbStatus, status);
@@ -181,10 +182,10 @@ namespace V2RayGCon.Views.UserControls
 
         private void UpdateMarkLable()
         {
-            var text = (serverItem.isAutoRun ? "A" : "")
-                + (serverItem.isInjectSkipCNSite ? "C" : "")
-                + (serverItem.isInjectImport ? "I" : "")
-                + (serverItem.isUntrack ? "U" : "");
+            var text = (serverItem.IsAutoRun() ? "A" : "")
+                + (serverItem.IsInjectSkipCnSite() ? "C" : "")
+                + (serverItem.IsInjectImport() ? "I" : "")
+                + (serverItem.IsUntrack() ? "U" : "");
 
             if (lbIsAutorun.Text != text)
             {
@@ -194,7 +195,8 @@ namespace V2RayGCon.Views.UserControls
 
         void UpdateBorderFoldingStat()
         {
-            var level = Lib.Utils.Clamp(serverItem.foldingLevel, 0, foldingButtonIcons.Length);
+            var level = Lib.Utils.Clamp(
+                serverItem.GetFoldingLevel(), 0, foldingButtonIcons.Length);
 
             if (btnIsCollapse.BackgroundImage != foldingButtonIcons[level])
             {
@@ -210,22 +212,22 @@ namespace V2RayGCon.Views.UserControls
 
         void UpdateFilterMarkBox()
         {
-            if (cboxMark.Text == serverItem.mark)
+            if (cboxMark.Text == serverItem.GetCustomMark())
             {
                 return;
             }
 
-            cboxMark.Text = serverItem.mark;
+            cboxMark.Text = serverItem.GetCustomMark();
         }
 
         void UpdateSelectedTickStat()
         {
-            if (serverItem.isSelected == chkSelected.Checked)
+            if (serverItem.IsSelected() == chkSelected.Checked)
             {
                 return;
             }
 
-            chkSelected.Checked = serverItem.isSelected;
+            chkSelected.Checked = serverItem.IsSelected();
             HighlightSelectedServerItem(chkSelected.Checked);
         }
 
@@ -260,7 +262,7 @@ namespace V2RayGCon.Views.UserControls
         {
             get
             {
-                return serverItem.isSelected;
+                return serverItem.IsSelected();
             }
             private set { }
         }
@@ -284,10 +286,7 @@ namespace V2RayGCon.Views.UserControls
             });
         }
 
-        public string GetConfig()
-        {
-            return serverItem.config;
-        }
+        public string GetConfig() => serverItem.GetConfig();
 
         public void SetStatusThen(string status, Action next = null)
         {
@@ -313,14 +312,11 @@ namespace V2RayGCon.Views.UserControls
             serverItem.SetIsSelected(selected);
         }
 
-        public double GetIndex()
-        {
-            return serverItem.index;
-        }
+        public double GetIndex() => serverItem.GetIndex();
 
         public void SetIndex(double index)
         {
-            serverItem.ChangeIndex(index);
+            serverItem.SetIndex(index);
         }
 
         public void Cleanup()
@@ -347,13 +343,13 @@ namespace V2RayGCon.Views.UserControls
 
         private void cboxInbound_SelectedIndexChanged(object sender, EventArgs e)
         {
-            serverItem.ChangeInboundMode(cboxInbound.SelectedIndex);
+            serverItem.SetCustomInbType(cboxInbound.SelectedIndex);
         }
 
         private void chkSelected_CheckedChanged(object sender, EventArgs e)
         {
             var selected = chkSelected.Checked;
-            if (selected == serverItem.isSelected)
+            if (selected == serverItem.IsSelected())
             {
                 return;
             }
@@ -369,7 +365,7 @@ namespace V2RayGCon.Views.UserControls
                 {
                     tboxInboundAddr.ForeColor = Color.Black;
                 }
-                serverItem.ChangeInboundIpAndPort(ip, port);
+                serverItem.SetCustomInbAddr(ip, port);
             }
             else
             {
@@ -395,8 +391,8 @@ namespace V2RayGCon.Views.UserControls
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var item = this.serverItem;
-            var config = item.config;
-            new Views.WinForms.FormConfiger(this.serverItem.config);
+            var config = item.GetConfig();
+            new Views.WinForms.FormConfiger(this.serverItem.GetConfig());
         }
 
         private void vmessToolStripMenuItem_Click(object sender, EventArgs e)
@@ -405,7 +401,7 @@ namespace V2RayGCon.Views.UserControls
                            Lib.Utils.CopyToClipboard(
                                Lib.Utils.Vmess2VmessLink(
                                    Lib.Utils.ConfigString2Vmess(
-                                       this.serverItem.config))) ?
+                                       GetConfig()))) ?
                            I18N.LinksCopied :
                            I18N.CopyFail);
         }
@@ -415,7 +411,7 @@ namespace V2RayGCon.Views.UserControls
             MessageBox.Show(
                            Lib.Utils.CopyToClipboard(
                                Lib.Utils.AddLinkPrefix(
-                                   Lib.Utils.Base64Encode(this.serverItem.config),
+                                   Lib.Utils.Base64Encode(GetConfig()),
                                    Model.Data.Enum.LinkTypes.v2ray)) ?
                            I18N.LinksCopied :
                            I18N.CopyFail);
@@ -428,7 +424,7 @@ namespace V2RayGCon.Views.UserControls
                 return;
             }
             Cleanup();
-            servers.DeleteServerByConfig(serverItem.config);
+            servers.DeleteServerByConfig(GetConfig());
         }
 
         private void logOfThisServerToolStripMenuItem_Click(object sender, EventArgs e)
@@ -438,7 +434,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void cboxMark_TextChanged(object sender, EventArgs e)
         {
-            this.serverItem.SetMark(cboxMark.Text);
+            this.serverItem.SetCustomMark(cboxMark.Text);
         }
 
         private void cboxMark_DropDown(object sender, EventArgs e)
@@ -479,8 +475,8 @@ namespace V2RayGCon.Views.UserControls
 
         private void btnIsCollapse_Click(object sender, EventArgs e)
         {
-            var level = (serverItem.foldingLevel + 1) % 2;
-            serverItem.SetPropertyOnDemand(ref serverItem.foldingLevel, level);
+            var level = (serverItem.GetFoldingLevel() + 1) % 2;
+            serverItem.SetFoldingLevel(level);
         }
 
         private void lbIsAutorun_MouseDown(object sender, MouseEventArgs e)
@@ -508,25 +504,20 @@ namespace V2RayGCon.Views.UserControls
             serverItem.StopCoreThen();
         }
 
-        private void untrackToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            serverItem.ToggleBoolPropertyOnDemand(ref serverItem.isUntrack);
-        }
+        private void untrackToolStripMenuItem_Click(object sender, EventArgs e) =>
+            serverItem.ToggleIsUntrack();
 
-        private void autorunToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            serverItem.ToggleBoolPropertyOnDemand(ref serverItem.isAutoRun);
-        }
+        private void autorunToolStripMenuItem_Click(object sender, EventArgs e) =>
+            serverItem.ToggleIsAutoRun();
+
 
         private void globalImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             serverItem.ToggleIsInjectImport();
         }
 
-        private void skipCNWebsiteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            serverItem.ToggleBoolPropertyOnDemand(ref serverItem.isInjectSkipCNSite, true);
-        }
+        private void skipCNWebsiteToolStripMenuItem_Click(object sender, EventArgs e) =>
+            serverItem.ToggleIsInjectSkipCnSite();
 
         private void runSpeedTestToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -535,13 +526,13 @@ namespace V2RayGCon.Views.UserControls
 
         private void moveToTopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            serverItem.ChangeIndex(0);
+            serverItem.SetIndex(0);
             servers.InvokeEventOnRequireFlyPanelReload();
         }
 
         private void moveToBottomToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            serverItem.ChangeIndex(double.MaxValue);
+            serverItem.SetIndex(double.MaxValue);
             servers.InvokeEventOnRequireFlyPanelReload();
         }
 

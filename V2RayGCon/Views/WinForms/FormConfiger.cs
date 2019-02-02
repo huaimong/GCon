@@ -387,8 +387,8 @@ namespace V2RayGCon.Views.WinForms
 
             for (int i = 0; i < serverList.Count; i++)
             {
-                var name = string.Format("{0}.{1}", i + 1, serverList[i].name);
-                var org = serverList[i].config;
+                var name = string.Format("{0}.{1}", i + 1, serverList[i].GetName());
+                var org = serverList[i].GetConfig();
                 menuReplaceServer.Add(new ToolStripMenuItem(name, null, (s, a) =>
                 {
                     if (Lib.UI.Confirm(I18N.ReplaceServer))

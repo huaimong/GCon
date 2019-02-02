@@ -198,10 +198,6 @@
     <value>180</value>
     <comment>seconds</comment>
   </data>
-  <data name="LazySaveServerListDelay" xml:space="preserve">
-    <value>30</value>
-    <comment>seconds</comment>
-  </data>
   <data name="SpeedTestTimeout" xml:space="preserve">
     <value>20</value>
     <comment>seconds</comment>

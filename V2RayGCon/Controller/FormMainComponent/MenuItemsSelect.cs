@@ -74,13 +74,13 @@ namespace V2RayGCon.Controller.FormMainComponent
                 (s, a) => SelectAllPagesWhere(el => false);
 
             invertSelectionAllPages.Click +=
-                (s, a) => SelectAllPagesWhere(el => !el.isSelected);
+                (s, a) => SelectAllPagesWhere(el => !el.IsSelected());
 
             selectAutorunAllPages.Click +=
-                (s, a) => SelectAllPagesWhere(el => el.isAutoRun);
+                (s, a) => SelectAllPagesWhere(el => el.IsAutoRun());
 
             selectRunningAllPages.Click +=
-                 (s, a) => SelectAllPagesWhere(el => el.isServerOn);
+                 (s, a) => SelectAllPagesWhere(el => el.IsCoreRunning());
 
             selectTimeoutAllPages.Click +=
                 (s, a) => SelectAllPagesWhere(el => el.speedTestResult == long.MaxValue);
@@ -89,10 +89,10 @@ namespace V2RayGCon.Controller.FormMainComponent
                 (s, a) => SelectAllPagesWhere(el => el.speedTestResult < 0);
 
             selectNoMarkAllPages.Click +=
-                (s, a) => SelectAllPagesWhere(el => string.IsNullOrEmpty(el.mark));
+                (s, a) => SelectAllPagesWhere(el => string.IsNullOrEmpty(el.GetCustomMark()));
 
             selectUntrackAllPages.Click +=
-                (s, a) => SelectAllPagesWhere(el => el.isUntrack);
+                (s, a) => SelectAllPagesWhere(el => el.IsUntrack());
 
         }
 
@@ -111,13 +111,13 @@ namespace V2RayGCon.Controller.FormMainComponent
                 (s, a) => SelectAllServersWhere(el => true);
 
             invertSelectionAllServers.Click +=
-                (s, a) => SelectAllServersWhere(el => !el.isSelected);
+                (s, a) => SelectAllServersWhere(el => !el.IsSelected());
 
             selectNoneAllServers.Click +=
                 (s, a) => SelectAllServersWhere(el => false);
 
             selectNoMarkAllServers.Click +=
-                (s, a) => SelectAllServersWhere(el => string.IsNullOrEmpty(el.mark));
+                (s, a) => SelectAllServersWhere(el => string.IsNullOrEmpty(el.GetCustomMark()));
 
             selectNoSpeedTestAllServers.Click +=
                 (s, a) => SelectAllServersWhere(el => el.speedTestResult < 0);
@@ -126,13 +126,13 @@ namespace V2RayGCon.Controller.FormMainComponent
                 (s, a) => SelectAllServersWhere(el => el.speedTestResult == long.MaxValue);
 
             selectRunningAllServers.Click +=
-                (s, a) => SelectAllServersWhere(el => el.isServerOn);
+                (s, a) => SelectAllServersWhere(el => el.IsCoreRunning());
 
             selectAutorunAllServers.Click +=
-                (s, a) => SelectAllServersWhere(el => el.isAutoRun);
+                (s, a) => SelectAllServersWhere(el => el.IsAutoRun());
 
             selectUntrackAllServers.Click +=
-                (s, a) => SelectAllServersWhere(el => el.isUntrack);
+                (s, a) => SelectAllServersWhere(el => el.IsUntrack());
         }
 
         private void InitCurPageSelectors(ToolStripMenuItem selectAllCurPage, ToolStripMenuItem selectNoneCurPage, ToolStripMenuItem invertSelectionCurPage)
@@ -150,11 +150,11 @@ namespace V2RayGCon.Controller.FormMainComponent
         void SelectCurPageWhere(Func<Views.UserControls.ServerUI, bool> condiction)
         {
             var panel = GetFlyPanel();
-            var configs = panel.GetFilteredList().Select(s => s.config);
+            var configs = panel.GetFilteredList().Select(s => s.GetConfig());
 
             // clear all not in current filtered list
             servers.GetServerList()
-                .Where(s => !configs.Contains(s.config))
+                .Where(s => !configs.Contains(s.GetConfig()))
                 .Select(s =>
                 {
                     s.SetIsSelected(false);
@@ -171,13 +171,13 @@ namespace V2RayGCon.Controller.FormMainComponent
         void SelectAllPagesWhere(Func<Controller.CoreServerCtrl, bool> condiction)
         {
             var configs = GetFlyPanel().GetFilteredList()
-                .Select(s => s.config)
+                .Select(s => s.GetConfig())
                 .ToList();
 
             servers.GetServerList()
                 .Select(s =>
                 {
-                    if (!configs.Contains(s.config))
+                    if (!configs.Contains(s.GetConfig()))
                     {
                         s.SetIsSelected(false);
                         return false;

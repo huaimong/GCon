@@ -277,7 +277,6 @@ namespace V2RayGCon.Controller.FormMainComponent
             // create on demand
             if (lazyShowSearchResultTimer == null)
             {
-                var delay = Lib.Utils.Str2Int(StrConst.LazySaveServerListDelay);
 
                 lazyShowSearchResultTimer =
                     new Lib.Sys.CancelableTimeout(
@@ -390,12 +389,12 @@ namespace V2RayGCon.Controller.FormMainComponent
             foreach (var control in GetAllServersControl())
             {
                 var config = control.GetConfig();
-                if (serverList.Where(s => s.config == config)
+                if (serverList.Where(s => s.GetConfig() == config)
                     .FirstOrDefault() == null)
                 {
                     result.Add(control);
                 }
-                serverList.RemoveAll(s => s.config == config);
+                serverList.RemoveAll(s => s.GetConfig() == config);
             }
 
             return result;
@@ -451,7 +450,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 var index = i + 1.0; // closure
                 var item = list[i];
-                item.ChangeIndex(index);
+                item.SetIndex(index);
             }
         }
 

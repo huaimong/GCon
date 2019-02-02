@@ -14,12 +14,10 @@ namespace V2RayGCon.Controller
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
     public class CoreServerCtrl : VgcApis.Models.IControllers.ICoreCtrl
     {
-        [JsonIgnore]
         Service.Cache cache;
-        [JsonIgnore]
         Service.Servers servers;
-        [JsonIgnore]
         Service.Setting setting;
+        Service.Core coreServ;
 
         public event EventHandler
             OnPropertyChanged,
@@ -33,37 +31,16 @@ namespace V2RayGCon.Controller
         /// </summary>
         public event EventHandler<VgcApis.Models.Datas.BoolEvent> OnRequireKeepTrack;
 
-        // private variables will not be serialized
-        public string config; // plain text of config.json
-        public bool isAutoRun, isInjectImport, isSelected, isInjectSkipCNSite, isUntrack;
-        public string name, summary, inboundIP, mark, uid;
-        public int overwriteInboundType, inboundPort, foldingLevel;
-        public double index;
+        Views.WinForms.FormSingleServerLog logForm = null;
+        VgcApis.Models.Datas.CoreInfo coreInfo;
 
-        public CoreServerCtrl()
+        public CoreServerCtrl(
+            VgcApis.Models.Datas.CoreInfo coreInfo)
         {
-            // new server will displays at the bottom
-            index = double.MaxValue;
-
-            isSelected = false;
-            isUntrack = false;
-            isServerOn = false;
-            isAutoRun = false;
-            isInjectImport = false;
-
-            foldingLevel = 0;
-
-            mark = string.Empty;
-            status = string.Empty;
-            name = string.Empty;
-            summary = string.Empty;
-            config = string.Empty;
-            uid = string.Empty;
+            this.coreInfo = coreInfo;
+            isCoreRunning = false;
+            curStatusCache = string.Empty;
             speedTestResult = -1;
-
-            overwriteInboundType = 1;
-            inboundIP = "127.0.0.1";
-            inboundPort = 1080;
         }
 
         public void Run(
@@ -75,38 +52,25 @@ namespace V2RayGCon.Controller
             this.servers = servers;
             this.setting = setting;
 
-            server = new Service.Core(setting);
-            server.OnLog += OnLogHandler;
-            server.OnCoreStatusChanged += OnCoreStateChangedHandler;
+            coreServ = new Service.Core(setting);
+            coreServ.OnLog += OnLogHandler;
+            coreServ.OnCoreStatusChanged += OnCoreStateChangedHandler;
         }
 
         #region properties
+        public long speedTestResult { get; private set; }
 
-        #endregion
+        string _curStatusCache = "";
+        public string curStatusCache
+        {
+            get => _curStatusCache;
+            private set
+            {
+                SetPropertyOnDemand(ref _curStatusCache, value);
+            }
+        }
 
-        #region non-serialize properties
-        [JsonIgnore]
-        int statsPort { get; set; }
-
-        [JsonIgnore]
-        public long speedTestResult;
-
-        [JsonIgnore]
-        Views.WinForms.FormSingleServerLog logForm = null;
-
-        [JsonIgnore]
-        public string status;
-
-        [JsonIgnore]
-        public bool isServerOn;
-
-        [JsonIgnore]
-        public Service.Core server;
-
-        [JsonIgnore]
         ConcurrentQueue<string> _logCache = new ConcurrentQueue<string>();
-
-        [JsonIgnore]
         public string logCache
         {
             get
@@ -122,71 +86,89 @@ namespace V2RayGCon.Controller
                     _logCache, maxLogLines, maxLogLines / 3);
             }
         }
+
+        int statsPort;
+        bool isCoreRunning = false;
         #endregion
 
         #region ICoreCtrl interface
-        public string GetInboundIpAndPort() => string.Format("{0}:{1}", inboundIP, inboundPort);
-        public int GetInboundMode() => overwriteInboundType;
-        public string GetMark() => mark;
+        public bool IsCoreRunning() => isCoreRunning;
+        public bool IsInjectImport() => coreInfo.isInjectImport;
+        public bool IsInjectSkipCnSite() => coreInfo.isInjectSkipCNSite;
+        public bool IsUntrack() => coreInfo.isUntrack;
+        public bool IsSelected() => coreInfo.isSelected;
+        public bool IsAutoRun() => coreInfo.isAutoRun;
+
+        public int GetFoldingLevel() => coreInfo.foldingLevel;
+        public double GetIndex() => coreInfo.index;
+        public string GetName() => coreInfo.name;
+        public string GetStatus() => curStatusCache;
+        public string GetConfig() => coreInfo.config;
+        public int GetCustomInbType() => coreInfo.customInbType;
+        public string GetMark() => coreInfo.customMark;
         public long GetSpeedTestResult() => speedTestResult;
-        public string GetSummary() => summary;
+        public string GetSummary() => coreInfo.summary;
+
+        public void SetFoldingLevel(int level) =>
+            SetPropertyOnDemand(ref coreInfo.foldingLevel, level);
+
+        public string GetCustomInbAddr()
+        {
+            return $"{coreInfo.inbIp}:{coreInfo.inbPort}";
+        }
+
 
         public string GetTitle()
         {
-            var result = string.Format("{0}.[{1}] {2}",
-                (int)this.index,
-                this.name,
-                this.summary);
+            var ci = coreInfo;
+            var result = $"{ci.index}.[{ci.name}] {ci.summary}";
             return Lib.Utils.CutStr(result, 60);
         }
 
-        public void SetMark(string mark)
+        public string GetCustomMark() => coreInfo.customMark;
+
+        public void SetCustomMark(string mark)
         {
-            if (this.mark == mark)
+            if (coreInfo.customMark == mark)
             {
                 return;
             }
 
-            this.mark = mark;
-            if (!string.IsNullOrEmpty(mark)
-                && !(this.servers.GetMarkList().Contains(mark)))
-            {
-                this.servers.UpdateMarkList();
-            }
+            coreInfo.customMark = mark;
+            servers.UpdateMarkList(mark);
             InvokeEventOnPropertyChange();
         }
 
-        public void ChangeInboundMode(int type)
+        public void SetCustomInbType(int type)
         {
-            if (this.overwriteInboundType == type)
+            if (coreInfo.customInbType == type)
             {
                 return;
             }
 
-            this.overwriteInboundType = Lib.Utils.Clamp(
-                type, 0, Model.Data.Table.inboundOverwriteTypesName.Length);
+            coreInfo.customInbType = Lib.Utils.Clamp(
+                type, 0, Model.Data.Table.customInbTypeNames.Length);
 
             InvokeEventOnPropertyChange();
-            if (isServerOn)
+            if (isCoreRunning)
             {
-                // time consuming things
                 RestartCoreThen();
             }
         }
 
-        public void ChangeInboundIpAndPort(string ip, int port)
+        public void SetCustomInbAddr(string ip, int port)
         {
             var changed = false;
 
-            if (ip != this.inboundIP)
+            if (ip != coreInfo.inbIp)
             {
-                this.inboundIP = ip;
+                coreInfo.inbIp = ip;
                 changed = true;
             }
 
-            if (port != this.inboundPort)
+            if (port != coreInfo.inbPort)
             {
-                this.inboundPort = port;
+                coreInfo.inbPort = port;
                 changed = true;
 
             }
@@ -197,21 +179,21 @@ namespace V2RayGCon.Controller
             }
         }
 
-        public void ChangeConfig(string config)
+        public void ChangeCoreConfig(string newConfig)
         {
-            if (this.config == config)
+            if (coreInfo.config == newConfig)
             {
                 return;
             }
 
-            this.config = config;
+            coreInfo.config = newConfig;
             InvokeEventOnPropertyChange();
             UpdateSummaryThen(() =>
             {
                 InvokeEventOnRequireMenuUpdate();
             });
 
-            if (server.isRunning)
+            if (coreServ.isRunning)
             {
                 RestartCoreThen();
             }
@@ -219,30 +201,38 @@ namespace V2RayGCon.Controller
 
         public void SetIsSelected(bool selected)
         {
-            if (selected == isSelected)
+            if (selected == coreInfo.isSelected)
             {
                 return;
             }
-            this.isSelected = selected;
+            coreInfo.isSelected = selected;
             InvokeEventOnRequireStatusBarUpdate();
             InvokeEventOnPropertyChange();
         }
 
+        readonly object genUidLocker = new object();
         public string GetUid()
         {
-            if (string.IsNullOrEmpty(uid))
+            lock (genUidLocker)
             {
-                var uidList = servers
-                    .GetServerList()
-                    .Select(s => s.uid)
-                    .ToList();
-                do
+                if (string.IsNullOrEmpty(coreInfo.uid))
                 {
-                    uid = Lib.Utils.RandomHex(16);
-                } while (uidList.Contains(uid));
-                InvokeEventOnPropertyChange();
+                    var uidList = servers
+                        .GetServerList()
+                        .Select(s => s.GetRawUid())
+                        .ToList();
+
+                    string newUid;
+                    do
+                    {
+                        newUid = Lib.Utils.RandomHex(16);
+                    } while (uidList.Contains(newUid));
+
+                    coreInfo.uid = newUid;
+                    InvokeEventOnPropertyChange();
+                }
             }
-            return uid;
+            return coreInfo.uid;
         }
 
         public void RestartCoreAsync() => RestartCoreThen();
@@ -255,7 +245,7 @@ namespace V2RayGCon.Controller
             void log(string msg)
             {
                 SendLog(msg);
-                SetPropertyOnDemand(ref status, msg);
+                curStatusCache = msg;
             }
 
             var port = Lib.Utils.GetFreeTcpPort();
@@ -305,14 +295,6 @@ namespace V2RayGCon.Controller
             done.WaitOne();
         }
 
-        public double GetIndex() => this.index;
-        public string GetName() => this.name;
-        public string GetStatus() => this.status;
-        public string GetConfig() => this.config;
-        public bool IsCoreRunning() => this.isServerOn;
-        public bool IsUntrack() => this.isUntrack;
-        public bool IsSelected() => this.isSelected;
-
         public VgcApis.Models.Datas.StatsSample TakeStatisticsSample()
         {
             if (!setting.isEnableStatistics
@@ -321,13 +303,14 @@ namespace V2RayGCon.Controller
                 return null;
             }
 
-            var up = this.server.QueryStatsApi(this.statsPort, true);
-            var down = this.server.QueryStatsApi(this.statsPort, false);
+            var up = this.coreServ.QueryStatsApi(this.statsPort, true);
+            var down = this.coreServ.QueryStatsApi(this.statsPort, false);
             return new VgcApis.Models.Datas.StatsSample(up, down);
         }
         #endregion
 
         #region public method
+        public VgcApis.Models.Datas.CoreInfo GetCoreInfo() => coreInfo;
 
         public bool IsSuitableToBeUsedAsSysProxy(
             bool isGlobal,
@@ -372,53 +355,27 @@ namespace V2RayGCon.Controller
             return true;
         }
 
-        public void SetPropertyOnDemand(ref string property, string value, bool isNeedCoreStopped = false)
+        public bool SetPropertyOnDemand(ref string property, string value) =>
+            SetPropertyOnDemandWorker(ref property, value);
+
+        public bool SetPropertyOnDemand<T>(ref T property, T value)
+            where T : struct =>
+            SetPropertyOnDemandWorker(ref property, value);
+
+        public void ToggleIsInjectSkipCnSite()
         {
-            SetPropertyOnDemand<string>(ref property, value, isNeedCoreStopped);
+            ToggleBoolPropertyOnDemand(ref coreInfo.isInjectSkipCNSite, true);
         }
 
-        public void SetPropertyOnDemand(ref int property, int value, bool isNeedCoreStopped = false)
-        {
-            SetPropertyOnDemand<int>(ref property, value, isNeedCoreStopped);
-        }
+        public void ToggleIsAutoRun() =>
+            ToggleBoolPropertyOnDemand(ref coreInfo.isAutoRun);
 
-        public void SetPropertyOnDemand(ref double property, double value, bool isNeedCoreStopped = false)
-        {
-            SetPropertyOnDemand<double>(ref property, value, isNeedCoreStopped);
-        }
-
-        public void SetPropertyOnDemand(ref bool property, bool value, bool isNeedCoreStopped = false)
-        {
-            SetPropertyOnDemand<bool>(ref property, value, isNeedCoreStopped);
-        }
-
-        public void ToggleBoolPropertyOnDemand(ref bool property, bool requireRestart = false)
-        {
-            property = !property;
-
-            // refresh UI immediately
-            InvokeEventOnPropertyChange();
-
-            // time consuming things
-            if (requireRestart && isServerOn)
-            {
-                RestartCoreThen();
-            }
-        }
+        public void ToggleIsUntrack() =>
+            ToggleBoolPropertyOnDemand(ref coreInfo.isUntrack);
 
         public void ToggleIsInjectImport()
         {
-            this.isInjectImport = !this.isInjectImport;
-
-            // refresh UI immediately
-            InvokeEventOnPropertyChange();
-
-            // time consuming things
-            if (isServerOn)
-            {
-                RestartCoreThen();
-            }
-
+            ToggleBoolPropertyOnDemand(ref coreInfo.isInjectImport, true);
             UpdateSummaryThen(() => InvokeEventOnRequireMenuUpdate());
         }
 
@@ -426,9 +383,9 @@ namespace V2RayGCon.Controller
         {
             Task.Factory.StartNew(() =>
             {
-                var configString = isInjectImport ?
-                    InjectGlobalImport(this.config, false, true) :
-                    this.config;
+                var configString = coreInfo.isInjectImport ?
+                    InjectGlobalImport(coreInfo.config, false, true) :
+                    coreInfo.config;
                 try
                 {
                     UpdateSummary(
@@ -449,10 +406,10 @@ namespace V2RayGCon.Controller
         public void CleanupThen(Action next)
         {
             OnCoreClosing?.Invoke(this, EventArgs.Empty);
-            this.server.StopCoreThen(() =>
+            this.coreServ.StopCoreThen(() =>
             {
-                this.server.OnLog -= OnLogHandler;
-                this.server.OnCoreStatusChanged -= OnCoreStateChangedHandler;
+                this.coreServ.OnLog -= OnLogHandler;
+                this.coreServ.OnCoreStatusChanged -= OnCoreStateChangedHandler;
                 Task.Factory.StartNew(() =>
                 {
                     next?.Invoke();
@@ -463,7 +420,7 @@ namespace V2RayGCon.Controller
         public void StopCoreThen(Action next = null)
         {
             OnCoreClosing?.Invoke(this, EventArgs.Empty);
-            Task.Factory.StartNew(() => server.StopCoreThen(
+            Task.Factory.StartNew(() => coreServ.StopCoreThen(
                 () =>
                 {
                     OnRequireNotifierUpdate?.Invoke(this, EventArgs.Empty);
@@ -479,7 +436,7 @@ namespace V2RayGCon.Controller
 
         public void GetterInboundInfoFor(Action<string> next)
         {
-            var serverName = this.name;
+            var serverName = coreInfo.name;
             Task.Factory.StartNew(() =>
             {
                 var inInfo = GetParsedInboundInfo();
@@ -511,36 +468,43 @@ namespace V2RayGCon.Controller
             catch { }
         }
 
-        public void ChangeIndex(double index)
-        {
-            if (Lib.Utils.AreEqual(this.index, index))
-            {
-                return;
-            }
+        public void SetIndexQuiet(double index) => SetIndexWorker(index, true);
 
-            this.index = index;
-            this.server.title = GetTitle();
-            InvokeEventOnPropertyChange();
-        }
+        public void SetIndex(double index) => SetIndexWorker(index, false);
 
         public bool GetterInfoFor(Func<string[], bool> filter)
         {
+            var ci = coreInfo;
             return filter(new string[] {
                 // index 0
-                name+summary,
+                ci.name+ci.summary,
 
                 // index 1
-                GetInProtocolNameByNumber(overwriteInboundType)
-                +inboundIP
-                +inboundPort.ToString(),
+                GetInProtocolNameByNumber(ci.customInbType)
+                +ci.inbIp
+                +ci.inbPort.ToString(),
 
                 // index 2
-                this.mark??"",
+                ci.customMark??"",
             });
         }
         #endregion
 
         #region private method
+        void ToggleBoolPropertyOnDemand(ref bool property, bool requireRestart = false)
+        {
+            property = !property;
+
+            // refresh UI immediately
+            InvokeEventOnPropertyChange();
+
+            // time consuming things
+            if (requireRestart && isCoreRunning)
+            {
+                RestartCoreThen();
+            }
+        }
+
         string InjectGlobalImport(string config, bool isIncludeSpeedTest, bool isIncludeActivate)
         {
             JObject import = Lib.Utils.ImportItemList2JObject(
@@ -585,9 +549,9 @@ namespace V2RayGCon.Controller
         /// <returns></returns>
         Tuple<string, string, int> GetParsedInboundInfo()
         {
-            var protocol = GetInProtocolNameByNumber(overwriteInboundType);
-            var ip = inboundIP;
-            var port = inboundPort;
+            var protocol = GetInProtocolNameByNumber(coreInfo.customInbType);
+            var ip = coreInfo.inbIp;
+            var port = coreInfo.inbPort;
 
             if (protocol != "config")
             {
@@ -616,13 +580,28 @@ namespace V2RayGCon.Controller
             return new Tuple<string, string, int>(protocol, ip, port);
         }
 
-        static string GetInProtocolNameByNumber(int typeNumber)
+        string GetInProtocolNameByNumber(int typeNumber)
         {
-            var table = Model.Data.Table.inboundOverwriteTypesName;
+            var table = Model.Data.Table.customInbTypeNames;
             return table[Lib.Utils.Clamp(typeNumber, 0, table.Length)];
         }
 
-        static bool IsProtocolMatchProxyRequirment(bool isGlobalProxy, string protocol)
+        void SetIndexWorker(double index, bool quiet)
+        {
+            if (Lib.Utils.AreEqual(coreInfo.index, index))
+            {
+                return;
+            }
+
+            coreInfo.index = index;
+            this.coreServ.title = GetTitle();
+            if (!quiet)
+            {
+                InvokeEventOnPropertyChange();
+            }
+        }
+
+        bool IsProtocolMatchProxyRequirment(bool isGlobalProxy, string protocol)
         {
             if (isGlobalProxy && protocol != "http")
             {
@@ -648,9 +627,9 @@ namespace V2RayGCon.Controller
 
             if (!OverwriteInboundSettings(
                 ref cfg,
-                overwriteInboundType,
-                this.inboundIP,
-                this.inboundPort))
+                coreInfo.customInbType,
+                coreInfo.inbIp,
+                coreInfo.inbPort))
             {
                 StopCoreThen(next);
                 return;
@@ -662,8 +641,8 @@ namespace V2RayGCon.Controller
             // debug
             var configStr = cfg.ToString(Formatting.Indented);
 
-            server.title = GetTitle();
-            server.RestartCoreThen(
+            coreServ.title = GetTitle();
+            coreServ.RestartCoreThen(
                 cfg.ToString(),
                 () =>
                 {
@@ -699,7 +678,7 @@ namespace V2RayGCon.Controller
 
         void InjectSkipCnSiteSettingsIntoConfig(ref JObject config)
         {
-            if (!this.isInjectSkipCNSite)
+            if (!coreInfo.isInjectSkipCNSite)
             {
                 return;
             }
@@ -710,70 +689,68 @@ namespace V2RayGCon.Controller
                 false);
         }
 
-        void SetPropertyOnDemand<T>(
-            ref T property,
-            T value,
-            bool isNeedCoreStopped)
+        bool SetPropertyOnDemandWorker<T>(ref T property, T value)
         {
-            if (EqualityComparer<T>.Default.Equals(property, value))
+            bool changed = false;
+            if (!EqualityComparer<T>.Default.Equals(property, value))
             {
-                return;
+                property = value;
+                InvokeEventOnPropertyChange();
+                changed = true;
             }
-
-            if (isNeedCoreStopped)
-            {
-                if (NeedStopCoreFirst())
-                {
-                    InvokeEventOnPropertyChange(); // refresh ui
-                    return;
-                }
-            }
-
-            property = value;
-            InvokeEventOnPropertyChange();
+            return changed;
         }
 
         JObject GetDecodedConfig(bool isUseCache, bool isIncludeSpeedTest, bool isIncludeActivate)
         {
-            JObject cfg = null;
+            var coreConfig = coreInfo.config;
+            JObject decodedConfig = null;
+
             try
             {
-                cfg = servers.ParseImport(
-                    isInjectImport ?
-                    InjectGlobalImport(config, isIncludeSpeedTest, isIncludeActivate) :
-                    config);
-
-                cache.core[config] = cfg.ToString(Formatting.None);
-
+                string injectedConfig;
+                if (coreInfo.isInjectImport)
+                {
+                    injectedConfig = InjectGlobalImport(
+                        coreInfo.config,
+                        isIncludeSpeedTest,
+                        isIncludeActivate);
+                }
+                else
+                {
+                    injectedConfig = coreConfig;
+                }
+                decodedConfig = servers.ParseImport(injectedConfig);
+                cache.core[coreConfig] = decodedConfig.ToString(Formatting.None);
             }
             catch { }
 
-            if (cfg == null)
+            if (decodedConfig == null)
             {
                 SendLog(I18N.DecodeImportFail);
                 if (isUseCache)
                 {
                     try
                     {
-                        cfg = JObject.Parse(cache.core[config]);
+                        decodedConfig = JObject.Parse(cache.core[coreConfig]);
                     }
                     catch (KeyNotFoundException) { }
                     SendLog(I18N.UsingDecodeCache);
                 }
             }
 
-            return cfg;
+            return decodedConfig;
         }
 
-        bool NeedStopCoreFirst()
+        bool NeedToStopCoreFirst()
         {
-            if (!isServerOn)
+            if (!isCoreRunning)
             {
                 return false;
             }
 
-            if (overwriteInboundType != (int)Model.Data.Enum.ProxyTypes.HTTP
-                && overwriteInboundType != (int)Model.Data.Enum.ProxyTypes.SOCKS)
+            if (coreInfo.customInbType != (int)Model.Data.Enum.ProxyTypes.HTTP
+                && coreInfo.customInbType != (int)Model.Data.Enum.ProxyTypes.SOCKS)
             {
                 return false;
 
@@ -861,7 +838,7 @@ namespace V2RayGCon.Controller
             logCache = message;
             try
             {
-                setting.SendLog($"[{this.name}] {message}");
+                setting.SendLog($"[{coreInfo.name}] {message}");
             }
             catch { }
             logTimeStamp = DateTime.Now.Ticks;
@@ -884,20 +861,25 @@ namespace V2RayGCon.Controller
 
         void UpdateSummary(JObject config)
         {
-            this.name = Lib.Utils.GetAliasFromConfig(config);
-            this.summary = Lib.Utils.GetSummaryFromConfig(config);
+            coreInfo.name = Lib.Utils.GetAliasFromConfig(config);
+            coreInfo.summary = Lib.Utils.GetSummaryFromConfig(config);
         }
 
         void OnCoreStateChangedHandler(object sender, EventArgs args)
         {
-            isServerOn = server.isRunning;
-            if (!isServerOn)
+            isCoreRunning = coreServ.isRunning;
+            if (!isCoreRunning)
             {
                 statsPort = 0;
             }
             InvokeEventOnPropertyChange();
         }
 
+        #endregion
+
+
+        #region protected methods
+        protected string GetRawUid() => coreInfo.uid;
         #endregion
     }
 }

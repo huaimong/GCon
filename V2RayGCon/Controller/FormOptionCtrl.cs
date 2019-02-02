@@ -55,7 +55,7 @@ namespace V2RayGCon.Controller
             {
                 // insert a space in the front for regex matching
                 serverString += " v2ray://"
-                    + Lib.Utils.Base64Encode(server.config)
+                    + Lib.Utils.Base64Encode(server.GetConfig())
                     + Environment.NewLine;
             }
 

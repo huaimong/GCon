@@ -91,8 +91,8 @@ namespace V2RayGCon.Views.WinForms
             this.serverList = new Dictionary<string, string>();
             foreach (var server in serverList)
             {
-                cboxServList.Items.Add(server.name);
-                this.serverList[server.name] = server.config;
+                cboxServList.Items.Add(server.GetName());
+                this.serverList[server.GetName()] = server.GetConfig();
             }
 
             servIndex = Lib.Utils.Clamp(oldIndex, 0, serverList.Count);
