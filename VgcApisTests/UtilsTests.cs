@@ -18,7 +18,7 @@ namespace VgcApisTests
             {
                 str += ".";
             }
-            var adam = new VgcApis.Libs.Sys.LazyGuy(task, 100);
+            var adam = new VgcApis.Libs.Tasks.LazyGuy(task, 100);
             adam.DoItNow();
             Assert.AreEqual(".", str);
 

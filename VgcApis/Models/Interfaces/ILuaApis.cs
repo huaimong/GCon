@@ -22,6 +22,6 @@ namespace VgcApis.Models.Interfaces
         /// <param name="millisecond"></param>
         void Sleep(int millisecond);
 
-        List<Interfaces.ICoreCtrl> GetAllServers();
+        List<Interfaces.ICoreServCtrl> GetAllServers();
     }
 }

@@ -12,7 +12,7 @@ namespace Statistics.Services
         VgcApis.Models.IServices.IServersService vgcServers;
 
         Models.UserSettings userSettins;
-        VgcApis.Libs.Sys.LazyGuy bookKeeper;
+        VgcApis.Libs.Tasks.LazyGuy bookKeeper;
         Timer bgStatsDataUpdateTimer = null;
 
         #region properties
@@ -58,7 +58,7 @@ namespace Statistics.Services
             this.vgcServers = vgcServers;
 
             userSettins = LoadUserSetting();
-            bookKeeper = new VgcApis.Libs.Sys.LazyGuy(
+            bookKeeper = new VgcApis.Libs.Tasks.LazyGuy(
                 SaveUserSetting, 1000 * 60 * 5);
             StartBgStatsDataUpdateTimer();
             vgcServers.OnCoreClosing += OnCoreClosingHandler;
@@ -73,13 +73,13 @@ namespace Statistics.Services
             // So losing 5 minutes of statistics data is an acceptable loss.
             if (!IsShutdown())
             {
-                VgcApis.Libs.Sys.FileLog.Info("Statistics: save data");
+                VgcApis.Libs.Sys.FileLogger.Info("Statistics: save data");
                 UpdateHistoryStatsDataWorker();
             }
 
             bookKeeper.DoItNow();
             bookKeeper.Quit();
-            VgcApis.Libs.Sys.FileLog.Info("Statistics: done!");
+            VgcApis.Libs.Sys.FileLogger.Info("Statistics: done!");
         }
         #endregion
 
@@ -91,13 +91,13 @@ namespace Statistics.Services
             var uid = args.Data;
             var coreCtrl = vgcServers
                 .GetAllServersList()
-                .FirstOrDefault(s => s.GetUid() == uid);
+                .FirstOrDefault(s => s.GetStates().GetUid() == uid);
             if (coreCtrl == null)
             {
                 return;
             }
-            var sample = coreCtrl.TakeStatisticsSample();
-            var title = coreCtrl.GetTitle();
+            var sample = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
+            var title = coreCtrl.GetStates().GetTitle();
             Task.Factory.StartNew(
                 () => AddToHistoryStatsData(uid, title, sample));
 
@@ -167,8 +167,8 @@ namespace Statistics.Services
                 isUpdating = true;
                 var newDatas = vgcServers
                     .GetAllServersList()
-                    .Where(s => s.IsCoreRunning())
-                    .OrderBy(s => s.GetIndex())
+                    .Where(s => s.GetCoreCtrl().IsCoreRunning())
+                    .OrderBy(s => s.GetStates().GetIndex())
                     .Select(s => GetterCoreInfo(s))
                     .ToList();
 
@@ -224,13 +224,13 @@ namespace Statistics.Services
             }
         }
 
-        Models.StatsResult GetterCoreInfo(VgcApis.Models.Interfaces.ICoreCtrl coreCtrl)
+        Models.StatsResult GetterCoreInfo(VgcApis.Models.Interfaces.ICoreServCtrl coreCtrl)
         {
             var result = new Models.StatsResult();
-            result.title = coreCtrl.GetTitle();
-            result.uid = coreCtrl.GetUid();
+            result.title = coreCtrl.GetStates().GetTitle();
+            result.uid = coreCtrl.GetStates().GetUid();
 
-            var curData = coreCtrl.TakeStatisticsSample();
+            var curData = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
             if (curData != null)
             {
                 result.stamp = curData.stamp;

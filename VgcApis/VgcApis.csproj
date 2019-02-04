@@ -51,22 +51,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libs\Tasks\Bar.cs" />
+    <Compile Include="Libs\Tasks\Routine.cs" />
+    <Compile Include="Models\BaseClasses\ComponentOf.cs" />
+    <Compile Include="Models\BaseClasses\ContainerTpl.cs" />
+    <Compile Include="Models\BaseClasses\Disposable.cs" />
     <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
+    <Compile Include="Libs\Sys\QueueLogger.cs" />
+    <Compile Include="Models\Consts\Libs.cs" />
     <Compile Include="Models\Consts\Intervals.cs" />
     <Compile Include="Models\Consts\Files.cs" />
     <Compile Include="Models\Consts\Webs.cs" />
     <Compile Include="Models\Datas\CoreInfo.cs" />
     <Compile Include="Models\Datas\Enum.cs" />
+    <Compile Include="Models\Interfaces\CoreCtrlComponents\IConfig.cs" />
+    <Compile Include="Models\Interfaces\CoreCtrlComponents\ICore.cs" />
+    <Compile Include="Models\Interfaces\CoreCtrlComponents\ILogger.cs" />
+    <Compile Include="Models\Interfaces\CoreCtrlComponents\IStates.cs" />
+    <Compile Include="Models\Interfaces\IComponent.cs" />
+    <Compile Include="Models\Interfaces\IContainer.cs" />
     <Compile Include="Models\Interfaces\ILuaApis.cs" />
     <Compile Include="Models\IServices\IAllServices.cs" />
     <Compile Include="Models\Interfaces\IPlugin.cs" />
-    <Compile Include="Libs\Sys\CancelableTimeout.cs" />
-    <Compile Include="Libs\Sys\LazyGuy.cs" />
-    <Compile Include="Libs\Sys\FileLog.cs" />
+    <Compile Include="Libs\Tasks\CancelableTimeout.cs" />
+    <Compile Include="Libs\Tasks\LazyGuy.cs" />
+    <Compile Include="Libs\Sys\FileLogger.cs" />
     <Compile Include="Models\BaseClasses\LuaSignal.cs" />
     <Compile Include="Models\BaseClasses\Plugin.cs" />
     <Compile Include="Models\Datas\DataEvent.cs" />
-    <Compile Include="Models\Interfaces\ICoreCtrl.cs" />
+    <Compile Include="Models\Interfaces\ICoreServCtrl.cs" />
     <Compile Include="Models\Interfaces\IDropableControl.cs" />
     <Compile Include="Models\Interfaces\ILuaSignal.cs" />
     <Compile Include="Models\IServices\IServersService.cs" />
@@ -117,6 +130,7 @@
     <None Include="Resources\icons\icon_light.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Libs\Factory\" />
     <Folder Include="Models\Grpcs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

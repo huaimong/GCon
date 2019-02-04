@@ -103,15 +103,15 @@ namespace ProxySetter.Services
 
         void SearchForAvailableProxyServer(
             bool isGlobal,
-            List<VgcApis.Models.Interfaces.ICoreCtrl> serverList)
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> serverList)
         {
             foreach (var serv in serverList)
             {
-                if (serv.IsSuitableToBeUsedAsSysProxy(
+                if (serv.GetConfiger().IsSuitableToBeUsedAsSysProxy(
                    isGlobal, out bool isSocks, out int port))
                 {
                     UpdateSysProxySetting(
-                        serv.GetTitle(),
+                        serv.GetStates().GetTitle(),
                         isSocks,
                         port);
                     return;
@@ -177,14 +177,14 @@ namespace ProxySetter.Services
                     setting.GetBasicSetting().sysProxyMode ==
                     (int)Model.Data.Enum.SystemProxyModes.Global;
 
-            var curServ = serverList.FirstOrDefault(s => s.GetConfig() == curServerConfig);
+            var curServ = serverList.FirstOrDefault(s => s.GetStates().GetConfig() == curServerConfig);
             if (curServ != null)
             {
-                if (curServ.IsSuitableToBeUsedAsSysProxy(
+                if (curServ.GetConfiger().IsSuitableToBeUsedAsSysProxy(
                     isGlobal, out bool isSocks, out int port))
                 {
                     UpdateSysProxySetting(
-                        curServ.GetTitle(),
+                        curServ.GetStates().GetTitle(),
                         isSocks,
                         port);
                     return;
@@ -197,8 +197,8 @@ namespace ProxySetter.Services
         bool isServerStart;
         void TrackingHandler(object sender, VgcApis.Models.Datas.BoolEvent isServerStart)
         {
-            var server = sender as VgcApis.Models.Interfaces.ICoreCtrl;
-            curServerConfig = server.GetConfig();
+            var server = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
+            curServerConfig = serve.GetStates()r.GetConfig();
             this.isServerStart = isServerStart.Data;
             WakeupLazyProxyUpdater();
         }

@@ -10,11 +10,11 @@ namespace VgcApis.Models.IServices
         event EventHandler<Models.Datas.StrEvent> OnCoreClosing;
 
         string PackServersIntoV4Package(
-            List<Models.Interfaces.ICoreCtrl> servList,
+            List<Models.Interfaces.ICoreServCtrl> servList,
             string orgServerUid,
             string packageName);
 
-        ReadOnlyCollection<Models.Interfaces.ICoreCtrl> GetTrackableServerList();
-        ReadOnlyCollection<Models.Interfaces.ICoreCtrl> GetAllServersList();
+        ReadOnlyCollection<Models.Interfaces.ICoreServCtrl> GetTrackableServerList();
+        ReadOnlyCollection<Models.Interfaces.ICoreServCtrl> GetAllServersList();
     }
 }

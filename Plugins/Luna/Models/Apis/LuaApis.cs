@@ -26,7 +26,7 @@ function Each(o)
     end
 end";
 
-        public List<VgcApis.Models.Interfaces.ICoreCtrl> GetAllServers() =>
+        public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetAllServers() =>
             vgcServers.GetAllServersList().ToList();
 
         public void Sleep(int milliseconds) =>

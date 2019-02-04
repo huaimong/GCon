@@ -7,7 +7,7 @@ namespace Luna.Services
         VgcApis.Models.IServices.ISettingsService vgcSetting;
         readonly string pluginName = Properties.Resources.Name;
         Models.Data.UserSettings userSettings;
-        VgcApis.Libs.Sys.LazyGuy bookKeeper;
+        VgcApis.Libs.Tasks.LazyGuy bookKeeper;
 
         public Settings() { }
 
@@ -30,7 +30,7 @@ namespace Luna.Services
                 .LoadPluginSetting<Models.Data.UserSettings>(
                     pluginName, vgcSetting);
 
-            bookKeeper = new VgcApis.Libs.Sys.LazyGuy(
+            bookKeeper = new VgcApis.Libs.Tasks.LazyGuy(
                 SaveUserSettingsNow, 30000);
         }
 

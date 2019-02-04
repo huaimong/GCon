@@ -36,15 +36,15 @@
             // 
             // rtBoxLogger
             // 
-            resources.ApplyResources(this.rtBoxLogger, "rtBoxLogger");
             this.rtBoxLogger.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            resources.ApplyResources(this.rtBoxLogger, "rtBoxLogger");
             this.rtBoxLogger.Name = "rtBoxLogger";
             this.rtBoxLogger.ReadOnly = true;
             // 
             // panel1
             // 
-            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Controls.Add(this.rtBoxLogger);
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
             // 
             // FormSingleServerLog
@@ -53,6 +53,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Name = "FormSingleServerLog";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormSingleServerLog_FormClosed);
             this.Load += new System.EventHandler(this.FormSingleServerLog_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

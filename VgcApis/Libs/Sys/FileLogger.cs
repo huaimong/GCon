@@ -4,7 +4,7 @@ using System.IO;
 namespace VgcApis.Libs.Sys
 {
     // https://docs.microsoft.com/en-us/dotnet/standard/io/how-to-open-and-append-to-a-log-file
-    public class FileLog
+    public class FileLogger
     {
         static readonly object writeLogLocker = new object();
 

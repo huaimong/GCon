@@ -27,7 +27,7 @@ namespace Pacman.Services
 
         #region public methods
         public string Pack(
-            List<VgcApis.Models.Interfaces.ICoreCtrl> servList,
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
             string orgServerUid,
             string packageName)
         {
@@ -37,7 +37,7 @@ namespace Pacman.Services
                 packageName);
         }
 
-        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreCtrl>
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
             GetAllServersList()
                 => vgcServers.GetAllServersList();
 

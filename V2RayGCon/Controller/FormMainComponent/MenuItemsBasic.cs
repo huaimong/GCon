@@ -57,7 +57,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             foreach (var server in serverList)
             {
                 var vlink = Lib.Utils.AddLinkPrefix(
-                    Lib.Utils.Base64Encode(server.GetConfig()),
+                    Lib.Utils.Base64Encode(server.GetStates().GetConfig()),
                     Model.Data.Enum.LinkTypes.v2ray);
 
                 s += vlink + System.Environment.NewLine + System.Environment.NewLine;

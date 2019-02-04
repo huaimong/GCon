@@ -129,6 +129,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\CoreServerComponent\Config.cs" />
+    <Compile Include="Controller\CoreServerComponent\Core.cs" />
+    <Compile Include="Controller\CoreServerComponent\States.cs" />
+    <Compile Include="Controller\CoreServerComponent\Logger.cs" />
     <Compile Include="Controller\FormConfigerCtrl.cs" />
     <Compile Include="Controller\ConfigerComponent\Editor.cs" />
     <Compile Include="Controller\ConfigerComponent\Import.cs" />

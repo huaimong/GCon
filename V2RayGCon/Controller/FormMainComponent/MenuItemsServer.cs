@@ -91,8 +91,8 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 var list = servers
                     .GetServerList()
-                    .Where(s => s.IsSelected())
-                    .Select(s => s as VgcApis.Models.Interfaces.ICoreCtrl)
+                    .Where(s => s.GetStates().IsSelected())
+                    .Select(s => s as VgcApis.Models.Interfaces.ICoreServCtrl)
                     .ToList();
 
                 if (setting.isUseV4)
@@ -182,9 +182,9 @@ namespace V2RayGCon.Controller.FormMainComponent
             copyAsV2rayLinks.Click += ApplyActionOnSelectedServers(() =>
             {
                 var list = servers.GetServerList()
-                    .Where(s => s.IsSelected())
+                    .Where(s => s.GetStates().IsSelected())
                     .Select(s => Lib.Utils.AddLinkPrefix(
-                        Lib.Utils.Base64Encode(s.GetConfig()),
+                        Lib.Utils.Base64Encode(s.GetStates().GetConfig()),
                         Model.Data.Enum.LinkTypes.v2ray))
                     .ToList();
 
@@ -243,13 +243,16 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         void SortServerListBySummary()
         {
-            var list = servers.GetServerList().Where(s => s.IsSelected()).ToList();
+            var list = servers.GetServerList().Where(s => s.GetStates().IsSelected()).ToList();
             if (list.Count < 2)
             {
                 return;
             }
 
-            SortServerItemList(ref list, (a, b) => a.GetSummary().CompareTo(b.GetSummary()));
+            SortServerItemList(
+                ref list,
+                (a, b) => a.GetStates().GetSummary().CompareTo(b.GetStates().GetSummary()));
+
             RemoveAllControlsAndRefreshFlyPanel();
         }
 
@@ -263,23 +266,30 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
 
             list.Sort(comparer);
-            var minIndex = list.First().GetIndex();
+            var minIndex = list.First().GetStates().GetIndex();
             var delta = 1.0 / 2 / list.Count;
             for (int i = 1; i < list.Count; i++)
             {
-                list[i].SetIndexQuiet(minIndex + delta * i);
+                list[i].GetStates().SetIndexQuiet(minIndex + delta * i);
             }
         }
 
         private void SortServerListBySpeedTestResult()
         {
-            var list = servers.GetServerList().Where(s => s.IsSelected()).ToList();
+            var list = servers.GetServerList().Where(s => s.GetStates().IsSelected()).ToList();
             if (list.Count < 2)
             {
                 return;
             }
 
-            SortServerItemList(ref list, (a, b) => a.speedTestResult.CompareTo(b.speedTestResult));
+            SortServerItemList(
+                ref list,
+                (a, b) =>
+                {
+                    var spa = a.GetStates().GetSpeedTestResult();
+                    var spb = b.GetStates().GetSpeedTestResult();
+                    return spa.CompareTo(spb);
+                });
             RemoveAllControlsAndRefreshFlyPanel();
         }
 
@@ -288,10 +298,10 @@ namespace V2RayGCon.Controller.FormMainComponent
             collapseLevel = Lib.Utils.Clamp(collapseLevel, 0, 3);
             servers
                 .GetServerList()
-                .Where(s => s.IsSelected())
+                .Where(s => s.GetStates().IsSelected())
                 .Select(s =>
                 {
-                    s.SetFoldingLevel(collapseLevel);
+                    s.GetStates().SetFoldingLevel(collapseLevel);
                     return true;
                 })
                 .ToList(); // force linq to execute
@@ -307,10 +317,10 @@ namespace V2RayGCon.Controller.FormMainComponent
         void SetServerItemsIndex(double index)
         {
             servers.GetServerList()
-                .Where(s => s.IsSelected())
+                .Where(s => s.GetStates().IsSelected())
                 .Select(s =>
                 {
-                    s.SetIndex(index);
+                    s.GetStates().SetIndex(index);
                     return true;
                 })
                 .ToList(); // force linq to execute
@@ -325,11 +335,11 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             foreach (var server in serverList)
             {
-                if (!server.IsSelected())
+                if (!server.GetStates().IsSelected())
                 {
                     continue;
                 }
-                var vmess = Lib.Utils.ConfigString2Vmess(server.GetConfig());
+                var vmess = Lib.Utils.ConfigString2Vmess(server.GetStates().GetConfig());
                 var vmessLink = Lib.Utils.Vmess2VmessLink(vmess);
 
                 if (!string.IsNullOrEmpty(vmessLink))

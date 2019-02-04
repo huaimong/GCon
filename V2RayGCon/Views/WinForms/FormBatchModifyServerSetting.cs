@@ -40,13 +40,16 @@ namespace V2RayGCon.Views.WinForms
                 this.cboxMark.Items.Add(mark);
             }
 
-            var firstCtrl = servers.GetServerList().Where(s => s.IsSelected()).FirstOrDefault();
+            var firstCtrl = servers
+                .GetServerList()
+                .Where(s => s.GetStates().IsSelected())
+                .FirstOrDefault();
             if (firstCtrl == null)
             {
                 return;
             }
 
-            var first = firstCtrl.GetCoreInfo();
+            var first = firstCtrl.GetStates().GetAllRawCoreInfo();
 
             this.cboxInMode.SelectedIndex = first.customInbType;
             this.tboxInIP.Text = first.inbIp;
@@ -79,7 +82,11 @@ namespace V2RayGCon.Views.WinForms
 
         private void btnModify_Click(object sender, EventArgs e)
         {
-            var list = servers.GetServerList().Where(s => s.IsSelected()).ToList();
+            var list = servers
+                .GetServerList()
+                .Where(s => s.GetStates().IsSelected())
+                .ToList();
+
             var newMode = chkInMode.Checked ? cboxInMode.SelectedIndex : -1;
             var newIP = chkInIP.Checked ? tboxInIP.Text : null;
             var newPort = chkInPort.Checked ? Lib.Utils.Str2Int(tboxInPort.Text) : -1;
@@ -109,7 +116,7 @@ namespace V2RayGCon.Views.WinForms
                 var portNumber = isPortAutoIncrease ? newPort + index : newPort;
 
                 var server = list[index];
-                if (!server.IsCoreRunning())
+                if (!server.GetCoreCtrl().IsCoreRunning())
                 {
                     ModifyServerSetting(
                         ref server,
@@ -120,13 +127,13 @@ namespace V2RayGCon.Views.WinForms
                     return;
                 }
 
-                server.StopCoreThen(() =>
+                server.GetCoreCtrl().StopCoreThen(() =>
                 {
                     ModifyServerSetting(
                         ref server,
                         newMode, newIP, portNumber,
                         newMark, newAutorun, newImport, newSkipCN);
-                    server.RestartCoreThen();
+                    server.GetCoreCtrl().RestartCoreThen();
                     next();
                 });
             };
@@ -150,7 +157,7 @@ namespace V2RayGCon.Views.WinForms
             int newMode, string newIP, int newPort,
             string newMark, int newAutorun, int newImport, int newSkipCN)
         {
-            var server = serverCtrl.GetCoreInfo();
+            var server = serverCtrl.GetStates().GetAllRawCoreInfo();
 
             if (newSkipCN >= 0)
             {

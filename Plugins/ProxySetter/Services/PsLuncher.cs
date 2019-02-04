@@ -15,7 +15,7 @@
         public void Run(VgcApis.Models.IServices.IAllServices api)
         {
             orgSysProxySetting = Lib.Sys.ProxySetter.GetProxySetting();
-            VgcApis.Libs.Sys.FileLog.Info("ProxySetter: save sys proxy settings");
+            VgcApis.Libs.Sys.FileLogger.Info("ProxySetter: save sys proxy settings");
 
             this.vgcApi = api;
 
@@ -57,7 +57,7 @@
             pacServer.Cleanup();
             setting.Cleanup();
             Lib.Sys.ProxySetter.UpdateProxySettingOnDemand(orgSysProxySetting);
-            VgcApis.Libs.Sys.FileLog.Info("ProxySetter: restore sys proxy settings");
+            VgcApis.Libs.Sys.FileLogger.Info("ProxySetter: restore sys proxy settings");
         }
         #region properties
         #endregion
