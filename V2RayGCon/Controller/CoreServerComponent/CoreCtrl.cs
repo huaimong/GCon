@@ -7,19 +7,37 @@ using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Controller.CoreServerComponent
 {
-    sealed public class Core :
+    sealed public class CoreCtrl :
         VgcApis.Models.BaseClasses.ComponentOf<CoreServerCtrl>,
-        VgcApis.Models.Interfaces.CoreCtrlComponents.ICore
+        VgcApis.Models.Interfaces.CoreCtrlComponents.ICoreCtrl
     {
         Service.Core coreServ;
         Service.Setting setting;
+        Service.Servers servers;
 
-        public Core(Service.Setting setting)
+        public CoreCtrl(
+            Service.Setting setting,
+            Service.Servers servers)
         {
             this.setting = setting;
-            this.coreServ = new Service.Core(setting);
+            this.servers = servers;
         }
 
+        CoreStates states;
+        Configer configer;
+        Logger logger;
+        CoreServerCtrl container;
+        public override void Prepare()
+        {
+            this.coreServ = new Service.Core(setting);
+
+            container = GetContainer();
+            states = container.GetComponent<CoreStates>();
+            configer = container.GetComponent<Configer>();
+            logger = container.GetComponent<Logger>();
+        }
+
+        #region public mehtods
         // 非正常终止时调用 
         public void SetTitle(string title) => coreServ.title = title;
 
@@ -34,28 +52,6 @@ namespace V2RayGCon.Controller.CoreServerComponent
             coreServ.OnCoreStatusChanged -= OnCoreStateChangedHandler;
         }
 
-        void OnCoreStateChangedHandler(object sender, EventArgs args)
-        {
-            if (!coreServ.isRunning)
-            {
-                states.SetStatPort(0);
-            }
-            container.InvokeEventOnPropertyChange();
-        }
-
-        States states;
-        Config configer;
-        Logger logger;
-        CoreServerCtrl container;
-        public override void Prepare()
-        {
-            container = GetContainer();
-            states = container.GetComponent<States>();
-            configer = container.GetComponent<Config>();
-            logger = container.GetComponent<Logger>();
-        }
-
-        #region public mehtods
         public VgcApis.Models.Datas.StatsSample TakeStatisticsSample()
         {
             var statsPort = states.GetStatPort();
@@ -95,77 +91,71 @@ namespace V2RayGCon.Controller.CoreServerComponent
             Task.Factory.StartNew(() => RestartCoreWorker(next));
 
         public bool IsCoreRunning() => coreServ.isRunning;
+
+        public void RunSpeedTest() =>
+            BeginSpeedTestWorker(configer.GetConfig());
         #endregion
 
         #region private methods
-        public void RunSpeedTest()
+        void OnCoreStateChangedHandler(object sender, EventArgs args)
         {
-            void log(string msg)
+            if (!coreServ.isRunning)
             {
-                logger.Log(msg);
-                states.SetStatus(msg);
+                states.SetStatPort(0);
             }
+            container.InvokeEventOnPropertyChange();
+        }
 
-            var port = Lib.Utils.GetFreeTcpPort();
-            var config = configer.PrepareSpeedTestConfig(port);
+        void BeginSpeedTestWorker(string rawConfig)
+        {
+            states.SetStatus(I18N.Testing);
+            logger.Log(I18N.Testing);
 
-            if (string.IsNullOrEmpty(config))
-            {
-                log(I18N.DecodeImportFail);
-                return;
-            }
+            var delay = servers.SpeedTestWorker(
+                rawConfig,
+                states.GetTitle(),
+                true,
+                true,
+                false,
+                (s, a) => logger.Log(a.Data));
 
-            var url = StrConst.SpeedTestUrl;
-            var text = I18N.Testing;
-            log(text);
-            logger.Log(url);
+            states.SetSpeedTestResult(delay);
 
-            var speedTester = new Service.Core(setting)
-            {
-                title = states.GetTitle()
-            };
-            speedTester.OnLog += OnLogHandler;
-            speedTester.RestartCore(config);
+            var speedTestResult = delay < long.MaxValue ?
+                $"{delay.ToString()} ms" :
+                I18N.Timeout;
 
-            states.SetSpeedTestResult(
-                Lib.Utils.VisitWebPageSpeedTest(url, port));
-
-            var speed = states.GetSpeedTestResult();
-            text = string.Format(
-                "{0}",
-                (speed < long.MaxValue ? speed.ToString() + "ms" : I18N.Timeout));
-
-            log(text);
-            speedTester.StopCore();
-            speedTester.OnLog -= OnLogHandler;
+            states.SetStatus(speedTestResult);
+            logger.Log(speedTestResult);
         }
 
         void OnLogHandler(object sender, VgcApis.Models.Datas.StrEvent arg) =>
             logger.Log(arg.Data);
 
 
-        public void StopCoreWorker(Action next)
+        void StopCoreWorker(Action next)
         {
             container.InvokeEventOnCoreClosing();
             coreServ.StopCoreThen(
                 () =>
                 {
                     container.InvokeEventOnRequireNotifierUpdate();
-                    container.InvokeEventOnRequireKeepTrack(false);
+                    container.InvokeEventOnTrackCoreStop();
                     next?.Invoke();
                 });
         }
 
         void RestartCoreWorker(Action next)
         {
-            JObject cfg = configer.GetDecodedConfig(true, false, true);
+            JObject cfg = servers.DecodeConfig(
+                configer.GetConfig(), true, false, true);
             if (cfg == null)
             {
                 StopCoreThen(next);
                 return;
             }
 
-            if (!configer.OverwriteInboundSettings(
+            if (!servers.ReplaceInboundWithCustomSetting(
                 ref cfg,
                 states.GetCustomInbType(),
                 states.GetInbIp(),
@@ -175,8 +165,8 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 return;
             }
 
-            configer.InjectSkipCnSiteSettingsIntoConfig(ref cfg);
-            configer.InjectStatsSettingsIntoConfig(ref cfg);
+            configer.InjectSkipCnSitesConfig(ref cfg);
+            configer.InjectStatisticsConfig(ref cfg);
 
             // debug
             var configStr = cfg.ToString(Formatting.Indented);
@@ -187,7 +177,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 () =>
                 {
                     container.InvokeEventOnRequireNotifierUpdate();
-                    container.InvokeEventOnRequireKeepTrack(true);
+                    container.InvokeEventOnTrackCoreStart();
                     next?.Invoke();
                 },
                 Lib.Utils.GetEnvVarsFromConfig(cfg));

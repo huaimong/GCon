@@ -23,5 +23,6 @@ namespace VgcApis.Models.Interfaces
         void Sleep(int millisecond);
 
         List<Interfaces.ICoreServCtrl> GetAllServers();
+        long RunSpeedTest(string rawConfig);
     }
 }

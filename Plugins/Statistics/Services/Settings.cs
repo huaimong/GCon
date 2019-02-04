@@ -91,13 +91,13 @@ namespace Statistics.Services
             var uid = args.Data;
             var coreCtrl = vgcServers
                 .GetAllServersList()
-                .FirstOrDefault(s => s.GetStates().GetUid() == uid);
+                .FirstOrDefault(s => s.GetCoreStates().GetUid() == uid);
             if (coreCtrl == null)
             {
                 return;
             }
             var sample = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
-            var title = coreCtrl.GetStates().GetTitle();
+            var title = coreCtrl.GetCoreStates().GetTitle();
             Task.Factory.StartNew(
                 () => AddToHistoryStatsData(uid, title, sample));
 
@@ -168,7 +168,7 @@ namespace Statistics.Services
                 var newDatas = vgcServers
                     .GetAllServersList()
                     .Where(s => s.GetCoreCtrl().IsCoreRunning())
-                    .OrderBy(s => s.GetStates().GetIndex())
+                    .OrderBy(s => s.GetCoreStates().GetIndex())
                     .Select(s => GetterCoreInfo(s))
                     .ToList();
 
@@ -227,8 +227,8 @@ namespace Statistics.Services
         Models.StatsResult GetterCoreInfo(VgcApis.Models.Interfaces.ICoreServCtrl coreCtrl)
         {
             var result = new Models.StatsResult();
-            result.title = coreCtrl.GetStates().GetTitle();
-            result.uid = coreCtrl.GetStates().GetUid();
+            result.title = coreCtrl.GetCoreStates().GetTitle();
+            result.uid = coreCtrl.GetCoreStates().GetUid();
 
             var curData = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
             if (curData != null)

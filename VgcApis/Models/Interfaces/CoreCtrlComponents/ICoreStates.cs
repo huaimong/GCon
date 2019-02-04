@@ -2,7 +2,7 @@
 
 namespace VgcApis.Models.Interfaces.CoreCtrlComponents
 {
-    public interface IStates
+    public interface ICoreStates
     {
         Datas.CoreInfo GetAllRawCoreInfo();
 
@@ -17,7 +17,6 @@ namespace VgcApis.Models.Interfaces.CoreCtrlComponents
         void ToggleIsInjectImport();
         void ToggleIsInjectSkipCnSite();
 
-        string GetRawUid();
         string GetUid();
 
         bool IsAutoRun();
@@ -27,7 +26,7 @@ namespace VgcApis.Models.Interfaces.CoreCtrlComponents
         bool IsInjectImport();
 
         double GetIndex();
-        string GetConfig();
+
         string GetMark();
         string GetSummary();
 
@@ -49,8 +48,6 @@ namespace VgcApis.Models.Interfaces.CoreCtrlComponents
         string GetCustomInbAddr();
         string GetInbIp();
         int GetInbPort();
-
-        int GetStatPort();
-        void SetStatPort(int port);
+        string GetRawUid();
     }
 }

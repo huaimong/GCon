@@ -157,7 +157,9 @@ namespace V2RayGCon.Service
         }
 
         // blocking
-        public void RestartCore(string config, Dictionary<string, string> env = null)
+        public void RestartCore(
+            string config, 
+            Dictionary<string, string> env = null)
         {
             lock (coreLock)
             {

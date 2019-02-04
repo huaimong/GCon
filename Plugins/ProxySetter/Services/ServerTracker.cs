@@ -111,7 +111,7 @@ namespace ProxySetter.Services
                    isGlobal, out bool isSocks, out int port))
                 {
                     UpdateSysProxySetting(
-                        serv.GetStates().GetTitle(),
+                        serv.GetCoreStates().GetTitle(),
                         isSocks,
                         port);
                     return;
@@ -177,14 +177,14 @@ namespace ProxySetter.Services
                     setting.GetBasicSetting().sysProxyMode ==
                     (int)Model.Data.Enum.SystemProxyModes.Global;
 
-            var curServ = serverList.FirstOrDefault(s => s.GetStates().GetConfig() == curServerConfig);
+            var curServ = serverList.FirstOrDefault(s => s.GetConfiger().GetConfig() == curServerConfig);
             if (curServ != null)
             {
                 if (curServ.GetConfiger().IsSuitableToBeUsedAsSysProxy(
                     isGlobal, out bool isSocks, out int port))
                 {
                     UpdateSysProxySetting(
-                        curServ.GetStates().GetTitle(),
+                        curServ.GetCoreStates().GetTitle(),
                         isSocks,
                         port);
                     return;
@@ -198,7 +198,7 @@ namespace ProxySetter.Services
         void TrackingHandler(object sender, VgcApis.Models.Datas.BoolEvent isServerStart)
         {
             var server = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
-            curServerConfig = serve.GetStates()r.GetConfig();
+            curServerConfig = server.GetConfiger().GetConfig();
             this.isServerStart = isServerStart.Data;
             WakeupLazyProxyUpdater();
         }

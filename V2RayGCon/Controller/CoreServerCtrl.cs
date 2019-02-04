@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using VgcApis.Models.Interfaces.CoreCtrlComponents;
 
 namespace V2RayGCon.Controller
@@ -8,27 +7,21 @@ namespace V2RayGCon.Controller
         VgcApis.Models.BaseClasses.ContainerTpl<CoreServerCtrl>,
         VgcApis.Models.Interfaces.ICoreServCtrl
     {
-
-
-        /// <summary>
-        /// false: stop true: start
-        /// </summary>
-        public event EventHandler<VgcApis.Models.Datas.BoolEvent>
-            OnRequireKeepTrack;
-
         public event EventHandler
             OnPropertyChanged,
             OnRequireStatusBarUpdate,
             OnRequireMenuUpdate,
             OnRequireNotifierUpdate,
-            OnCoreClosing;
+            OnCoreClosing,
+            OnTrackCoreStop,
+            OnTrackCoreStart;
 
         VgcApis.Models.Datas.CoreInfo coreInfo;
 
-        CoreServerComponent.States states;
+        CoreServerComponent.CoreStates states;
         CoreServerComponent.Logger logger;
-        CoreServerComponent.Config configer;
-        CoreServerComponent.Core coreCtrl;
+        CoreServerComponent.Configer configer;
+        CoreServerComponent.CoreCtrl coreCtrl;
 
         public CoreServerCtrl(
             VgcApis.Models.Datas.CoreInfo coreInfo)
@@ -42,10 +35,10 @@ namespace V2RayGCon.Controller
              Service.Servers servers)
         {
             //external dependency injection
-            coreCtrl = new CoreServerComponent.Core(setting);
-            states = new CoreServerComponent.States(servers, coreInfo);
+            coreCtrl = new CoreServerComponent.CoreCtrl(setting, servers);
+            states = new CoreServerComponent.CoreStates(servers, coreInfo);
             logger = new CoreServerComponent.Logger(setting);
-            configer = new CoreServerComponent.Config(
+            configer = new CoreServerComponent.Configer(
                 setting, cache, servers, coreInfo);
 
             Plug(coreCtrl);
@@ -74,33 +67,21 @@ namespace V2RayGCon.Controller
         public void InvokeEventOnPropertyChange() =>
             InvokeEmptyEventIgnoreError(OnPropertyChanged);
 
-        public void InvokeEventOnRequireKeepTrack(bool isServerStart) =>
-            OnRequireKeepTrack(
-                this,
-                new VgcApis.Models.Datas.BoolEvent(isServerStart));
+        public void InvokeEventOnTrackCoreStop() =>
+            OnTrackCoreStop?.Invoke(this, EventArgs.Empty);
+
+        public void InvokeEventOnTrackCoreStart() =>
+            OnTrackCoreStart?.Invoke(this, EventArgs.Empty);
 
         public void InvokeEventOnRequireMenuUpdate() =>
             InvokeEmptyEvent(OnRequireMenuUpdate);
         #endregion
 
         #region public method
-        public IStates GetStates() => states;
-        public ICore GetCoreCtrl() => coreCtrl;
+        public ICoreStates GetCoreStates() => states;
+        public ICoreCtrl GetCoreCtrl() => coreCtrl;
         public ILogger GetLogger() => logger;
-        public IConfig GetConfiger() => configer;
-
-        public void CleanupThen(Action next)
-        {
-            InvokeEventOnCoreClosing();
-            coreCtrl.StopCoreThen(() =>
-            {
-                coreCtrl.ReleaseEvents();
-                Task.Run(() =>
-                {
-                    next?.Invoke();
-                });
-            });
-        }
+        public IConfiger GetConfiger() => configer;
         #endregion
 
         #region private method
@@ -122,5 +103,14 @@ namespace V2RayGCon.Controller
         }
         #endregion
 
+        #region protected methods
+        protected override void Cleanup()
+        {
+            InvokeEventOnCoreClosing();
+            coreCtrl.StopCore();
+            coreCtrl.ReleaseEvents();
+            base.Cleanup();
+        }
+        #endregion
     }
 }

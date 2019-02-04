@@ -68,7 +68,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
 
             return list
-                .Where(serv => serv.GetStates().GetterInfoFor(
+                .Where(serv => serv.GetCoreStates().GetterInfoFor(
                     infos => keywords.All(
                         kw => infos.Any(
                             info => Lib.Utils.PartialMatch(info, kw)))))
@@ -389,12 +389,12 @@ namespace V2RayGCon.Controller.FormMainComponent
             foreach (var control in GetAllServersControl())
             {
                 var config = control.GetConfig();
-                if (serverList.Where(s => s.GetStates().GetConfig() == config)
+                if (serverList.Where(s => s.GetConfiger().GetConfig() == config)
                     .FirstOrDefault() == null)
                 {
                     result.Add(control);
                 }
-                serverList.RemoveAll(s => s.GetStates().GetConfig() == config);
+                serverList.RemoveAll(s => s.GetConfiger().GetConfig() == config);
             }
 
             return result;
@@ -450,7 +450,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 var index = i + 1.0; // closure
                 var item = list[i];
-                item.GetStates().SetIndex(index);
+                item.GetCoreStates().SetIndex(index);
             }
         }
 

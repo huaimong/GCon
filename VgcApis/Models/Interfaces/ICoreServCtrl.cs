@@ -2,17 +2,9 @@
 {
     public interface ICoreServCtrl
     {
-        /****************     new      ****************************/
-
-        CoreCtrlComponents.IStates GetStates();
-        CoreCtrlComponents.ICore GetCoreCtrl();
+        CoreCtrlComponents.ICoreStates GetCoreStates();
+        CoreCtrlComponents.ICoreCtrl GetCoreCtrl();
         CoreCtrlComponents.ILogger GetLogger();
-        CoreCtrlComponents.IConfig GetConfiger();
-
-        void InvokeEventOnRequireNotifierUpdate();
-        void InvokeEventOnCoreClosing();
-        void InvokeEventOnRequireKeepTrack(bool isServerStart);
-
-
+        CoreCtrlComponents.IConfiger GetConfiger();
     }
 }

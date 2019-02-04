@@ -4,7 +4,8 @@ using System.Linq;
 
 namespace Luna.Models.Apis
 {
-    public class LuaApis : VgcApis.Models.Interfaces.ILuaApis
+    public class LuaApis : 
+        VgcApis.Models.Interfaces.ILuaApis
     {
         Services.Settings settings;
         VgcApis.Models.IServices.IServersService vgcServers;
@@ -25,6 +26,8 @@ function Each(o)
         end
     end
 end";
+        public long RunSpeedTest(string rawConfig) =>
+            vgcServers.RunSpeedTest(rawConfig);
 
         public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetAllServers() =>
             vgcServers.GetAllServersList().ToList();

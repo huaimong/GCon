@@ -42,14 +42,14 @@ namespace V2RayGCon.Views.WinForms
 
             var firstCtrl = servers
                 .GetServerList()
-                .Where(s => s.GetStates().IsSelected())
+                .Where(s => s.GetCoreStates().IsSelected())
                 .FirstOrDefault();
             if (firstCtrl == null)
             {
                 return;
             }
 
-            var first = firstCtrl.GetStates().GetAllRawCoreInfo();
+            var first = firstCtrl.GetCoreStates().GetAllRawCoreInfo();
 
             this.cboxInMode.SelectedIndex = first.customInbType;
             this.tboxInIP.Text = first.inbIp;
@@ -84,7 +84,7 @@ namespace V2RayGCon.Views.WinForms
         {
             var list = servers
                 .GetServerList()
-                .Where(s => s.GetStates().IsSelected())
+                .Where(s => s.GetCoreStates().IsSelected())
                 .ToList();
 
             var newMode = chkInMode.Checked ? cboxInMode.SelectedIndex : -1;
@@ -157,7 +157,7 @@ namespace V2RayGCon.Views.WinForms
             int newMode, string newIP, int newPort,
             string newMark, int newAutorun, int newImport, int newSkipCN)
         {
-            var server = serverCtrl.GetStates().GetAllRawCoreInfo();
+            var server = serverCtrl.GetCoreStates().GetAllRawCoreInfo();
 
             if (newSkipCN >= 0)
             {

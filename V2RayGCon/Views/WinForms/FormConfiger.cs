@@ -390,9 +390,9 @@ namespace V2RayGCon.Views.WinForms
                 var name = string.Format(
                     "{0}.{1}",
                     i + 1,
-                    serverList[i].GetStates().GetName());
+                    serverList[i].GetCoreStates().GetName());
 
-                var org = serverList[i].GetStates().GetConfig();
+                var org = serverList[i].GetConfiger().GetConfig();
                 menuReplaceServer.Add(new ToolStripMenuItem(name, null, (s, a) =>
                 {
                     if (Lib.UI.Confirm(I18N.ReplaceServer))

@@ -446,15 +446,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 https://www.google.com 的本地化字符串。
-        /// </summary>
-        internal static string SpeedTestUrl {
-            get {
-                return ResourceManager.GetString("SpeedTestUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 api --server=&quot;127.0.0.1:{0}&quot; StatsService.GetStats &quot;name: &quot;&quot;&quot;&quot;inbound&gt;&gt;&gt;agentin&gt;&gt;&gt;traffic&gt;&gt;&gt;{1}&quot;&quot;&quot;&quot; reset: true&quot; 的本地化字符串。
         /// </summary>
         internal static string StatsQueryParamTpl {

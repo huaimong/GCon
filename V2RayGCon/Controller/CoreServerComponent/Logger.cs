@@ -24,16 +24,17 @@
             catch { }
         }
 
-        States coreInfo;
+        CoreStates coreInfo;
         public override void Prepare()
         {
-            coreInfo = GetContainer().GetComponent<States>();
+            coreInfo = GetContainer().GetComponent<CoreStates>();
         }
 
         Views.WinForms.FormSingleServerLog logForm = null;
+        readonly object formLogLocker = new object();
         public void ShowLogForm()
         {
-            lock (logForm)
+            lock (formLogLocker)
             {
                 if (logForm == null)
                 {

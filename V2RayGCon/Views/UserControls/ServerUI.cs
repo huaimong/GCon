@@ -49,10 +49,10 @@ namespace V2RayGCon.Views.UserControls
 
         #region interface VgcApis.Models.IDropableControl
         public string GetTitle() =>
-            coreServCtrl.GetStates().GetTitle();
+            coreServCtrl.GetCoreStates().GetTitle();
 
         public string GetUid() =>
-            coreServCtrl.GetStates().GetUid();
+            coreServCtrl.GetCoreStates().GetUid();
         #endregion
 
         #region private method
@@ -108,13 +108,13 @@ namespace V2RayGCon.Views.UserControls
             VgcApis.Libs.UI.RunInUiThread(rtboxServerTitle, () =>
             {
                 Lib.UI.UpdateControlOnDemand(
-                    cboxInbound, coreServCtrl.GetStates().GetCustomInbType());
+                    cboxInbound, coreServCtrl.GetCoreStates().GetCustomInbType());
 
                 Lib.UI.UpdateControlOnDemand(
-                    rtboxServerTitle, coreServCtrl.GetStates().GetTitle());
+                    rtboxServerTitle, coreServCtrl.GetCoreStates().GetTitle());
 
                 Lib.UI.UpdateControlOnDemand(
-                    lbStatus, coreServCtrl.GetStates().GetStatus());
+                    lbStatus, coreServCtrl.GetCoreStates().GetStatus());
 
                 UpdateServerOptionTickStat();
                 UpdateInboundAddrOndemand();
@@ -131,19 +131,19 @@ namespace V2RayGCon.Views.UserControls
         {
             Lib.UI.UpdateControlOnDemand(
                 globalImportToolStripMenuItem,
-                coreServCtrl.GetStates().IsInjectImport());
+                coreServCtrl.GetCoreStates().IsInjectImport());
 
             Lib.UI.UpdateControlOnDemand(
                 skipCNWebsiteToolStripMenuItem,
-                coreServCtrl.GetStates().IsInjectSkipCnSite());
+                coreServCtrl.GetCoreStates().IsInjectSkipCnSite());
 
             Lib.UI.UpdateControlOnDemand(
                 autorunToolStripMenuItem,
-                coreServCtrl.GetStates().IsAutoRun());
+                coreServCtrl.GetCoreStates().IsAutoRun());
 
             Lib.UI.UpdateControlOnDemand(
                 untrackToolStripMenuItem,
-                coreServCtrl.GetStates().IsUntrack());
+                coreServCtrl.GetCoreStates().IsUntrack());
         }
 
         void UpdateInboundAddrOndemand()
@@ -154,7 +154,7 @@ namespace V2RayGCon.Views.UserControls
                 return;
             }
 
-            var addr = coreServCtrl.GetStates().GetCustomInbAddr();
+            var addr = coreServCtrl.GetCoreStates().GetCustomInbAddr();
             if (tboxInboundAddr.Text != addr)
             {
                 tboxInboundAddr.Text = addr;
@@ -163,7 +163,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void UpdateToolsTip()
         {
-            var status = coreServCtrl.GetStates().GetStatus();
+            var status = coreServCtrl.GetCoreStates().GetStatus();
             if (toolTip1.GetToolTip(lbStatus) != status)
             {
                 toolTip1.SetToolTip(lbStatus, status);
@@ -178,10 +178,10 @@ namespace V2RayGCon.Views.UserControls
 
         private void UpdateMarkLable()
         {
-            var text = (coreServCtrl.GetStates().IsAutoRun() ? "A" : "")
-                + (coreServCtrl.GetStates().IsInjectSkipCnSite() ? "C" : "")
-                + (coreServCtrl.GetStates().IsInjectImport() ? "I" : "")
-                + (coreServCtrl.GetStates().IsUntrack() ? "U" : "");
+            var text = (coreServCtrl.GetCoreStates().IsAutoRun() ? "A" : "")
+                + (coreServCtrl.GetCoreStates().IsInjectSkipCnSite() ? "C" : "")
+                + (coreServCtrl.GetCoreStates().IsInjectImport() ? "I" : "")
+                + (coreServCtrl.GetCoreStates().IsUntrack() ? "U" : "");
 
             if (lbIsAutorun.Text != text)
             {
@@ -192,7 +192,7 @@ namespace V2RayGCon.Views.UserControls
         void UpdateBorderFoldingStat()
         {
             var level = Lib.Utils.Clamp(
-                coreServCtrl.GetStates().GetFoldingLevel(), 0, foldingButtonIcons.Length);
+                coreServCtrl.GetCoreStates().GetFoldingLevel(), 0, foldingButtonIcons.Length);
 
             if (btnIsCollapse.BackgroundImage != foldingButtonIcons[level])
             {
@@ -208,22 +208,22 @@ namespace V2RayGCon.Views.UserControls
 
         void UpdateFilterMarkBox()
         {
-            if (cboxMark.Text == coreServCtrl.GetStates().GetCustomMark())
+            if (cboxMark.Text == coreServCtrl.GetCoreStates().GetCustomMark())
             {
                 return;
             }
 
-            cboxMark.Text = coreServCtrl.GetStates().GetCustomMark();
+            cboxMark.Text = coreServCtrl.GetCoreStates().GetCustomMark();
         }
 
         void UpdateSelectedTickStat()
         {
-            if (coreServCtrl.GetStates().IsSelected() == chkSelected.Checked)
+            if (coreServCtrl.GetCoreStates().IsSelected() == chkSelected.Checked)
             {
                 return;
             }
 
-            chkSelected.Checked = coreServCtrl.GetStates().IsSelected();
+            chkSelected.Checked = coreServCtrl.GetCoreStates().IsSelected();
             HighlightSelectedServerItem(chkSelected.Checked);
         }
 
@@ -258,7 +258,7 @@ namespace V2RayGCon.Views.UserControls
         {
             get
             {
-                return coreServCtrl.GetStates().IsSelected();
+                return coreServCtrl.GetCoreStates().IsSelected();
             }
             private set { }
         }
@@ -282,7 +282,7 @@ namespace V2RayGCon.Views.UserControls
             });
         }
 
-        public string GetConfig() => coreServCtrl.GetStates().GetConfig();
+        public string GetConfig() => coreServCtrl.GetConfiger().GetConfig();
 
         public void SetStatusThen(string status, Action next = null)
         {
@@ -305,14 +305,14 @@ namespace V2RayGCon.Views.UserControls
 
         public void SetSelected(bool selected)
         {
-            coreServCtrl.GetStates().SetIsSelected(selected);
+            coreServCtrl.GetCoreStates().SetIsSelected(selected);
         }
 
-        public double GetIndex() => coreServCtrl.GetStates().GetIndex();
+        public double GetIndex() => coreServCtrl.GetCoreStates().GetIndex();
 
         public void SetIndex(double index)
         {
-            coreServCtrl.GetStates().SetIndex(index);
+            coreServCtrl.GetCoreStates().SetIndex(index);
         }
 
         public void Cleanup()
@@ -339,17 +339,17 @@ namespace V2RayGCon.Views.UserControls
 
         private void cboxInbound_SelectedIndexChanged(object sender, EventArgs e)
         {
-            coreServCtrl.GetStates().SetCustomInbType(cboxInbound.SelectedIndex);
+            coreServCtrl.GetCoreStates().SetCustomInbType(cboxInbound.SelectedIndex);
         }
 
         private void chkSelected_CheckedChanged(object sender, EventArgs e)
         {
             var selected = chkSelected.Checked;
-            if (selected == coreServCtrl.GetStates().IsSelected())
+            if (selected == coreServCtrl.GetCoreStates().IsSelected())
             {
                 return;
             }
-            coreServCtrl.GetStates().SetIsSelected(selected);
+            coreServCtrl.GetCoreStates().SetIsSelected(selected);
             HighlightSelectedServerItem(chkSelected.Checked);
         }
 
@@ -361,7 +361,7 @@ namespace V2RayGCon.Views.UserControls
                 {
                     tboxInboundAddr.ForeColor = Color.Black;
                 }
-                coreServCtrl.GetStates().SetCustomInbAddr(ip, port);
+                coreServCtrl.GetCoreStates().SetCustomInbAddr(ip, port);
             }
             else
             {
@@ -387,8 +387,8 @@ namespace V2RayGCon.Views.UserControls
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var item = this.coreServCtrl;
-            var config = item.GetStates().GetConfig();
-            new Views.WinForms.FormConfiger(this.coreServCtrl.GetStates().GetConfig());
+            var config = item.GetConfiger().GetConfig();
+            new Views.WinForms.FormConfiger(this.coreServCtrl.GetConfiger().GetConfig());
         }
 
         private void vmessToolStripMenuItem_Click(object sender, EventArgs e)
@@ -430,7 +430,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void cboxMark_TextChanged(object sender, EventArgs e)
         {
-            this.coreServCtrl.GetStates().SetCustomMark(cboxMark.Text);
+            this.coreServCtrl.GetCoreStates().SetCustomMark(cboxMark.Text);
         }
 
         private void cboxMark_DropDown(object sender, EventArgs e)
@@ -471,8 +471,8 @@ namespace V2RayGCon.Views.UserControls
 
         private void btnIsCollapse_Click(object sender, EventArgs e)
         {
-            var level = (coreServCtrl.GetStates().GetFoldingLevel() + 1) % 2;
-            coreServCtrl.GetStates().SetFoldingLevel(level);
+            var level = (coreServCtrl.GetCoreStates().GetFoldingLevel() + 1) % 2;
+            coreServCtrl.GetCoreStates().SetFoldingLevel(level);
         }
 
         private void lbIsAutorun_MouseDown(object sender, MouseEventArgs e)
@@ -501,19 +501,19 @@ namespace V2RayGCon.Views.UserControls
         }
 
         private void untrackToolStripMenuItem_Click(object sender, EventArgs e) =>
-            coreServCtrl.GetStates().ToggleIsUntrack();
+            coreServCtrl.GetCoreStates().ToggleIsUntrack();
 
         private void autorunToolStripMenuItem_Click(object sender, EventArgs e) =>
-            coreServCtrl.GetStates().ToggleIsAutoRun();
+            coreServCtrl.GetCoreStates().ToggleIsAutoRun();
 
 
         private void globalImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            coreServCtrl.GetStates().ToggleIsInjectImport();
+            coreServCtrl.GetCoreStates().ToggleIsInjectImport();
         }
 
         private void skipCNWebsiteToolStripMenuItem_Click(object sender, EventArgs e) =>
-            coreServCtrl.GetStates().ToggleIsInjectSkipCnSite();
+            coreServCtrl.GetCoreStates().ToggleIsInjectSkipCnSite();
 
         private void runSpeedTestToolStripMenuItem1_Click(object sender, EventArgs e)
         {
@@ -522,13 +522,13 @@ namespace V2RayGCon.Views.UserControls
 
         private void moveToTopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            coreServCtrl.GetStates().SetIndex(0);
+            coreServCtrl.GetCoreStates().SetIndex(0);
             servers.InvokeEventOnRequireFlyPanelReload();
         }
 
         private void moveToBottomToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            coreServCtrl.GetStates().SetIndex(double.MaxValue);
+            coreServCtrl.GetCoreStates().SetIndex(double.MaxValue);
             servers.InvokeEventOnRequireFlyPanelReload();
         }
 

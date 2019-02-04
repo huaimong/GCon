@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace V2RayGCon.Controller.CoreServerComponent
 {
-    sealed public class States :
+    public class CoreStates :
         VgcApis.Models.BaseClasses.ComponentOf<CoreServerCtrl>,
-        VgcApis.Models.Interfaces.CoreCtrlComponents.IStates
+        VgcApis.Models.Interfaces.CoreCtrlComponents.ICoreStates
     {
         VgcApis.Models.Datas.CoreInfo coreInfo;
         Service.Servers servers;
 
-        public States(
+        public CoreStates(
             Service.Servers servers,
             VgcApis.Models.Datas.CoreInfo coreInfo)
         {
@@ -20,13 +20,13 @@ namespace V2RayGCon.Controller.CoreServerComponent
         }
 
         CoreServerCtrl container;
-        Core coreCtrl;
-        Config configer;
+        CoreCtrl coreCtrl;
+        Configer configer;
         public override void Prepare()
         {
             container = GetContainer();
-            coreCtrl = container.GetComponent<Core>();
-            configer = container.GetComponent<Config>();
+            coreCtrl = container.GetComponent<CoreCtrl>();
+            configer = container.GetComponent<Configer>();
         }
 
         #region properties
@@ -100,7 +100,6 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         public VgcApis.Models.Datas.CoreInfo GetAllRawCoreInfo() => coreInfo;
 
-        public string GetRawUid() => coreInfo.uid;
         readonly object genUidLocker = new object();
         public string GetUid()
         {
@@ -110,7 +109,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 {
                     var uidList = servers
                         .GetServerList()
-                        .Select(s => s.GetStates().GetRawUid())
+                        .Select(s => s.GetCoreStates().GetRawUid())
                         .ToList();
 
                     string newUid;
@@ -127,7 +126,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
         }
 
         public double GetIndex() => coreInfo.index;
-        public string GetConfig() => coreInfo.config;
+
         public string GetMark() => coreInfo.customMark;
         public string GetSummary() => coreInfo.summary;
 
@@ -241,11 +240,10 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         long speedTestResult = -1;
         public long GetSpeedTestResult() => speedTestResult;
-        public void SetSpeedTestResult(long value)
-        {
+        public void SetSpeedTestResult(long value) =>
             speedTestResult = value;
-        }
 
+        public string GetRawUid() => coreInfo.uid;
         #endregion
 
         #region private methods

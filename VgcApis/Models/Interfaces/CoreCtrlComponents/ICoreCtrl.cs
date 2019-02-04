@@ -2,18 +2,15 @@
 
 namespace VgcApis.Models.Interfaces.CoreCtrlComponents
 {
-    public interface ICore
+    public interface ICoreCtrl
     {
-        void RunSpeedTest();
+        bool IsCoreRunning();
 
-        // 非正常终止时调用 
-        void SetTitle(string title);
+        void RunSpeedTest();
 
         void StopCore();
         void StopCoreThen();
         void StopCoreThen(Action next);
-
-        bool IsCoreRunning();
 
         void RestartCore();
         void RestartCoreThen();

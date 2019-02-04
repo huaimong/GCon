@@ -196,14 +196,14 @@ namespace Pacman.Controllers
                 LoopThroughFlyContentItems(b =>
                 {
                     var bean = b.GetBean();
-                    var c = list.FirstOrDefault(t => t.GetStates().GetUid() == bean.uid);
+                    var c = list.FirstOrDefault(t => t.GetCoreStates().GetUid() == bean.uid);
                     if (c == null)
                     {
                         flyContent.Controls.Remove(b);
                         return;
                     }
 
-                    var states = c.GetStates();
+                    var states = c.GetCoreStates();
                     b.SetStatus(states.GetStatus());
                     b.SetTitle(states.GetTitle());
                 });
@@ -230,7 +230,7 @@ namespace Pacman.Controllers
 
             var list = settings
                 .GetAllServersList()
-                .Where(s => uidList.Contains(s.GetStates().GetUid()))
+                .Where(s => uidList.Contains(s.GetCoreStates().GetUid()))
                 .ToList();
 
             var package = settings
@@ -260,14 +260,14 @@ namespace Pacman.Controllers
             var curList = GetFlyContentBeanList();
             var selectedServerList = settings
                 .GetAllServersList()
-                .Where(s => s.GetStates().IsSelected())
+                .Where(s => s.GetCoreStates().IsSelected())
                 .ToList();
 
             foreach (var serverCtrl in selectedServerList)
             {
-                var states = serverCtrl.GetStates();
+                var states = serverCtrl.GetCoreStates();
 
-                var found = curList.FirstOrDefault(b => b.uid == serverCtrl.GetStates().GetUid());
+                var found = curList.FirstOrDefault(b => b.uid == serverCtrl.GetCoreStates().GetUid());
                 if (found != null)
                 {
                     found.title = states.GetTitle();
@@ -276,7 +276,7 @@ namespace Pacman.Controllers
                 curList.Add(new Models.Data.Bean
                 {
                     title = states.GetTitle(),
-                    uid = serverCtrl.GetStates().GetUid(),
+                    uid = serverCtrl.GetCoreStates().GetUid(),
                 });
             }
             this.beanList = curList;

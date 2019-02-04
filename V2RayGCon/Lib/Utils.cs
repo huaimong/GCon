@@ -1009,7 +1009,18 @@ namespace V2RayGCon.Lib
         }
         #endregion
 
+        #region speed test helper
+
+        public static string InboundTypeNumberToName(int typeNumber)
+        {
+            var table = Model.Data.Table.customInbTypeNames;
+            return table[Lib.Utils.Clamp(typeNumber, 0, table.Length)];
+        }
+        #endregion
+
         #region Miscellaneous
+
+
         public static string TrimVersionString(string version)
         {
             for (int i = 0; i < 2; i++)

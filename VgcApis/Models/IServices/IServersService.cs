@@ -6,15 +6,16 @@ namespace VgcApis.Models.IServices
 {
     public interface IServersService
     {
-        event EventHandler<Models.Datas.BoolEvent> OnServerStateChange;
-        event EventHandler<Models.Datas.StrEvent> OnCoreClosing;
+        event EventHandler<Datas.BoolEvent> OnServerStateChange;
+        event EventHandler<Datas.StrEvent> OnCoreClosing;
 
         string PackServersIntoV4Package(
-            List<Models.Interfaces.ICoreServCtrl> servList,
+            List<Interfaces.ICoreServCtrl> servList,
             string orgServerUid,
             string packageName);
 
-        ReadOnlyCollection<Models.Interfaces.ICoreServCtrl> GetTrackableServerList();
-        ReadOnlyCollection<Models.Interfaces.ICoreServCtrl> GetAllServersList();
+        ReadOnlyCollection<Interfaces.ICoreServCtrl> GetTrackableServerList();
+        ReadOnlyCollection<Interfaces.ICoreServCtrl> GetAllServersList();
+        long RunSpeedTest(string rawConfig);
     }
 }
