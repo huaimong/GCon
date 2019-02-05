@@ -1302,11 +1302,12 @@ namespace V2RayGCon.Lib
             };
         }
 
-        public static List<TResult> ExecuteInParallel<TParam, TResult>(List<TParam> values, Func<TParam, TResult> lambda)
+        public static List<TResult> ExecuteInParallel<TParam, TResult>(
+            IEnumerable<TParam> values, Func<TParam, TResult> lambda)
         {
             var result = new List<TResult>();
 
-            if (values.Count <= 0)
+            if (values.Count() <= 0)
             {
                 return result;
             }

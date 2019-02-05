@@ -195,7 +195,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 // dict( [url]=>mark ) to list(url,mark) mark maybe null
                 var subsUrl = subscriptions.Select(s => s).ToList();
                 List<string[]> links = BatchGetLinksFromSubsUrl(subsUrl);
-                servers.ImportLinks(links);
+                servers.ImportLinksBatchMode(links,false);
                 EnableBtnUpdate();
 
             });

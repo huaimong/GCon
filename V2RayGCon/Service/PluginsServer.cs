@@ -9,7 +9,8 @@ namespace V2RayGCon.Service
     {
         Setting setting;
         Notifier notifier;
-        Plugin.ApiServ apis = new Plugin.ApiServ();
+
+        VgcApis.Services.Apis apis = new VgcApis.Services.Apis();
 
         Dictionary<string, VgcApis.Models.Interfaces.IPlugin> plugins =
             new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
@@ -19,12 +20,13 @@ namespace V2RayGCon.Service
         public void Run(
             Setting setting,
             Servers servers,
+            ConfigMgr configMgr,
             Notifier notifier)
         {
             this.setting = setting;
             this.notifier = notifier;
 
-            apis.Run(setting, servers);
+            apis.Run(setting, servers, configMgr);
             plugins = LoadAllPlugins();
             RestartAllPlugins();
         }

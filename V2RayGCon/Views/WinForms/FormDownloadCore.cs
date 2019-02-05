@@ -19,7 +19,7 @@ namespace V2RayGCon.Views.WinForms
         }
         #endregion
 
-        Service.Downloader downloader;
+        Lib.Nets.Downloader downloader;
         Service.Setting setting;
         Service.Servers servers;
 
@@ -55,7 +55,7 @@ namespace V2RayGCon.Views.WinForms
 
             Task.Factory.StartNew(() =>
             {
-                var core = new Service.Core(setting);
+                var core = new V2RayGCon.Lib.V2Ray.Core(setting);
                 var version = core.GetCoreVersion();
                 var msg = string.IsNullOrEmpty(version) ?
                     I18N.GetCoreVerFail :
@@ -96,7 +96,7 @@ namespace V2RayGCon.Views.WinForms
 
         void DownloadV2RayCore(int proxyPort)
         {
-            downloader = new Service.Downloader(setting);
+            downloader = new Lib.Nets.Downloader(setting);
             downloader.SetArchitecture(cboxArch.SelectedIndex == 1);
             downloader.SetVersion(cboxVer.Text);
             downloader.proxyPort = proxyPort;

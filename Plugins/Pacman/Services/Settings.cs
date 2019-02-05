@@ -14,10 +14,10 @@ namespace Pacman.Services
 
         public Settings() { }
 
-        public void Run(VgcApis.Models.IServices.IAllServices vgcApi)
+        public void Run(VgcApis.Models.IServices.IApiService vgcApi)
         {
-            vgcServers = vgcApi.GetVgcServersService();
-            vgcSetting = vgcApi.GetVgcSettingService();
+            vgcServers = vgcApi.GetServersService();
+            vgcSetting = vgcApi.GetSettingService();
             userSettings = LoadUserSettings();
         }
 
@@ -39,7 +39,7 @@ namespace Pacman.Services
 
         public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
             GetAllServersList()
-                => vgcServers.GetAllServersList();
+                => vgcServers.GetAllServersOrderByIndex();
 
         public List<Models.Data.Package> GetPackageList()
         {

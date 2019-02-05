@@ -84,23 +84,19 @@ namespace Statistics.Services
         #endregion
 
         #region private method
-        void OnCoreClosingHandler(
-            object sender,
-            VgcApis.Models.Datas.StrEvent args)
+        void OnCoreClosingHandler(object sender, EventArgs args)
         {
-            var uid = args.Data;
-            var coreCtrl = vgcServers
-                .GetAllServersList()
-                .FirstOrDefault(s => s.GetCoreStates().GetUid() == uid);
+            var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
             if (coreCtrl == null)
             {
                 return;
             }
+
+            var uid = coreCtrl.GetCoreStates().GetUid();
             var sample = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
             var title = coreCtrl.GetCoreStates().GetTitle();
             Task.Factory.StartNew(
                 () => AddToHistoryStatsData(uid, title, sample));
-
         }
 
         void AddToHistoryStatsData(
@@ -166,9 +162,8 @@ namespace Statistics.Services
             {
                 isUpdating = true;
                 var newDatas = vgcServers
-                    .GetAllServersList()
+                    .GetAllServersOrderByIndex()
                     .Where(s => s.GetCoreCtrl().IsCoreRunning())
-                    .OrderBy(s => s.GetCoreStates().GetIndex())
                     .Select(s => GetterCoreInfo(s))
                     .ToList();
 

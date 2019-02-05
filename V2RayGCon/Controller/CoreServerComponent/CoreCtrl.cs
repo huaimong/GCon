@@ -11,16 +11,19 @@ namespace V2RayGCon.Controller.CoreServerComponent
         VgcApis.Models.BaseClasses.ComponentOf<CoreServerCtrl>,
         VgcApis.Models.Interfaces.CoreCtrlComponents.ICoreCtrl
     {
-        Service.Core coreServ;
+        Lib.V2Ray.Core coreServ;
         Service.Setting setting;
         Service.Servers servers;
+        Service.ConfigMgr configMgr;
 
         public CoreCtrl(
             Service.Setting setting,
-            Service.Servers servers)
+            Service.Servers servers,
+            Service.ConfigMgr configMgr)
         {
             this.setting = setting;
             this.servers = servers;
+            this.configMgr = configMgr;
         }
 
         CoreStates states;
@@ -29,7 +32,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
         CoreServerCtrl container;
         public override void Prepare()
         {
-            this.coreServ = new Service.Core(setting);
+            this.coreServ = new V2RayGCon.Lib.V2Ray.Core(setting);
 
             container = GetContainer();
             states = container.GetComponent<CoreStates>();
@@ -111,7 +114,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             states.SetStatus(I18N.Testing);
             logger.Log(I18N.Testing);
 
-            var delay = servers.SpeedTestWorker(
+            var delay = configMgr.SpeedTestWorker(
                 rawConfig,
                 states.GetTitle(),
                 true,
@@ -147,7 +150,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         void RestartCoreWorker(Action next)
         {
-            JObject cfg = servers.DecodeConfig(
+            JObject cfg = configMgr.DecodeConfig(
                 configer.GetConfig(), true, false, true);
             if (cfg == null)
             {
@@ -155,7 +158,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 return;
             }
 
-            if (!servers.ReplaceInboundWithCustomSetting(
+            if (!configMgr.ReplaceInboundWithCustomSetting(
                 ref cfg,
                 states.GetCustomInbType(),
                 states.GetInbIp(),

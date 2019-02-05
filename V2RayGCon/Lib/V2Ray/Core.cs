@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
-namespace V2RayGCon.Service
+namespace V2RayGCon.Lib.V2Ray
 {
     public class Core
     {
@@ -158,7 +158,7 @@ namespace V2RayGCon.Service
 
         // blocking
         public void RestartCore(
-            string config, 
+            string config,
             Dictionary<string, string> env = null)
         {
             lock (coreLock)

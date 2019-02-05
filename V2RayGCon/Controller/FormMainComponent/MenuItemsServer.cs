@@ -90,7 +90,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             packSelected.Click += ApplyActionOnSelectedServers(() =>
             {
                 var list = servers
-                    .GetServerList()
+                    .GetAllServersOrderByIndex()
                     .Where(s => s.GetCoreStates().IsSelected())
                     .Select(s => s as VgcApis.Models.Interfaces.ICoreServCtrl)
                     .ToList();
@@ -123,7 +123,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 if (Lib.UI.Confirm(I18N.ConfirmStopAllSelectedServers))
                 {
-                    servers.StopAllSelectedThen();
+                    servers.StopSelectedServersThen();
                 }
             });
 
@@ -131,7 +131,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 if (Lib.UI.Confirm(I18N.ConfirmRestartAllSelectedServers))
                 {
-                    servers.RestartAllSelectedServersThen();
+                    servers.RestartSelectedServersThen();
                 }
             });
         }
@@ -181,7 +181,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             copyAsV2rayLinks.Click += ApplyActionOnSelectedServers(() =>
             {
-                var list = servers.GetServerList()
+                var list = servers.GetAllServersOrderByIndex()
                     .Where(s => s.GetCoreStates().IsSelected())
                     .Select(s => Lib.Utils.AddLinkPrefix(
                         Lib.Utils.Base64Encode(s.GetConfiger().GetConfig()),
@@ -243,7 +243,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         void SortServerListBySummary()
         {
-            var list = servers.GetServerList().Where(s => s.GetCoreStates().IsSelected()).ToList();
+            var list = servers.GetAllServersOrderByIndex().Where(s => s.GetCoreStates().IsSelected()).ToList();
             if (list.Count < 2)
             {
                 return;
@@ -257,8 +257,8 @@ namespace V2RayGCon.Controller.FormMainComponent
         }
 
         static void SortServerItemList(
-             ref List<Controller.CoreServerCtrl> list,
-             Comparison<Controller.CoreServerCtrl> comparer)
+             ref List<VgcApis.Models.Interfaces.ICoreServCtrl> list,
+             Comparison<VgcApis.Models.Interfaces.ICoreServCtrl> comparer)
         {
             if (list == null || list.Count < 2)
             {
@@ -276,7 +276,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         private void SortServerListBySpeedTestResult()
         {
-            var list = servers.GetServerList().Where(s => s.GetCoreStates().IsSelected()).ToList();
+            var list = servers.GetAllServersOrderByIndex().Where(s => s.GetCoreStates().IsSelected()).ToList();
             if (list.Count < 2)
             {
                 return;
@@ -297,7 +297,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         {
             collapseLevel = Lib.Utils.Clamp(collapseLevel, 0, 3);
             servers
-                .GetServerList()
+                .GetAllServersOrderByIndex()
                 .Where(s => s.GetCoreStates().IsSelected())
                 .Select(s =>
                 {
@@ -316,7 +316,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         void SetServerItemsIndex(double index)
         {
-            servers.GetServerList()
+            servers.GetAllServersOrderByIndex()
                 .Where(s => s.GetCoreStates().IsSelected())
                 .Select(s =>
                 {
@@ -330,7 +330,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         string EncodeAllServersIntoVmessLinks()
         {
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
             string result = string.Empty;
 
             foreach (var server in serverList)

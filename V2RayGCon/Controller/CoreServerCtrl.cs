@@ -32,14 +32,15 @@ namespace V2RayGCon.Controller
         public void Run(
              Service.Cache cache,
              Service.Setting setting,
+             Service.ConfigMgr configMgr,
              Service.Servers servers)
         {
             //external dependency injection
-            coreCtrl = new CoreServerComponent.CoreCtrl(setting, servers);
+            coreCtrl = new CoreServerComponent.CoreCtrl(setting, servers, configMgr);
             states = new CoreServerComponent.CoreStates(servers, coreInfo);
             logger = new CoreServerComponent.Logger(setting);
             configer = new CoreServerComponent.Configer(
-                setting, cache, servers, coreInfo);
+                setting, cache, configMgr, servers, coreInfo);
 
             Plug(coreCtrl);
             Plug(states);

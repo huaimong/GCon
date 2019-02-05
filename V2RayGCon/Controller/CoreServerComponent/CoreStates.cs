@@ -108,7 +108,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 if (string.IsNullOrEmpty(coreInfo.uid))
                 {
                     var uidList = servers
-                        .GetServerList()
+                        .GetAllServersOrderByIndex()
                         .Select(s => s.GetCoreStates().GetRawUid())
                         .ToList();
 
@@ -199,7 +199,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
 
             coreInfo.customMark = mark;
-            servers.UpdateMarkList(mark);
+            servers.AddNewMark(mark);
             container.InvokeEventOnPropertyChange();
         }
 

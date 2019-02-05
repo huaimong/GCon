@@ -12,7 +12,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
     class Import : ConfigerComponentController
     {
         Service.Setting setting;
-        Service.Servers servers;
+        Service.ConfigMgr configMgr;
 
         Scintilla editor;
         CheckBox cboxGlobalImport;
@@ -26,7 +26,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             Button btnSaveAs)
         {
             this.setting = Service.Setting.Instance;
-            this.servers = Service.Servers.Instance;
+            this.configMgr = Service.ConfigMgr.Instance;
 
             this.editor = Lib.UI.CreateScintilla(container, true);
             this.cboxGlobalImport = globalImport;
@@ -132,7 +132,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             try
             {
-                return servers.ParseImport(plainText).ToString();
+                return configMgr.ParseImport(plainText).ToString();
             }
             catch (FileNotFoundException)
             {

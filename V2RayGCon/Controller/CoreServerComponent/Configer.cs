@@ -12,6 +12,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
         Service.Setting setting;
         Service.Cache cache;
         Service.Servers servers;
+        Service.ConfigMgr configMgr;
         VgcApis.Models.Datas.CoreInfo coreInfo;
 
         CoreStates states;
@@ -22,9 +23,11 @@ namespace V2RayGCon.Controller.CoreServerComponent
         public Configer(
             Service.Setting setting,
             Service.Cache cache,
+            Service.ConfigMgr configMgr,
             Service.Servers servers,
             VgcApis.Models.Datas.CoreInfo coreInfo)
         {
+            this.configMgr = configMgr;
             this.setting = setting;
             this.cache = cache;
             this.servers = servers;
@@ -47,12 +50,12 @@ namespace V2RayGCon.Controller.CoreServerComponent
             Task.Run(() =>
             {
                 var configString = coreInfo.isInjectImport ?
-                    servers.InjectImportTpls(coreInfo.config, false, true) :
+                    configMgr.InjectImportTpls(coreInfo.config, false, true) :
                     coreInfo.config;
                 try
                 {
                     UpdateSummary(
-                        servers.ParseImport(configString));
+                        configMgr.ParseImport(configString));
                 }
                 catch
                 {
@@ -143,7 +146,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
 
             // 优先考虑兼容旧配置。
-            servers.InjectSkipCnSiteSettingsIntoConfig(
+            configMgr.InjectSkipCnSiteSettingsIntoConfig(
                 ref config,
                 false);
         }
@@ -212,7 +215,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 return new Tuple<string, string, int>(protocol, ip, port);
             }
 
-            var parsedConfig = servers.DecodeConfig(rawConfig, true, false, true);
+            var parsedConfig = configMgr.DecodeConfig(rawConfig, true, false, true);
             if (parsedConfig == null)
             {
                 return null;

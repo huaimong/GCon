@@ -379,7 +379,7 @@ namespace V2RayGCon.Views.WinForms
             menuReplaceServer.Clear();
             menuLoadServer.Clear();
 
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
 
             var enable = serverList.Count > 0;
             replaceExistServerToolStripMenuItem.Enabled = enable;

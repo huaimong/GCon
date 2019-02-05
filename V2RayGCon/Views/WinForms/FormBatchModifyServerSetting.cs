@@ -41,7 +41,7 @@ namespace V2RayGCon.Views.WinForms
             }
 
             var firstCtrl = servers
-                .GetServerList()
+                .GetAllServersOrderByIndex()
                 .Where(s => s.GetCoreStates().IsSelected())
                 .FirstOrDefault();
             if (firstCtrl == null)
@@ -83,7 +83,7 @@ namespace V2RayGCon.Views.WinForms
         private void btnModify_Click(object sender, EventArgs e)
         {
             var list = servers
-                .GetServerList()
+                .GetAllServersOrderByIndex()
                 .Where(s => s.GetCoreStates().IsSelected())
                 .ToList();
 
@@ -107,7 +107,7 @@ namespace V2RayGCon.Views.WinForms
 
         #region private method
         void ModifyServersSetting(
-            List<Controller.CoreServerCtrl> list,
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> list,
             int newMode, string newIP, int newPort, bool isPortAutoIncrease,
             string newMark, int newAutorun, int newImport, int newSkipCN)
         {
@@ -153,7 +153,7 @@ namespace V2RayGCon.Views.WinForms
         }
 
         void ModifyServerSetting(
-            ref Controller.CoreServerCtrl serverCtrl,
+            ref VgcApis.Models.Interfaces.ICoreServCtrl serverCtrl,
             int newMode, string newIP, int newPort,
             string newMark, int newAutorun, int newImport, int newSkipCN)
         {

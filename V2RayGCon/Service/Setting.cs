@@ -24,7 +24,6 @@ namespace V2RayGCon.Service
         Setting()
         {
             userSettings = LoadUserSettings();
-            runningServerSummary = string.Empty;
             isShutdown = false;
         }
 
@@ -38,8 +37,6 @@ namespace V2RayGCon.Service
                 LazySaveUserSettings();
             }
         }
-
-        public string runningServerSummary { get; set; }
 
         public bool isShutdown { get; set; }
 
@@ -270,15 +267,6 @@ namespace V2RayGCon.Service
             }
 
             return pluginsSetting;
-        }
-
-        public void InvokeEventIgnoreErrorOnRequireNotifyTextUpdate()
-        {
-            try
-            {
-                OnRequireNotifyTextUpdate?.Invoke(this, EventArgs.Empty);
-            }
-            catch { }
         }
 
         public void Cleanup()

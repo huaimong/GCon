@@ -71,7 +71,7 @@
     <Compile Include="Models\Interfaces\IComponent.cs" />
     <Compile Include="Models\Interfaces\IContainer.cs" />
     <Compile Include="Models\Interfaces\ILuaApis.cs" />
-    <Compile Include="Models\IServices\IAllServices.cs" />
+    <Compile Include="Models\IServices\IApiServices.cs" />
     <Compile Include="Models\Interfaces\IPlugin.cs" />
     <Compile Include="Libs\Tasks\CancelableTimeout.cs" />
     <Compile Include="Libs\Tasks\LazyGuy.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="Models\Interfaces\ICoreServCtrl.cs" />
     <Compile Include="Models\Interfaces\IDropableControl.cs" />
     <Compile Include="Models\Interfaces\ILuaSignal.cs" />
+    <Compile Include="Models\IServices\IConfigMgr.cs" />
     <Compile Include="Models\IServices\IServersService.cs" />
     <Compile Include="Models\IServices\ISettingsService.cs" />
     <Compile Include="Models\Datas\StatsSample.cs" />
@@ -98,6 +99,7 @@
     </Compile>
     <Compile Include="Libs\UI.cs" />
     <Compile Include="Libs\Utils.cs" />
+    <Compile Include="Services\Apis.cs" />
     <Compile Include="WinForms\FormSearch.cs">
       <SubType>Form</SubType>
     </Compile>

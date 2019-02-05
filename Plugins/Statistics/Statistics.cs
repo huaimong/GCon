@@ -4,7 +4,7 @@ namespace Statistics
 {
     public class Statistics : VgcApis.Models.BaseClasses.Plugin
     {
-        VgcApis.Models.IServices.IAllServices api;
+        VgcApis.Models.IServices.IApiService api;
         VgcApis.Models.IServices.IServersService vgcServers;
         VgcApis.Models.IServices.ISettingsService vgcSetting;
         Views.WinForms.FormMain formMain = null;
@@ -17,11 +17,11 @@ namespace Statistics
         #endregion
 
         #region protected override methods
-        protected override void Start(VgcApis.Models.IServices.IAllServices api)
+        protected override void Start(VgcApis.Models.IServices.IApiService api)
         {
             this.api = api;
-            vgcSetting = api.GetVgcSettingService();
-            vgcServers = api.GetVgcServersService();
+            vgcSetting = api.GetSettingService();
+            vgcServers = api.GetServersService();
 
             settings = new Services.Settings();
             settings.Run(vgcSetting, vgcServers);

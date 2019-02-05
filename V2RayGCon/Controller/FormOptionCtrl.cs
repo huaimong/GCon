@@ -51,7 +51,7 @@ namespace V2RayGCon.Controller
             }
 
             var serverString = string.Empty;
-            foreach (var server in Service.Servers.Instance.GetServerList())
+            foreach (var server in Service.Servers.Instance.GetAllServersOrderByIndex())
             {
                 // insert a space in the front for regex matching
                 serverString += " v2ray://"
@@ -111,7 +111,7 @@ namespace V2RayGCon.Controller
             if (options.ContainsKey("servers")
                 && Lib.UI.Confirm(I18N.ConfirmImportServers))
             {
-                Service.Servers.Instance.ImportLinksWithV2RayLinks(options["servers"]);
+                Service.Servers.Instance.ImportLinkWithV2RayLinks(options["servers"]);
             }
             else
             {

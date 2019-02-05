@@ -7,7 +7,7 @@
         string Version { get; }
         string Description { get; }
 
-        void Run(Models.IServices.IAllServices api);
+        void Run(Models.IServices.IApiService api);
         void Show();
         void Cleanup();
     }

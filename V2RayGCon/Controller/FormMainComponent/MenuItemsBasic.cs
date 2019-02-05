@@ -40,7 +40,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 return;
             }
 
-            servers.ImportLinksWithV2RayLinks(v2rayLinks);
+            servers.ImportLinkWithV2RayLinks(v2rayLinks);
         }
 
         public void ExportAllServersToTextFile()
@@ -51,7 +51,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 return;
             }
 
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
             string s = string.Empty;
 
             foreach (var server in serverList)
@@ -96,7 +96,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             importLinkFromClipboard.Click += (s, a) =>
             {
                 string links = Lib.Utils.GetClipboardText();
-                servers.ImportLinksWithV2RayLinks(links);
+                servers.ImportLinkWithV2RayLinks(links);
             };
 
             exportAllServer.Click += (s, a) => ExportAllServersToTextFile();

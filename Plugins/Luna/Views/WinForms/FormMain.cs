@@ -12,12 +12,15 @@ namespace Luna.Views.WinForms
         Services.LuaServer luaServer;
         Services.Settings settings;
         VgcApis.Models.IServices.IServersService vgcServers;
+        VgcApis.Models.IServices.IConfigMgrService configMgr;
 
         public FormMain(
+            VgcApis.Models.IServices.IConfigMgrService configMgr,
             VgcApis.Models.IServices.IServersService vgcServers,
             Services.Settings settings,
             Services.LuaServer luaServer)
         {
+            this.configMgr = configMgr;
             this.vgcServers = vgcServers;
             this.settings = settings;
             this.luaServer = luaServer;
@@ -51,7 +54,7 @@ namespace Luna.Views.WinForms
                 rtBoxOutput,
                 pnlScriptEditor);
 
-            editorCtrl.Run(vgcServers, settings, luaServer);
+            editorCtrl.Run(configMgr, vgcServers, settings, luaServer);
 
             menuCtrl = new Controllers.MenuCtrl(
                 this,

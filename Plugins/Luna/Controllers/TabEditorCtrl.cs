@@ -11,6 +11,7 @@ namespace Luna.Controllers
     {
         Services.Settings settings;
         Services.LuaServer luaServer;
+        VgcApis.Models.IServices.IConfigMgrService configMgr;
         Controllers.LuaCoreCtrl luaCoreCtrl;
         VgcApis.WinForms.FormSearch formSearch = null;
 
@@ -114,10 +115,12 @@ namespace Luna.Controllers
         }
 
         public void Run(
+            VgcApis.Models.IServices.IConfigMgrService configMgr,
             VgcApis.Models.IServices.IServersService vgcServers,
             Services.Settings settings,
-            Services.LuaServer luaServer)
+            Services.LuaServer luaServer            )
         {
+            this.configMgr = configMgr;
             this.settings = settings;
             this.luaServer = luaServer;
             this.luaCoreCtrl = CreateLuaCoreCtrl(
@@ -141,7 +144,7 @@ namespace Luna.Controllers
             Services.Settings settings)
         {
             var luaApis = new Models.Apis.LuaApis();
-            luaApis.Run(settings, vgcServers);
+            luaApis.Run(settings, vgcServers,configMgr);
             luaApis.SetRedirectLogWorker(Log);
 
             var coreSettings = new Models.Data.LuaCoreSetting();

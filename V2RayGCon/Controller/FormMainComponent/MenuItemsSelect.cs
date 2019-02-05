@@ -155,7 +155,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             var configs = panel.GetFilteredList().Select(s => s.GetConfiger().GetConfig());
 
             // clear all not in current filtered list
-            servers.GetServerList()
+            servers.GetAllServersOrderByIndex()
                 .Where(s => !configs.Contains(s.GetConfiger().GetConfig()))
                 .Select(s =>
                 {
@@ -170,13 +170,15 @@ namespace V2RayGCon.Controller.FormMainComponent
             });
         }
 
-        void SelectAllPagesWhere(Func<Controller.CoreServerCtrl, bool> condiction)
+        void SelectAllPagesWhere(
+            Func<VgcApis.Models.Interfaces.ICoreServCtrl, bool> 
+            condiction)
         {
             var configs = GetFlyPanel().GetFilteredList()
                 .Select(s => s.GetConfiger().GetConfig())
                 .ToList();
 
-            servers.GetServerList()
+            servers.GetAllServersOrderByIndex()
                 .Select(s =>
                 {
                     if (!configs.Contains(s.GetConfiger().GetConfig()))
@@ -191,9 +193,11 @@ namespace V2RayGCon.Controller.FormMainComponent
         }
 
 
-        void SelectAllServersWhere(Func<Controller.CoreServerCtrl, bool> condiction)
+        void SelectAllServersWhere(
+            Func<VgcApis.Models.Interfaces.ICoreServCtrl, bool> 
+            condiction)
         {
-            servers.GetServerList()
+            servers.GetAllServersOrderByIndex()
                 .Select(s =>
                 {
                     s.GetCoreStates().SetIsSelected(condiction(s));

@@ -14,13 +14,13 @@ namespace V2RayGCon.Views.UserControls
     {
         Service.Setting setting;
         Service.Servers servers;
-        Controller.CoreServerCtrl coreServCtrl;
+        VgcApis.Models.Interfaces.ICoreServCtrl coreServCtrl;
 
         int[] formHeight;
         Bitmap[] foldingButtonIcons;
         string[] keywords = null;
 
-        public ServerUI(Controller.CoreServerCtrl serverItem)
+        public ServerUI(VgcApis.Models.Interfaces.ICoreServCtrl serverItem)
         {
             setting = Service.Setting.Instance;
             servers = Service.Servers.Instance;

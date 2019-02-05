@@ -4,33 +4,23 @@ using System.Linq;
 
 namespace Luna.Models.Apis
 {
-    public class LuaApis : 
+    public class LuaApis :
         VgcApis.Models.Interfaces.ILuaApis
     {
         Services.Settings settings;
         VgcApis.Models.IServices.IServersService vgcServers;
+        VgcApis.Models.IServices.IConfigMgrService configMgr;
         Action<string> redirectLogWorker;
 
         public LuaApis() { }
 
         #region ILuaApis
-        public string PerdefinedFunctions() => @"
-import = function () end
-                
--- copy from NLua
-function Each(o)
-    local e = o:GetEnumerator()
-    return function()
-        if e:MoveNext() then
-        return e.Current
-        end
-    end
-end";
+
         public long RunSpeedTest(string rawConfig) =>
-            vgcServers.RunSpeedTest(rawConfig);
+            configMgr.RunSpeedTest(rawConfig);
 
         public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetAllServers() =>
-            vgcServers.GetAllServersList().ToList();
+            vgcServers.GetAllServersOrderByIndex().ToList();
 
         public void Sleep(int milliseconds) =>
             System.Threading.Thread.Sleep(milliseconds);
@@ -57,12 +47,17 @@ end";
 
         public void Run(
             Services.Settings settings,
-            VgcApis.Models.IServices.IServersService vgcServers)
+            VgcApis.Models.IServices.IServersService vgcServers,
+            VgcApis.Models.IServices.IConfigMgrService configMgr)
         {
             this.settings = settings;
+            this.configMgr = configMgr;
             this.vgcServers = vgcServers;
             this.redirectLogWorker = settings.SendLog;
         }
+
+        public string PerdefinedFunctions() =>
+            VgcApis.Models.Consts.Libs.LuaPerdefinedFunctions;
         #endregion
 
         #region private methods

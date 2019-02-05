@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
-namespace V2RayGCon.Service
+namespace V2RayGCon.Lib.Nets
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-    class Downloader
+    internal sealed class Downloader
     {
         public event EventHandler OnDownloadCompleted, OnDownloadCancelled, OnDownloadFail;
         public event EventHandler<VgcApis.Models.Datas.IntEvent> OnProgress;
@@ -142,7 +141,7 @@ namespace V2RayGCon.Service
             pluginServ.StopAllPlugins();
             VgcApis.Libs.Utils.Sleep(300);
 
-            var activeServerList = servers.GetActiveServerList();
+            var activeServerList = servers.GetRunningServers();
             servers.StopAllServersThen(() =>
             {
                 var status = UnzipPackage();
@@ -150,7 +149,7 @@ namespace V2RayGCon.Service
                 pluginServ.RestartAllPlugins();
                 if (activeServerList.Count > 0)
                 {
-                    servers.RestartServersByListThen(activeServerList);
+                    servers.RestartServersThen(activeServerList);
                 }
             });
         }

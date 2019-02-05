@@ -15,7 +15,7 @@ namespace V2RayGCon.Test
         [DataRow("0.0.1.11", "0.0.1.11")]
         [DataRow("0.0.1.0", "0.0.1")]
         [DataRow("0.0.0.1", "0.0.0.1")]
-        [DataRow("0.0.0.0","0.0")]
+        [DataRow("0.0.0.0", "0.0")]
         public void TrimVersionStringTest(string version, string expect)
         {
             var result = Lib.Utils.TrimVersionString(version);
@@ -209,7 +209,7 @@ namespace V2RayGCon.Test
         [TestMethod]
         public void GetLocalCoreVersion()
         {
-            var core = new Service.Core(Service.Setting.Instance);
+            var core = new V2RayGCon.Lib.V2Ray.Core(Service.Setting.Instance);
             var version = core.GetCoreVersion();
 
             if (core.IsExecutableExist())

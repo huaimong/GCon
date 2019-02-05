@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 
 namespace VgcApis.Models.Interfaces.CoreCtrlComponents
 {
     public interface IConfiger
     {
         string GetConfig();
+        void SetConfig(string newConfig);
 
         bool IsSuitableToBeUsedAsSysProxy(
           bool isGlobal,
@@ -13,8 +13,6 @@ namespace VgcApis.Models.Interfaces.CoreCtrlComponents
           out int port);
 
         void UpdateSummaryThen(Action next = null);
-        void SetConfig(string newConfig);
-
         void GetterInboundInfoThen(Action<string> next);
     }
 }

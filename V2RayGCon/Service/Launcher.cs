@@ -12,6 +12,7 @@ namespace V2RayGCon.Service
         Setting setting;
         Servers servers;
         Notifier notifier;
+        ConfigMgr configMgr;
         PluginsServer pluginsServ;
         bool isCleanupDone = false;
 
@@ -22,6 +23,8 @@ namespace V2RayGCon.Service
 
             setting = Setting.Instance;
             servers = Servers.Instance;
+            configMgr = ConfigMgr.Instance;
+
             notifier = Notifier.Instance;
             pluginsServ = PluginsServer.Instance;
 
@@ -29,10 +32,10 @@ namespace V2RayGCon.Service
 
             // dependency injection
             cache.Run(setting);
-            servers.Run(setting, cache);
+            servers.Run(setting, cache, configMgr);
+            configMgr.Run(setting, cache, servers);
             notifier.Run(setting, servers);
-
-            pluginsServ.Run(setting, servers, notifier);
+            pluginsServ.Run(setting, servers, configMgr, notifier);
 
             Application.ApplicationExit +=
                 (s, a) => OnApplicationExitHandler(false);
@@ -64,6 +67,7 @@ namespace V2RayGCon.Service
                     setting.isShutdown = isShutdown;
                 }
 
+                configMgr.Cleanup();
                 pluginsServ.Cleanup();
                 notifier.Cleanup();
                 servers.Cleanup();
@@ -146,7 +150,7 @@ namespace V2RayGCon.Service
 
         #endregion
 
-        #region unhandled exception
+        #region unhandle exception
         void ShowExceptionDetails()
         {
             System.Diagnostics.Process.Start(GetBugLogFileName());

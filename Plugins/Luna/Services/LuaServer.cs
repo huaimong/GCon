@@ -77,11 +77,12 @@ namespace Luna.Services
 
         public void Run(
             Settings settings,
-            VgcApis.Models.IServices.IServersService vgcServers)
+            VgcApis.Models.IServices.IServersService vgcServers,
+            VgcApis.Models.IServices.IConfigMgrService configMgr)
         {
             this.settings = settings;
             this.luaApis = new Models.Apis.LuaApis();
-            luaApis.Run(settings, vgcServers);
+            luaApis.Run(settings, vgcServers,configMgr);
 
             luaCoreCtrls = InitLuaCores(settings, luaApis);
             WakeUpAutoRunScripts();

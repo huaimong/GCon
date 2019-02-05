@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
@@ -11,7 +13,14 @@ namespace V2RayGCon.Service
         Setting setting;
         Servers servers;
 
-        Notifier() { }
+        VgcApis.Libs.Tasks.LazyGuy notifierUpdater;
+
+        Notifier()
+        {
+            notifierUpdater = new VgcApis.Libs.Tasks.LazyGuy(
+                () => GenNotifierTextThen(text => SetNotifyText(text)),
+                VgcApis.Models.Consts.Intervals.NotifierTextUpdateIntreval);
+        }
 
         public void Run(Setting setting, Servers servers)
         {
@@ -19,7 +28,9 @@ namespace V2RayGCon.Service
             this.servers = servers;
 
             CreateNotifyIcon();
-            setting.OnRequireNotifyTextUpdate += OnRequireNotifyTextUpdateHandler;
+
+            servers.OnRequireNotifyTextUpdate +=
+                OnRequireNotifyTextUpdateHandler;
 
             ni.MouseClick += (s, a) =>
             {
@@ -29,7 +40,7 @@ namespace V2RayGCon.Service
                 }
             };
 
-            OnRequireNotifyTextUpdateHandler(this, EventArgs.Empty);
+            notifierUpdater.DoItLater();
         }
 
         #region public method
@@ -63,16 +74,17 @@ namespace V2RayGCon.Service
         public void Cleanup()
         {
             ni.Visible = false;
-            setting.OnRequireNotifyTextUpdate -=
+
+            servers.OnRequireNotifyTextUpdate -=
                 OnRequireNotifyTextUpdateHandler;
+
+            notifierUpdater.Quit();
         }
         #endregion
 
         #region private method
-        void RunInUiThread(Action updater)
-        {
+        void RunInUiThread(Action updater) =>
             VgcApis.Libs.UI.RunInUiThread(ni.ContextMenuStrip, updater);
-        }
 
         private void RemoveOldPluginMenu()
         {
@@ -85,13 +97,48 @@ namespace V2RayGCon.Service
                     this.oldPluginMenu));
         }
 
-        void OnRequireNotifyTextUpdateHandler(object sender, EventArgs args)
+        void OnRequireNotifyTextUpdateHandler(object sender, EventArgs args) =>
+            notifierUpdater.DoItLater();
+
+        void GenNotifierTextThen(Action<string> action)
         {
-            var servInfo = setting.runningServerSummary;
-            UpdateNotifyText(servInfo);
+            var list = servers.GetAllServersOrderByIndex()
+                .Where(s => s.GetCoreCtrl().IsCoreRunning())
+                .ToList();
+
+            var count = list.Count;
+
+            if (count <= 0 || count > 2)
+            {
+                var text = count <= 0 ?
+                    I18N.Description :
+                    count.ToString() + I18N.ServersAreRunning;
+                action?.Invoke(text);
+                return;
+            }
+
+            var texts = new List<string>();
+
+            void done()
+            {
+                action?.Invoke(string.Join(Environment.NewLine, texts));
+                return;
+            }
+
+            void worker(int index, Action next)
+            {
+                list[index].GetConfiger().GetterInboundInfoThen(s =>
+                {
+                    texts.Add(s);
+                    next?.Invoke();
+                });
+            }
+
+            Lib.Utils.ChainActionHelperAsync(count, worker, done);
         }
 
-        private void UpdateNotifyText(string rawText)
+
+        private void SetNotifyText(string rawText)
         {
             var text = string.IsNullOrEmpty(rawText) ?
                 I18N.Description :
@@ -178,7 +225,7 @@ namespace V2RayGCon.Service
 
                             var msg=Lib.Utils.CutStr(link,90);
                             setting.SendLog($"QRCode: {msg}");
-                            servers.ImportLinksWithOutV2RayLinks(link);
+                            servers.ImportLinkWithOutV2RayLinks(link);
                         }
 
                         void Fail()
@@ -194,7 +241,7 @@ namespace V2RayGCon.Service
                     Properties.Resources.CopyLongTextToClipboard_16x,
                     (s,a)=>{
                         string links = Lib.Utils.GetClipboardText();
-                        servers.ImportLinksWithOutV2RayLinks(links);
+                        servers.ImportLinkWithOutV2RayLinks(links);
                     }),
 
                 new ToolStripMenuItem(

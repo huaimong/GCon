@@ -55,9 +55,9 @@ namespace V2RayGCon.Controller.FormMainComponent
 
 
         #region public method
-        public List<Controller.CoreServerCtrl> GetFilteredList()
+        public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetFilteredList()
         {
-            var list = servers.GetServerList();
+            var list = servers.GetAllServersOrderByIndex();
             var keywords = (searchKeywords ?? "").Split(
                 new char[] { ' ', ',' },
                 StringSplitOptions.RemoveEmptyEntries);
@@ -168,7 +168,8 @@ namespace V2RayGCon.Controller.FormMainComponent
         #endregion
 
         #region private method
-        List<Controller.CoreServerCtrl> GenPagedServerList(List<Controller.CoreServerCtrl> serverList)
+        List<VgcApis.Models.Interfaces.ICoreServCtrl> GenPagedServerList(
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> serverList)
         {
             var count = serverList.Count;
             var pageSize = setting.serverPanelPageSize;
@@ -195,11 +196,11 @@ namespace V2RayGCon.Controller.FormMainComponent
             var text = string.Format(
                 I18N.StatusBarServerCountTpl,
                     GetFilteredList().Count,
-                    servers.GetTotalServerCount())
+                    servers.CountAllServers())
                 + " "
                 + string.Format(
                     I18N.StatusBarTplSelectedItem,
-                    servers.GetTotalSelectedServerCount(),
+                    servers.CountSelectedServers(),
                     GetAllServersControl().Count());
 
             var showPager = paging[1] > 1;
@@ -345,7 +346,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 servers.GetMarkList().ToArray());
         }
 
-        void AddNewServerItems(List<Controller.CoreServerCtrl> serverList)
+        void AddNewServerItems(List<VgcApis.Models.Interfaces.ICoreServCtrl> serverList)
         {
             flyPanel.Controls.AddRange(
                 serverList
@@ -368,7 +369,8 @@ namespace V2RayGCon.Controller.FormMainComponent
             });
         }
 
-        void RemoveDeletedServerItems(ref List<Controller.CoreServerCtrl> serverList)
+        void RemoveDeletedServerItems(
+            ref List<VgcApis.Models.Interfaces.ICoreServCtrl> serverList)
         {
             var deletedControlList = GetDeletedControlList(serverList);
 
@@ -382,7 +384,8 @@ namespace V2RayGCon.Controller.FormMainComponent
             Task.Factory.StartNew(() => DisposeFlyPanelControlByList(deletedControlList));
         }
 
-        List<Views.UserControls.ServerUI> GetDeletedControlList(List<Controller.CoreServerCtrl> serverList)
+        List<Views.UserControls.ServerUI> GetDeletedControlList(
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> serverList)
         {
             var result = new List<Views.UserControls.ServerUI>();
 
@@ -444,7 +447,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         private void ResetIndex()
         {
-            var list = servers.GetServerList().ToList();
+            var list = servers.GetAllServersOrderByIndex().ToList();
 
             for (int i = 0; i < list.Count; i++)
             {

@@ -195,11 +195,20 @@ namespace ProxySetter.Services
 
         string curServerConfig;
         bool isServerStart;
-        void TrackingHandler(object sender, VgcApis.Models.Datas.BoolEvent isServerStart)
+
+        void OnCoreStartHandler(object sender, EventArgs args)
         {
-            var server = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
-            curServerConfig = server.GetConfiger().GetConfig();
-            this.isServerStart = isServerStart.Data;
+            var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
+            curServerConfig = coreCtrl.GetConfiger().GetConfig();
+            isServerStart = true;
+            WakeupLazyProxyUpdater();
+        }
+
+        void OnCoreClosingHandler(object sender, EventArgs args)
+        {
+            var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
+            curServerConfig = coreCtrl.GetConfiger().GetConfig();
+            isServerStart = false;
             WakeupLazyProxyUpdater();
         }
 
@@ -213,7 +222,8 @@ namespace ProxySetter.Services
                     return;
                 }
 
-                servers.OnServerStateChange += TrackingHandler;
+                servers.OnCoreClosing += OnCoreClosingHandler;
+                servers.OnCoreStart += OnCoreStartHandler;
                 isTracking = true;
             }
             setting.DebugLog("Start tracking.");
@@ -228,7 +238,9 @@ namespace ProxySetter.Services
                     return;
                 }
 
-                servers.OnServerStateChange -= TrackingHandler;
+                servers.OnCoreClosing -= OnCoreClosingHandler;
+                servers.OnCoreStart -= OnCoreStartHandler;
+
                 isTracking = false;
             }
             setting.DebugLog("Stop tracking.");

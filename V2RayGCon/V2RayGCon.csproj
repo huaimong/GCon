@@ -174,15 +174,17 @@
     <Compile Include="Model\Data\ServerTracker.cs" />
     <Compile Include="Model\Data\UpdateInfo.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
-    <Compile Include="Service\Core.cs" />
+    <Compile Include="Lib\V2Ray\Core.cs" />
     <Compile Include="Model\BaseClass\ICacheComponent.cs" />
     <Compile Include="Model\BaseClass\FormComponentController.cs" />
     <Compile Include="Model\BaseClass\NotifyComponent.cs" />
     <Compile Include="Model\BaseClass\SingletonService.cs" />
     <Compile Include="Model\Data\ImportItem.cs" />
+    <Compile Include="Service\ConfigMgr.cs" />
     <Compile Include="Service\Launcher.cs" />
-    <Compile Include="Plugin\ApiServ.cs" />
     <Compile Include="Service\PluginsServer.cs" />
+    <Compile Include="Service\ServersComponents\LinkImporter.cs" />
+    <Compile Include="Service\ServersComponents\QueryHandler.cs" />
     <Compile Include="Views\UserControls\ImportUI.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -242,7 +244,7 @@
     <Compile Include="Model\Data\Vmess.cs" />
     <Compile Include="Service\Cache.cs" />
     <Compile Include="Service\Caches\Template.cs" />
-    <Compile Include="Service\Downloader.cs" />
+    <Compile Include="Lib\Nets\Downloader.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Views\WinForms\FormConfiger.cs">
       <SubType>Form</SubType>

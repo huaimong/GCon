@@ -80,7 +80,7 @@ namespace V2RayGCon.Views.WinForms
 
             cboxServList.Items.Clear();
 
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
 
             if (serverList.Count <= 0)
             {
