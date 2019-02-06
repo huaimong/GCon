@@ -4,6 +4,7 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
+        string GetAppDir();
         string VmessLink2ConfigString(string vmessLink);
         string Search(string query, int start, int proxyPort);
         List<string> ExtractHttpLink(string text);
