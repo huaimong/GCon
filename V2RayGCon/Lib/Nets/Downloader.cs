@@ -205,7 +205,7 @@ namespace V2RayGCon.Lib.Nets
         {
             _sha256sum = null;
 
-            var dgst = Lib.Utils.FetchThroughProxy(url, proxyPort, -1);
+            var dgst = Lib.Utils.Fetch(url, proxyPort, -1);
             if (string.IsNullOrEmpty(dgst))
             {
                 return;

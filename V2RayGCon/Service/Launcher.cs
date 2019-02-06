@@ -120,7 +120,7 @@ namespace V2RayGCon.Service
             // new Views.WinForms.FormConfiger(@"{}");
             // new Views.WinForms.FormConfigTester();
             // Views.WinForms.FormOption.GetForm();
-            Views.WinForms.FormMain.ShowForm();
+            // Views.WinForms.FormMain.ShowForm();
             Views.WinForms.FormLog.GetForm();
             // setting.WakeupAutorunServer();
             // Views.WinForms.FormSimAddVmessClient.GetForm();
@@ -140,7 +140,7 @@ namespace V2RayGCon.Service
             }
             else
             {
-                servers.WakeupServers();
+                servers.WakeupServersInBootList();
             }
 
 #if DEBUG

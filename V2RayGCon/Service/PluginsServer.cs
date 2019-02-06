@@ -10,7 +10,7 @@ namespace V2RayGCon.Service
         Setting setting;
         Notifier notifier;
 
-        VgcApis.Services.Apis apis = new VgcApis.Services.Apis();
+        Lib.Lua.Apis vgcApis = new Lib.Lua.Apis();
 
         Dictionary<string, VgcApis.Models.Interfaces.IPlugin> plugins =
             new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
@@ -26,7 +26,7 @@ namespace V2RayGCon.Service
             this.setting = setting;
             this.notifier = notifier;
 
-            apis.Run(setting, servers, configMgr);
+            vgcApis.Run(setting, servers, configMgr);
             plugins = LoadAllPlugins();
             RestartAllPlugins();
         }
@@ -43,7 +43,7 @@ namespace V2RayGCon.Service
             {
                 if (enabledList.Contains(p.Key))
                 {
-                    p.Value.Run(apis);
+                    p.Value.Run(vgcApis);
                 }
                 else
                 {
@@ -67,6 +67,7 @@ namespace V2RayGCon.Service
         {
             CleanupPlugins(plugins.Keys.ToList());
             plugins = new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
+            vgcApis.Dispose();
         }
 
         public List<Model.Data.PluginInfoItem> GetterAllPluginsInfo()

@@ -13,6 +13,9 @@ namespace VgcApis.Models.IServices
             string orgServerUid,
             string packageName);
 
+        int GetAvailableHttpProxyPort();
+        string ReplaceOrAddNewServer(string orgUid, string newConfig);
+
         ReadOnlyCollection<Interfaces.ICoreServCtrl> GetTrackableServerList();
         ReadOnlyCollection<Interfaces.ICoreServCtrl> GetAllServersOrderByIndex();
     }

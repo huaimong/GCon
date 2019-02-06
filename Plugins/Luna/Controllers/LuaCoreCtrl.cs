@@ -22,6 +22,17 @@ namespace Luna.Controllers
 
         public LuaCoreCtrl() { }
 
+        public void Run(
+            Services.Settings settings,
+            Models.Data.LuaCoreSetting luaCoreState,
+            VgcApis.Models.Interfaces.ILuaApis luaApis)
+        {
+            this.settings = settings;
+            this.coreSetting = luaCoreState;
+            this.luaApis = luaApis;
+            this.luaSignal = new VgcApis.Models.BaseClasses.LuaSignal();
+        }
+
         #region properties 
         public string name => coreSetting.name;
 
@@ -142,17 +153,6 @@ namespace Luna.Controllers
         {
             Kill();
         }
-
-        public void Run(
-            Services.Settings settings,
-            Models.Data.LuaCoreSetting luaCoreState,
-            VgcApis.Models.Interfaces.ILuaApis luaApis)
-        {
-            this.settings = settings;
-            this.coreSetting = luaCoreState;
-            this.luaApis = luaApis;
-            this.luaSignal = new VgcApis.Models.BaseClasses.LuaSignal();
-        }
         #endregion
 
         #region private methods
@@ -179,7 +179,7 @@ namespace Luna.Controllers
         Lua CreateLuaCore()
         {
             var state = new Lua();
-            state["Api"] = luaApis;
+            state["Api"] = luaApis; // bug: lua can access all public functions
             state["Signal"] = luaSignal;
             state.DoString(luaApis.PerdefinedFunctions());
             return state;

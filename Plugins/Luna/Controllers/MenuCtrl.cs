@@ -7,20 +7,32 @@ namespace Luna.Controllers
     {
         TabEditorCtrl editorCtrl;
         Views.WinForms.FormMain formMain;
+        Services.FormMgr formMgrService;
 
         public MenuCtrl(
+            Services.FormMgr formMgrService,
             Views.WinForms.FormMain formMain,
             TabEditorCtrl editorCtrl,
+            ToolStripMenuItem miNewWindow,
             ToolStripMenuItem miLoad,
             ToolStripMenuItem miSaveAs,
             ToolStripMenuItem miExit)
         {
+            this.formMgrService = formMgrService;
+
             BindControls(formMain, editorCtrl);
-            NewMethod(miLoad, miSaveAs, miExit);
+            BindEvents(miNewWindow,miLoad, miSaveAs, miExit);
         }
 
-        private void NewMethod(ToolStripMenuItem miLoad, ToolStripMenuItem miSaveAs, ToolStripMenuItem miExit)
+        private void BindEvents(
+            ToolStripMenuItem miNewWindow,
+            ToolStripMenuItem miLoad, 
+            ToolStripMenuItem miSaveAs, 
+            ToolStripMenuItem miExit)
         {
+            miNewWindow.Click += (s, a) => 
+                formMgrService.CreateNewForm();
+
             // event handling
             miExit.Click += (s, a) =>
             {

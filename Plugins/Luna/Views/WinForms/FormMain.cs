@@ -11,17 +11,17 @@ namespace Luna.Views.WinForms
 
         Services.LuaServer luaServer;
         Services.Settings settings;
-        VgcApis.Models.IServices.IServersService vgcServers;
-        VgcApis.Models.IServices.IConfigMgrService configMgr;
+        Services.FormMgr formMgr;
+        VgcApis.Models.IServices.IApiService api;
 
         public FormMain(
-            VgcApis.Models.IServices.IConfigMgrService configMgr,
-            VgcApis.Models.IServices.IServersService vgcServers,
+            VgcApis.Models.IServices.IApiService api,
             Services.Settings settings,
-            Services.LuaServer luaServer)
+            Services.LuaServer luaServer,
+            Services.FormMgr formMgr)
         {
-            this.configMgr = configMgr;
-            this.vgcServers = vgcServers;
+            this.api = api;
+            this.formMgr = formMgr;
             this.settings = settings;
             this.luaServer = luaServer;
             InitializeComponent();
@@ -54,11 +54,13 @@ namespace Luna.Views.WinForms
                 rtBoxOutput,
                 pnlScriptEditor);
 
-            editorCtrl.Run(configMgr, vgcServers, settings, luaServer);
+            editorCtrl.Run(api, settings, luaServer);
 
             menuCtrl = new Controllers.MenuCtrl(
+                formMgr,
                 this,
                 editorCtrl,
+                newWindowToolStripMenuItem,
                 loadFileToolStripMenuItem,
                 saveAsToolStripMenuItem,
                 exitToolStripMenuItem);

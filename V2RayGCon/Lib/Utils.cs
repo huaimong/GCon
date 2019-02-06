@@ -883,7 +883,7 @@ namespace V2RayGCon.Lib
         /// <param name="proxyPort">1-65535, other value means download directly</param>
         /// <param name="timeout">millisecond, if &lt;1 then use default value 30000</param>
         /// <returns>If sth. goes wrong return string.Empty</returns>
-        public static string FetchThroughProxy(string url, int proxyPort, int timeout)
+        static string FetchWorker(string url, int proxyPort, int timeout)
         {
             var html = string.Empty;
 
@@ -907,10 +907,14 @@ namespace V2RayGCon.Lib
             return html;
         }
 
-        public static string Fetch(string url, int timeout = -1)
-        {
-            return FetchThroughProxy(url, -1, timeout);
-        }
+        public static string Fetch(string url, int proxyPort, int timeout) =>
+            FetchWorker(url, proxyPort, timeout);
+
+        public static string Fetch(string url) =>
+            FetchWorker(url, -1, -1);
+
+        public static string Fetch(string url, int timeout) =>
+            FetchWorker(url, -1, timeout);
 
         public static string GetLatestVGCVersion()
         {
@@ -936,7 +940,7 @@ namespace V2RayGCon.Lib
             List<string> versions = new List<string> { };
             var url = StrConst.V2rayCoreReleasePageUrl;
 
-            string html = FetchThroughProxy(url, proxyPort, -1);
+            string html = Fetch(url, proxyPort);
             if (string.IsNullOrEmpty(html))
             {
                 return versions;

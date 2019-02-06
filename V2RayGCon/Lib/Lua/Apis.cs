@@ -1,12 +1,16 @@
 ﻿using VgcApis.Models.IServices;
 
-namespace VgcApis.Services
+namespace V2RayGCon.Lib.Lua
 {
-    public class Apis : IApiService
+    public class Apis :
+        VgcApis.Models.BaseClasses.Disposable,
+        IApiService
     {
         IServersService serversService;
         ISettingsService settingService;
         IConfigMgrService configMgrService;
+        ApiComponents.UtilsApi utilsService;
+        ApiComponents.WebApi webService;
 
         public void Run(
             ISettingsService setting,
@@ -16,6 +20,9 @@ namespace VgcApis.Services
             this.configMgrService = configMgr;
             this.settingService = setting;
             this.serversService = servers;
+
+            this.utilsService = new ApiComponents.UtilsApi();
+            this.webService = new ApiComponents.WebApi();
         }
 
         #region IApi interfaces
@@ -27,6 +34,20 @@ namespace VgcApis.Services
 
         public IConfigMgrService GetConfigMgrService()
             => this.configMgrService;
+
+        public IUtilsService GetUtilsService() => utilsService;
+        public IWebService GetWebService() => webService;
+
+
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            utilsService?.Dispose();
+            webService?.Dispose();
+        }
+
         #endregion
     }
 }

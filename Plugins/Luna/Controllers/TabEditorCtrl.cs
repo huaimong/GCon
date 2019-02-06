@@ -11,7 +11,9 @@ namespace Luna.Controllers
     {
         Services.Settings settings;
         Services.LuaServer luaServer;
+        VgcApis.Models.IServices.IApiService api;
         VgcApis.Models.IServices.IConfigMgrService configMgr;
+        VgcApis.Models.IServices.IServersService vgcServers;
         Controllers.LuaCoreCtrl luaCoreCtrl;
         VgcApis.WinForms.FormSearch formSearch = null;
 
@@ -58,6 +60,34 @@ namespace Luna.Controllers
                 pnlEditorContainer);
         }
 
+        public void Run(
+          VgcApis.Models.IServices.IApiService api,
+          Services.Settings settings,
+          Services.LuaServer luaServer)
+        {
+            this.api = api;
+            this.configMgr = api.GetConfigMgrService();
+            this.vgcServers = api.GetServersService();
+
+            this.settings = settings;
+            this.luaServer = luaServer;
+            this.luaCoreCtrl = CreateLuaCoreCtrl(
+                settings, api);
+
+            InitControls();
+            BindEvents();
+
+            ReloadScriptName();
+            if (cboxScriptName.Items.Count > 0)
+            {
+                cboxScriptName.SelectedIndex = 0;
+            }
+
+            updateOutputTimer.Tick += UpdateOutput;
+            updateOutputTimer.Start();
+        }
+
+
         #region properties 
         ConcurrentQueue<string> _logCache = new ConcurrentQueue<string>();
         long logCacheUpdateTimeStamp = DateTime.Now.Ticks;
@@ -80,25 +110,33 @@ namespace Luna.Controllers
             var keyCode = keyEvent.KeyCode;
             if (keyEvent.Control)
             {
-                if (keyCode == Keys.F)
+                switch (keyCode)
                 {
-                    ShowFormSearch();
+                    case Keys.F:
+                        ShowFormSearch();
+                        break;
+                    case Keys.S:
+                        OnBtnSaveScriptClickHandler(false);
+                        break;
+                    case Keys.N:
+                        ClearEditor();
+                        break;
                 }
                 return;
             }
 
             switch (keyCode)
             {
-                case (Keys.F5):
+                case Keys.F5:
                     btnRunScript.PerformClick();
                     break;
-                case (Keys.F6):
+                case Keys.F6:
                     btnStopScript.PerformClick();
                     break;
-                case (Keys.F7):
+                case Keys.F7:
                     btnKillScript.PerformClick();
                     break;
-                case (Keys.F8):
+                case Keys.F8:
                     btnClearOutput.PerformClick();
                     break;
             }
@@ -114,37 +152,12 @@ namespace Luna.Controllers
             return true;
         }
 
-        public void Run(
-            VgcApis.Models.IServices.IConfigMgrService configMgr,
-            VgcApis.Models.IServices.IServersService vgcServers,
-            Services.Settings settings,
-            Services.LuaServer luaServer            )
-        {
-            this.configMgr = configMgr;
-            this.settings = settings;
-            this.luaServer = luaServer;
-            this.luaCoreCtrl = CreateLuaCoreCtrl(
-                vgcServers, settings);
-
-            InitControls();
-            BindEvents();
-
-            ReloadScriptName();
-            if (cboxScriptName.Items.Count > 0)
-            {
-                cboxScriptName.SelectedIndex = 0;
-            }
-
-            updateOutputTimer.Tick += UpdateOutput;
-            updateOutputTimer.Start();
-        }
 
         LuaCoreCtrl CreateLuaCoreCtrl(
-            VgcApis.Models.IServices.IServersService vgcServers,
-            Services.Settings settings)
+            Services.Settings settings,
+            VgcApis.Models.IServices.IApiService api)
         {
-            var luaApis = new Models.Apis.LuaApis();
-            luaApis.Run(settings, vgcServers,configMgr);
+            var luaApis = new Models.Apis.LuaApis(settings, api);
             luaApis.SetRedirectLogWorker(Log);
 
             var coreSettings = new Models.Data.LuaCoreSetting();
@@ -237,17 +250,7 @@ namespace Luna.Controllers
 
         private void BindEvents()
         {
-            btnNewScript.Click += (s, a) =>
-            {
-                if (IsChanged() && !VgcApis.Libs.UI.Confirm(I18N.DiscardUnsavedChanges))
-                {
-                    return;
-                }
-                preScriptName = "";
-                preScriptContent = "";
-                luaEditor.Text = "";
-                cboxScriptName.Text = "";
-            };
+            btnNewScript.Click += (s, a) => ClearEditor();
 
             btnKillScript.Click += (s, a) => luaCoreCtrl.Kill();
 
@@ -288,23 +291,40 @@ namespace Luna.Controllers
                 }
             };
 
-            btnSaveScript.Click += (s, a) =>
-            {
-                var scriptName = cboxScriptName.Text;
-                if (string.IsNullOrEmpty(scriptName))
-                {
-                    VgcApis.Libs.UI.MsgBoxAsync("", I18N.ScriptNameNotSet);
-                    return;
-                }
-
-                var success = SaveScript();
-                VgcApis.Libs.UI.MsgBoxAsync("", success ? I18N.Done : I18N.Fail);
-            };
+            btnSaveScript.Click += (s, a) => OnBtnSaveScriptClickHandler(true);
 
             cboxScriptName.DropDown += (s, a) => ReloadScriptName();
 
             cboxScriptName.SelectedValueChanged += CboxScriptNameChangedHandler;
 
+        }
+
+        private void OnBtnSaveScriptClickHandler(bool showResult)
+        {
+            var scriptName = cboxScriptName.Text;
+            if (string.IsNullOrEmpty(scriptName))
+            {
+                VgcApis.Libs.UI.MsgBoxAsync("", I18N.ScriptNameNotSet);
+                return;
+            }
+
+            var success = SaveScript();
+            if (showResult)
+            {
+                VgcApis.Libs.UI.MsgBoxAsync("", success ? I18N.Done : I18N.Fail);
+            }
+        }
+
+        private void ClearEditor()
+        {
+            if (IsChanged() && !VgcApis.Libs.UI.Confirm(I18N.DiscardUnsavedChanges))
+            {
+                return;
+            }
+            preScriptName = "";
+            preScriptContent = "";
+            luaEditor.Text = "";
+            cboxScriptName.Text = "";
         }
 
         void CboxScriptNameChangedHandler(object sender, EventArgs args)

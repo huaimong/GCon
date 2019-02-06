@@ -152,91 +152,6 @@ namespace V2RayGCon.Service
         }
         #endregion
 
-        #region private method
-        void InitServerCtrlList()
-        {
-            lock (serverListWriteLock)
-            {
-                var coreInfoList = setting.LoadCoreInfoList();
-                foreach (var coreInfo in coreInfoList)
-                {
-                    var server = new Controller.CoreServerCtrl(coreInfo);
-                    coreServList.Add(server);
-                }
-            }
-
-            foreach (var server in coreServList)
-            {
-                server.Run(cache, setting, configMgr, this);
-                BindEventsTo(server);
-            }
-        }
-
-        string AddServersPackageV4(string orgUid, JObject package)
-        {
-            var newConfig = package.ToString(Formatting.None);
-            var servUid = "";
-
-            var orgServ = coreServList.FirstOrDefault(s => s.GetCoreStates().GetUid() == orgUid);
-            if (orgServ != null)
-            {
-                ReplaceServerConfig(orgServ.GetConfiger().GetConfig(), newConfig);
-                servUid = orgUid;
-            }
-            else
-            {
-                AddServer(newConfig, "PackageV4");
-                var newServ = coreServList.FirstOrDefault(s => s.GetConfiger().GetConfig() == newConfig);
-                if (newServ != null)
-                {
-                    servUid = newServ.GetCoreStates().GetUid();
-                }
-            }
-
-            return servUid;
-        }
-
-        int GetServerIndexByConfig(string config)
-        {
-            for (int i = 0; i < coreServList.Count; i++)
-            {
-                var coreCfg = coreServList[i].GetConfiger().GetConfig();
-                if (coreCfg == config)
-                {
-                    return i;
-                }
-            }
-            return -1;
-        }
-
-        void SaveCurrentServerList()
-        {
-            lock (serverListWriteLock)
-            {
-                var coreInfoList = coreServList
-                    .Select(s => s.GetCoreStates().GetAllRawCoreInfo())
-                    .ToList();
-                setting.SaveServerList(coreInfoList);
-            }
-        }
-
-        void RemoveServerItemFromListThen(int index, Action next = null)
-        {
-            var server = coreServList[index];
-            Task.Run(() =>
-            {
-                lock (serverListWriteLock)
-                {
-                    ReleaseEventsFrom(server);
-                    server.Dispose();
-                    coreServList.RemoveAt(index);
-                }
-                next?.Invoke();
-            });
-        }
-
-        #endregion
-
         #region server tracking
 
         void ServerTrackingUpdateWorker(
@@ -400,8 +315,6 @@ namespace V2RayGCon.Service
             RestartServersThen(list);
         }
 
-
-
         public bool IsEmpty()
         {
             return !(this.coreServList.Any());
@@ -428,8 +341,11 @@ namespace V2RayGCon.Service
                 return "";
             }
 
+
             JObject package = configMgr.GenV4ServersPackage(servList, packageName);
-            string newUid = AddServersPackageV4(orgUid, package);
+
+            var newConfig = package.ToString(Formatting.None);
+            string newUid = ReplaceOrAddNewServer(orgUid, newConfig);
 
             UpdateMarkList();
             setting.SendLog(I18N.PackageDone);
@@ -526,7 +442,7 @@ namespace V2RayGCon.Service
             Lib.Utils.ChainActionHelperAsync(list.Count, worker, done);
         }
 
-        public void WakeupServers()
+        public void WakeupServersInBootList()
         {
             List<Controller.CoreServerCtrl> bootList = configMgr.GenServersBootList(coreServList);
 
@@ -749,6 +665,89 @@ namespace V2RayGCon.Service
 
             coreServList[index].GetConfiger().SetConfig(newConfig);
             return true;
+        }
+
+        public string ReplaceOrAddNewServer(string orgUid, string newConfig)
+        {
+            var servUid = "";
+
+            var orgServ = coreServList.FirstOrDefault(s => s.GetCoreStates().GetUid() == orgUid);
+            if (orgServ != null)
+            {
+                ReplaceServerConfig(orgServ.GetConfiger().GetConfig(), newConfig);
+                servUid = orgUid;
+            }
+            else
+            {
+                AddServer(newConfig, "PackageV4");
+                var newServ = coreServList.FirstOrDefault(s => s.GetConfiger().GetConfig() == newConfig);
+                if (newServ != null)
+                {
+                    servUid = newServ.GetCoreStates().GetUid();
+                }
+            }
+
+            return servUid;
+        }
+        #endregion
+
+        #region private method
+        void InitServerCtrlList()
+        {
+            lock (serverListWriteLock)
+            {
+                var coreInfoList = setting.LoadCoreInfoList();
+                foreach (var coreInfo in coreInfoList)
+                {
+                    var server = new Controller.CoreServerCtrl(coreInfo);
+                    coreServList.Add(server);
+                }
+            }
+
+            foreach (var server in coreServList)
+            {
+                server.Run(cache, setting, configMgr, this);
+                BindEventsTo(server);
+            }
+        }
+
+        int GetServerIndexByConfig(string config)
+        {
+            for (int i = 0; i < coreServList.Count; i++)
+            {
+                var coreCfg = coreServList[i].GetConfiger().GetConfig();
+                if (coreCfg == config)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        void SaveCurrentServerList()
+        {
+            lock (serverListWriteLock)
+            {
+                var coreInfoList = coreServList
+                    .Select(s => s.GetCoreStates().GetAllRawCoreInfo())
+                    .ToList();
+                setting.SaveServerList(coreInfoList);
+            }
+        }
+
+        void RemoveServerItemFromListThen(int index, Action next = null)
+        {
+            var server = coreServList[index];
+            Task.Run(() =>
+            {
+                lock (serverListWriteLock)
+                {
+                    ReleaseEventsFrom(server);
+                    server.Dispose();
+                    coreServList.RemoveAt(index);
+                }
+                next?.Invoke();
+            });
         }
 
         #endregion

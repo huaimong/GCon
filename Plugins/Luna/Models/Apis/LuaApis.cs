@@ -9,15 +9,36 @@ namespace Luna.Models.Apis
     {
         Services.Settings settings;
         VgcApis.Models.IServices.IServersService vgcServers;
-        VgcApis.Models.IServices.IConfigMgrService configMgr;
+        VgcApis.Models.IServices.IConfigMgrService vgcConfigMgr;
+        VgcApis.Models.IServices.IWebService vgcWeb;
+        VgcApis.Models.IServices.IUtilsService vgcUtils;
+
         Action<string> redirectLogWorker;
 
-        public LuaApis() { }
+        public LuaApis(
+            Services.Settings settings,
+            VgcApis.Models.IServices.IApiService api)
+        {
+            this.settings = settings;
+            this.vgcConfigMgr = api.GetConfigMgrService();
+            this.vgcServers = api.GetServersService();
+            this.vgcWeb = api.GetWebService();
+            this.vgcUtils = api.GetUtilsService();
+            this.redirectLogWorker = settings.SendLog;
+        }
 
         #region ILuaApis
 
         public long RunSpeedTest(string rawConfig) =>
-            configMgr.RunSpeedTest(rawConfig);
+            vgcConfigMgr.RunSpeedTest(rawConfig);
+
+        public int GetProxyPort() =>
+            vgcServers.GetAvailableHttpProxyPort();
+
+        public string Fetch(string url, int proxyPort, int timeout) =>
+            vgcWeb.Fetch(url, proxyPort, timeout*1000);
+
+        public string Fetch(string url) => vgcWeb.Fetch(url);
 
         public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetAllServers() =>
             vgcServers.GetAllServersOrderByIndex().ToList();
@@ -45,16 +66,7 @@ namespace Luna.Models.Apis
             }
         }
 
-        public void Run(
-            Services.Settings settings,
-            VgcApis.Models.IServices.IServersService vgcServers,
-            VgcApis.Models.IServices.IConfigMgrService configMgr)
-        {
-            this.settings = settings;
-            this.configMgr = configMgr;
-            this.vgcServers = vgcServers;
-            this.redirectLogWorker = settings.SendLog;
-        }
+
 
         public string PerdefinedFunctions() =>
             VgcApis.Models.Consts.Libs.LuaPerdefinedFunctions;

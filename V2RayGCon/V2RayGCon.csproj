@@ -156,6 +156,9 @@
     <Compile Include="Controller\OptionComponent\Subscription.cs" />
     <Compile Include="Controller\FormOptionCtrl.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Lib\Lua\ApiComponents\UtilsApi.cs" />
+    <Compile Include="Lib\Lua\ApiComponents\WebApi.cs" />
+    <Compile Include="Lib\Lua\Apis.cs" />
     <Compile Include="Lib\Sys\ChildProcessTracker.cs" />
     <Compile Include="Lib\Sys\DllLoader.cs" />
     <Compile Include="Lib\QRCode\HybridBinarizer.cs" />

@@ -5,6 +5,23 @@ namespace VgcApis.Models.Interfaces
     public interface ILuaApis
     {
         /// <summary>
+        /// First running http server port.
+        /// </summary>
+        /// <returns></returns>
+        int GetProxyPort();
+
+        /// <summary>
+        /// timeout seconds
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="proxyPort"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        string Fetch(string url, int proxyPort, int timeout);
+
+        string Fetch(string url);
+
+        /// <summary>
         /// Show perdefined functions.
         /// </summary>
         /// <returns></returns>
