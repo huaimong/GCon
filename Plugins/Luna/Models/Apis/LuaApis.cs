@@ -28,6 +28,12 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public string PatchHref(string url, string href) =>
+            vgcWeb.PatchHref(url, href);
+
+        public List<string> FindAllHref(string text) =>
+            vgcWeb.FindAllHref(text);
+
         public string GetAppDir() => VgcApis.Libs.Utils.GetAppDir();
 
         public string VmessLink2ConfigString(string vmessLink) =>
@@ -35,14 +41,9 @@ namespace Luna.Models.Apis
 
         public string Search(string query, int start, int proxyPort) =>
             vgcWeb.Search(query, 0, proxyPort, 20 * 1000);
-
-        public List<string> ExtractHttpLink(string text) =>
-            vgcUtils.ExtractLinks(
-                text,
-                VgcApis.Models.Datas.Enum.LinkTypes.http);
-
+        
         public List<string> ExtractVmessLink(string text) =>
-            vgcUtils.ExtractLinks(text,
+            vgcWeb.ExtractLinks(text,
                 VgcApis.Models.Datas.Enum.LinkTypes.vmess);
 
         public long RunSpeedTest(string rawConfig) =>

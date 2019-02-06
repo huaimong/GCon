@@ -4,10 +4,11 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
+        string PatchHref(string url, string href);
         string GetAppDir();
         string VmessLink2ConfigString(string vmessLink);
         string Search(string query, int start, int proxyPort);
-        List<string> ExtractHttpLink(string text);
+        List<string> FindAllHref(string text);
         List<string> ExtractVmessLink(string text);
 
         /// <summary>

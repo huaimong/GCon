@@ -16,6 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.UI;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -814,6 +815,55 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region net
+        public static string GetBaseUrl(string url)
+        {
+            try
+            {
+                var uri = new Uri(url);
+                var baseUri = uri.GetLeftPart(UriPartial.Authority);
+                return baseUri;
+            }
+            catch (ArgumentNullException) { }
+            catch (UriFormatException) { }
+            catch (ArgumentException) { }
+            catch (InvalidOperationException) { }
+            return "";
+        }
+
+        public static string PatchHref(string url, string href)
+        {
+            var baseUrl = GetBaseUrl(url);
+
+            if (string.IsNullOrEmpty(baseUrl)
+                || string.IsNullOrEmpty(href)
+                || !href.StartsWith("/"))
+            {
+                return href;
+            }
+
+            return baseUrl + href;
+        }
+
+        public static List<string> FindAllHref(string text)
+        {
+            var empty = new List<string>();
+
+            if (string.IsNullOrEmpty(text))
+            {
+                return empty;
+            }
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(text);
+
+            var result = doc.DocumentNode.SelectNodes("//a")
+                ?.Select(p => p.GetAttributeValue("href", ""))
+                ?.Where(s => !string.IsNullOrEmpty(s))
+                ?.ToList();
+
+            return result ?? empty;
+        }
+
         public static string GenSearchUrl(string query, int start)
         {
             var url = VgcApis.Models.Consts.Webs.SearchUrlPrefix + UrlEncode(query);

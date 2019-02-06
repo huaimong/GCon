@@ -42,7 +42,7 @@ namespace V2RayGCon.Service
             return DoSpeedTest(
                 speedTestConfig,
                 title,
-                VgcApis.Models.Consts.Webs.SpeedTestUrl,
+                VgcApis.Models.Consts.Webs.GoogleDotCom,
                 port,
                 logDeliever);
         }

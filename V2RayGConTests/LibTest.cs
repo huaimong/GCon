@@ -10,6 +10,17 @@ namespace V2RayGCon.Test
     [TestClass]
     public class LibTest
     {
+
+        [DataTestMethod]
+        [DataRow("http://a.com/b/c/", "/d/e/abc.html", "http://a.com/d/e/abc.html")]
+        [DataRow("vv/b/c/", "/e/abc.html", "/e/abc.html")]
+        [DataRow("http://a.com/c", "/d/abc.html", "http://a.com/d/abc.html")]
+        public void PatchUrlTest(string url, string relativeUrl, string expect)
+        {
+            var patchedUrl = Lib.Utils.PatchHref(url, relativeUrl);
+            Assert.AreEqual(expect, patchedUrl);
+        }
+
         [DataTestMethod]
         [DataRow("0.0.0.0.", "0.0.0.0.")]
         [DataRow("0.0.1.11", "0.0.1.11")]
@@ -278,6 +289,16 @@ namespace V2RayGCon.Test
                 var len = Lib.Utils.Str2ListStr(item.Key).Count;
                 Assert.AreEqual(item.Value, len);
             }
+        }
+
+        [DataTestMethod]
+        [DataRow("http://abc.com https://def.com", 0)]
+        [DataRow("<a href='http://abc.com' ></a> https://def.com", 1)]
+        [DataRow("<a href='a' ></a> https://def.com", 1)]
+        public void FindAllHrefTest(string html, int count)
+        {
+            var links = Lib.Utils.FindAllHref(html);
+            Assert.AreEqual(count, links.Count());
         }
 
         [TestMethod]
