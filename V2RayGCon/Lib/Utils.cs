@@ -15,6 +15,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -624,7 +625,9 @@ namespace V2RayGCon.Lib
             return list;
         }
 
-        public static List<string> ExtractLinks(string text, Model.Data.Enum.LinkTypes linkType)
+        public static List<string> ExtractLinks(
+            string text,
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
             string pattern = GenPattern(linkType);
             var matches = Regex.Matches("\n" + text, pattern, RegexOptions.IgnoreCase);
@@ -646,7 +649,7 @@ namespace V2RayGCon.Lib
             string content = JsonConvert.SerializeObject(vmess);
             return AddLinkPrefix(
                 Base64Encode(content),
-                Model.Data.Enum.LinkTypes.vmess);
+                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
         }
 
         public static Model.Data.Vmess VmessLink2Vmess(string link)
@@ -811,6 +814,18 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region net
+        public static string GenSearchUrl(string query, int start)
+        {
+            var url = VgcApis.Models.Consts.Webs.SearchUrlPrefix + UrlEncode(query);
+            if (start > 0)
+            {
+                url += VgcApis.Models.Consts.Webs.SearchPagePrefix + start.ToString();
+            }
+            return url;
+        }
+
+        public static string UrlEncode(string value) => HttpUtility.UrlEncode(value);
+
         public static long VisitWebPageSpeedTest(string url = "https://www.google.com", int port = -1)
         {
             var timeout = Str2Int(StrConst.SpeedTestTimeout) * 1000;
@@ -1166,23 +1181,37 @@ namespace V2RayGCon.Lib
             return true;
         }
 
-        static string GetLinkPrefix(Model.Data.Enum.LinkTypes linkType)
+        static string GenLinkPrefix(
+            VgcApis.Models.Datas.Enum.LinkTypes linkType) =>
+            $"{linkType.ToString()}";
+
+        public static string GenPattern(
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
-            return Model.Data.Table.linkPrefix[(int)linkType];
+            string pattern = "";
+
+            switch (linkType)
+            {
+                case VgcApis.Models.Datas.Enum.LinkTypes.ss:
+                case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
+                case VgcApis.Models.Datas.Enum.LinkTypes.v2ray:
+                    pattern = GenLinkPrefix(linkType) + "://" +
+                        VgcApis.Models.Consts.Files.PatternBase64;
+                    break;
+                case VgcApis.Models.Datas.Enum.LinkTypes.http:
+                default:
+                    pattern = VgcApis.Models.Consts.Files.PatternUrl;
+                    break;
+            }
+
+            return StrConst.PatternNonAlphabet + pattern;
         }
 
-        public static string GenPattern(Model.Data.Enum.LinkTypes linkType)
+        public static string AddLinkPrefix(
+            string b64Content,
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
-            return string.Format(
-               "{0}{1}{2}",
-               StrConst.PatternNonAlphabet, // vme[ss]
-               GetLinkPrefix(linkType),
-               StrConst.PatternBase64);
-        }
-
-        public static string AddLinkPrefix(string b64Content, Model.Data.Enum.LinkTypes linkType)
-        {
-            return GetLinkPrefix(linkType) + b64Content;
+            return GenLinkPrefix(linkType) + "://" + b64Content;
         }
 
         public static string GetLinkBody(string link)

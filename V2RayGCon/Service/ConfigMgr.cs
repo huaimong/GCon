@@ -252,6 +252,17 @@ namespace V2RayGCon.Service
             return pkg;
         }
 
+        public string VmessLink2ConfigString(string vmessLink)
+        {
+            var vmess = Lib.Utils.VmessLink2Vmess(vmessLink);
+            var config = Vmess2Config(vmess);
+            if (config == null)
+            {
+                return "";
+            }
+            return config.ToString();
+        }
+
         public JObject Vmess2Config(Model.Data.Vmess vmess)
         {
             if (vmess == null)

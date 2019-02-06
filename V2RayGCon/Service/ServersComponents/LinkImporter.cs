@@ -143,7 +143,7 @@ namespace V2RayGCon.Service.ServersComponents
         Tuple<bool, List<string[]>> ImportSSLinks(string text, string mark = "")
         {
             var isAddNewServer = false;
-            var links = Lib.Utils.ExtractLinks(text, Model.Data.Enum.LinkTypes.ss);
+            var links = Lib.Utils.ExtractLinks(text, VgcApis.Models.Datas.Enum.LinkTypes.ss);
             List<string[]> result = new List<string[]>();
 
             foreach (var link in links)
@@ -173,7 +173,7 @@ namespace V2RayGCon.Service.ServersComponents
         Tuple<bool, List<string[]>> ImportV2RayLinks(string text, string mark = "")
         {
             bool isAddNewServer = false;
-            var links = Lib.Utils.ExtractLinks(text, Model.Data.Enum.LinkTypes.v2ray);
+            var links = Lib.Utils.ExtractLinks(text, VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
             List<string[]> result = new List<string[]>();
 
             foreach (var link in links)
@@ -209,7 +209,7 @@ namespace V2RayGCon.Service.ServersComponents
 
         Tuple<bool, List<string[]>> ImportVmessLinks(string text, string mark = "")
         {
-            var links = Lib.Utils.ExtractLinks(text, Model.Data.Enum.LinkTypes.vmess);
+            var links = Lib.Utils.ExtractLinks(text, VgcApis.Models.Datas.Enum.LinkTypes.vmess);
             var result = new List<string[]>();
             var isAddNewServer = false;
 

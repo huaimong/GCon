@@ -185,7 +185,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                     .Where(s => s.GetCoreStates().IsSelected())
                     .Select(s => Lib.Utils.AddLinkPrefix(
                         Lib.Utils.Base64Encode(s.GetConfiger().GetConfig()),
-                        Model.Data.Enum.LinkTypes.v2ray))
+                        VgcApis.Models.Datas.Enum.LinkTypes.v2ray))
                     .ToList();
 
                 MessageBox.Show(

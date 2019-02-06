@@ -129,7 +129,7 @@ namespace V2RayGCon.Views.WinForms
             {
                 link = Lib.Utils.AddLinkPrefix(
                     Lib.Utils.Base64Encode(config),
-                    Model.Data.Enum.LinkTypes.v2ray);
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
             }
 
             tboxLink.Text = link;

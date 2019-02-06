@@ -40,6 +40,7 @@
             vmess = 0,
             v2ray = 1,
             ss = 2,
+            http = 3,
         }
 
         /// <summary>

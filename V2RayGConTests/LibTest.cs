@@ -281,11 +281,23 @@ namespace V2RayGCon.Test
         }
 
         [TestMethod]
+        public void ExtractLinks_HttpLink()
+        {
+            var html = "http://abc.com https://def.com";
+
+            var links = Lib.Utils.ExtractLinks(html,
+                VgcApis.Models.Datas.Enum.LinkTypes.http);
+
+            Assert.AreEqual(2, links.Count());
+        }
+
+
+        [TestMethod]
         public void ExtractLinks_FromString()
         {
             // var content = testData("links");
             var content = "ss://ZHVtbXkwMA==";
-            var links = Lib.Utils.ExtractLinks(content, Model.Data.Enum.LinkTypes.ss);
+            var links = Lib.Utils.ExtractLinks(content, VgcApis.Models.Datas.Enum.LinkTypes.ss);
             var expact = "ss://ZHVtbXkwMA==";
             Assert.AreEqual(links.Count, 1);
             Assert.AreEqual(expact, links[0]);
@@ -295,7 +307,7 @@ namespace V2RayGCon.Test
         public void ExtractLinks_FromLinksTxt()
         {
             var content = TestConst.links;
-            var links = Lib.Utils.ExtractLinks(content, Model.Data.Enum.LinkTypes.vmess);
+            var links = Lib.Utils.ExtractLinks(content, VgcApis.Models.Datas.Enum.LinkTypes.vmess);
             Assert.AreEqual(2, links.Count);
         }
 
@@ -303,7 +315,7 @@ namespace V2RayGCon.Test
         public void ExtractLink_FromEmptyString_Return_EmptyList()
         {
             var content = "";
-            var links = Lib.Utils.ExtractLinks(content, Model.Data.Enum.LinkTypes.vmess);
+            var links = Lib.Utils.ExtractLinks(content, VgcApis.Models.Datas.Enum.LinkTypes.vmess);
             Assert.AreEqual(0, links.Count);
         }
 

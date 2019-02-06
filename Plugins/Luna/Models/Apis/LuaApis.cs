@@ -28,6 +28,20 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public string VmessLink2ConfigString(string vmessLink) =>
+            vgcConfigMgr.VmessLink2ConfigString(vmessLink);
+
+        public string Search(string query, int start, int proxyPort) =>
+            vgcWeb.Search(query, 0, proxyPort, 20 * 1000);
+
+        public List<string> ExtractHttpLink(string text)=>
+            vgcUtils.ExtractLinks(
+                text,
+                VgcApis.Models.Datas.Enum.LinkTypes.http);
+
+        public List<string> ExtractVmessLink(string text) =>
+            vgcUtils.ExtractLinks(text,
+                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
 
         public long RunSpeedTest(string rawConfig) =>
             vgcConfigMgr.RunSpeedTest(rawConfig);
@@ -36,9 +50,9 @@ namespace Luna.Models.Apis
             vgcServers.GetAvailableHttpProxyPort();
 
         public string Fetch(string url, int proxyPort, int timeout) =>
-            vgcWeb.Fetch(url, proxyPort, timeout*1000);
+            vgcWeb.Fetch(url, proxyPort, timeout * 1000);
 
-        public string Fetch(string url) => vgcWeb.Fetch(url);
+        public string Fetch(string url) => vgcWeb.Fetch(url, -1, -1);
 
         public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetAllServers() =>
             vgcServers.GetAllServersOrderByIndex().ToList();
@@ -65,8 +79,6 @@ namespace Luna.Models.Apis
                 redirectLogWorker = worker;
             }
         }
-
-
 
         public string PerdefinedFunctions() =>
             VgcApis.Models.Consts.Libs.LuaPerdefinedFunctions;

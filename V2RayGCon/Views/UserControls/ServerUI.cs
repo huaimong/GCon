@@ -408,7 +408,7 @@ namespace V2RayGCon.Views.UserControls
                            Lib.Utils.CopyToClipboard(
                                Lib.Utils.AddLinkPrefix(
                                    Lib.Utils.Base64Encode(GetConfig()),
-                                   Model.Data.Enum.LinkTypes.v2ray)) ?
+                                   VgcApis.Models.Datas.Enum.LinkTypes.v2ray)) ?
                            I18N.LinksCopied :
                            I18N.CopyFail);
         }

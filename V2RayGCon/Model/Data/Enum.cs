@@ -35,13 +35,6 @@
             zhCN = 2,
         }
 
-        public enum LinkTypes
-        {
-            vmess = 0,
-            v2ray = 1,
-            ss = 2,
-        }
-
         /// <summary>
         /// Inbound types
         /// </summary>

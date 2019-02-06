@@ -58,7 +58,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 var vlink = Lib.Utils.AddLinkPrefix(
                     Lib.Utils.Base64Encode(server.GetConfiger().GetConfig()),
-                    Model.Data.Enum.LinkTypes.v2ray);
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
 
                 s += vlink + System.Environment.NewLine + System.Environment.NewLine;
             }

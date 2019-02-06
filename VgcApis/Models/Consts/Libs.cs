@@ -6,10 +6,12 @@
         public const int TrimdownLogCacheDelay = 5000;
         public const int MaxCacheLoggerLineNumber = 1000;
         public const int MinCacheLoggerLineNumber = 1000;
+        #endregion
 
         public const string LuaPerdefinedFunctions =
 @"
 import = function () end
+print = function(...) Api:Print(...) end
                 
 -- copy from NLua
 function Each(o)
@@ -20,6 +22,6 @@ function Each(o)
         end
     end
 end";
-        #endregion
+
     }
 }

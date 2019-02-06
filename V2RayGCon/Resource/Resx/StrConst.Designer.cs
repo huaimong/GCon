@@ -374,15 +374,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4}) 的本地化字符串。
-        /// </summary>
-        internal static string PatternBase64 {
-            get {
-                return ResourceManager.GetString("PatternBase64", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 [A-Za-z0-9+/]+ 的本地化字符串。
         /// </summary>
         internal static string PatternBase64NonStandard {
