@@ -509,26 +509,24 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
-set "remove4VgcLiteFileList=Luna NLua liblua53 lua53 KeraLua ProxySetter"
-set "pluginFileList=Luna Statistics Pacman ProxySetter"
-set "nugetLibFileList=liblua53 NLua KeraLua lua53 HtmlAgilityPack DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
+set "allDlls=Luna NLua liblua53 lua53 KeraLua ProxySetter Statistics Pacman HtmlAgilityPack DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
 set "luaFolders=x86 x64"
-set "move2LibDirFileList=%25nugetLibFileList%25 %25pluginFileList%25"
 
 call:CreateFolderOnDemand "%25libsDir%25"
 
-if "$(ConfigurationName)" == "lite" ( 
-  call:RemoveFiles "%25remove4VgcLiteFileList%25"
-)  
+call:MoveFolders "%25luaFolders%25"
 
-call:MoveLuaFolders "%25luaFolders%25"
-
-call:MoveFilesByList "%25move2LibDirFileList%25"
+call:MoveFilesByList "%25allDlls%25"
 goto:eof
 
-:MoveLuaFolders
+:MoveFolders
   for %25%25i in (%25~1) do ( 
-	move "%25%25i" "%25libsDir%25"
+	IF EXIST "%25libsDir%25\%25%25i\" ( 
+	  ROBOCOPY "%25%25i" "%25libsDir%25\%25%25i" /E /IS /MOVE
+	) ELSE (
+	  MOVE /Y "%25%25i" "%25libsDir%25\"
+	) 
+	rem move "%25%25i" "%25libsDir%25"
   ) 
 goto:eof
 
