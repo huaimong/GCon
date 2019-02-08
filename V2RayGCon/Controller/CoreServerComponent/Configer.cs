@@ -138,7 +138,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             });
         }
 
-        public void InjectSkipCnSitesConfig(ref JObject config)
+        public void InjectSkipCnSitesConfigOnDemand(ref JObject config)
         {
             if (!coreInfo.isInjectSkipCNSite)
             {
@@ -151,7 +151,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 false);
         }
 
-        public void InjectStatisticsConfig(ref JObject config)
+        public void InjectStatisticsConfigOnDemand(ref JObject config)
         {
             if (!setting.isEnableStatistics)
             {
@@ -215,7 +215,12 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 return new Tuple<string, string, int>(protocol, ip, port);
             }
 
-            var parsedConfig = configMgr.DecodeConfig(rawConfig, true, false, true);
+            var parsedConfig = configMgr.DecodeConfig(
+                rawConfig, 
+                true, 
+                false, 
+                coreInfo.isInjectImport);
+
             if (parsedConfig == null)
             {
                 return null;

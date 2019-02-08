@@ -26,7 +26,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             this.configMgr = configMgr;
         }
 
-        CoreStates states;
+        CoreStates coreStates;
         Configer configer;
         Logger logger;
         CoreServerCtrl container;
@@ -35,7 +35,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             this.coreServ = new V2RayGCon.Lib.V2Ray.Core(setting);
 
             container = GetContainer();
-            states = container.GetComponent<CoreStates>();
+            coreStates = container.GetComponent<CoreStates>();
             configer = container.GetComponent<Configer>();
             logger = container.GetComponent<Logger>();
         }
@@ -57,7 +57,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         public VgcApis.Models.Datas.StatsSample TakeStatisticsSample()
         {
-            var statsPort = states.GetStatPort();
+            var statsPort = coreStates.GetStatPort();
             if (!setting.isEnableStatistics
                 || statsPort <= 0)
             {
@@ -104,31 +104,31 @@ namespace V2RayGCon.Controller.CoreServerComponent
         {
             if (!coreServ.isRunning)
             {
-                states.SetStatPort(0);
+                coreStates.SetStatPort(0);
             }
             container.InvokeEventOnPropertyChange();
         }
 
         void BeginSpeedTestWorker(string rawConfig)
         {
-            states.SetStatus(I18N.Testing);
+            coreStates.SetStatus(I18N.Testing);
             logger.Log(I18N.Testing);
 
             var delay = configMgr.SpeedTestWorker(
                 rawConfig,
-                states.GetTitle(),
+                coreStates.GetTitle(),
                 true,
                 true,
                 false,
                 (s, a) => logger.Log(a.Data));
 
-            states.SetSpeedTestResult(delay);
+            coreStates.SetSpeedTestResult(delay);
 
             var speedTestResult = delay < long.MaxValue ?
                 $"{delay.ToString()} ms" :
                 I18N.Timeout;
 
-            states.SetStatus(speedTestResult);
+            coreStates.SetStatus(speedTestResult);
             logger.Log(speedTestResult);
         }
 
@@ -151,30 +151,34 @@ namespace V2RayGCon.Controller.CoreServerComponent
         void RestartCoreWorker(Action next)
         {
             JObject cfg = configMgr.DecodeConfig(
-                configer.GetConfig(), true, false, true);
+                configer.GetConfig(),
+                true, 
+                false, 
+                coreStates.IsInjectImport());
+
             if (cfg == null)
             {
                 StopCoreThen(next);
                 return;
             }
 
-            if (!configMgr.ReplaceInboundWithCustomSetting(
+            if (!configMgr.ModifyInboundByCustomSetting(
                 ref cfg,
-                states.GetCustomInbType(),
-                states.GetInbIp(),
-                states.GetInbPort()))
+                coreStates.GetCustomInbType(),
+                coreStates.GetInbIp(),
+                coreStates.GetInbPort()))
             {
                 StopCoreThen(next);
                 return;
             }
 
-            configer.InjectSkipCnSitesConfig(ref cfg);
-            configer.InjectStatisticsConfig(ref cfg);
+            configer.InjectSkipCnSitesConfigOnDemand(ref cfg);
+            configer.InjectStatisticsConfigOnDemand(ref cfg);
 
             // debug
             var configStr = cfg.ToString(Formatting.Indented);
 
-            coreServ.title = states.GetTitle();
+            coreServ.title = coreStates.GetTitle();
             coreServ.RestartCoreThen(
                 cfg.ToString(),
                 () =>

@@ -103,7 +103,7 @@ namespace V2RayGCon.Service
             return decodedConfig;
         }
 
-        public bool ReplaceInboundWithCustomSetting(
+        public bool ModifyInboundByCustomSetting(
             ref JObject config,
             int inbType,
             string ip,
@@ -561,7 +561,7 @@ namespace V2RayGCon.Service
                 return empty;
             }
 
-            if (!ReplaceInboundWithCustomSetting(
+            if (!ModifyInboundByCustomSetting(
                 ref config,
                 (int)Model.Data.Enum.ProxyTypes.HTTP,
                 "127.0.0.1",
