@@ -4,10 +4,10 @@ namespace Luna.Services
 {
     public class Settings
     {
-        VgcApis.Models.IServices.ISettingService vgcSetting;
+        VgcApis.Models.IServices.ISettingsService vgcSetting;
         readonly string pluginName = Properties.Resources.Name;
         Models.Data.UserSettings userSettings;
-        VgcApis.Libs.Sys.LazyGuy bookKeeper;
+        VgcApis.Libs.Tasks.LazyGuy bookKeeper;
 
         public Settings() { }
 
@@ -22,7 +22,7 @@ namespace Luna.Services
             => vgcSetting.IsShutdown();
 
         public void Run(
-            VgcApis.Models.IServices.ISettingService vgcSetting)
+            VgcApis.Models.IServices.ISettingsService vgcSetting)
         {
             this.vgcSetting = vgcSetting;
 
@@ -30,7 +30,7 @@ namespace Luna.Services
                 .LoadPluginSetting<Models.Data.UserSettings>(
                     pluginName, vgcSetting);
 
-            bookKeeper = new VgcApis.Libs.Sys.LazyGuy(
+            bookKeeper = new VgcApis.Libs.Tasks.LazyGuy(
                 SaveUserSettingsNow, 30000);
         }
 

@@ -7,17 +7,17 @@ namespace Pacman.Services
 {
     public class Settings
     {
-        VgcApis.Models.IServices.ISettingService vgcSetting;
+        VgcApis.Models.IServices.ISettingsService vgcSetting;
         VgcApis.Models.IServices.IServersService vgcServers;
         readonly string pluginName = Properties.Resources.Name;
         Models.Data.UserSettings userSettings;
 
         public Settings() { }
 
-        public void Run(VgcApis.IService vgcApi)
+        public void Run(VgcApis.Models.IServices.IApiService vgcApi)
         {
-            vgcServers = vgcApi.GetVgcServersService();
-            vgcSetting = vgcApi.GetVgcSettingService();
+            vgcServers = vgcApi.GetServersService();
+            vgcSetting = vgcApi.GetSettingService();
             userSettings = LoadUserSettings();
         }
 
@@ -27,7 +27,7 @@ namespace Pacman.Services
 
         #region public methods
         public string Pack(
-            List<VgcApis.Models.IControllers.ICoreCtrl> servList,
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
             string orgServerUid,
             string packageName)
         {
@@ -37,9 +37,9 @@ namespace Pacman.Services
                 packageName);
         }
 
-        public ReadOnlyCollection<VgcApis.Models.IControllers.ICoreCtrl>
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
             GetAllServersList()
-                => vgcServers.GetAllServersList();
+                => vgcServers.GetAllServersOrderByIndex();
 
         public List<Models.Data.Package> GetPackageList()
         {

@@ -8,6 +8,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
     {
         Service.Cache cache;
         Service.Servers servers;
+        Service.ConfigMgr configMgr;
 
         bool isUseV4;
 
@@ -18,6 +19,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             cache = Service.Cache.Instance;
             servers = Service.Servers.Instance;
+            configMgr = Service.ConfigMgr.Instance;
 
             isUseV4 = chkUseV4.Checked;
             chkUseV4.CheckedChanged += (s, a) =>
@@ -28,7 +30,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             skipCN.Click += (s, a) =>
             {
                 container.InjectConfigHelper(
-                    () => servers
+                    () => configMgr
                         .InjectSkipCnSiteSettingsIntoConfig(
                             ref container.config,
                             isUseV4)

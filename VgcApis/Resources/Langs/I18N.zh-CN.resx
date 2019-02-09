@@ -120,7 +120,13 @@
   <data name="Confirm" xml:space="preserve">
     <value>确认</value>
   </data>
+  <data name="Done" xml:space="preserve">
+    <value>完成</value>
+  </data>
   <data name="SaveAs" xml:space="preserve">
     <value>另存为</value>
+  </data>
+  <data name="WriteFileFail" xml:space="preserve">
+    <value>写入文件失败!</value>
   </data>
 </root>

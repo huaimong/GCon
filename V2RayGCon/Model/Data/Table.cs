@@ -43,7 +43,7 @@ namespace V2RayGCon.Model.Data
             { (int)Model.Data.Enum.Sections.OutboundDetour, "outboundDetour"},
         };
 
-        public static readonly string[] inboundOverwriteTypesName = new string[] {
+        public static readonly string[] customInbTypeNames = new string[] {
             "config",
             "http",
             "socks"

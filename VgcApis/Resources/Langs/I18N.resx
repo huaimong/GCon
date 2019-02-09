@@ -120,7 +120,13 @@
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="Done" xml:space="preserve">
+    <value>Done.</value>
+  </data>
   <data name="SaveAs" xml:space="preserve">
     <value>Save as</value>
+  </data>
+  <data name="WriteFileFail" xml:space="preserve">
+    <value>Write to file fail!</value>
   </data>
 </root>

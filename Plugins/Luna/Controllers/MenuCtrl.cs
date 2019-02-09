@@ -7,20 +7,32 @@ namespace Luna.Controllers
     {
         TabEditorCtrl editorCtrl;
         Views.WinForms.FormMain formMain;
+        Services.FormMgr formMgrService;
 
         public MenuCtrl(
+            Services.FormMgr formMgrService,
             Views.WinForms.FormMain formMain,
             TabEditorCtrl editorCtrl,
+            ToolStripMenuItem miNewWindow,
             ToolStripMenuItem miLoad,
             ToolStripMenuItem miSaveAs,
             ToolStripMenuItem miExit)
         {
+            this.formMgrService = formMgrService;
+
             BindControls(formMain, editorCtrl);
-            NewMethod(miLoad, miSaveAs, miExit);
+            BindEvents(miNewWindow,miLoad, miSaveAs, miExit);
         }
 
-        private void NewMethod(ToolStripMenuItem miLoad, ToolStripMenuItem miSaveAs, ToolStripMenuItem miExit)
+        private void BindEvents(
+            ToolStripMenuItem miNewWindow,
+            ToolStripMenuItem miLoad, 
+            ToolStripMenuItem miSaveAs, 
+            ToolStripMenuItem miExit)
         {
+            miNewWindow.Click += (s, a) => 
+                formMgrService.CreateNewForm();
+
             // event handling
             miExit.Click += (s, a) =>
             {
@@ -37,9 +49,8 @@ namespace Luna.Controllers
                     return;
                 }
 
-                string script = VgcApis.Libs.UI.ShowReadFileDialog(
-                    VgcApis.Models.Consts.Files.LuaExt,
-                    out string filename);
+                string script = VgcApis.Libs.UI.ReadFileContentFromDialog(
+                    VgcApis.Models.Consts.Files.LuaExt);
 
                 // user cancelled.
                 if (script == null)
@@ -52,27 +63,9 @@ namespace Luna.Controllers
 
             miSaveAs.Click += (s, a) =>
             {
-                var script = editorCtrl.GetCurrentEditorContent();
-
-                var result = VgcApis.Libs.UI.ShowSaveFileDialog(
+                VgcApis.Libs.UI.SaveToFile(
                     VgcApis.Models.Consts.Files.LuaExt,
-                    script,
-                    out string filename);
-
-                switch (result)
-
-                {
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                        MessageBox.Show(I18N.Done);
-                        break;
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                        MessageBox.Show(I18N.WriteFileFail);
-                        break;
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                        // do nothing
-                        break;
-                }
-
+                    editorCtrl.GetCurrentEditorContent());
             };
         }
 

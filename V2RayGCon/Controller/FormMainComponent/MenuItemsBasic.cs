@@ -12,7 +12,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem miSimVmessServer,
             ToolStripMenuItem miImportLinkFromClipboard,
             ToolStripMenuItem miExportAllServer,
-            ToolStripMenuItem importFromFile,
+            ToolStripMenuItem miImportFromFile,
             ToolStripMenuItem miAbout,
             ToolStripMenuItem miHelp,
             ToolStripMenuItem miFormConfigEditor,
@@ -24,7 +24,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         {
             servers = Service.Servers.Instance;
 
-            InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, importFromFile);
+            InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, miImportFromFile);
             InitMenuWindows(miFormConfigEditor, miFormQRCode, miFormLog, miFormOptions);
             InitMenuAbout(miAbout, miHelp, miDownloadV2rayCore, miRemoveV2rayCore);
         }
@@ -32,14 +32,15 @@ namespace V2RayGCon.Controller.FormMainComponent
         #region public method
         public void ImportServersFromTextFile()
         {
-            string v2rayLinks = VgcApis.Libs.UI.ShowReadFileDialog(StrConst.ExtText, out string filename);
+            string v2rayLinks = VgcApis.Libs.UI.ReadFileContentFromDialog(
+                VgcApis.Models.Consts.Files.TxtExt);
 
             if (v2rayLinks == null)
             {
                 return;
             }
 
-            servers.ImportLinksWithV2RayLinks(v2rayLinks);
+            servers.ImportLinkWithV2RayLinks(v2rayLinks);
         }
 
         public void ExportAllServersToTextFile()
@@ -50,33 +51,21 @@ namespace V2RayGCon.Controller.FormMainComponent
                 return;
             }
 
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
             string s = string.Empty;
 
             foreach (var server in serverList)
             {
                 var vlink = Lib.Utils.AddLinkPrefix(
-                    Lib.Utils.Base64Encode(server.config),
-                    Model.Data.Enum.LinkTypes.v2ray);
+                    Lib.Utils.Base64Encode(server.GetConfiger().GetConfig()),
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
 
                 s += vlink + System.Environment.NewLine + System.Environment.NewLine;
             }
 
-            switch (VgcApis.Libs.UI.ShowSaveFileDialog(
-                StrConst.ExtText,
-                s,
-                out string filename))
-            {
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                    MessageBox.Show(I18N.Done);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                    MessageBox.Show(I18N.WriteFileFail);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                    // do nothing
-                    break;
-            }
+            VgcApis.Libs.UI.SaveToFile(
+                VgcApis.Models.Consts.Files.TxtExt,
+                s);
         }
 
         public override bool RefreshUI() { return false; }
@@ -84,14 +73,14 @@ namespace V2RayGCon.Controller.FormMainComponent
         #endregion
 
         #region private method
-        private void InitMenuAbout(ToolStripMenuItem about, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
+        private void InitMenuAbout(ToolStripMenuItem aboutVGC, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
         {
             // menu about
             downloadV2rayCore.Click += (s, a) => Views.WinForms.FormDownloadCore.GetForm();
 
             removeV2rayCore.Click += (s, a) => RemoveV2RayCore();
 
-            about.Click += (s, a) =>
+            aboutVGC.Click += (s, a) =>
                 Lib.UI.VisitUrl(I18N.VistPorjectPage, Properties.Resources.ProjectLink);
 
             help.Click += (s, a) =>
@@ -107,7 +96,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             importLinkFromClipboard.Click += (s, a) =>
             {
                 string links = Lib.Utils.GetClipboardText();
-                servers.ImportLinksWithV2RayLinks(links);
+                servers.ImportLinkWithV2RayLinks(links);
             };
 
             exportAllServer.Click += (s, a) => ExportAllServersToTextFile();

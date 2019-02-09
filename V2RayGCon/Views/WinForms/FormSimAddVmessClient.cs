@@ -85,7 +85,7 @@ namespace V2RayGCon.Views.WinForms
 
             var link = Lib.Utils.Vmess2VmessLink(vmess);
 
-            servers.ImportLinksWithOutV2RayLinks(link);
+            servers.ImportLinkWithOutV2RayLinks(link);
             this.Close();
         }
 

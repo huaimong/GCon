@@ -93,6 +93,8 @@ namespace Luna.Libs
 
             // Disable cmd
             scintilla.ClearCmdKey(Keys.Control | Keys.F);
+            scintilla.ClearCmdKey(Keys.Control | Keys.S);
+            scintilla.ClearCmdKey(Keys.Control | Keys.N);
             return scintilla;
         }
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Timers;
 
-namespace VgcApis.Libs.Sys
+namespace VgcApis.Libs.Tasks
 {
     public class CancelableTimeout
     {
@@ -57,5 +57,6 @@ namespace VgcApis.Libs.Sys
             this.worker = null;
             timer.Close();
         }
+
     }
 }

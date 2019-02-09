@@ -148,9 +148,11 @@ namespace V2RayGCon.Views.WinForms
                 return;
             }
 
-            string json = VgcApis.Libs.UI.ShowReadFileDialog(
-                VgcApis.Models.Consts.Files.JsonExt,
-                out string filename);
+            var tuple = VgcApis.Libs.UI.ReadFileFromDialog(
+                VgcApis.Models.Consts.Files.JsonExt);
+
+            var json = tuple.Item1;
+            var filename = tuple.Item2;
 
             // user cancelled.
             if (json == null)
@@ -377,7 +379,7 @@ namespace V2RayGCon.Views.WinForms
             menuReplaceServer.Clear();
             menuLoadServer.Clear();
 
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
 
             var enable = serverList.Count > 0;
             replaceExistServerToolStripMenuItem.Enabled = enable;
@@ -385,8 +387,12 @@ namespace V2RayGCon.Views.WinForms
 
             for (int i = 0; i < serverList.Count; i++)
             {
-                var name = string.Format("{0}.{1}", i + 1, serverList[i].name);
-                var org = serverList[i].config;
+                var name = string.Format(
+                    "{0}.{1}",
+                    i + 1,
+                    serverList[i].GetCoreStates().GetName());
+
+                var org = serverList[i].GetConfiger().GetConfig();
                 menuReplaceServer.Add(new ToolStripMenuItem(name, null, (s, a) =>
                 {
                     if (Lib.UI.Confirm(I18N.ReplaceServer))

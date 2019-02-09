@@ -14,6 +14,17 @@ namespace Luna.Services
 
         public LuaServer() { }
 
+        public void Run(
+           Settings settings,
+           VgcApis.Models.IServices.IApiService api)
+        {
+            this.settings = settings;
+            this.luaApis = new Models.Apis.LuaApis(settings, api);
+
+            luaCoreCtrls = InitLuaCores(settings, luaApis);
+            WakeUpAutoRunScripts();
+        }
+
         #region public methods
         public List<Controllers.LuaCoreCtrl> GetAllLuaCoreCtrls()
         {
@@ -75,17 +86,7 @@ namespace Luna.Services
             return true;
         }
 
-        public void Run(
-            Settings settings,
-            VgcApis.Models.IServices.IServersService vgcServers)
-        {
-            this.settings = settings;
-            this.luaApis = new Models.Apis.LuaApis();
-            luaApis.Run(settings, vgcServers);
 
-            luaCoreCtrls = InitLuaCores(settings, luaApis);
-            WakeUpAutoRunScripts();
-        }
 
         public void Cleanup()
         {

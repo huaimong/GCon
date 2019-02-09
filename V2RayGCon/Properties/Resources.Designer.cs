@@ -215,7 +215,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://github.com/nobody3u/V2RayGCon 的本地化字符串。
+        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon 的本地化字符串。
         /// </summary>
         internal static string ProjectLink {
             get {

@@ -85,7 +85,7 @@ namespace V2RayGCon.Controller
 
             var newConfig = Lib.Utils.Config2String(config);
             if (originalConfig == newConfig
-                || servers.IsServerItemExist(newConfig))
+                || servers.IsServerExist(newConfig))
             {
                 MessageBox.Show(I18N.DuplicateServer);
                 return false;

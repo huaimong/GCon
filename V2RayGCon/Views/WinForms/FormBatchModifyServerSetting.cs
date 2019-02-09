@@ -40,16 +40,21 @@ namespace V2RayGCon.Views.WinForms
                 this.cboxMark.Items.Add(mark);
             }
 
-            var first = servers.GetServerList().Where(s => s.isSelected).FirstOrDefault();
-            if (first == null)
+            var firstCtrl = servers
+                .GetAllServersOrderByIndex()
+                .Where(s => s.GetCoreStates().IsSelected())
+                .FirstOrDefault();
+            if (firstCtrl == null)
             {
                 return;
             }
 
-            this.cboxInMode.SelectedIndex = first.overwriteInboundType;
-            this.tboxInIP.Text = first.inboundIP;
-            this.tboxInPort.Text = first.inboundPort.ToString();
-            this.cboxMark.Text = first.mark;
+            var first = firstCtrl.GetCoreStates().GetAllRawCoreInfo();
+
+            this.cboxInMode.SelectedIndex = first.customInbType;
+            this.tboxInIP.Text = first.inbIp;
+            this.tboxInPort.Text = first.inbPort.ToString();
+            this.cboxMark.Text = first.customMark;
             this.cboxAutorun.SelectedIndex = first.isAutoRun ? 0 : 1;
             this.cboxImport.SelectedIndex = first.isInjectImport ? 0 : 1;
             this.cboxIsInjectSkipCNSite.SelectedIndex = first.isInjectSkipCNSite ? 0 : 1;
@@ -77,7 +82,11 @@ namespace V2RayGCon.Views.WinForms
 
         private void btnModify_Click(object sender, EventArgs e)
         {
-            var list = servers.GetServerList().Where(s => s.isSelected).ToList();
+            var list = servers
+                .GetAllServersOrderByIndex()
+                .Where(s => s.GetCoreStates().IsSelected())
+                .ToList();
+
             var newMode = chkInMode.Checked ? cboxInMode.SelectedIndex : -1;
             var newIP = chkInIP.Checked ? tboxInIP.Text : null;
             var newPort = chkInPort.Checked ? Lib.Utils.Str2Int(tboxInPort.Text) : -1;
@@ -98,7 +107,7 @@ namespace V2RayGCon.Views.WinForms
 
         #region private method
         void ModifyServersSetting(
-            List<Controller.CoreServerCtrl> list,
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> list,
             int newMode, string newIP, int newPort, bool isPortAutoIncrease,
             string newMark, int newAutorun, int newImport, int newSkipCN)
         {
@@ -107,7 +116,7 @@ namespace V2RayGCon.Views.WinForms
                 var portNumber = isPortAutoIncrease ? newPort + index : newPort;
 
                 var server = list[index];
-                if (!server.isServerOn)
+                if (!server.GetCoreCtrl().IsCoreRunning())
                 {
                     ModifyServerSetting(
                         ref server,
@@ -118,13 +127,13 @@ namespace V2RayGCon.Views.WinForms
                     return;
                 }
 
-                server.StopCoreThen(() =>
+                server.GetCoreCtrl().StopCoreThen(() =>
                 {
                     ModifyServerSetting(
                         ref server,
                         newMode, newIP, portNumber,
                         newMark, newAutorun, newImport, newSkipCN);
-                    server.RestartCoreThen();
+                    server.GetCoreCtrl().RestartCoreThen();
                     next();
                 });
             };
@@ -144,10 +153,12 @@ namespace V2RayGCon.Views.WinForms
         }
 
         void ModifyServerSetting(
-            ref Controller.CoreServerCtrl server,
+            ref VgcApis.Models.Interfaces.ICoreServCtrl serverCtrl,
             int newMode, string newIP, int newPort,
             string newMark, int newAutorun, int newImport, int newSkipCN)
         {
+            var server = serverCtrl.GetCoreStates().GetAllRawCoreInfo();
+
             if (newSkipCN >= 0)
             {
                 server.isInjectSkipCNSite = newSkipCN == 0;
@@ -165,21 +176,21 @@ namespace V2RayGCon.Views.WinForms
 
             if (newMode >= 0)
             {
-                server.overwriteInboundType = newMode;
+                server.customInbType = newMode;
             }
 
             if (newIP != null)
             {
-                server.inboundIP = newIP;
+                server.inbIp = newIP;
             }
             if (newPort >= 0)
             {
-                server.inboundPort = newPort;
+                server.inbPort = newPort;
             }
 
             if (newMark != null)
             {
-                server.mark = newMark;
+                server.customMark = newMark;
             }
         }
 

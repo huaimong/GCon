@@ -6,21 +6,21 @@
         PacServer pacServer;
         ServerTracker serverTracker;
 
-        VgcApis.IService vgcApi;
+        VgcApis.Models.IServices.IApiService vgcApi;
         Model.Data.ProxyRegKeyValue orgSysProxySetting;
         Views.WinForms.FormMain formMain;
 
         public PsLuncher() { }
 
-        public void Run(VgcApis.IService api)
+        public void Run(VgcApis.Models.IServices.IApiService api)
         {
             orgSysProxySetting = Lib.Sys.ProxySetter.GetProxySetting();
-            VgcApis.Libs.Sys.FileLog.Info("ProxySetter: save sys proxy settings");
+            VgcApis.Libs.Sys.FileLogger.Info("ProxySetter: save sys proxy settings");
 
             this.vgcApi = api;
 
-            var vgcSetting = api.GetVgcSettingService();
-            var vgcServer = api.GetVgcServersService();
+            var vgcSetting = api.GetSettingService();
+            var vgcServer = api.GetServersService();
 
             pacServer = new PacServer();
             setting = new PsSettings();
@@ -57,7 +57,7 @@
             pacServer.Cleanup();
             setting.Cleanup();
             Lib.Sys.ProxySetter.UpdateProxySettingOnDemand(orgSysProxySetting);
-            VgcApis.Libs.Sys.FileLog.Info("ProxySetter: restore sys proxy settings");
+            VgcApis.Libs.Sys.FileLogger.Info("ProxySetter: restore sys proxy settings");
         }
         #region properties
         #endregion

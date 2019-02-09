@@ -8,11 +8,11 @@ namespace Statistics.Services
 {
     public class Settings
     {
-        VgcApis.Models.IServices.ISettingService vgcSetting;
+        VgcApis.Models.IServices.ISettingsService vgcSetting;
         VgcApis.Models.IServices.IServersService vgcServers;
 
         Models.UserSettings userSettins;
-        VgcApis.Libs.Sys.LazyGuy bookKeeper;
+        VgcApis.Libs.Tasks.LazyGuy bookKeeper;
         Timer bgStatsDataUpdateTimer = null;
 
         #region properties
@@ -51,14 +51,14 @@ namespace Statistics.Services
         }
 
         public void Run(
-            VgcApis.Models.IServices.ISettingService vgcSetting,
+            VgcApis.Models.IServices.ISettingsService vgcSetting,
             VgcApis.Models.IServices.IServersService vgcServers)
         {
             this.vgcSetting = vgcSetting;
             this.vgcServers = vgcServers;
 
             userSettins = LoadUserSetting();
-            bookKeeper = new VgcApis.Libs.Sys.LazyGuy(
+            bookKeeper = new VgcApis.Libs.Tasks.LazyGuy(
                 SaveUserSetting, 1000 * 60 * 5);
             StartBgStatsDataUpdateTimer();
             vgcServers.OnCoreClosing += OnCoreClosingHandler;
@@ -73,34 +73,30 @@ namespace Statistics.Services
             // So losing 5 minutes of statistics data is an acceptable loss.
             if (!IsShutdown())
             {
-                VgcApis.Libs.Sys.FileLog.Info("Statistics: save data");
+                VgcApis.Libs.Sys.FileLogger.Info("Statistics: save data");
                 UpdateHistoryStatsDataWorker();
             }
 
             bookKeeper.DoItNow();
             bookKeeper.Quit();
-            VgcApis.Libs.Sys.FileLog.Info("Statistics: done!");
+            VgcApis.Libs.Sys.FileLogger.Info("Statistics: done!");
         }
         #endregion
 
         #region private method
-        void OnCoreClosingHandler(
-            object sender,
-            VgcApis.Models.Datas.StrEvent args)
+        void OnCoreClosingHandler(object sender, EventArgs args)
         {
-            var uid = args.Data;
-            var coreCtrl = vgcServers
-                .GetAllServersList()
-                .FirstOrDefault(s => s.GetUid() == uid);
+            var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
             if (coreCtrl == null)
             {
                 return;
             }
-            var sample = coreCtrl.TakeStatisticsSample();
-            var title = coreCtrl.GetTitle();
+
+            var uid = coreCtrl.GetCoreStates().GetUid();
+            var sample = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
+            var title = coreCtrl.GetCoreStates().GetTitle();
             Task.Factory.StartNew(
                 () => AddToHistoryStatsData(uid, title, sample));
-
         }
 
         void AddToHistoryStatsData(
@@ -166,9 +162,8 @@ namespace Statistics.Services
             {
                 isUpdating = true;
                 var newDatas = vgcServers
-                    .GetAllServersList()
-                    .Where(s => s.IsCoreRunning())
-                    .OrderBy(s => s.GetIndex())
+                    .GetAllServersOrderByIndex()
+                    .Where(s => s.GetCoreCtrl().IsCoreRunning())
                     .Select(s => GetterCoreInfo(s))
                     .ToList();
 
@@ -224,13 +219,13 @@ namespace Statistics.Services
             }
         }
 
-        Models.StatsResult GetterCoreInfo(VgcApis.Models.IControllers.ICoreCtrl coreCtrl)
+        Models.StatsResult GetterCoreInfo(VgcApis.Models.Interfaces.ICoreServCtrl coreCtrl)
         {
             var result = new Models.StatsResult();
-            result.title = coreCtrl.GetTitle();
-            result.uid = coreCtrl.GetUid();
+            result.title = coreCtrl.GetCoreStates().GetTitle();
+            result.uid = coreCtrl.GetCoreStates().GetUid();
 
-            var curData = coreCtrl.TakeStatisticsSample();
+            var curData = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
             if (curData != null)
             {
                 result.stamp = curData.stamp;

@@ -15,7 +15,7 @@ namespace V2RayGCon.Service
 {
     public class Setting :
         Model.BaseClass.SingletonService<Setting>,
-        VgcApis.Models.IServices.ISettingService
+        VgcApis.Models.IServices.ISettingsService
     {
         public event EventHandler OnRequireNotifyTextUpdate;
         Model.Data.UserSettings userSettings;
@@ -24,7 +24,6 @@ namespace V2RayGCon.Service
         Setting()
         {
             userSettings = LoadUserSettings();
-            runningServerSummary = string.Empty;
             isShutdown = false;
         }
 
@@ -38,8 +37,6 @@ namespace V2RayGCon.Service
                 LazySaveUserSettings();
             }
         }
-
-        public string runningServerSummary { get; set; }
 
         public bool isShutdown { get; set; }
 
@@ -272,15 +269,6 @@ namespace V2RayGCon.Service
             return pluginsSetting;
         }
 
-        public void InvokeEventIgnoreErrorOnRequireNotifyTextUpdate()
-        {
-            try
-            {
-                OnRequireNotifyTextUpdate?.Invoke(this, EventArgs.Empty);
-            }
-            catch { }
-        }
-
         public void Cleanup()
         {
             lazyGCTimer?.Release();
@@ -353,16 +341,16 @@ namespace V2RayGCon.Service
             return r ?? empty;
         }
 
-        public List<Controller.CoreServerCtrl> LoadServerList()
+        public List<VgcApis.Models.Datas.CoreInfo> LoadCoreInfoList()
         {
-            var empty = new List<Controller.CoreServerCtrl>();
+            var empty = new List<VgcApis.Models.Datas.CoreInfo>();
 
-            List<Controller.CoreServerCtrl> list = null;
+            List<VgcApis.Models.Datas.CoreInfo> list = null;
             try
             {
                 list = JsonConvert
-                    .DeserializeObject<List<Controller.CoreServerCtrl>>(
-                        userSettings.ServerList);
+                    .DeserializeObject<List<VgcApis.Models.Datas.CoreInfo>>(
+                        userSettings.CoreInfoList);
             }
             catch { }
 
@@ -496,12 +484,12 @@ namespace V2RayGCon.Service
             LazySaveUserSettings();
         }
 
-        public void SaveServerList(List<Controller.CoreServerCtrl> serverList)
+        public void SaveServerList(List<VgcApis.Models.Datas.CoreInfo> coreInfoList)
         {
             string json = JsonConvert.SerializeObject(
-                serverList ?? new List<Controller.CoreServerCtrl>());
+                coreInfoList ?? new List<VgcApis.Models.Datas.CoreInfo>());
 
-            userSettings.ServerList = json;
+            userSettings.CoreInfoList = json;
             LazySaveUserSettings();
         }
         #endregion

@@ -53,6 +53,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
             this.Name = "FormSingleServerLog";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormSingleServerLog_FormClosed);
             this.Load += new System.EventHandler(this.FormSingleServerLog_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

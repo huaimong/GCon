@@ -6,71 +6,56 @@ namespace V2RayGCon.Views.WinForms
 {
     public partial class FormSingleServerLog : Form
     {
-        Controller.CoreServerCtrl serverItem;
-        Timer updateLogTimer = new Timer { Interval = 500 };
+        long updateTimestamp = -1;
+        VgcApis.Libs.Tasks.Routine logUpdater;
+        VgcApis.Libs.Sys.QueueLogger qLogger;
 
-        public FormSingleServerLog(Controller.CoreServerCtrl serverItem)
+        public FormSingleServerLog(
+            string title,
+            VgcApis.Libs.Sys.QueueLogger logger)
         {
-
-            this.serverItem = serverItem;
+            this.qLogger = logger;
+            logUpdater = new VgcApis.Libs.Tasks.Routine(
+                RefreshUi,
+                VgcApis.Models.Consts.Intervals.SiFormLogRefreshInterval);
 
             InitializeComponent();
-
-            this.FormClosed += (s, e) =>
-            {
-                if (updateLogTimer != null)
-                {
-                    updateLogTimer.Stop();
-                    updateLogTimer.Tick -= UpdateLog;
-                    updateLogTimer.Dispose();
-                }
-            };
-
             VgcApis.Libs.UI.AutoSetFormIcon(this);
-            this.Show();
-            this.Text = I18N.Log + " - " + serverItem.GetTitle();
+            this.Text = I18N.Log + " - " + title;
         }
 
-        private void FormSingleServerLog_Load(object sender, System.EventArgs e)
+        private void RefreshUi()
         {
-            updateLogTimer.Tick += UpdateLog;
-            updateLogTimer.Start();
+            var timestamp = qLogger.GetTimestamp();
+
+            if (updateTimestamp == timestamp)
+            {
+                return;
+            }
+
+            updateTimestamp = timestamp;
+            VgcApis.Libs.UI.RunInUiThread(this, UpdateLogBox);
         }
 
-        private void ScrollToBottom()
+        void UpdateLogBox()
         {
+            rtBoxLogger.Text = string.Join(
+                Environment.NewLine,
+                qLogger.GetLogContent())
+                + Environment.NewLine;
+
             rtBoxLogger.SelectionStart = rtBoxLogger.Text.Length;
             rtBoxLogger.ScrollToCaret();
         }
 
-        readonly object updateLogLocker = new object();
-        bool isUpdating = false;
-        long updateTimeStamp = DateTime.Now.Ticks;
-
-        void UpdateLog(object sender, EventArgs args)
+        private void FormSingleServerLog_Load(object sender, EventArgs e)
         {
-            lock (updateLogLocker)
-            {
-                if (isUpdating || updateTimeStamp == serverItem.logTimeStamp)
-                {
-                    return;
-                }
-                isUpdating = true;
-            }
+            logUpdater.Run();
+        }
 
-            try
-            {
-                updateTimeStamp = serverItem.logTimeStamp;
-                rtBoxLogger.Text = serverItem.logCache;
-                ScrollToBottom();
-            }
-            catch { }
-
-            lock (updateLogLocker)
-            {
-                isUpdating = false;
-            }
-
+        private void FormSingleServerLog_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            logUpdater.Dispose();
         }
     }
 }

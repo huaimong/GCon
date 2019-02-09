@@ -70,11 +70,29 @@ namespace VgcApis.Resources.Langs {
         }
         
         /// <summary>
+        ///   查找类似 Done. 的本地化字符串。
+        /// </summary>
+        internal static string Done {
+            get {
+                return ResourceManager.GetString("Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Save as 的本地化字符串。
         /// </summary>
         internal static string SaveAs {
             get {
                 return ResourceManager.GetString("SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Write to file fail! 的本地化字符串。
+        /// </summary>
+        internal static string WriteFileFail {
+            get {
+                return ResourceManager.GetString("WriteFileFail", resourceCulture);
             }
         }
     }

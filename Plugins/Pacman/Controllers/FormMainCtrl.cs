@@ -99,7 +99,7 @@ namespace Pacman.Controllers
                 // https://www.codeproject.com/Articles/48411/Using-the-FlowLayoutPanel-and-Reordering-with-Drag
                 if (a.Data.GetDataPresent("V2RayGCon.Views.UserControls.ServerUI"))
                 {
-                    var item = (VgcApis.Models.IControllers.IDropableControl)a.Data.GetData("V2RayGCon.Views.UserControls.ServerUI");
+                    var item = (VgcApis.Models.Interfaces.IDropableControl)a.Data.GetData("V2RayGCon.Views.UserControls.ServerUI");
                     var bean = new Models.Data.Bean
                     {
                         title = item.GetTitle(),
@@ -196,14 +196,16 @@ namespace Pacman.Controllers
                 LoopThroughFlyContentItems(b =>
                 {
                     var bean = b.GetBean();
-                    var c = list.FirstOrDefault(t => t.GetUid() == bean.uid);
+                    var c = list.FirstOrDefault(t => t.GetCoreStates().GetUid() == bean.uid);
                     if (c == null)
                     {
                         flyContent.Controls.Remove(b);
                         return;
                     }
-                    b.SetStatus(c.GetStatus());
-                    b.SetTitle(c.GetTitle());
+
+                    var states = c.GetCoreStates();
+                    b.SetStatus(states.GetStatus());
+                    b.SetTitle(states.GetTitle());
                 });
 
             };
@@ -228,7 +230,7 @@ namespace Pacman.Controllers
 
             var list = settings
                 .GetAllServersList()
-                .Where(s => uidList.Contains(s.GetUid()))
+                .Where(s => uidList.Contains(s.GetCoreStates().GetUid()))
                 .ToList();
 
             var package = settings
@@ -258,21 +260,23 @@ namespace Pacman.Controllers
             var curList = GetFlyContentBeanList();
             var selectedServerList = settings
                 .GetAllServersList()
-                .Where(s => s.IsSelected())
+                .Where(s => s.GetCoreStates().IsSelected())
                 .ToList();
 
             foreach (var serverCtrl in selectedServerList)
             {
-                var found = curList.FirstOrDefault(b => b.uid == serverCtrl.GetUid());
+                var states = serverCtrl.GetCoreStates();
+
+                var found = curList.FirstOrDefault(b => b.uid == serverCtrl.GetCoreStates().GetUid());
                 if (found != null)
                 {
-                    found.title = serverCtrl.GetTitle();
+                    found.title = states.GetTitle();
                     continue;
                 }
                 curList.Add(new Models.Data.Bean
                 {
-                    title = serverCtrl.GetTitle(),
-                    uid = serverCtrl.GetUid(),
+                    title = states.GetTitle(),
+                    uid = serverCtrl.GetCoreStates().GetUid(),
                 });
             }
             this.beanList = curList;

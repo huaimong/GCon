@@ -6,26 +6,21 @@ namespace V2RayGCon.Views.WinForms
 {
     public partial class FormMain : Form
     {
-        #region Sigleton
-        static FormMain _instant;
-        public static FormMain GetForm()
-        {
-            if (_instant == null || _instant.IsDisposed)
-            {
-                _instant = new FormMain();
-            }
-            _instant.Activate();
-            return _instant;
-        }
+
+        #region single instance thing
+        static readonly VgcApis.Models.BaseClasses.AuxSiWinForm<FormMain> auxSiForm =
+            new VgcApis.Models.BaseClasses.AuxSiWinForm<FormMain>();
+        static public FormMain GetForm() => auxSiForm.GetForm();
+        static public void ShowForm() => auxSiForm.ShowForm();
         #endregion
 
         Controller.FormMainCtrl formMainCtrl;
         Service.Setting setting;
         Service.Servers servers;
-        System.Windows.Forms.Timer updateTitleTimer = null;
+        Timer updateTitleTimer = null;
         string formTitle = "";
 
-        FormMain()
+        public FormMain()
         {
             setting = Service.Setting.Instance;
             servers = Service.Servers.Instance;
@@ -34,11 +29,9 @@ namespace V2RayGCon.Views.WinForms
             VgcApis.Libs.UI.AutoSetFormIcon(this);
             Lib.UI.AutoScaleToolStripControls(this, 16);
             GenFormTitle();
-
-            this.Show();
         }
 
-        private void FormMain_Shown(object sender, EventArgs e)
+        public void FormMain_Shown(object sender, EventArgs e)
         {
             UpdateFormTitle(this, EventArgs.Empty);
             setting.RestoreFormRect(this);

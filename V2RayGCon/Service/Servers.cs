@@ -17,729 +17,177 @@ namespace V2RayGCon.Service
     {
         Setting setting = null;
         Cache cache = null;
+        ConfigMgr configMgr;
 
-        public event EventHandler<VgcApis.Models.Datas.BoolEvent>
-            OnServerStateChange;
-
-        public event EventHandler<VgcApis.Models.Datas.StrEvent>
-            OnCoreClosing; // single core closing.
+        ServersComponents.LinkImporter linkImporter;
+        ServersComponents.QueryHandler queryHandler;
 
         public event EventHandler
+            OnCoreStart, // ICoreServCtrl sender
+            OnCoreClosing, // ICoreServCtrl sender
+
+            OnRequireNotifyTextUpdate,
             OnRequireMenuUpdate,
             OnRequireStatusBarUpdate,
             OnRequireFlyPanelUpdate,
             OnRequireFlyPanelReload;
 
-        List<Controller.CoreServerCtrl> serverList = null;
+        List<Controller.CoreServerCtrl> coreServList =
+            new List<Controller.CoreServerCtrl>();
+
         List<string> markList = null;
 
-        Lib.Sys.CancelableTimeout
-            lazySaveServerListTimer = null,
-            lazyUpdateNotifyTextTimer = null;
+        VgcApis.Libs.Tasks.LazyGuy serverSaver;
         readonly object serverListWriteLock = new object();
+        VgcApis.Libs.Tasks.Bar speedTestingBar = new VgcApis.Libs.Tasks.Bar();
 
         Servers()
         {
-            isTesting = false;
+            serverSaver = new VgcApis.Libs.Tasks.LazyGuy(
+                SaveCurrentServerList,
+                VgcApis.Models.Consts.Intervals.SaveServerListIntreval);
         }
 
         public void Run(
            Setting setting,
-           Cache cache)
+           Cache cache,
+           ConfigMgr configMgr)
         {
+            this.configMgr = configMgr;
             this.cache = cache;
             this.setting = setting;
-            this.serverList = setting.LoadServerList();
+            InitServerCtrlList();
 
-            foreach (var server in serverList)
-            {
-                server.Run(cache, setting, this);
-                BindEventsTo(server);
-            }
+            linkImporter = new ServersComponents.LinkImporter(
+                setting, this, configMgr, serverSaver);
+
+            queryHandler = new ServersComponents.QueryHandler(
+                serverListWriteLock,
+                coreServList);
         }
 
-        #region interface for plugins
-        public ReadOnlyCollection<VgcApis.Models.IControllers.ICoreCtrl> GetTrackableServerList()
-            => serverList
-                .Where(s => s.isServerOn && !s.isUntrack)
-                .Select(s => s as VgcApis.Models.IControllers.ICoreCtrl)
-                .ToList()
-                .AsReadOnly();
+        #region querys
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
+          GetRunningServers() =>
+          queryHandler.GetRunningServers();
 
-        public ReadOnlyCollection<VgcApis.Models.IControllers.ICoreCtrl> GetAllServersList()
-            => serverList
-                .Select(s => s as VgcApis.Models.IControllers.ICoreCtrl)
-                .ToList()
-                .AsReadOnly();
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
+           GetAllServersOrderByIndex() =>
+           queryHandler.GetAllServersOrderByIndex();
+
+        public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
+            GetTrackableServerList() =>
+            queryHandler.GetTrackableServerList();
+
         #endregion
 
-        #region property
-        bool _isTesting;
-        readonly object _isTestingLock = new object();
-        bool isTesting
+        #region event relay
+
+        void NotifierTextUpdateHandler(object sender, EventArgs args) =>
+            InvokeEventOnRequireNotifyTextUpdateIgnoreError();
+
+        void InvokeEventHandlerIgnoreError(EventHandler handler, object sender, EventArgs args)
         {
-            get
+            try
             {
-                lock (_isTestingLock)
-                {
-                    return _isTesting;
-                }
+                handler?.Invoke(sender, args);
             }
-            set
-            {
-                lock (_isTestingLock)
-                {
-                    _isTesting = value;
-                }
-            }
-        }
-        #endregion
-
-        #region private method
-        void ImportLinks(string links, bool includeV2RayLinks)
-        {
-            var taskList = new List<Task<Tuple<bool, List<string[]>>>>();
-
-            taskList.Add(
-                new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportVmessLinks(links)));
-
-
-            taskList.Add(
-                new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportSSLinks(links)));
-
-
-            if (includeV2RayLinks)
-            {
-                taskList.Add(
-                    new Task<Tuple<bool, List<string[]>>>(
-                        () => ImportV2RayLinks(links)));
-            }
-
-            var tasks = taskList.ToArray();
-
-            Task.Factory.StartNew(() =>
-            {
-                foreach (var task in tasks)
-                {
-                    task.Start();
-                }
-                Task.WaitAll(tasks);
-
-                var results = GetterImportLinksResult(tasks);
-                ShowImportLinksResult(results);
-            });
+            catch { }
         }
 
-        private string ImportPackageV4Config(string orgUid, JObject package)
-        {
-            var newConfig = package.ToString(Formatting.None);
-            var servUid = "";
+        void InvokeEventOnRequireNotifyTextUpdateIgnoreError() =>
+            InvokeEventHandlerIgnoreError(OnRequireNotifyTextUpdate, this, EventArgs.Empty);
 
-            var orgServ = serverList.FirstOrDefault(s => s.GetUid() == orgUid);
-            if (orgServ != null)
-            {
-                ReplaceServerConfig(orgServ.config, newConfig);
-                servUid = orgUid;
-            }
-            else
-            {
-                AddServer(newConfig, "PackageV4");
-                var newServ = serverList.FirstOrDefault(s => s.config == newConfig);
-                if (newServ != null)
-                {
-                    servUid = newServ.GetUid();
-                }
-            }
+        void InvokeEventOnCoreStartIgnoreError(object sender, EventArgs args) =>
+            InvokeEventHandlerIgnoreError(OnCoreStart, sender, EventArgs.Empty);
 
-            return servUid;
-        }
+        void InvokeEventOnCoreClosingIgnoreError(object sender, EventArgs args) =>
+            InvokeEventHandlerIgnoreError(OnCoreClosing, sender, EventArgs.Empty);
 
-        private JObject GenPackageV4Config(List<VgcApis.Models.IControllers.ICoreCtrl> servList, string packageName)
-        {
-            var package = cache.tpl.LoadPackage("pkgV4Tpl");
-            package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
-            var outbounds = package["outbounds"] as JArray;
-            var description = "";
+        void InvokeEventOnRequireStatusBarUpdate(object sender, EventArgs args) =>
+            InvokeEventHandlerIgnoreError(OnRequireStatusBarUpdate, null, EventArgs.Empty);
 
-            for (var i = 0; i < servList.Count; i++)
-            {
-                var s = servList[i];
-                var parts = Lib.Utils.ExtractOutboundsFromConfig(s.GetConfig());
-                var c = 0;
-                foreach (JObject p in parts)
-                {
-                    p["tag"] = $"agentout{i}s{c++}";
-                    outbounds.Add(p);
-                }
-                var name = s.GetName();
-                if (c == 0)
-                {
-                    setting.SendLog(I18N.PackageFail + ": " + name);
-                }
-                else
-                {
-                    description += $" {i}.[{name}]";
-                    setting.SendLog(I18N.PackageSuccess + ": " + name);
-                }
-            }
-            package["v2raygcon"]["description"] = description;
-            return package;
-        }
+        void InvokeEventOnRequireMenuUpdate(object sender, EventArgs args) =>
+            InvokeEventHandlerIgnoreError(OnRequireMenuUpdate, null, EventArgs.Empty);
 
-        void DisposeLazyTimers()
-        {
-            lazyServerTrackerTimer?.Release();
-            lazySaveServerListTimer?.Release();
-            lazyUpdateNotifyTextTimer?.Release();
-        }
+        public void InvokeEventOnRequireFlyPanelUpdate() =>
+            InvokeEventHandlerIgnoreError(OnRequireFlyPanelUpdate, this, EventArgs.Empty);
 
-        private List<Controller.CoreServerCtrl> GenBootServerList()
-        {
-            var trackerSetting = setting.GetServerTrackerSetting();
-            if (!trackerSetting.isTrackerOn)
-            {
-                return serverList.Where(s => s.isAutoRun).ToList();
-            }
+        public void InvokeEventOnRequireFlyPanelReload() =>
+            InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
 
-            setting.isServerTrackerOn = true;
-            var trackList = trackerSetting.serverList;
+        void ServerItemPropertyChangedHandler(object sender, EventArgs arg) =>
+            serverSaver.DoItLater();
 
-            var bootList = serverList
-                .Where(s => s.isAutoRun || trackList.Contains(s.config))
-                .ToList();
+        void OnTrackCoreStartHandler(object sender, EventArgs args) =>
+            TrackCoreRunningStateHandler(sender, true);
 
-            if (string.IsNullOrEmpty(trackerSetting.curServer))
-            {
-                return bootList;
-            }
-
-            bootList.RemoveAll(s => s.config == trackerSetting.curServer);
-            var lastServer = serverList.FirstOrDefault(
-                    s => s.config == trackerSetting.curServer);
-            if (lastServer != null && !lastServer.isUntrack)
-            {
-                bootList.Insert(0, lastServer);
-            }
-            return bootList;
-        }
+        void OnTrackCoreStopHandler(object sender, EventArgs args) =>
+            TrackCoreRunningStateHandler(sender, false);
 
         void BindEventsTo(Controller.CoreServerCtrl server)
         {
-            server.OnCoreClosing += InvokeEventOnCoreClosing;
-            server.OnRequireKeepTrack += OnRequireKeepTrackHandler;
+            server.OnCoreClosing += InvokeEventOnCoreClosingIgnoreError;
+
+            server.OnTrackCoreStart += OnTrackCoreStartHandler;
+            server.OnTrackCoreStop += OnTrackCoreStopHandler;
+
             server.OnPropertyChanged += ServerItemPropertyChangedHandler;
             server.OnRequireMenuUpdate += InvokeEventOnRequireMenuUpdate;
             server.OnRequireStatusBarUpdate += InvokeEventOnRequireStatusBarUpdate;
-            server.OnRequireNotifierUpdate += LazyUpdateNotifyTextHandler;
+            server.OnRequireNotifierUpdate += NotifierTextUpdateHandler;
         }
 
         void ReleaseEventsFrom(Controller.CoreServerCtrl server)
         {
-            server.OnCoreClosing -= InvokeEventOnCoreClosing;
-            server.OnRequireKeepTrack -= OnRequireKeepTrackHandler;
+            server.OnCoreClosing -= InvokeEventOnCoreClosingIgnoreError;
+
+            server.OnTrackCoreStart -= OnTrackCoreStartHandler;
+            server.OnTrackCoreStop -= OnTrackCoreStopHandler;
+
             server.OnPropertyChanged -= ServerItemPropertyChangedHandler;
             server.OnRequireMenuUpdate -= InvokeEventOnRequireMenuUpdate;
             server.OnRequireStatusBarUpdate -= InvokeEventOnRequireStatusBarUpdate;
-            server.OnRequireNotifierUpdate -= LazyUpdateNotifyTextHandler;
+            server.OnRequireNotifierUpdate -= NotifierTextUpdateHandler;
         }
+        #endregion
 
+        #region server tracking
 
-        List<string> GetHtmlContentFromCache(List<string> urls)
-        {
-            return urls.Count <= 0 ?
-                urls :
-                Lib.Utils.ExecuteInParallel<string, string>(
-                    urls,
-                    (url) => cache.html[url]);
-        }
-
-
-        /// <summary>
-        /// update running servers list
-        /// </summary>
-        /// <param name="includeCurServer"></param>
-        Model.Data.ServerTracker GenCurTrackerSetting(string curServer, bool isStart)
-        {
-            var trackerSetting = setting.GetServerTrackerSetting();
-            var tracked = trackerSetting.serverList;
-
-            var running = GetServerList()
-                .Where(s => s.isServerOn && !s.isUntrack)
-                .Select(s => s.config)
-                .ToList();
-
-            tracked.RemoveAll(c => !running.Any(r => r == c));  // remove stopped
-            running.RemoveAll(r => tracked.Any(t => t == r));
-            tracked.AddRange(running);
-            tracked.Remove(curServer);
-
-            if (isStart)
-            {
-                trackerSetting.curServer = curServer;
-            }
-            else
-            {
-                trackerSetting.curServer = null;
-            }
-
-            trackerSetting.serverList = tracked;
-            return trackerSetting;
-        }
-
-        void InvokeOnServerStateChange(
-            object sender,
-            VgcApis.Models.Datas.BoolEvent isServerStart)
-        {
-            try
-            {
-                OnServerStateChange?.Invoke(sender, isServerStart);
-            }
-            catch { }
-        }
-
-        void LazyServerTrackUpdateWorker(
-            Controller.CoreServerCtrl servCtrl,
+        void ServerTrackingUpdateWorker(
+            Controller.CoreServerCtrl coreServCtrl,
             bool isStart)
         {
-            var curTrackerSetting = GenCurTrackerSetting(servCtrl.config, isStart);
+            var curTrackerSetting =
+                configMgr.GenCurTrackerSetting(
+                    coreServList.AsReadOnly(),
+                    coreServCtrl.GetConfiger().GetConfig(),
+                    isStart);
+
             setting.SaveServerTrackerSetting(curTrackerSetting);
             return;
         }
 
-        int GetServerIndexByConfig(string config)
+        Lib.Sys.CancelableTimeout lazyServerTrackingTimer = null;
+        void DoServerTrackingLater(Action onTimeout)
         {
-            for (int i = 0; i < serverList.Count; i++)
-            {
-                if (serverList[i].config == config)
-                {
-                    return i;
-                }
-            }
-            return -1;
+            lazyServerTrackingTimer?.Release();
+            lazyServerTrackingTimer = null;
+            lazyServerTrackingTimer = new Lib.Sys.CancelableTimeout(onTimeout, 2000);
+            lazyServerTrackingTimer.Start();
         }
 
-        List<Controller.CoreServerCtrl> GetSelectedServerList(bool descending = false)
+        void TrackCoreRunningStateHandler(object sender, bool isCoreStart)
         {
-            var list = serverList.Where(s => s.isSelected);
-            if (descending)
+            // for plugins
+            if (isCoreStart)
             {
-                return list.OrderByDescending(s => s.index).ToList();
-            }
-
-            return list.OrderBy(s => s.index).ToList();
-        }
-
-        string[] GenImportResult(string link, bool success, string reason, string mark)
-        {
-            return new string[]
-            {
-                string.Empty,  // reserve for index
-                link,
-                mark,
-                success?"√":"×",
-                reason,
-            };
-        }
-
-        JObject SSLink2Config(string ssLink)
-        {
-            Model.Data.Shadowsocks ss = Lib.Utils.SSLink2SS(ssLink);
-            if (ss == null)
-            {
-                return null;
-            }
-
-            Lib.Utils.TryParseIPAddr(ss.addr, out string ip, out int port);
-
-            var config = cache.tpl.LoadTemplate("tplImportSS");
-
-            var setting = config["outbound"]["settings"]["servers"][0];
-            setting["address"] = ip;
-            setting["port"] = port;
-            setting["method"] = ss.method;
-            setting["password"] = ss.pass;
-
-            return config.DeepClone() as JObject;
-        }
-
-        Tuple<bool, List<string[]>> ImportSSLinks(string text, string mark = "")
-        {
-            var isAddNewServer = false;
-            var links = Lib.Utils.ExtractLinks(text, Model.Data.Enum.LinkTypes.ss);
-            List<string[]> result = new List<string[]>();
-
-            foreach (var link in links)
-            {
-                var config = SSLink2Config(link);
-
-                if (config == null)
-                {
-                    result.Add(GenImportResult(link, false, I18N.DecodeFail, mark));
-                    continue;
-                }
-
-                if (AddServer(Lib.Utils.Config2String(config), mark, true))
-                {
-                    isAddNewServer = true;
-                    result.Add(GenImportResult(link, true, I18N.Success, mark));
-                }
-                else
-                {
-                    result.Add(GenImportResult(link, false, I18N.DuplicateServer, mark));
-                }
-            }
-
-            return new Tuple<bool, List<string[]>>(isAddNewServer, result);
-        }
-
-        Tuple<bool, List<string[]>> ImportV2RayLinks(string text, string mark = "")
-        {
-            bool isAddNewServer = false;
-            var links = Lib.Utils.ExtractLinks(text, Model.Data.Enum.LinkTypes.v2ray);
-            List<string[]> result = new List<string[]>();
-
-            foreach (var link in links)
-            {
-                try
-                {
-                    var config = JObject.Parse(
-                        Lib.Utils.Base64Decode(
-                            Lib.Utils.GetLinkBody(link)));
-
-                    if (config != null)
-                    {
-                        if (AddServer(Lib.Utils.Config2String(config), mark, true))
-                        {
-                            isAddNewServer = true;
-                            result.Add(GenImportResult(link, true, I18N.Success, mark));
-                        }
-                        else
-                        {
-                            result.Add(GenImportResult(link, false, I18N.DuplicateServer, mark));
-                        }
-                    }
-                }
-                catch
-                {
-                    // skip if error occured
-                    result.Add(GenImportResult(link, false, I18N.DecodeFail, mark));
-                }
-            }
-
-            return new Tuple<bool, List<string[]>>(isAddNewServer, result);
-        }
-
-        JToken GenStreamSetting(Model.Data.Vmess vmess)
-        {
-            // insert stream type
-            string[] streamTypes = { "ws", "tcp", "kcp", "h2" };
-            string streamType = vmess.net.ToLower();
-
-            if (!streamTypes.Contains(streamType))
-            {
-                return JToken.Parse(@"{}");
-            }
-
-            var streamToken = cache.tpl.LoadTemplate(streamType);
-            try
-            {
-                switch (streamType)
-                {
-                    case "kcp":
-                        streamToken["kcpSettings"]["header"]["type"] = vmess.type;
-                        break;
-                    case "ws":
-                        streamToken["wsSettings"]["path"] = string.IsNullOrEmpty(vmess.v) ? vmess.host : vmess.path;
-                        if (vmess.v == "2" && !string.IsNullOrEmpty(vmess.host))
-                        {
-                            streamToken["wsSettings"]["headers"]["Host"] = vmess.host;
-                        }
-                        break;
-                    case "h2":
-                        streamToken["httpSettings"]["path"] = vmess.path;
-                        streamToken["httpSettings"]["host"] = Lib.Utils.Str2JArray(vmess.host);
-                        break;
-                }
-            }
-            catch { }
-
-            try
-            {
-                streamToken["security"] =
-                    vmess.tls?.ToLower() == "tls" ?
-                    "tls" : "none";
-            }
-            catch { }
-
-            return streamToken;
-        }
-
-        JObject Vmess2Config(Model.Data.Vmess vmess)
-        {
-            if (vmess == null)
-            {
-                return null;
-            }
-
-            // prepare template
-            var config = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
-            config["v2raygcon"]["alias"] = vmess.ps;
-
-            var outVmess = cache.tpl.LoadTemplate("outbVmess");
-            outVmess["streamSettings"] = GenStreamSetting(vmess);
-            var node = outVmess["settings"]["vnext"][0];
-            node["address"] = vmess.add;
-            node["port"] = Lib.Utils.Str2Int(vmess.port);
-            node["users"][0]["id"] = vmess.id;
-            node["users"][0]["alterId"] = Lib.Utils.Str2Int(vmess.aid);
-
-            var isV4 = setting.isUseV4;
-            var inbound = Lib.Utils.CreateJObject(
-                (isV4 ? "inbounds.0" : "inbound"),
-                cache.tpl.LoadTemplate("inbSimSock"));
-
-            var outbound = Lib.Utils.CreateJObject(
-                (isV4 ? "outbounds.0" : "outbound"),
-                outVmess);
-
-            Lib.Utils.MergeJson(ref config, inbound);
-            Lib.Utils.MergeJson(ref config, outbound);
-            return config.DeepClone() as JObject;
-        }
-
-        Tuple<bool, List<string[]>> ImportVmessLinks(string text, string mark = "")
-        {
-            var links = Lib.Utils.ExtractLinks(text, Model.Data.Enum.LinkTypes.vmess);
-            var result = new List<string[]>();
-            var isAddNewServer = false;
-
-            foreach (var link in links)
-            {
-                var vmess = Lib.Utils.VmessLink2Vmess(link);
-                var config = Vmess2Config(vmess);
-
-                if (config == null)
-                {
-                    result.Add(GenImportResult(link, false, I18N.DecodeFail, mark));
-                    continue;
-                }
-
-                if (AddServer(Lib.Utils.Config2String(config), mark, true))
-                {
-                    result.Add(GenImportResult(link, true, I18N.Success, mark));
-                    isAddNewServer = true;
-                }
-                else
-                {
-                    result.Add(GenImportResult(link, false, I18N.DuplicateServer, mark));
-                }
-            }
-
-            return new Tuple<bool, List<string[]>>(isAddNewServer, result);
-        }
-
-        void LazySaveServerList()
-        {
-            // create on demand
-            if (lazySaveServerListTimer == null)
-            {
-                var delay = Lib.Utils.Str2Int(StrConst.LazySaveServerListDelay);
-
-                lazySaveServerListTimer =
-                    new Lib.Sys.CancelableTimeout(
-                        () => setting.SaveServerList(serverList),
-                        delay * 1000);
-            }
-
-            lazySaveServerListTimer.Start();
-        }
-
-        void LazyUpdateNotifyTextHandler(object sender, EventArgs args)
-        {
-            if (lazyUpdateNotifyTextTimer == null)
-            {
-                lazyUpdateNotifyTextTimer =
-                    new Lib.Sys.CancelableTimeout(
-                        UpdateNotifierText,
-                        2000);
-            }
-
-            lazyUpdateNotifyTextTimer.Start();
-        }
-
-        void UpdateNotifierText()
-        {
-            var list = serverList
-                .Where(s => s.isServerOn)
-                .OrderBy(s => s.index)
-                .ToList();
-
-            var count = list.Count;
-
-            if (count <= 0 || count > 2)
-            {
-                setting.runningServerSummary = count <= 0 ?
-                    I18N.Description :
-                    count.ToString() + I18N.ServersAreRunning;
-
-                setting.InvokeEventIgnoreErrorOnRequireNotifyTextUpdate();
-                return;
-            }
-
-            var texts = new List<string>();
-
-            void done()
-            {
-                setting.runningServerSummary = string.Join(Environment.NewLine, texts);
-                setting.InvokeEventIgnoreErrorOnRequireNotifyTextUpdate();
-            }
-
-            void worker(int index, Action next)
-            {
-                list[index].GetterInboundInfoFor((s) =>
-                {
-                    texts.Add(s);
-                    next?.Invoke();
-                });
-            }
-
-            Lib.Utils.ChainActionHelperAsync(count, worker, done);
-        }
-
-        void InvokeEventOnCoreClosing(object sender, EventArgs args)
-        {
-            try
-            {
-                var coreCtrl = sender as Controller.CoreServerCtrl;
-                var uid = coreCtrl.GetUid();
-                OnCoreClosing?.Invoke(null, new VgcApis.Models.Datas.StrEvent(uid));
-            }
-            catch { }
-        }
-
-        void InvokeEventOnRequireStatusBarUpdate(object sender, EventArgs args)
-        {
-            try
-            {
-                OnRequireStatusBarUpdate?.Invoke(this, EventArgs.Empty);
-            }
-            catch { }
-        }
-
-        void InvokeEventOnRequireMenuUpdate(object sender, EventArgs args)
-        {
-            try
-            {
-                OnRequireMenuUpdate?.Invoke(this, EventArgs.Empty);
-            }
-            catch { }
-        }
-
-        void ServerItemPropertyChangedHandler(object sender, EventArgs arg)
-        {
-            LazySaveServerList();
-        }
-
-        void RemoveServerItemFromListThen(int index, Action next = null)
-        {
-            var server = serverList[index];
-            server.CleanupThen(() =>
-            {
-                lock (serverListWriteLock)
-                {
-                    ReleaseEventsFrom(server);
-                    serverList.RemoveAt(index);
-                }
-                next?.Invoke();
-            });
-        }
-
-        JObject ExtractOutboundInfoFromConfig(string configString, string id, int portBase, int index, string tagPrefix)
-        {
-            var pkg = cache.tpl.LoadPackage("package");
-            var config = ParseImport(configString);
-
-            var tagin = tagPrefix + "in" + index.ToString();
-            var tagout = tagPrefix + "out" + index.ToString();
-            var port = portBase + index;
-
-            pkg["routing"]["settings"]["rules"][0]["inboundTag"][0] = tagin;
-            pkg["routing"]["settings"]["rules"][0]["outboundTag"] = tagout;
-
-            pkg["inboundDetour"][0]["port"] = port;
-            pkg["inboundDetour"][0]["tag"] = tagin;
-            pkg["inboundDetour"][0]["settings"]["port"] = port;
-            pkg["inboundDetour"][0]["settings"]["clients"][0]["id"] = id;
-
-            pkg["outboundDetour"][0]["protocol"] = config["outbound"]["protocol"];
-            pkg["outboundDetour"][0]["tag"] = tagout;
-            pkg["outboundDetour"][0]["settings"] = config["outbound"]["settings"];
-            pkg["outboundDetour"][0]["streamSettings"] = config["outbound"]["streamSettings"];
-
-            return pkg;
-        }
-
-        JObject GenVnextConfigPart(int index, int basePort, string id)
-        {
-            var vnext = cache.tpl.LoadPackage("vnext");
-            vnext["outbound"]["settings"]["vnext"][0]["port"] = basePort + index;
-            vnext["outbound"]["settings"]["vnext"][0]["users"][0]["id"] = id;
-            return vnext;
-        }
-
-        private void ShowImportLinksResult(Tuple<bool, List<string[]>> results)
-        {
-            var isAddNewServer = results.Item1;
-            var allResults = results.Item2;
-
-            if (isAddNewServer)
-            {
-                UpdateAllServersSummary();
-                LazySaveServerList();
-            }
-
-            setting.LazyGC();
-
-            if (allResults.Count > 0)
-            {
-                new Views.WinForms.FormImportLinksResult(allResults);
-                Application.Run();
+                InvokeEventOnCoreStartIgnoreError(sender, EventArgs.Empty);
             }
             else
             {
-                MessageBox.Show(I18N.NoLinkFound);
+                InvokeEventOnCoreClosingIgnoreError(sender, EventArgs.Empty);
             }
-        }
-
-        private static Tuple<bool, List<string[]>> GetterImportLinksResult(Task<Tuple<bool, List<string[]>>>[] tasks)
-        {
-            var allResults = new List<string[]>();
-            var isAddNewServer = false;
-            foreach (var task in tasks)
-            {
-                isAddNewServer = isAddNewServer || task.Result.Item1;
-                allResults.AddRange(task.Result.Item2);
-                task.Dispose();
-            }
-
-            return new Tuple<bool, List<string[]>>(isAddNewServer, allResults);
-        }
-
-        Lib.Sys.CancelableTimeout lazyServerTrackerTimer = null;
-        public void SetLazyServerTrackerUpdater(Action onTimeout)
-        {
-            lazyServerTrackerTimer?.Release();
-            lazyServerTrackerTimer = null;
-            lazyServerTrackerTimer = new Lib.Sys.CancelableTimeout(onTimeout, 2000);
-            lazyServerTrackerTimer.Start();
-        }
-
-        void OnRequireKeepTrackHandler(object sender, VgcApis.Models.Datas.BoolEvent isServerStart)
-        {
-            // for plugins
-            InvokeOnServerStateChange(sender, isServerStart);
 
             if (!setting.isServerTrackerOn)
             {
@@ -747,28 +195,47 @@ namespace V2RayGCon.Service
             }
 
             var server = sender as Controller.CoreServerCtrl;
-            if (server.isUntrack)
+            if (server.GetCoreStates().IsUntrack())
             {
                 return;
             }
 
-            SetLazyServerTrackerUpdater(() =>
-                LazyServerTrackUpdateWorker(server, isServerStart.Data));
+            DoServerTrackingLater(
+                () => ServerTrackingUpdateWorker(
+                    server, isCoreStart));
         }
         #endregion
 
         #region public method
+        /// <summary>
+        /// linkList=List(string[]{0: text, 1: mark}>)
+        /// </summary>
+        /// <param name="linkList"></param>
+        /// <param name="includingV2rayLinks"></param>
+        public void ImportLinksBatchMode(
+            IEnumerable<string[]> linkList,
+            bool includingV2rayLinks) =>
+            linkImporter.ImportLinksBatchMode(
+                linkList, includingV2rayLinks);
+
+        public void ImportLinkWithOutV2RayLinks(string text) =>
+            linkImporter.ImportLinkWithOutV2RayLinks(text);
+
+        public void ImportLinkWithV2RayLinks(string text) =>
+            linkImporter.ImportLinkWithV2RayLinks(text);
+
         /// <summary>
         /// return -1 when fail
         /// </summary>
         /// <returns></returns>
         public int GetAvailableHttpProxyPort()
         {
-            var list = GetServerList().Where(s => s.isServerOn);
+            var list = GetAllServersOrderByIndex()
+                .Where(s => s.GetCoreCtrl().IsCoreRunning());
 
             foreach (var serv in list)
             {
-                if (serv.IsSuitableToBeUsedAsSysProxy(
+                if (serv.GetConfiger().IsSuitableToBeUsedAsSysProxy(
                     true, out bool isSocks, out int port))
                 {
                     return port;
@@ -777,142 +244,39 @@ namespace V2RayGCon.Service
             return -1;
         }
 
-
-        /// <summary>
-        /// ref means config will change after the function is executed.
-        /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public void InjectSkipCnSiteSettingsIntoConfig(
-            ref JObject config,
-            bool useV4)
-        {
-            var c = JObject.Parse(@"{}");
-
-            var dict = new Dictionary<string, string> {
-                { "dns","dnsCFnGoogle" },
-                { "routing",GetRoutingTplName(config, useV4) },
-            };
-
-            foreach (var item in dict)
-            {
-                var tpl = Lib.Utils.CreateJObject(item.Key);
-                var value = cache.tpl.LoadExample(item.Value);
-                tpl[item.Key] = value;
-
-                if (!Lib.Utils.Contains(config, tpl))
-                {
-                    c[item.Key] = value;
-                }
-            }
-
-            // put dns/routing settings in front of user settings
-            Lib.Utils.CombineConfig(ref config, c);
-
-            // put outbounds after user settings
-            var hasOutbounds = Lib.Utils.GetKey(config, "outbounds") != null;
-            var hasOutDtr = Lib.Utils.GetKey(config, "outboundDetour") != null;
-
-            var outboundTag = "outboundDetour";
-            if (!hasOutDtr && (hasOutbounds || useV4))
-            {
-                outboundTag = "outbounds";
-            }
-
-            var o = Lib.Utils.CreateJObject(
-                outboundTag,
-                cache.tpl.LoadExample("outDtrFreedom"));
-
-            if (!Lib.Utils.Contains(config, o))
-            {
-                Lib.Utils.CombineConfig(ref o, config);
-                config = o;
-            }
-        }
-
-        private static string GetRoutingTplName(JObject config, bool useV4)
-        {
-            var routingRules = Lib.Utils.GetKey(config, "routing.rules");
-            var routingSettingsRules = Lib.Utils.GetKey(config, "routing.settings.rules");
-            var hasRoutingV4 = routingRules == null ? false : (routingRules is JArray);
-            var hasRoutingV3 = routingSettingsRules == null ? false : (routingSettingsRules is JArray);
-
-            var isUseRoutingV4 = !hasRoutingV3 && (useV4 || hasRoutingV4);
-            return isUseRoutingV4 ? "routeCnipV4" : "routeCNIP";
-        }
-
         public void UpdateTrackerSettingNow()
         {
-            var fakeCtrl = new Controller.CoreServerCtrl
-            {
-                config = "",
-            };
-            LazyServerTrackUpdateWorker(fakeCtrl, false);
-        }
-
-        /*
-         * exceptions  
-         * test<FormatException> base64 decode fail
-         * test<System.Net.WebException> url not exist
-         * test<Newtonsoft.Json.JsonReaderException> json decode fail
-         */
-        public JObject ParseImport(string configString)
-        {
-            var maxDepth = Lib.Utils.Str2Int(StrConst.ParseImportDepth);
-
-            var result = Lib.Utils.ParseImportRecursively(
-                GetHtmlContentFromCache,
-                JObject.Parse(configString),
-                maxDepth);
-
-            try
-            {
-                Lib.Utils.RemoveKeyFromJObject(result, "v2raygcon.import");
-            }
-            catch (KeyNotFoundException)
-            {
-                // do nothing;
-            }
-
-            return result;
+            var fakeCtrl = new Controller.CoreServerCtrl(
+                new VgcApis.Models.Datas.CoreInfo());
+            ServerTrackingUpdateWorker(fakeCtrl, false);
         }
 
         public void Cleanup()
         {
             setting.isServerTrackerOn = false;
-            lazySaveServerListTimer?.Timeout();
+            serverSaver.DoItNow();
+            serverSaver.Quit();
+            lazyServerTrackingTimer?.Release();
+
             AutoResetEvent sayGoodbye = new AutoResetEvent(false);
             StopAllServersThen(() => sayGoodbye.Set());
             sayGoodbye.WaitOne();
-            DisposeLazyTimers();
         }
 
-        public int GetTotalSelectedServerCount()
-        {
-            return serverList.Count(s => s.isSelected);
-        }
+        public int CountSelectedServers() =>
+            coreServList.Count(s => s.GetCoreStates().IsSelected());
 
-        public int GetTotalServerCount()
-        {
-            return serverList.Count;
-        }
+        public int CountAllServers() => coreServList.Count;
 
-        public void InvokeEventOnRequireFlyPanelUpdate()
+        public void SetAllServerIsSelected(bool isSelected)
         {
-            try
-            {
-                OnRequireFlyPanelUpdate?.Invoke(this, EventArgs.Empty);
-            }
-            catch { }
-        }
-
-        public void InvokeEventOnRequireFlyPanelReload()
-        {
-            try
-            {
-                OnRequireFlyPanelReload?.Invoke(this, EventArgs.Empty);
-            }
-            catch { }
+            coreServList
+                .Select(s =>
+                {
+                    s.GetCoreStates().SetIsSelected(isSelected);
+                    return true;
+                })
+                .ToList();
         }
 
         public ReadOnlyCollection<string> GetMarkList()
@@ -924,87 +288,42 @@ namespace V2RayGCon.Service
             return markList.AsReadOnly();
         }
 
-        public void SetAllServerIsSelected(bool isSelected)
+        public void AddNewMark(string newMark)
         {
-            serverList
-                .Select(s =>
-                {
-                    s.SetIsSelected(isSelected);
-                    return true;
-                })
-                .ToList();
+            if (!markList.Contains(newMark))
+            {
+                UpdateMarkList();
+            }
         }
 
         public void UpdateMarkList()
         {
-            markList = serverList
-                .Select(s => s.mark)
+            markList = coreServList
+                .Select(s => s.GetCoreStates().GetCustomMark())
                 .Distinct()
                 .Where(s => !string.IsNullOrEmpty(s))
                 .ToList();
         }
 
-        public void RestartInjectImportServers()
+        public void RestartServersWithImportMark()
         {
-            var list = serverList
-                .Where(s => s.isInjectImport && s.isServerOn)
-                .OrderBy(s => s.index)
+            var list = coreServList
+                .Where(s => s.GetCoreStates().IsInjectImport() && s.GetCoreCtrl().IsCoreRunning())
+                .OrderBy(s => s.GetCoreStates().GetIndex())
                 .ToList();
 
-            RestartServersByListThen(list);
-        }
-
-        public ReadOnlyCollection<Controller.CoreServerCtrl> GetServerList()
-        {
-            return serverList.OrderBy(s => s.index).ToList().AsReadOnly();
+            RestartServersThen(list);
         }
 
         public bool IsEmpty()
         {
-            return !(this.serverList.Any());
+            return !(this.coreServList.Any());
         }
-
-        public void ImportLinks(List<string[]> linkList)
-        {
-            // linkList:[ linksString, mark] 
-            var taskList = new List<Task<Tuple<bool, List<string[]>>>>();
-
-            foreach (var link in linkList)
-            {
-                taskList.Add(new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportVmessLinks(link[0], link[1])));
-                taskList.Add(new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportSSLinks(link[0], link[1])));
-                taskList.Add(new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportV2RayLinks(link[0], link[1])));
-            }
-
-            var tasks = taskList.ToArray();
-            Task.Factory.StartNew(() =>
-            {
-                foreach (var task in tasks)
-                {
-                    task.Start();
-                }
-                Task.WaitAll(tasks);
-
-                var results = GetterImportLinksResult(tasks);
-                UpdateMarkList();
-                ShowImportLinksResult(results);
-            });
-        }
-
-        public void ImportLinksWithOutV2RayLinks(string links) =>
-            ImportLinks(links, false);
-
-        public void ImportLinksWithV2RayLinks(string links) =>
-            ImportLinks(links, true);
 
         public bool IsSelecteAnyServer()
         {
-            return serverList.Any(s => s.isSelected);
+            return coreServList.Any(s => s.GetCoreStates().IsSelected());
         }
-
 
         /// <summary>
         /// packageName is Null or empty ? "PackageV4" : packageName
@@ -1012,7 +331,7 @@ namespace V2RayGCon.Service
         /// <param name="packageName"></param>
         /// <param name="servList"></param>
         public string PackServersIntoV4Package(
-            List<VgcApis.Models.IControllers.ICoreCtrl> servList,
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
             string orgUid,
             string packageName)
         {
@@ -1022,8 +341,11 @@ namespace V2RayGCon.Service
                 return "";
             }
 
-            JObject package = GenPackageV4Config(servList, packageName);
-            string newUid = ImportPackageV4Config(orgUid, package);
+
+            JObject package = configMgr.GenV4ServersPackage(servList, packageName);
+
+            var newConfig = package.ToString(Formatting.None);
+            string newUid = ReplaceOrAddNewServer(orgUid, newConfig);
 
             UpdateMarkList();
             setting.SendLog(I18N.PackageDone);
@@ -1033,7 +355,7 @@ namespace V2RayGCon.Service
         }
 
         public void PackServersIntoV3Package(
-            List<VgcApis.Models.IControllers.ICoreCtrl> servList)
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
         {
             var packages = JObject.Parse(@"{}");
             var serverNameList = new List<string>();
@@ -1056,25 +378,24 @@ namespace V2RayGCon.Service
             void worker(int index, Action next)
             {
                 var server = servList[index];
+                var name = server.GetCoreStates().GetName();
+
                 try
                 {
-                    var package = ExtractOutboundInfoFromConfig(
-                        server.GetConfig(), id, port, index, tagPrefix);
+                    var package = configMgr.ExtractOutboundInfoFromConfig(
+                        server.GetConfiger().GetConfig(), id, port, index, tagPrefix);
                     Lib.Utils.UnionJson(ref packages, package);
-                    var vnext = GenVnextConfigPart(index, port, id);
+                    var vnext = configMgr.GenVnextConfigPart(index, port, id);
                     Lib.Utils.UnionJson(ref packages, vnext);
 
                     serverNameList.Add(
-                        string.Format(
-                            "{0}.[{1}]",
-                            index,
-                            server.GetName()));
+                        string.Format("{0}.[{1}]", index, name));
 
-                    setting.SendLog(I18N.PackageSuccess + ": " + server.GetName());
+                    setting.SendLog(I18N.PackageSuccess + ": " + name);
                 }
                 catch
                 {
-                    setting.SendLog(I18N.PackageFail + ": " + server.GetName());
+                    setting.SendLog(I18N.PackageFail + ": " + name);
                 }
                 next();
             }
@@ -1084,64 +405,62 @@ namespace V2RayGCon.Service
 
         public bool RunSpeedTestOnSelectedServers()
         {
-            if (isTesting)
+            if (!speedTestingBar.Install())
             {
                 return false;
             }
-            isTesting = true;
 
-            var list = GetSelectedServerList(false);
+            var list = queryHandler.GetSelectedServers(false);
 
             Task.Factory.StartNew(() =>
             {
-                Lib.Utils.ExecuteInParallel<Controller.CoreServerCtrl, bool>(list, (server) =>
+                Lib.Utils.ExecuteInParallel(list, (server) =>
                 {
-                    server.RunSpeedTest();
-                    return true;
+                    server.GetCoreCtrl().RunSpeedTest();
+
+                    // ExecuteInParallel require a return value
+                    return "";
                 });
 
-                isTesting = false;
+                speedTestingBar.Remove();
                 MessageBox.Show(I18N.SpeedTestFinished);
             });
 
             return true;
         }
 
-        public List<Controller.CoreServerCtrl> GetActiveServerList()
+        public void RestartServersThen(
+            IEnumerable<VgcApis.Models.Interfaces.ICoreServCtrl> servers,
+            Action done = null)
         {
-            return serverList.Where(s => s.isServerOn).ToList();
-        }
-
-        public void RestartServersByListThen(List<Controller.CoreServerCtrl> servers, Action done = null)
-        {
-            var list = servers;
+            var list = servers.ToList();
             void worker(int index, Action next)
             {
-                list[index].RestartCoreThen(next);
+                list[index].GetCoreCtrl().RestartCoreThen(next);
             }
 
             Lib.Utils.ChainActionHelperAsync(list.Count, worker, done);
         }
 
-        public void WakeupServers()
+        public void WakeupServersInBootList()
         {
-            List<Controller.CoreServerCtrl> bootList = GenBootServerList();
+            List<Controller.CoreServerCtrl> bootList = configMgr.GenServersBootList(coreServList);
 
             void worker(int index, Action next)
             {
-                bootList[index].RestartCoreThen(next);
+                bootList[index].GetCoreCtrl().RestartCoreThen(next);
             }
 
             Lib.Utils.ChainActionHelperAsync(bootList.Count, worker);
         }
 
-        public void RestartAllSelectedServersThen(Action done = null)
+        public void RestartSelectedServersThen(Action done = null)
         {
             void worker(int index, Action next)
             {
-                if (serverList[index].isSelected)
+                if (coreServList[index].GetCoreStates().IsSelected())
                 {
-                    serverList[index].RestartCoreThen(next);
+                    coreServList[index].GetCoreCtrl().RestartCoreThen(next);
                 }
                 else
                 {
@@ -1149,16 +468,16 @@ namespace V2RayGCon.Service
                 }
             }
 
-            Lib.Utils.ChainActionHelperAsync(serverList.Count, worker, done);
+            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, done);
         }
 
-        public void StopAllSelectedThen(Action lambda = null)
+        public void StopSelectedServersThen(Action lambda = null)
         {
             void worker(int index, Action next)
             {
-                if (serverList[index].isSelected)
+                if (coreServList[index].GetCoreStates().IsSelected())
                 {
-                    serverList[index].StopCoreThen(next);
+                    coreServList[index].GetCoreCtrl().StopCoreThen(next);
                 }
                 else
                 {
@@ -1166,22 +485,22 @@ namespace V2RayGCon.Service
                 }
             }
 
-            Lib.Utils.ChainActionHelperAsync(serverList.Count, worker, lambda);
+            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, lambda);
         }
 
         public void StopAllServersThen(Action lambda = null)
         {
             void worker(int index, Action next)
             {
-                serverList[index].StopCoreThen(next);
+                coreServList[index].GetCoreCtrl().StopCoreThen(next);
             }
 
-            Lib.Utils.ChainActionHelperAsync(serverList.Count, worker, lambda);
+            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, lambda);
         }
 
         public void DeleteSelectedServersThen(Action done = null)
         {
-            if (isTesting)
+            if (!speedTestingBar.Install())
             {
                 MessageBox.Show(I18N.LastTestNoFinishYet);
                 return;
@@ -1189,7 +508,7 @@ namespace V2RayGCon.Service
 
             void worker(int index, Action next)
             {
-                if (!serverList[index].isSelected)
+                if (!coreServList[index].GetCoreStates().IsSelected())
                 {
                     next();
                     return;
@@ -1200,20 +519,23 @@ namespace V2RayGCon.Service
 
             void finish()
             {
-                LazyUpdateNotifyTextHandler(this, EventArgs.Empty);
-                LazySaveServerList();
+                NotifierTextUpdateHandler(this, EventArgs.Empty);
+                serverSaver.DoItLater();
                 UpdateMarkList();
                 InvokeEventOnRequireFlyPanelUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
+
+                speedTestingBar.Remove();
+
                 done?.Invoke();
             }
 
-            Lib.Utils.ChainActionHelperAsync(serverList.Count, worker, finish);
+            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, finish);
         }
 
         public void DeleteAllServersThen(Action done = null)
         {
-            if (isTesting)
+            if (!speedTestingBar.Install())
             {
                 MessageBox.Show(I18N.LastTestNoFinishYet);
                 return;
@@ -1221,15 +543,17 @@ namespace V2RayGCon.Service
 
             void finish()
             {
-                LazySaveServerList();
+                serverSaver.DoItLater();
                 UpdateMarkList();
                 InvokeEventOnRequireFlyPanelUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
+
+                speedTestingBar.Remove();
                 done?.Invoke();
             }
 
             Lib.Utils.ChainActionHelperAsync(
-                serverList.Count,
+                coreServList.Count,
                 RemoveServerItemFromListThen,
                 finish);
         }
@@ -1240,7 +564,7 @@ namespace V2RayGCon.Service
             {
                 try
                 {
-                    serverList[index].UpdateSummaryThen(next);
+                    coreServList[index].GetConfiger().UpdateSummaryThen(next);
                 }
                 catch
                 {
@@ -1252,17 +576,17 @@ namespace V2RayGCon.Service
             void done()
             {
                 setting.LazyGC();
-                LazySaveServerList();
+                serverSaver.DoItLater();
                 InvokeEventOnRequireFlyPanelUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
             }
 
-            Lib.Utils.ChainActionHelperAsync(serverList.Count, worker, done);
+            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, done);
         }
 
         public void DeleteServerByConfig(string config)
         {
-            if (isTesting)
+            if (!speedTestingBar.Install())
             {
                 MessageBox.Show(I18N.LastTestNoFinishYet);
                 return;
@@ -1272,50 +596,53 @@ namespace V2RayGCon.Service
             if (index < 0)
             {
                 MessageBox.Show(I18N.CantFindOrgServDelFail);
+                speedTestingBar.Remove();
                 return;
             }
 
             Task.Factory.StartNew(
                 () => RemoveServerItemFromListThen(index, () =>
                 {
-                    LazyUpdateNotifyTextHandler(this, EventArgs.Empty);
-                    LazySaveServerList();
+                    NotifierTextUpdateHandler(this, EventArgs.Empty);
+                    serverSaver.DoItLater();
                     UpdateMarkList();
-                    InvokeEventOnRequireMenuUpdate(serverList, EventArgs.Empty);
+                    InvokeEventOnRequireMenuUpdate(coreServList, EventArgs.Empty);
                     InvokeEventOnRequireFlyPanelUpdate();
+                    speedTestingBar.Remove();
                 }));
         }
 
-        public bool IsServerItemExist(string config)
+        public bool IsServerExist(string config)
         {
-            return serverList.Any(s => s.config == config);
+            return coreServList.Any(s => s.GetConfiger().GetConfig() == config);
         }
 
         public bool AddServer(string config, string mark, bool quiet = false)
         {
             // duplicate
-            if (IsServerItemExist(config))
+            if (IsServerExist(config))
             {
                 return false;
             }
 
-            var newServer = new Controller.CoreServerCtrl()
+            var coreInfo = new VgcApis.Models.Datas.CoreInfo
             {
                 config = config,
-                mark = mark,
+                customMark = mark,
             };
 
+            var newServer = new Controller.CoreServerCtrl(coreInfo);
             lock (serverListWriteLock)
             {
-                serverList.Add(newServer);
+                coreServList.Add(newServer);
             }
 
-            newServer.Run(cache, setting, this);
+            newServer.Run(cache, setting, configMgr, this);
             BindEventsTo(newServer);
 
             if (!quiet)
             {
-                newServer.UpdateSummaryThen(() =>
+                newServer.GetConfiger().UpdateSummaryThen(() =>
                 {
                     InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
                     InvokeEventOnRequireFlyPanelUpdate();
@@ -1323,7 +650,7 @@ namespace V2RayGCon.Service
             }
 
             setting.LazyGC();
-            LazySaveServerList();
+            serverSaver.DoItLater();
             return true;
         }
 
@@ -1336,8 +663,91 @@ namespace V2RayGCon.Service
                 return false;
             }
 
-            serverList[index].ChangeConfig(newConfig);
+            coreServList[index].GetConfiger().SetConfig(newConfig);
             return true;
+        }
+
+        public string ReplaceOrAddNewServer(string orgUid, string newConfig)
+        {
+            var servUid = "";
+
+            var orgServ = coreServList.FirstOrDefault(s => s.GetCoreStates().GetUid() == orgUid);
+            if (orgServ != null)
+            {
+                ReplaceServerConfig(orgServ.GetConfiger().GetConfig(), newConfig);
+                servUid = orgUid;
+            }
+            else
+            {
+                AddServer(newConfig, "PackageV4");
+                var newServ = coreServList.FirstOrDefault(s => s.GetConfiger().GetConfig() == newConfig);
+                if (newServ != null)
+                {
+                    servUid = newServ.GetCoreStates().GetUid();
+                }
+            }
+
+            return servUid;
+        }
+        #endregion
+
+        #region private method
+        void InitServerCtrlList()
+        {
+            lock (serverListWriteLock)
+            {
+                var coreInfoList = setting.LoadCoreInfoList();
+                foreach (var coreInfo in coreInfoList)
+                {
+                    var server = new Controller.CoreServerCtrl(coreInfo);
+                    coreServList.Add(server);
+                }
+            }
+
+            foreach (var server in coreServList)
+            {
+                server.Run(cache, setting, configMgr, this);
+                BindEventsTo(server);
+            }
+        }
+
+        int GetServerIndexByConfig(string config)
+        {
+            for (int i = 0; i < coreServList.Count; i++)
+            {
+                var coreCfg = coreServList[i].GetConfiger().GetConfig();
+                if (coreCfg == config)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        void SaveCurrentServerList()
+        {
+            lock (serverListWriteLock)
+            {
+                var coreInfoList = coreServList
+                    .Select(s => s.GetCoreStates().GetAllRawCoreInfo())
+                    .ToList();
+                setting.SaveServerList(coreInfoList);
+            }
+        }
+
+        void RemoveServerItemFromListThen(int index, Action next = null)
+        {
+            var server = coreServList[index];
+            Task.Run(() =>
+            {
+                lock (serverListWriteLock)
+                {
+                    ReleaseEventsFrom(server);
+                    server.Dispose();
+                    coreServList.RemoveAt(index);
+                }
+                next?.Invoke();
+            });
         }
 
         #endregion
@@ -1346,7 +756,7 @@ namespace V2RayGCon.Service
 #if DEBUG
         public void DbgFastRestartTest(int round)
         {
-            var list = serverList.ToList();
+            var list = coreServList.ToList();
             var rnd = new Random();
 
             var count = list.Count;
@@ -1364,11 +774,11 @@ namespace V2RayGCon.Service
                         AutoResetEvent sayGoodbye = new AutoResetEvent(false);
                         if (isStopCore)
                         {
-                            server.StopCoreThen(() => sayGoodbye.Set());
+                            server.GetCoreCtrl().StopCoreThen(() => sayGoodbye.Set());
                         }
                         else
                         {
-                            server.RestartCoreThen(() => sayGoodbye.Set());
+                            server.GetCoreCtrl().RestartCoreThen(() => sayGoodbye.Set());
                         }
                         sayGoodbye.WaitOne();
                     });

@@ -6,15 +6,17 @@ namespace VgcApis.Models.IServices
 {
     public interface IServersService
     {
-        event EventHandler<Models.Datas.BoolEvent> OnServerStateChange;
-        event EventHandler<Models.Datas.StrEvent> OnCoreClosing;
+        event EventHandler OnCoreStart, OnCoreClosing;
 
         string PackServersIntoV4Package(
-            List<Models.IControllers.ICoreCtrl> servList,
+            List<Interfaces.ICoreServCtrl> servList,
             string orgServerUid,
             string packageName);
 
-        ReadOnlyCollection<Models.IControllers.ICoreCtrl> GetTrackableServerList();
-        ReadOnlyCollection<Models.IControllers.ICoreCtrl> GetAllServersList();
+        int GetAvailableHttpProxyPort();
+        string ReplaceOrAddNewServer(string orgUid, string newConfig);
+
+        ReadOnlyCollection<Interfaces.ICoreServCtrl> GetTrackableServerList();
+        ReadOnlyCollection<Interfaces.ICoreServCtrl> GetAllServersOrderByIndex();
     }
 }

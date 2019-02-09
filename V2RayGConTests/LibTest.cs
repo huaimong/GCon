@@ -10,12 +10,23 @@ namespace V2RayGCon.Test
     [TestClass]
     public class LibTest
     {
+
+        [DataTestMethod]
+        [DataRow("http://a.com/b/c/", "/d/e/abc.html", "http://a.com/d/e/abc.html")]
+        [DataRow("vv/b/c/", "/e/abc.html", "/e/abc.html")]
+        [DataRow("http://a.com/c", "/d/abc.html", "http://a.com/d/abc.html")]
+        public void PatchUrlTest(string url, string relativeUrl, string expect)
+        {
+            var patchedUrl = Lib.Utils.PatchHref(url, relativeUrl);
+            Assert.AreEqual(expect, patchedUrl);
+        }
+
         [DataTestMethod]
         [DataRow("0.0.0.0.", "0.0.0.0.")]
         [DataRow("0.0.1.11", "0.0.1.11")]
         [DataRow("0.0.1.0", "0.0.1")]
         [DataRow("0.0.0.1", "0.0.0.1")]
-        [DataRow("0.0.0.0","0.0")]
+        [DataRow("0.0.0.0", "0.0")]
         public void TrimVersionStringTest(string version, string expect)
         {
             var result = Lib.Utils.TrimVersionString(version);
@@ -209,7 +220,7 @@ namespace V2RayGCon.Test
         [TestMethod]
         public void GetLocalCoreVersion()
         {
-            var core = new Service.Core(Service.Setting.Instance);
+            var core = new V2RayGCon.Lib.V2Ray.Core(Service.Setting.Instance);
             var version = core.GetCoreVersion();
 
             if (core.IsExecutableExist())
@@ -280,12 +291,34 @@ namespace V2RayGCon.Test
             }
         }
 
+        [DataTestMethod]
+        [DataRow("http://abc.com https://def.com", 0)]
+        [DataRow("<a href='http://abc.com' ></a> https://def.com", 1)]
+        [DataRow("<a href='a' ></a> https://def.com", 1)]
+        public void FindAllHrefTest(string html, int count)
+        {
+            var links = Lib.Utils.FindAllHref(html);
+            Assert.AreEqual(count, links.Count());
+        }
+
+        [TestMethod]
+        public void ExtractLinks_HttpLink()
+        {
+            var html = "http://abc.com https://def.com";
+
+            var links = Lib.Utils.ExtractLinks(html,
+                VgcApis.Models.Datas.Enum.LinkTypes.http);
+
+            Assert.AreEqual(2, links.Count());
+        }
+
+
         [TestMethod]
         public void ExtractLinks_FromString()
         {
             // var content = testData("links");
             var content = "ss://ZHVtbXkwMA==";
-            var links = Lib.Utils.ExtractLinks(content, Model.Data.Enum.LinkTypes.ss);
+            var links = Lib.Utils.ExtractLinks(content, VgcApis.Models.Datas.Enum.LinkTypes.ss);
             var expact = "ss://ZHVtbXkwMA==";
             Assert.AreEqual(links.Count, 1);
             Assert.AreEqual(expact, links[0]);
@@ -295,7 +328,7 @@ namespace V2RayGCon.Test
         public void ExtractLinks_FromLinksTxt()
         {
             var content = TestConst.links;
-            var links = Lib.Utils.ExtractLinks(content, Model.Data.Enum.LinkTypes.vmess);
+            var links = Lib.Utils.ExtractLinks(content, VgcApis.Models.Datas.Enum.LinkTypes.vmess);
             Assert.AreEqual(2, links.Count);
         }
 
@@ -303,7 +336,7 @@ namespace V2RayGCon.Test
         public void ExtractLink_FromEmptyString_Return_EmptyList()
         {
             var content = "";
-            var links = Lib.Utils.ExtractLinks(content, Model.Data.Enum.LinkTypes.vmess);
+            var links = Lib.Utils.ExtractLinks(content, VgcApis.Models.Datas.Enum.LinkTypes.vmess);
             Assert.AreEqual(0, links.Count);
         }
 

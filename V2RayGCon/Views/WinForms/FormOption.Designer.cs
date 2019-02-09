@@ -156,7 +156,6 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.chkSetUpgradeUseProxy);
             this.groupBox2.Controls.Add(this.rbtnIdontCare);
             this.groupBox2.Controls.Add(this.rbtnSetUpgradeToVgcFull);
             resources.ApplyResources(this.groupBox2, "groupBox2");
@@ -188,6 +187,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.chkSetUpgradeUseProxy);
             this.groupBox6.Controls.Add(this.chkSetUseV4);
             this.groupBox6.Controls.Add(this.chkSetSysPortable);
             resources.ApplyResources(this.groupBox6, "groupBox6");

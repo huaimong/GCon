@@ -145,9 +145,6 @@
   <data name="PkgWin64" xml:space="preserve">
     <value>v2ray-windows-64.zip</value>
   </data>
-  <data name="PatternBase64" xml:space="preserve">
-    <value>(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})</value>
-  </data>
   <data name="ExtPng" xml:space="preserve">
     <value>PNG Files|*.png|All File|*.*</value>
   </data>
@@ -176,9 +173,6 @@
   <data name="UrlLatestVGC" xml:space="preserve">
     <value>https://github.com/nobody3u/V2RayGCon/releases/latest</value>
   </data>
-  <data name="ExtText" xml:space="preserve">
-    <value>Text File|*.txt|All File|*.*</value>
-  </data>
   <data name="VlinkWiki" xml:space="preserve">
     <value>https://github.com/nobody3u/V2RayGCon/wiki/vlink</value>
   </data>
@@ -201,16 +195,9 @@
     <value>180</value>
     <comment>seconds</comment>
   </data>
-  <data name="LazySaveServerListDelay" xml:space="preserve">
-    <value>30</value>
-    <comment>seconds</comment>
-  </data>
   <data name="SpeedTestTimeout" xml:space="preserve">
     <value>20</value>
     <comment>seconds</comment>
-  </data>
-  <data name="SpeedTestUrl" xml:space="preserve">
-    <value>https://www.google.com</value>
   </data>
   <data name="BugFileName" xml:space="preserve">
     <value>bug.txt</value>

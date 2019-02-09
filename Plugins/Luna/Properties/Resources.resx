@@ -121,7 +121,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.2</value>
-    <comment>添加从文件加载脚本功能</comment>
+    <value>0.0.3</value>
+    <comment>有时保存无效,暂未查原因</comment>
   </data>
 </root>

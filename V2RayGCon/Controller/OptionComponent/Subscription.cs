@@ -195,7 +195,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 // dict( [url]=>mark ) to list(url,mark) mark maybe null
                 var subsUrl = subscriptions.Select(s => s).ToList();
                 List<string[]> links = BatchGetLinksFromSubsUrl(subsUrl);
-                servers.ImportLinks(links);
+                servers.ImportLinksBatchMode(links, false);
                 EnableBtnUpdate();
 
             });
@@ -230,7 +230,7 @@ namespace V2RayGCon.Controller.OptionComponent
             Func<KeyValuePair<string, string>, string[]> worker = (item) =>
             {
                 // item[url]=mark
-                var subsString = Lib.Utils.FetchThroughProxy(item.Key, proxyPort, timeout);
+                var subsString = Lib.Utils.Fetch(item.Key, proxyPort, timeout);
 
                 if (string.IsNullOrEmpty(subsString))
                 {

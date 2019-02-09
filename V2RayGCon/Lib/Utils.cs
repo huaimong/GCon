@@ -15,6 +15,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Web.UI;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -624,7 +626,9 @@ namespace V2RayGCon.Lib
             return list;
         }
 
-        public static List<string> ExtractLinks(string text, Model.Data.Enum.LinkTypes linkType)
+        public static List<string> ExtractLinks(
+            string text,
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
             string pattern = GenPattern(linkType);
             var matches = Regex.Matches("\n" + text, pattern, RegexOptions.IgnoreCase);
@@ -646,7 +650,7 @@ namespace V2RayGCon.Lib
             string content = JsonConvert.SerializeObject(vmess);
             return AddLinkPrefix(
                 Base64Encode(content),
-                Model.Data.Enum.LinkTypes.vmess);
+                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
         }
 
         public static Model.Data.Vmess VmessLink2Vmess(string link)
@@ -811,6 +815,67 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region net
+        public static string GetBaseUrl(string url)
+        {
+            try
+            {
+                var uri = new Uri(url);
+                var baseUri = uri.GetLeftPart(UriPartial.Authority);
+                return baseUri;
+            }
+            catch (ArgumentNullException) { }
+            catch (UriFormatException) { }
+            catch (ArgumentException) { }
+            catch (InvalidOperationException) { }
+            return "";
+        }
+
+        public static string PatchHref(string url, string href)
+        {
+            var baseUrl = GetBaseUrl(url);
+
+            if (string.IsNullOrEmpty(baseUrl)
+                || string.IsNullOrEmpty(href)
+                || !href.StartsWith("/"))
+            {
+                return href;
+            }
+
+            return baseUrl + href;
+        }
+
+        public static List<string> FindAllHref(string text)
+        {
+            var empty = new List<string>();
+
+            if (string.IsNullOrEmpty(text))
+            {
+                return empty;
+            }
+
+            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(text);
+
+            var result = doc.DocumentNode.SelectNodes("//a")
+                ?.Select(p => p.GetAttributeValue("href", ""))
+                ?.Where(s => !string.IsNullOrEmpty(s))
+                ?.ToList();
+
+            return result ?? empty;
+        }
+
+        public static string GenSearchUrl(string query, int start)
+        {
+            var url = VgcApis.Models.Consts.Webs.SearchUrlPrefix + UrlEncode(query);
+            if (start > 0)
+            {
+                url += VgcApis.Models.Consts.Webs.SearchPagePrefix + start.ToString();
+            }
+            return url;
+        }
+
+        public static string UrlEncode(string value) => HttpUtility.UrlEncode(value);
+
         public static long VisitWebPageSpeedTest(string url = "https://www.google.com", int port = -1)
         {
             var timeout = Str2Int(StrConst.SpeedTestTimeout) * 1000;
@@ -883,7 +948,7 @@ namespace V2RayGCon.Lib
         /// <param name="proxyPort">1-65535, other value means download directly</param>
         /// <param name="timeout">millisecond, if &lt;1 then use default value 30000</param>
         /// <returns>If sth. goes wrong return string.Empty</returns>
-        public static string FetchThroughProxy(string url, int proxyPort, int timeout)
+        static string FetchWorker(string url, int proxyPort, int timeout)
         {
             var html = string.Empty;
 
@@ -907,10 +972,14 @@ namespace V2RayGCon.Lib
             return html;
         }
 
-        public static string Fetch(string url, int timeout = -1)
-        {
-            return FetchThroughProxy(url, -1, timeout);
-        }
+        public static string Fetch(string url, int proxyPort, int timeout) =>
+            FetchWorker(url, proxyPort, timeout);
+
+        public static string Fetch(string url) =>
+            FetchWorker(url, -1, -1);
+
+        public static string Fetch(string url, int timeout) =>
+            FetchWorker(url, -1, timeout);
 
         public static string GetLatestVGCVersion()
         {
@@ -936,7 +1005,7 @@ namespace V2RayGCon.Lib
             List<string> versions = new List<string> { };
             var url = StrConst.V2rayCoreReleasePageUrl;
 
-            string html = FetchThroughProxy(url, proxyPort, -1);
+            string html = Fetch(url, proxyPort);
             if (string.IsNullOrEmpty(html))
             {
                 return versions;
@@ -1009,7 +1078,18 @@ namespace V2RayGCon.Lib
         }
         #endregion
 
+        #region speed test helper
+
+        public static string InboundTypeNumberToName(int typeNumber)
+        {
+            var table = Model.Data.Table.customInbTypeNames;
+            return table[Lib.Utils.Clamp(typeNumber, 0, table.Length)];
+        }
+        #endregion
+
         #region Miscellaneous
+
+
         public static string TrimVersionString(string version)
         {
             for (int i = 0; i < 2; i++)
@@ -1151,23 +1231,37 @@ namespace V2RayGCon.Lib
             return true;
         }
 
-        static string GetLinkPrefix(Model.Data.Enum.LinkTypes linkType)
+        static string GenLinkPrefix(
+            VgcApis.Models.Datas.Enum.LinkTypes linkType) =>
+            $"{linkType.ToString()}";
+
+        public static string GenPattern(
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
-            return Model.Data.Table.linkPrefix[(int)linkType];
+            string pattern = "";
+
+            switch (linkType)
+            {
+                case VgcApis.Models.Datas.Enum.LinkTypes.ss:
+                case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
+                case VgcApis.Models.Datas.Enum.LinkTypes.v2ray:
+                    pattern = GenLinkPrefix(linkType) + "://" +
+                        VgcApis.Models.Consts.Files.PatternBase64;
+                    break;
+                case VgcApis.Models.Datas.Enum.LinkTypes.http:
+                default:
+                    pattern = VgcApis.Models.Consts.Files.PatternUrl;
+                    break;
+            }
+
+            return StrConst.PatternNonAlphabet + pattern;
         }
 
-        public static string GenPattern(Model.Data.Enum.LinkTypes linkType)
+        public static string AddLinkPrefix(
+            string b64Content,
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
-            return string.Format(
-               "{0}{1}{2}",
-               StrConst.PatternNonAlphabet, // vme[ss]
-               GetLinkPrefix(linkType),
-               StrConst.PatternBase64);
-        }
-
-        public static string AddLinkPrefix(string b64Content, Model.Data.Enum.LinkTypes linkType)
-        {
-            return GetLinkPrefix(linkType) + b64Content;
+            return GenLinkPrefix(linkType) + "://" + b64Content;
         }
 
         public static string GetLinkBody(string link)
@@ -1291,11 +1385,12 @@ namespace V2RayGCon.Lib
             };
         }
 
-        public static List<TResult> ExecuteInParallel<TParam, TResult>(List<TParam> values, Func<TParam, TResult> lambda)
+        public static List<TResult> ExecuteInParallel<TParam, TResult>(
+            IEnumerable<TParam> values, Func<TParam, TResult> lambda)
         {
             var result = new List<TResult>();
 
-            if (values.Count <= 0)
+            if (values.Count() <= 0)
             {
                 return result;
             }

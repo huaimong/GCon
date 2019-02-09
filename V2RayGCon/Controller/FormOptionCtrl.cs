@@ -51,11 +51,11 @@ namespace V2RayGCon.Controller
             }
 
             var serverString = string.Empty;
-            foreach (var server in Service.Servers.Instance.GetServerList())
+            foreach (var server in Service.Servers.Instance.GetAllServersOrderByIndex())
             {
                 // insert a space in the front for regex matching
                 serverString += " v2ray://"
-                    + Lib.Utils.Base64Encode(server.config)
+                    + Lib.Utils.Base64Encode(server.GetConfiger().GetConfig())
                     + Environment.NewLine;
             }
 
@@ -65,26 +65,15 @@ namespace V2RayGCon.Controller
                     { "servers" ,serverString},
                 };
 
-            switch (VgcApis.Libs.UI.ShowSaveFileDialog(
-                StrConst.ExtText,
-                JsonConvert.SerializeObject(data),
-                out string filename))
-            {
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                    MessageBox.Show(I18N.Done);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                    MessageBox.Show(I18N.WriteFileFail);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                    // do nothing
-                    break;
-            }
+            VgcApis.Libs.UI.SaveToFile(
+                VgcApis.Models.Consts.Files.TxtExt,
+                JsonConvert.SerializeObject(data));
         }
 
         public void RestoreOptions()
         {
-            string backup = VgcApis.Libs.UI.ShowReadFileDialog(StrConst.ExtText, out string filename);
+            string backup = VgcApis.Libs.UI.ReadFileContentFromDialog(
+                VgcApis.Models.Consts.Files.TxtExt);
 
             if (backup == null)
             {
@@ -122,7 +111,7 @@ namespace V2RayGCon.Controller
             if (options.ContainsKey("servers")
                 && Lib.UI.Confirm(I18N.ConfirmImportServers))
             {
-                Service.Servers.Instance.ImportLinksWithV2RayLinks(options["servers"]);
+                Service.Servers.Instance.ImportLinkWithV2RayLinks(options["servers"]);
             }
             else
             {

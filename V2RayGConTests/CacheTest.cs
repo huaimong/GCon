@@ -31,9 +31,8 @@ namespace V2RayGCon.Test
         }
 
         [DataTestMethod]
-        [DataRow("http://suo.im/4CTgF5")]
-        [DataRow("http://suo.im/4CTgF5,http://suo.im/5lp5PJ")]
-        [DataRow("http://suo.im/4CTgF5,http://suo.im/5lp5PJ,http://suo.im/4JJwhs")]
+        [DataRow("http://www.baidu.com")]
+        [DataRow("https://www.bing.com,http://www.baidu.com")]
         public void HTMLNormalTest(string rawData)
         {
             var data = rawData.Split(',');

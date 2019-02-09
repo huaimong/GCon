@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VgcApis.Libs.Sys
+namespace VgcApis.Libs.Tasks
 {
     public class LazyGuy
     {
@@ -55,6 +55,7 @@ namespace VgcApis.Libs.Sys
             lazyTimer.Start();
         }
 
+        bool cancel = false;
         public void DoItNow()
         {
             lazyTimer.Cancel();
@@ -62,16 +63,27 @@ namespace VgcApis.Libs.Sys
             // Don't hurt me.
             try
             {
-                task?.Invoke();
+                lock (task)
+                {
+                    if (cancel)
+                    {
+                        return;
+                    }
+                    task?.Invoke();
+                }
             }
             catch { }
         }
 
         public void Quit()
         {
-            lazyTimer.Cancel();
-            lazyTimer.Release();
-            task = null;
+            cancel = true;
+            lock (task)
+            {
+                lazyTimer.Cancel();
+                lazyTimer.Release();
+                task = null;
+            }
         }
         #endregion
 

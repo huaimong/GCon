@@ -4,11 +4,11 @@ namespace Pacman
 {
     public class Pacman : VgcApis.Models.BaseClasses.Plugin
     {
-        VgcApis.IService api;
+        VgcApis.Models.IServices.IApiService api;
         Services.Settings settings;
 
         VgcApis.Models.IServices.IServersService vgcServers;
-        VgcApis.Models.IServices.ISettingService vgcSettings;
+        VgcApis.Models.IServices.ISettingsService vgcSettings;
         Views.WinForms.FormMain formMain = null;
 
         // form=null;
@@ -33,12 +33,12 @@ namespace Pacman
             formMain.Show();
         }
 
-        protected override void Start(VgcApis.IService api)
+        protected override void Start(VgcApis.Models.IServices.IApiService api)
         {
             this.api = api;
             this.settings = new Services.Settings();
-            vgcServers = api.GetVgcServersService();
-            vgcSettings = api.GetVgcSettingService();
+            vgcServers = api.GetServersService();
+            vgcSettings = api.GetSettingService();
             settings.Run(api);
         }
 

@@ -103,15 +103,15 @@ namespace ProxySetter.Services
 
         void SearchForAvailableProxyServer(
             bool isGlobal,
-            List<VgcApis.Models.IControllers.ICoreCtrl> serverList)
+            List<VgcApis.Models.Interfaces.ICoreServCtrl> serverList)
         {
             foreach (var serv in serverList)
             {
-                if (serv.IsSuitableToBeUsedAsSysProxy(
+                if (serv.GetConfiger().IsSuitableToBeUsedAsSysProxy(
                    isGlobal, out bool isSocks, out int port))
                 {
                     UpdateSysProxySetting(
-                        serv.GetTitle(),
+                        serv.GetCoreStates().GetTitle(),
                         isSocks,
                         port);
                     return;
@@ -177,14 +177,14 @@ namespace ProxySetter.Services
                     setting.GetBasicSetting().sysProxyMode ==
                     (int)Model.Data.Enum.SystemProxyModes.Global;
 
-            var curServ = serverList.FirstOrDefault(s => s.GetConfig() == curServerConfig);
+            var curServ = serverList.FirstOrDefault(s => s.GetConfiger().GetConfig() == curServerConfig);
             if (curServ != null)
             {
-                if (curServ.IsSuitableToBeUsedAsSysProxy(
+                if (curServ.GetConfiger().IsSuitableToBeUsedAsSysProxy(
                     isGlobal, out bool isSocks, out int port))
                 {
                     UpdateSysProxySetting(
-                        curServ.GetTitle(),
+                        curServ.GetCoreStates().GetTitle(),
                         isSocks,
                         port);
                     return;
@@ -195,11 +195,20 @@ namespace ProxySetter.Services
 
         string curServerConfig;
         bool isServerStart;
-        void TrackingHandler(object sender, VgcApis.Models.Datas.BoolEvent isServerStart)
+
+        void OnCoreStartHandler(object sender, EventArgs args)
         {
-            var server = sender as VgcApis.Models.IControllers.ICoreCtrl;
-            curServerConfig = server.GetConfig();
-            this.isServerStart = isServerStart.Data;
+            var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
+            curServerConfig = coreCtrl.GetConfiger().GetConfig();
+            isServerStart = true;
+            WakeupLazyProxyUpdater();
+        }
+
+        void OnCoreClosingHandler(object sender, EventArgs args)
+        {
+            var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
+            curServerConfig = coreCtrl.GetConfiger().GetConfig();
+            isServerStart = false;
             WakeupLazyProxyUpdater();
         }
 
@@ -213,7 +222,8 @@ namespace ProxySetter.Services
                     return;
                 }
 
-                servers.OnServerStateChange += TrackingHandler;
+                servers.OnCoreClosing += OnCoreClosingHandler;
+                servers.OnCoreStart += OnCoreStartHandler;
                 isTracking = true;
             }
             setting.DebugLog("Start tracking.");
@@ -228,7 +238,9 @@ namespace ProxySetter.Services
                     return;
                 }
 
-                servers.OnServerStateChange -= TrackingHandler;
+                servers.OnCoreClosing -= OnCoreClosingHandler;
+                servers.OnCoreStart -= OnCoreStartHandler;
+
                 isTracking = false;
             }
             setting.DebugLog("Stop tracking.");

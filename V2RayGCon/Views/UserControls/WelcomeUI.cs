@@ -30,7 +30,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void WelcomeFlyPanelComponent_Load(object sender, System.EventArgs e)
         {
-            var core = new Service.Core(setting);
+            var core = new V2RayGCon.Lib.V2Ray.Core(setting);
             if (!core.IsExecutableExist())
             {
                 return;
@@ -64,7 +64,7 @@ namespace V2RayGCon.Views.UserControls
         private void lbCopyFromClipboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string links = Lib.Utils.GetClipboardText();
-            servers.ImportLinksWithOutV2RayLinks(links);
+            servers.ImportLinkWithOutV2RayLinks(links);
         }
 
         private void lbScanQRCode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -73,7 +73,7 @@ namespace V2RayGCon.Views.UserControls
             {
                 var msg = Lib.Utils.CutStr(link, 90);
                 Service.Setting.Instance.SendLog($"QRCode: {msg}");
-                servers.ImportLinksWithOutV2RayLinks(link);
+                servers.ImportLinkWithOutV2RayLinks(link);
             }
 
             void Fail()

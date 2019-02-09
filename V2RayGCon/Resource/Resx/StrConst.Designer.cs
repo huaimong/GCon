@@ -293,15 +293,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Text File|*.txt|All File|*.* 的本地化字符串。
-        /// </summary>
-        internal static string ExtText {
-            get {
-                return ResourceManager.GetString("ExtText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 https://github.com/v2ray/v2ray-core/releases/latest 的本地化字符串。
         /// </summary>
         internal static string LatestCoreLink {
@@ -316,15 +307,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string LazyGCDelay {
             get {
                 return ResourceManager.GetString("LazyGCDelay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 30 的本地化字符串。
-        /// </summary>
-        internal static string LazySaveServerListDelay {
-            get {
-                return ResourceManager.GetString("LazySaveServerListDelay", resourceCulture);
             }
         }
         
@@ -392,15 +374,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 (?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4}) 的本地化字符串。
-        /// </summary>
-        internal static string PatternBase64 {
-            get {
-                return ResourceManager.GetString("PatternBase64", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 [A-Za-z0-9+/]+ 的本地化字符串。
         /// </summary>
         internal static string PatternBase64NonStandard {
@@ -460,15 +433,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string SpeedTestTimeout {
             get {
                 return ResourceManager.GetString("SpeedTestTimeout", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 https://www.google.com 的本地化字符串。
-        /// </summary>
-        internal static string SpeedTestUrl {
-            get {
-                return ResourceManager.GetString("SpeedTestUrl", resourceCulture);
             }
         }
         

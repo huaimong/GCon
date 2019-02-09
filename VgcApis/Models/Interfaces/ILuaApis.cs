@@ -4,6 +4,30 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
+        string PatchHref(string url, string href);
+        string GetAppDir();
+        string VmessLink2ConfigString(string vmessLink);
+        string Search(string query, int start, int proxyPort);
+        List<string> FindAllHref(string text);
+        List<string> ExtractVmessLink(string text);
+
+        /// <summary>
+        /// First running http server port.
+        /// </summary>
+        /// <returns></returns>
+        int GetProxyPort();
+
+        /// <summary>
+        /// timeout seconds
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="proxyPort"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        string Fetch(string url, int proxyPort, int timeout);
+
+        string Fetch(string url);
+
         /// <summary>
         /// Show perdefined functions.
         /// </summary>
@@ -22,6 +46,7 @@ namespace VgcApis.Models.Interfaces
         /// <param name="millisecond"></param>
         void Sleep(int millisecond);
 
-        List<IControllers.ICoreCtrl> GetAllServers();
+        List<Interfaces.ICoreServCtrl> GetAllServers();
+        long RunSpeedTest(string rawConfig);
     }
 }

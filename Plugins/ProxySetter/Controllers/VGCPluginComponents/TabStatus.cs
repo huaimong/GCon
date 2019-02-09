@@ -52,25 +52,9 @@ namespace ProxySetter.Controllers.VGCPluginComponents
         {
             btnSaveAs.Click += (s, a) =>
             {
-                var content = pacServer.GetCurPacFileContent();
-                var result = VgcApis.Libs.UI.ShowSaveFileDialog(
+                VgcApis.Libs.UI.SaveToFile(
                     VgcApis.Models.Consts.Files.PacExt,
-                    content,
-                    out string filename);
-
-                switch (result)
-
-                {
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                        MessageBox.Show(I18N.Done);
-                        break;
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                        MessageBox.Show(I18N.WriteFileFail);
-                        break;
-                    case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                        // do nothing
-                        break;
-                }
+                    pacServer.GetCurPacFileContent());
             };
 
             btnClearSysProxy.Click += (s, a) =>

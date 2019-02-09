@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Concurrent;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -34,7 +35,7 @@ namespace VgcApis.Libs
         public static void SavePluginSetting<T>(
             string pluginName,
             T userSettings,
-            Models.IServices.ISettingService vgcSetting)
+            Models.IServices.ISettingsService vgcSetting)
             where T : class
         {
             try
@@ -47,7 +48,7 @@ namespace VgcApis.Libs
 
         public static T LoadPluginSetting<T>(
             string pluginName,
-            Models.IServices.ISettingService vgcSetting)
+            Models.IServices.ISettingsService vgcSetting)
             where T : class, new()
         {
             var empty = new T();
@@ -173,11 +174,13 @@ namespace VgcApis.Libs
         static string GenAppDir()
         {
             // z:\vgc\libs\vgcapi.dll
-            var vgcapiDllFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            var libsDirInfo = System.IO.Directory.GetParent(vgcapiDllFile);
-            var vgcDirInfo = System.IO.Directory.GetParent(libsDirInfo.ToString());
-
-            return vgcDirInfo.ToString();
+            var vgcApiDllFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var parent= new DirectoryInfo(vgcApiDllFile).Parent;
+            if (parent.Name == "libs")
+            {
+                parent = parent.Parent;
+            }
+            return parent.FullName;
         }
 
         public static string GetAppDir() => appDirCache;

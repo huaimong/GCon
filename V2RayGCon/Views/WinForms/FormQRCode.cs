@@ -80,7 +80,7 @@ namespace V2RayGCon.Views.WinForms
 
             cboxServList.Items.Clear();
 
-            var serverList = servers.GetServerList();
+            var serverList = servers.GetAllServersOrderByIndex();
 
             if (serverList.Count <= 0)
             {
@@ -91,8 +91,9 @@ namespace V2RayGCon.Views.WinForms
             this.serverList = new Dictionary<string, string>();
             foreach (var server in serverList)
             {
-                cboxServList.Items.Add(server.name);
-                this.serverList[server.name] = server.config;
+                var name = server.GetCoreStates().GetName();
+                cboxServList.Items.Add(name);
+                this.serverList[name] = server.GetConfiger().GetConfig();
             }
 
             servIndex = Lib.Utils.Clamp(oldIndex, 0, serverList.Count);
@@ -128,7 +129,7 @@ namespace V2RayGCon.Views.WinForms
             {
                 link = Lib.Utils.AddLinkPrefix(
                     Lib.Utils.Base64Encode(config),
-                    Model.Data.Enum.LinkTypes.v2ray);
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
             }
 
             tboxLink.Text = link;

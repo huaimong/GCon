@@ -5,13 +5,9 @@ namespace Luna
     // Using lunar not lua to void naming conflicts.
     public class Luna : VgcApis.Models.BaseClasses.Plugin
     {
-        VgcApis.IService api;
-        VgcApis.Models.IServices.IServersService vgcServers;
-        VgcApis.Models.IServices.ISettingService vgcSettings;
-
-        Views.WinForms.FormMain formMain = null;
         Services.Settings settings;
         Services.LuaServer luaServer;
+        Services.FormMgr formMgr;
 
         #region properties
         public override string Name => Properties.Resources.Name;
@@ -22,43 +18,27 @@ namespace Luna
         #region protected overrides
         protected override void Popup()
         {
-            if (formMain != null)
-            {
-                formMain.Activate();
-                return;
-            }
-
-            formMain = new Views.WinForms.FormMain(
-                vgcServers,
-                settings,
-                luaServer);
-
-            formMain.FormClosed += (s, a) => formMain = null;
-            formMain.Show();
+            formMgr.ShowOrCreateFirstForm();
         }
 
-        protected override void Start(VgcApis.IService api)
+        protected override void Start(VgcApis.Models.IServices.IApiService api)
         {
-            this.api = api;
-            vgcServers = api.GetVgcServersService();
-            vgcSettings = api.GetVgcSettingService();
+            var vgcServers = api.GetServersService();
+            var vgcSettings = api.GetSettingService();
+            var vgcConfigMgr = api.GetConfigMgrService();
 
             settings = new Services.Settings();
             luaServer = new Services.LuaServer();
+            formMgr = new Services.FormMgr();
 
             settings.Run(vgcSettings);
-            luaServer.Run(settings, vgcServers);
+            luaServer.Run(settings, api);
+            formMgr.Run(settings, luaServer, api);
         }
 
         protected override void Stop()
         {
-            if (formMain != null)
-            {
-                formMain.Close();
-            }
-
-            luaServer?.Cleanup();
-            settings?.Cleanup();
+            formMgr.Dispose();
         }
         #endregion
     }

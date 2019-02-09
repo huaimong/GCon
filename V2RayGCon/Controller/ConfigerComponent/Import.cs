@@ -12,7 +12,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
     class Import : ConfigerComponentController
     {
         Service.Setting setting;
-        Service.Servers servers;
+        Service.ConfigMgr configMgr;
 
         Scintilla editor;
         CheckBox cboxGlobalImport;
@@ -26,7 +26,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             Button btnSaveAs)
         {
             this.setting = Service.Setting.Instance;
-            this.servers = Service.Servers.Instance;
+            this.configMgr = Service.ConfigMgr.Instance;
 
             this.editor = Lib.UI.CreateScintilla(container, true);
             this.cboxGlobalImport = globalImport;
@@ -52,25 +52,10 @@ namespace V2RayGCon.Controller.ConfigerComponet
         #region private method
         void SaveCurrentContentToFile()
         {
-            switch (VgcApis.Libs.UI.ShowSaveFileDialog(
+            VgcApis.Libs.UI.SaveToFile(
                 VgcApis.Models.Consts.Files.JsonExt,
-                editor.Text,
-                out string filename))
-            {
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Success:
-                    MessageBox.Show(I18N.Done);
-                    break;
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Fail:
-                    MessageBox.Show(I18N.WriteFileFail);
-                    break;
-
-                case VgcApis.Models.Datas.Enum.SaveFileErrorCode.Cancel:
-                // do nothing
-                default:
-                    break;
-            }
+                editor.Text);
         }
-
 
         void AttachEvent(
             Button btnExpand,
@@ -147,7 +132,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             try
             {
-                return servers.ParseImport(plainText).ToString();
+                return configMgr.ParseImport(plainText).ToString();
             }
             catch (FileNotFoundException)
             {

@@ -19,7 +19,8 @@ namespace ProxySetter
         #endregion
 
         #region protected overrides
-        protected override void Start(VgcApis.IService api)
+        protected override void Start(
+            VgcApis.Models.IServices.IApiService api)
         {
             luncher = new Services.PsLuncher();
             luncher.Run(api);
