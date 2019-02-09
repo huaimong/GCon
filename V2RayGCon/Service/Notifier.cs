@@ -254,9 +254,11 @@ namespace V2RayGCon.Service
 
             menu.Items.AddRange(new ToolStripMenuItem[] {
                 new ToolStripMenuItem(
-                    I18N.Help,
+                    I18N.About,
                     Properties.Resources.StatusHelp_16x,
-                    (s,a)=>Lib.UI.VisitUrl(I18N.VistWikiPage,Properties.Resources.WikiLink)),
+                    (s,a)=>Lib.UI.VisitUrl(
+                        I18N.VistPorjectPage,
+                        Properties.Resources.ProjectLink)),
 
                 new ToolStripMenuItem(
                     I18N.Exit,

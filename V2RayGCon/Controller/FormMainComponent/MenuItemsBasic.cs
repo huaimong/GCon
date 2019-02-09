@@ -12,7 +12,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem miSimVmessServer,
             ToolStripMenuItem miImportLinkFromClipboard,
             ToolStripMenuItem miExportAllServer,
-            ToolStripMenuItem importFromFile,
+            ToolStripMenuItem miImportFromFile,
             ToolStripMenuItem miAbout,
             ToolStripMenuItem miHelp,
             ToolStripMenuItem miFormConfigEditor,
@@ -24,7 +24,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         {
             servers = Service.Servers.Instance;
 
-            InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, importFromFile);
+            InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, miImportFromFile);
             InitMenuWindows(miFormConfigEditor, miFormQRCode, miFormLog, miFormOptions);
             InitMenuAbout(miAbout, miHelp, miDownloadV2rayCore, miRemoveV2rayCore);
         }
@@ -73,14 +73,14 @@ namespace V2RayGCon.Controller.FormMainComponent
         #endregion
 
         #region private method
-        private void InitMenuAbout(ToolStripMenuItem about, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
+        private void InitMenuAbout(ToolStripMenuItem aboutVGC, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
         {
             // menu about
             downloadV2rayCore.Click += (s, a) => Views.WinForms.FormDownloadCore.GetForm();
 
             removeV2rayCore.Click += (s, a) => RemoveV2RayCore();
 
-            about.Click += (s, a) =>
+            aboutVGC.Click += (s, a) =>
                 Lib.UI.VisitUrl(I18N.VistPorjectPage, Properties.Resources.ProjectLink);
 
             help.Click += (s, a) =>
