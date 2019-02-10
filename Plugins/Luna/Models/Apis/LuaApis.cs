@@ -40,8 +40,8 @@ namespace Luna.Models.Apis
             vgcConfigMgr.VmessLink2ConfigString(vmessLink);
 
         public string Search(string query, int start, int proxyPort) =>
-            vgcWeb.Search(query, 0, proxyPort, 20 * 1000);
-        
+            vgcWeb.Search(query, start, proxyPort, 20 * 1000);
+
         public List<string> ExtractVmessLink(string text) =>
             vgcWeb.ExtractLinks(text,
                 VgcApis.Models.Datas.Enum.LinkTypes.vmess);
