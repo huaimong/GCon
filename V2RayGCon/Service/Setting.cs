@@ -17,7 +17,6 @@ namespace V2RayGCon.Service
         Model.BaseClass.SingletonService<Setting>,
         VgcApis.Models.IServices.ISettingsService
     {
-        public event EventHandler OnRequireNotifyTextUpdate;
         Model.Data.UserSettings userSettings;
 
         // Singleton need this private ctor.

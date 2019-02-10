@@ -81,7 +81,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 .OfType<Views.UserControls.ServerUI>()
                 .Select(e =>
                 {
-                    VgcApis.Libs.UI.RunInUiThread(flyPanel, () =>
+                    VgcApis.Libs.UI.RunInUiThread(formMain, () =>
                     {
                         operation(e);
                     });
@@ -104,7 +104,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         {
             var controlList = GetAllServersControl();
 
-            VgcApis.Libs.UI.RunInUiThread(flyPanel, () =>
+            VgcApis.Libs.UI.RunInUiThread(formMain, () =>
             {
                 flyPanel.SuspendLayout();
                 flyPanel.Controls.Clear();
@@ -143,7 +143,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             var list = this.GetFilteredList();
             var pagedList = GenPagedServerList(list);
 
-            VgcApis.Libs.UI.RunInUiThread(flyPanel, () =>
+            VgcApis.Libs.UI.RunInUiThread(formMain, () =>
             {
                 if (pagedList.Count > 0)
                 {
@@ -205,7 +205,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             var showPager = paging[1] > 1;
 
-            VgcApis.Libs.UI.RunInUiThread(flyPanel, () =>
+            VgcApis.Libs.UI.RunInUiThread(formMain, () =>
             {
                 if (showPager)
                 {
@@ -220,6 +220,8 @@ namespace V2RayGCon.Controller.FormMainComponent
                         I18N.StatusBarPagerInfoTpl,
                         paging[0] + 1,
                         paging[1]);
+
+                    formMain.Focus();
                 }
 
                 if (tsdbtnPager.Visible != showPager)
@@ -265,7 +267,6 @@ namespace V2RayGCon.Controller.FormMainComponent
                         // servers.ClearSelection();
 
                         RefreshUI();
-                        formMain.Activate();
                     });
                 tsdbtnPager.DropDownItems.Add(item);
             }
@@ -304,14 +305,12 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 paging[0]--;
                 RefreshUI();
-                formMain.Activate();
             };
 
             tslbNextPage.Click += (s, a) =>
             {
                 paging[0]++;
                 RefreshUI();
-                formMain.Activate();
             };
 
             lbMarkFilter.Click +=
@@ -325,7 +324,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             cboxMarkFilter.DropDown += (s, e) =>
             {
                 // cboxMarkFilter has no Invoke method.
-                VgcApis.Libs.UI.RunInUiThread(flyPanel, () =>
+                VgcApis.Libs.UI.RunInUiThread(formMain, () =>
                 {
                     UpdateMarkFilterItemList(cboxMarkFilter);
                     Lib.UI.ResetComboBoxDropdownMenuWidth(cboxMarkFilter);
@@ -360,7 +359,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 control.Cleanup();
             }
-            VgcApis.Libs.UI.RunInUiThread(flyPanel, () =>
+            VgcApis.Libs.UI.RunInUiThread(formMain, () =>
             {
                 foreach (var control in controlList)
                 {

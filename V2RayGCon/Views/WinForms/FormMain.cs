@@ -126,7 +126,7 @@ namespace V2RayGCon.Views.WinForms
             bind(toolStripButtonRestartSelected, toolStripMenuItemRestartSelected);
             bind(toolStripButtonStopSelected, toolStripMenuItemStopSelected);
 
-            bind(toolStripButtonModifySelected, toolStripMenuItemModifySettings);
+            bind(toolStripButtonModifySelected, toolStripMenuItemModifySettings, false);
             bind(toolStripButtonRunSpeedTest, toolStripMenuItemSpeedTestOnSelected);
             bind(toolStripButtonSortSelectedBySpeedTestResult, toolStripMenuItemSortBySpeedTest);
 

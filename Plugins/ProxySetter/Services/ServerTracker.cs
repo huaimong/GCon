@@ -194,13 +194,11 @@ namespace ProxySetter.Services
         }
 
         string curServerConfig;
-        bool isServerStart;
 
         void OnCoreStartHandler(object sender, EventArgs args)
         {
             var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
             curServerConfig = coreCtrl.GetConfiger().GetConfig();
-            isServerStart = true;
             WakeupLazyProxyUpdater();
         }
 
@@ -208,7 +206,6 @@ namespace ProxySetter.Services
         {
             var coreCtrl = sender as VgcApis.Models.Interfaces.ICoreServCtrl;
             curServerConfig = coreCtrl.GetConfiger().GetConfig();
-            isServerStart = false;
             WakeupLazyProxyUpdater();
         }
 
