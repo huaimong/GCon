@@ -41,10 +41,10 @@
             this.flySubsUrlContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.chkSetUpgradeUseProxy = new System.Windows.Forms.CheckBox();
             this.rbtnIdontCare = new System.Windows.Forms.RadioButton();
             this.rbtnSetUpgradeToVgcFull = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chkSetUpgradeUseProxy = new System.Windows.Forms.CheckBox();
             this.chkSetUseV4 = new System.Windows.Forms.CheckBox();
             this.chkSetSysPortable = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -156,18 +156,11 @@
             // 
             // groupBox2
             // 
+            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Controls.Add(this.rbtnIdontCare);
             this.groupBox2.Controls.Add(this.rbtnSetUpgradeToVgcFull);
-            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
-            // 
-            // chkSetUpgradeUseProxy
-            // 
-            resources.ApplyResources(this.chkSetUpgradeUseProxy, "chkSetUpgradeUseProxy");
-            this.chkSetUpgradeUseProxy.Name = "chkSetUpgradeUseProxy";
-            this.toolTip1.SetToolTip(this.chkSetUpgradeUseProxy, resources.GetString("chkSetUpgradeUseProxy.ToolTip"));
-            this.chkSetUpgradeUseProxy.UseVisualStyleBackColor = true;
             // 
             // rbtnIdontCare
             // 
@@ -187,12 +180,19 @@
             // 
             // groupBox6
             // 
+            resources.ApplyResources(this.groupBox6, "groupBox6");
             this.groupBox6.Controls.Add(this.chkSetUpgradeUseProxy);
             this.groupBox6.Controls.Add(this.chkSetUseV4);
             this.groupBox6.Controls.Add(this.chkSetSysPortable);
-            resources.ApplyResources(this.groupBox6, "groupBox6");
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.TabStop = false;
+            // 
+            // chkSetUpgradeUseProxy
+            // 
+            resources.ApplyResources(this.chkSetUpgradeUseProxy, "chkSetUpgradeUseProxy");
+            this.chkSetUpgradeUseProxy.Name = "chkSetUpgradeUseProxy";
+            this.toolTip1.SetToolTip(this.chkSetUpgradeUseProxy, resources.GetString("chkSetUpgradeUseProxy.ToolTip"));
+            this.chkSetUpgradeUseProxy.UseVisualStyleBackColor = true;
             // 
             // chkSetUseV4
             // 
