@@ -16,7 +16,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.UI;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -1005,7 +1004,7 @@ namespace V2RayGCon.Lib
             List<string> versions = new List<string> { };
             var url = StrConst.V2rayCoreReleasePageUrl;
 
-            string html = Fetch(url, proxyPort);
+            string html = Fetch(url, proxyPort, -1);
             if (string.IsNullOrEmpty(html))
             {
                 return versions;

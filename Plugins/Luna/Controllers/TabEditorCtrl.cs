@@ -14,8 +14,9 @@ namespace Luna.Controllers
         VgcApis.Models.IServices.IApiService api;
         VgcApis.Models.IServices.IConfigMgrService configMgr;
         VgcApis.Models.IServices.IServersService vgcServers;
-        Controllers.LuaCoreCtrl luaCoreCtrl;
+        LuaCoreCtrl luaCoreCtrl;
         VgcApis.WinForms.FormSearch formSearch = null;
+        VgcApis.Libs.Views.RepaintCtrl repaintCtrl;
 
         #region controls
         Scintilla luaEditor;
@@ -82,6 +83,8 @@ namespace Luna.Controllers
             {
                 cboxScriptName.SelectedIndex = 0;
             }
+
+            repaintCtrl = new VgcApis.Libs.Views.RepaintCtrl(rtboxOutput);
 
             updateOutputTimer.Tick += UpdateOutput;
             updateOutputTimer.Start();
@@ -236,9 +239,11 @@ namespace Luna.Controllers
             // form maybe closed
             try
             {
+                repaintCtrl.Disable();
                 updateOutputTimeStamp = logCacheUpdateTimeStamp;
                 rtboxOutput.Text = logCache;
                 VgcApis.Libs.UI.ScrollToBottom(rtboxOutput);
+                repaintCtrl.Enable();
             }
             catch { }
 

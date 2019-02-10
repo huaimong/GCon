@@ -9,6 +9,7 @@ namespace V2RayGCon.Views.WinForms
         long updateTimestamp = -1;
         VgcApis.Libs.Tasks.Routine logUpdater;
         VgcApis.Libs.Sys.QueueLogger qLogger;
+        VgcApis.Libs.Views.RepaintCtrl repaintCtrl;
 
         public FormSingleServerLog(
             string title,
@@ -39,6 +40,7 @@ namespace V2RayGCon.Views.WinForms
 
         void UpdateLogBox()
         {
+            repaintCtrl.Disable();
             rtBoxLogger.Text = string.Join(
                 Environment.NewLine,
                 qLogger.GetLogContent())
@@ -46,11 +48,13 @@ namespace V2RayGCon.Views.WinForms
 
             rtBoxLogger.SelectionStart = rtBoxLogger.Text.Length;
             rtBoxLogger.ScrollToCaret();
+            repaintCtrl.Enable();
         }
 
         private void FormSingleServerLog_Load(object sender, EventArgs e)
         {
             logUpdater.Run();
+            repaintCtrl = new VgcApis.Libs.Views.RepaintCtrl(rtBoxLogger);
         }
 
         private void FormSingleServerLog_FormClosed(object sender, FormClosedEventArgs e)

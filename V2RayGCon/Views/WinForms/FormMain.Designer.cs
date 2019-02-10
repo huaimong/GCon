@@ -105,6 +105,7 @@ namespace V2RayGCon.Views.WinForms
             this.toolStripMenuItemCopyAsV2rayLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyAsVmessLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyAsSubscription = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRestartSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStopSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemSpeedTestOnSelected = new System.Windows.Forms.ToolStripMenuItem();
@@ -169,6 +170,7 @@ namespace V2RayGCon.Views.WinForms
             // toolStrip1
             // 
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSelectAllCurPage,
             this.toolStripButtonInverseSelectionCurPage,
@@ -522,13 +524,14 @@ namespace V2RayGCon.Views.WinForms
             this.toolMenuItemServer.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemModifySelected,
             this.toolStripMenuItem1,
+            this.toolStripMenuItemPackSelectedServers,
+            this.toolStripSeparator12,
             this.toolStripMenuItemRestartSelected,
             this.toolStripMenuItemStopSelected,
             this.toolStripMenuItemSpeedTestOnSelected,
-            this.toolStripMenuItemPackSelectedServers,
             this.toolStripSeparator1,
-            this.refreshSummaryToolStripMenuItem,
-            this.toolStripMenuItemDeleteServers});
+            this.toolStripMenuItemDeleteServers,
+            this.refreshSummaryToolStripMenuItem});
             this.toolMenuItemServer.Name = "toolMenuItemServer";
             resources.ApplyResources(this.toolMenuItemServer, "toolMenuItemServer");
             // 
@@ -621,6 +624,11 @@ namespace V2RayGCon.Views.WinForms
             // 
             this.toolStripMenuItemCopyAsSubscription.Name = "toolStripMenuItemCopyAsSubscription";
             resources.ApplyResources(this.toolStripMenuItemCopyAsSubscription, "toolStripMenuItemCopyAsSubscription");
+            // 
+            // toolStripSeparator12
+            // 
+            this.toolStripSeparator12.Name = "toolStripSeparator12";
+            resources.ApplyResources(this.toolStripSeparator12, "toolStripSeparator12");
             // 
             // toolStripMenuItemRestartSelected
             // 
@@ -738,6 +746,7 @@ namespace V2RayGCon.Views.WinForms
             // 
             // statusStrip1
             // 
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelTotal,
             this.toolStripDropDownButtonPager,
@@ -901,5 +910,6 @@ namespace V2RayGCon.Views.WinForms
         private ToolStripMenuItem selectUntrackAllPagesToolStripMenuItem;
         private ToolStripMenuItem selectUntrackAllServersToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator11;
+        private ToolStripSeparator toolStripSeparator12;
     }
 }
