@@ -57,35 +57,39 @@ namespace V2RayGCon.Views.WinForms
         }
 
         readonly object updateLogLocker = new object();
-        bool isUpdating = false;
+
         long updateTimeStamp = DateTime.Now.Ticks;
 
+
+        VgcApis.Libs.Tasks.Bar bar = new VgcApis.Libs.Tasks.Bar();
         void UpdateLog(object sender, EventArgs args)
         {
-            lock (updateLogLocker)
+            if (!bar.Install())
             {
-                if (isUpdating || updateTimeStamp == setting.logTimeStamp)
-                {
-                    return;
-                }
-                isUpdating = true;
+                return;
+            }
+
+            var timestamp = setting.GetLogTimestamp();
+
+            if (updateTimeStamp == timestamp)
+            {
+                bar.Remove();
+                return;
             }
 
             try
             {
                 repaintCtrl.Disable();
-                updateTimeStamp = setting.logTimeStamp;
-                rtBoxLogger.Text = setting.logCache;
+                rtBoxLogger.Text = setting.GetLogContent();
                 ScrollToBottom();
+                updateTimeStamp = timestamp;
                 repaintCtrl.Enable();
             }
             catch { }
-
-            lock (updateLogLocker)
+            finally
             {
-                isUpdating = false;
+                bar.Remove();
             }
-
         }
     }
 }

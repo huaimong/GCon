@@ -166,7 +166,7 @@ namespace V2RayGCon.Service
             {
                 log += Environment.NewLine
                     + Environment.NewLine
-                    + setting.logCache;
+                    + setting.GetLogContent();
             }
             catch { }
             SaveBugLog(log);

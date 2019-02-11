@@ -41,11 +41,7 @@ namespace V2RayGCon.Views.WinForms
         void UpdateLogBox()
         {
             repaintCtrl.Disable();
-            rtBoxLogger.Text = string.Join(
-                Environment.NewLine,
-                qLogger.GetLogContent())
-                + Environment.NewLine;
-
+            rtBoxLogger.Text = qLogger.GetLogAsString(true);
             rtBoxLogger.SelectionStart = rtBoxLogger.Text.Length;
             rtBoxLogger.ScrollToCaret();
             repaintCtrl.Enable();
@@ -60,6 +56,7 @@ namespace V2RayGCon.Views.WinForms
         private void FormSingleServerLog_FormClosed(object sender, FormClosedEventArgs e)
         {
             logUpdater.Dispose();
+            qLogger.Dispose();
         }
     }
 }

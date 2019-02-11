@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
@@ -123,30 +122,10 @@ namespace V2RayGCon.Service
 
         public CultureInfo orgCulture = null;
 
-        ConcurrentQueue<string> _logCache = new ConcurrentQueue<string>();
-        public string logCache
-        {
-            get
-            {
-                return string.Join(Environment.NewLine, _logCache);
-            }
-            private set
-            {
-                _logCache.Enqueue(value);
-
-                if (_logCache.Count < maxLogLines)
-                {
-                    return;
-                }
-
-                string blackHole;
-                var cut = maxLogLines / 2;
-                for (var i = 0; i < cut; i++)
-                {
-                    _logCache.TryDequeue(out blackHole);
-                }
-            }
-        }
+        VgcApis.Libs.Sys.QueueLogger qLogger = new VgcApis.Libs.Sys.QueueLogger();
+        public long GetLogTimestamp() => qLogger.GetTimestamp();
+        public string GetLogContent() => qLogger.GetLogAsString(true);
+        public void SendLog(string log) => qLogger.Log(log);
 
         public Model.Data.Enum.Cultures culture
         {
@@ -273,6 +252,7 @@ namespace V2RayGCon.Service
             lazyGCTimer?.Release();
             lazySaveUserSettingsTimer?.Release();
             SaveUserSettingsNow();
+            qLogger.Dispose();
         }
 
         readonly object saveUserSettingsLocker = new object();
@@ -397,13 +377,6 @@ namespace V2RayGCon.Service
             form.Height = Math.Max(rect.Height, 200);
             form.Left = Lib.Utils.Clamp(rect.Left, 0, screen.Right - form.Width);
             form.Top = Lib.Utils.Clamp(rect.Top, 0, screen.Bottom - form.Height);
-        }
-
-        public long logTimeStamp { get; private set; } = DateTime.Now.Ticks;
-        public void SendLog(string log)
-        {
-            logCache = log;
-            logTimeStamp = DateTime.Now.Ticks;
         }
 
         public List<Model.Data.ImportItem> GetGlobalImportItems()

@@ -1,7 +1,6 @@
 ﻿using Luna.Resources.Langs;
 using ScintillaNET;
 using System;
-using System.Collections.Concurrent;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -17,6 +16,7 @@ namespace Luna.Controllers
         LuaCoreCtrl luaCoreCtrl;
         VgcApis.WinForms.FormSearch formSearch = null;
         VgcApis.Libs.Views.RepaintCtrl repaintCtrl;
+        VgcApis.Libs.Sys.QueueLogger qLogger = new VgcApis.Libs.Sys.QueueLogger();
 
         #region controls
         Scintilla luaEditor;
@@ -35,6 +35,8 @@ namespace Luna.Controllers
 
         string preScriptName = string.Empty;
         string preScriptContent = string.Empty;
+
+        VgcApis.Libs.Tasks.Routine logUpdater;
 
         public TabEditorCtrl(
             ComboBox cboxScriptName,
@@ -59,6 +61,10 @@ namespace Luna.Controllers
                 btnClearOutput,
                 rtboxOutput,
                 pnlEditorContainer);
+
+            logUpdater = new VgcApis.Libs.Tasks.Routine(
+               UpdateOutput,
+               VgcApis.Models.Consts.Intervals.LuaPluginLogRefreshInterval);
         }
 
         public void Run(
@@ -85,27 +91,8 @@ namespace Luna.Controllers
             }
 
             repaintCtrl = new VgcApis.Libs.Views.RepaintCtrl(rtboxOutput);
-
-            updateOutputTimer.Tick += UpdateOutput;
-            updateOutputTimer.Start();
+            logUpdater.Run();
         }
-
-
-        #region properties 
-        ConcurrentQueue<string> _logCache = new ConcurrentQueue<string>();
-        long logCacheUpdateTimeStamp = DateTime.Now.Ticks;
-        string logCache
-        {
-            get => string.Join(Environment.NewLine, _logCache);
-            set
-            {
-                _logCache.Enqueue(value);
-                logCacheUpdateTimeStamp = DateTime.Now.Ticks;
-                VgcApis.Libs.Utils.TrimDownConcurrentQueue(
-                    _logCache, 1000, 300);
-            }
-        }
-        #endregion
 
         #region public methods
         public void KeyBoardShortcutHandler(KeyEventArgs keyEvent)
@@ -172,13 +159,10 @@ namespace Luna.Controllers
 
         public void Cleanup()
         {
+            logUpdater?.Dispose();
             formSearch?.Close();
-
-            updateOutputTimer.Stop();
-            updateOutputTimer.Tick -= UpdateOutput;
-            updateOutputTimer.Dispose();
-
             luaCoreCtrl?.Kill();
+            qLogger?.Dispose();
         }
 
         public string GetCurrentEditorContent() => luaEditor.Text;
@@ -215,42 +199,41 @@ namespace Luna.Controllers
             formSearch.FormClosed += (s, a) => formSearch = null;
         }
 
-        void Log(string content)
-        {
-            logCache = content;
-        }
+        void Log(string content) => qLogger.Log(content);
 
-        Timer updateOutputTimer = new Timer { Interval = 500 };
-        readonly object updateOutputLocker = new object();
-        bool isOutputUpdating = false;
         long updateOutputTimeStamp = 0;
-
-        void UpdateOutput(object sender, EventArgs args)
+        VgcApis.Libs.Tasks.Bar bar = new VgcApis.Libs.Tasks.Bar();
+        void UpdateOutput()
         {
-            lock (updateOutputLocker)
+            if (!bar.Install())
             {
-                if (isOutputUpdating || updateOutputTimeStamp == logCacheUpdateTimeStamp)
+                return;
+            }
+
+            var timestamp = qLogger.GetTimestamp();
+            if (updateOutputTimeStamp == timestamp)
+            {
+                bar.Remove();
+                return;
+            }
+
+            VgcApis.Libs.UI.RunInUiThread(rtboxOutput, () =>
+            {
+                // form maybe closed
+                try
                 {
-                    return;
+                    repaintCtrl.Disable();
+                    rtboxOutput.Text = qLogger.GetLogAsString(true);
+                    VgcApis.Libs.UI.ScrollToBottom(rtboxOutput);
+                    repaintCtrl.Enable();
+                    updateOutputTimeStamp = timestamp;
                 }
-                isOutputUpdating = true;
-            }
-
-            // form maybe closed
-            try
-            {
-                repaintCtrl.Disable();
-                updateOutputTimeStamp = logCacheUpdateTimeStamp;
-                rtboxOutput.Text = logCache;
-                VgcApis.Libs.UI.ScrollToBottom(rtboxOutput);
-                repaintCtrl.Enable();
-            }
-            catch { }
-
-            lock (updateOutputLocker)
-            {
-                isOutputUpdating = false;
-            }
+                catch { }
+                finally
+                {
+                    bar.Remove();
+                }
+            });
         }
 
         private void BindEvents()
@@ -277,8 +260,7 @@ namespace Luna.Controllers
 
             btnClearOutput.Click += (s, a) =>
             {
-                _logCache = new ConcurrentQueue<string>();
-                logCacheUpdateTimeStamp = DateTime.Now.Ticks;
+                qLogger?.Reset();
             };
 
             btnDeleteScript.Click += (s, a) =>

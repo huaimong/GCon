@@ -6,5 +6,6 @@
         public const int NotifierTextUpdateIntreval = 3 * 1000;
 
         public const int SiFormLogRefreshInterval = 500;
+        public const int LuaPluginLogRefreshInterval = 500;
     }
 }
