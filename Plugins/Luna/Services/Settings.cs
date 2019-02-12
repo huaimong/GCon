@@ -2,7 +2,9 @@
 
 namespace Luna.Services
 {
-    public class Settings
+    public class Settings :
+        VgcApis.Models.BaseClasses.Disposable
+
     {
         VgcApis.Models.IServices.ISettingsService vgcSetting;
         readonly string pluginName = Properties.Resources.Name;
@@ -18,8 +20,10 @@ namespace Luna.Services
             vgcSetting.SendLog(string.Format("[{0}] {1}", name, contnet));
         }
 
-        public bool IsShutdown()
-            => vgcSetting.IsShutdown();
+        bool isDisposing = false;
+        public bool IsShutdown() => isDisposing || vgcSetting.IsShutdown();
+
+        public void SetIsDisposing(bool value) => isDisposing = value;
 
         public void Run(
             VgcApis.Models.IServices.ISettingsService vgcSetting)
@@ -49,8 +53,10 @@ namespace Luna.Services
         {
             bookKeeper.DoItLater();
         }
+        #endregion
 
-        public void Cleanup()
+        #region protected methods
+        protected override void Cleanup()
         {
             bookKeeper.DoItNow();
             bookKeeper.Quit();

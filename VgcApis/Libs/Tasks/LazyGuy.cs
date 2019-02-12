@@ -62,19 +62,14 @@ namespace VgcApis.Libs.Tasks
         {
             lazyTimer.Cancel();
 
-            // Don't hurt me.
-            try
+            lock (taskLocker)
             {
-                lock (taskLocker)
+                if (cancel)
                 {
-                    if (cancel)
-                    {
-                        return;
-                    }
-                    task?.Invoke();
+                    return;
                 }
+                task?.Invoke();
             }
-            catch { }
         }
 
         public void Quit()

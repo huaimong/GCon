@@ -38,7 +38,10 @@ namespace Luna
 
         protected override void Stop()
         {
-            formMgr.Dispose();
+            settings?.SetIsDisposing(true);
+            formMgr?.Dispose();
+            luaServer?.Dispose();
+            settings?.Dispose();
         }
         #endregion
     }

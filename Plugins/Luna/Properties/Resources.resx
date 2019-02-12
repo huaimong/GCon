@@ -121,7 +121,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.3</value>
-    <comment>有时保存无效,暂未查原因</comment>
+    <value>0.0.4</value>
+    <comment>修复保存无效问题</comment>
   </data>
 </root>
