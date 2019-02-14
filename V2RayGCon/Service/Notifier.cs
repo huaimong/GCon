@@ -35,15 +35,16 @@ namespace V2RayGCon.Service
 
             ni.MouseClick += (s, a) =>
             {
-                // 使用触控板又没设置双击右键时。。。
                 if (a.Button != MouseButtons.Left)
                 {
                     return;
                 }
 
                 // https://stackoverflow.com/questions/2208690/invoke-notifyicons-context-menu
-                MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(ni, null);
+                // MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
+                // mi.Invoke(ni, null);
+
+                Views.WinForms.FormMain.GetForm()?.Show();
             };
 
             notifierUpdater.DoItLater();

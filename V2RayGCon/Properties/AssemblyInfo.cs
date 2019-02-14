@@ -31,10 +31,11 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.7.15")]
+[assembly: AssemblyVersion("1.1.7.16")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.7.16 改回左键显示主窗口，主窗口菜单添加退出程序功能
  * v1.1.7.15 修复Luna保存无效问题
  * v1.1.7.14 Setting改用QueueLogger处理SendLog
  * v1.1.7.13 修复:切换分页时失焦

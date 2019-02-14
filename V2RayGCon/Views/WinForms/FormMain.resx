@@ -141,11 +141,8 @@
   <data name="flyServerListContainer.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="flyServerListContainer.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
   <data name="flyServerListContainer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>615, 440</value>
+    <value>410, 278</value>
   </data>
   <data name="flyServerListContainer.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -162,11 +159,8 @@
   <data name="&gt;&gt;flyServerListContainer.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="toolStripContainer2.ContentPanel.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
   <data name="toolStripContainer2.ContentPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>615, 440</value>
+    <value>410, 278</value>
   </data>
   <data name="&gt;&gt;toolStripContainer2.ContentPanel.Name" xml:space="preserve">
     <value>toolStripContainer2.ContentPanel</value>
@@ -198,9 +192,6 @@
   <data name="toolStripContainer2.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="toolStripContainer2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
-  </data>
   <data name="&gt;&gt;toolStripContainer2.RightToolStripPanel.Name" xml:space="preserve">
     <value>toolStripContainer2.RightToolStripPanel</value>
   </data>
@@ -214,7 +205,7 @@
     <value>2</value>
   </data>
   <data name="toolStripContainer2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>615, 472</value>
+    <value>410, 303</value>
   </data>
   <data name="toolStripContainer2.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -231,7 +222,7 @@
   <data name="toolStripButtonSelectAllCurPage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAABSSURBVDhPrdExCgAgDENR7+j1vKO6dK20Q5FQEGyGN6V8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABSSURBVDhPrdExCgAgDENR7+j1vKO6dK20Q5FQEGyGN6V8
         BJuIaIUHWh+pOEo2ww+sud198Nq5AYQBxAtUcALZ80wcJZvhB8rfWA4gDCBe4J/oAXZ95n86MOh/AAAA
         AElFTkSuQmCC
 </value>
@@ -240,7 +231,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonSelectAllCurPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonSelectAllCurPage.Text" xml:space="preserve">
     <value>toolStripButton1</value>
@@ -251,7 +242,7 @@
   <data name="toolStripButtonInverseSelectionCurPage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAABZSURBVDhPY/j27dt/SjDYACcnJ6wYrih4DlaMYsCH9x9R
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABZSURBVDhPY/j27dt/SjDYACcnJ6wYrih4DlaMYsCH9x9R
         ME0MgMkNnAHoGMUAbJhoAyjB1DEAm/NAGKYIm/dAmCQDcAUyigEwyYEzAB1T1QBsGG4A+fjbfwBK3g0+
         OWnPEwAAAABJRU5ErkJggg==
 </value>
@@ -260,7 +251,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonInverseSelectionCurPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonInverseSelectionCurPage.Text" xml:space="preserve">
     <value>toolStripButton2</value>
@@ -271,7 +262,7 @@
   <data name="toolStripButtonSelectNoneCurPage.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAABTSURBVDhP3dAxCgAgCIXhzub971ItroWBkvBCyKaGb3ry
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAABTSURBVDhP3dAxCgAgCIXhzub971ItroWBkvBCyKaGb3ry
         ExVmHhkrQESQHqFNuECr3dGDaP8pgOwBxAIZbwLoeUKP0CZc4PRJ0f5TANkDiAXu8ZgfPzPuRMlmkwAA
         AABJRU5ErkJggg==
 </value>
@@ -280,7 +271,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonSelectNoneCurPage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonSelectNoneCurPage.Text" xml:space="preserve">
     <value>toolStripButton3</value>
@@ -289,12 +280,12 @@
     <value>Select none in current page.</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 32</value>
+    <value>6, 25</value>
   </data>
   <data name="toolStripButtonAllServerSelectAll.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADbSURBVDhPY8AFvn//nvDt27f/yBgopgCVxg7QNcinL//P
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADbSURBVDhPY8AFvn//nvDt27f/yBgopgCVxg7QNcinL//P
         EDznf/XSkyjiMAzVhgAgQScnp/+RkZH/Z+28AtbMH7vo/679h8HiyBjFAGRTQZKfP39Bsf3Tx0//P7z/
         CMcoBnz+/Pk+sgEnT578P3MHwvanr96jaMYwABRYyM59/uYDXtsxDAABEAemSa9oLV7bcRoAcwUM47Id
         pwGbN2+GuwKf7SCM1QBQ1IFoGMZlOwhjNQAkCJNE14COCRpADMZpAD4M0wjDUO0IA4jBKBphANlUYjBU
@@ -305,7 +296,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonAllServerSelectAll.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonAllServerSelectAll.Text" xml:space="preserve">
     <value>toolStripButton4</value>
@@ -316,7 +307,7 @@
   <data name="toolStripButtonAllServerSelectNone.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADHSURBVDhPtZExDsIgFIa5gNdwdnTuLHdw8AaeyCNYHV3c
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADHSURBVDhPtZExDsIgFIa5gNdwdnTuLHdw8AaeyCNYHV3c
         dPQMTVCn0khgxPyEh7SVQmJ8yRceLf8XXsuUUguttQToh3uWKxw8bzcWoJdN0+1XS9pnYd3zbhHYzWcu
         RD3Wuq5tVVVJnMAYs44lFG6FsLLtkgQB5qRrkwA3US/1NUgEQRzGSn1OMhKA0/Fg5UO4vlhAI+A74CFe
         3q6X8hFQ/t8HAed8FBjSE6BiAa1T/F9QQlIwBQUJH/8ISugFqWJrCT72azH2BnAGpGC0qIutAAAAAElF
@@ -327,7 +318,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonAllServerSelectNone.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonAllServerSelectNone.Text" xml:space="preserve">
     <value>toolStripButton5</value>
@@ -336,12 +327,12 @@
     <value>Global selected none.</value>
   </data>
   <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 32</value>
+    <value>6, 25</value>
   </data>
   <data name="toolStripButtonRestartSelected.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAFjSURBVDhPjZNPaoNQEMa9QLtte5AsCl1lIYpHUHsD9SqB
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFjSURBVDhPjZNPaoNQEMa9QLtte5AsCl1lIYpHUHsD9SqB
         kE1KF4VSigsXHkDc5hKWinHjJtEkQhdO53uoGGOiHwy858z7vfnjk06nE3XtcDgox+PxvSiKCPvtdvvH
         6x9er/n7TOoLQfP5XFiWZZQkCS2XSzJNk2RZFmYYhvgWxzEx5LOqqvv6+DnAdV1SVbXd901RFPJ9H5lu
         WkgX0Jht2xQEAdKnNE0pDENyHKf1A4JMBgGr1eqsJ3WMmef5L8pADDKpy5kNZtBYA4C4kQ+ANJkAxv71
@@ -354,7 +345,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonRestartSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonRestartSelected.Text" xml:space="preserve">
     <value>toolStripButton6</value>
@@ -365,7 +356,7 @@
   <data name="toolStripButtonStopSelected.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAApSURBVDhPYxhm4Nu3b/+JwVDlmAAkuVCNFy8eNWBkGEAM
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAApSURBVDhPYxhm4Nu3b/+JwVDlmAAkuVCNFy8eNWBkGEAM
         hiofHoCBAQDLogB0oo6ceAAAAABJRU5ErkJggg==
 </value>
   </data>
@@ -373,7 +364,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonStopSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonStopSelected.Text" xml:space="preserve">
     <value>toolStripButton7</value>
@@ -382,12 +373,12 @@
     <value>Stop selected</value>
   </data>
   <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 32</value>
+    <value>6, 25</value>
   </data>
   <data name="toolStripButtonModifySelected.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAACnSURBVDhPzZCxDcIwEEUzEUO4d0XLFEzCAFmBFehoaBiD
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACnSURBVDhPzZCxDcIwEEUzEUO4d0XLFEzCAFmBFehoaBiD
         BimJOLs9eBFnxQgi2xWWnk4n338+ubMTYxzg3dYdgrvDSaFa8grMwW7bm6CKJLAwdbM/6vlyVe+9Oud+
         kgQMW5hNoESSBDQMEzJBiSQTjMOk8pBsC5OEEOb7JV8F8CmxvxGRMgEg4WULU4PkW6wKAMntPqZtqgWA
         hHtoEqzxh4IWkqCdqE9qh9Ul8HfLggAAAABJRU5ErkJggg==
@@ -397,7 +388,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonModifySelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonModifySelected.Text" xml:space="preserve">
     <value>toolStripButton8</value>
@@ -408,7 +399,7 @@
   <data name="toolStripButtonRunSpeedTest.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAExSURBVDhPnZHBSoRQFIZn3Xv0BkFBO0VIw40gLlwLuZ9e
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAExSURBVDhPnZHBSoRQFIZn3Xv0BkFBO0VIw40gLlwLuZ9e
         QGkzzrTrFdpbLYK2za6hcVPLtGYoC9QExVZ/Hpk7KDVqHfi4h3vu/Tjn3kGe50jTNMiyTBn8J0hwdG7g
         cfGAMr8uimJ7VeoXJNgb7WB/vIvTmzHCMPwquzkBsLU60h5MwDg8O8CVd9l/rE0C2u/DjxGCZYDJZAKe
         58FxXCtrAXtE13URxwmS+LOThoDmpZU2qahpGmRZbuCMHDiOU+UNAXvxuoAOUc4wDANxlCCKYui63hSw
@@ -420,7 +411,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonRunSpeedTest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonRunSpeedTest.Text" xml:space="preserve">
     <value>toolStripButton9</value>
@@ -431,7 +422,7 @@
   <data name="toolStripButtonSortSelectedBySpeedTestResult.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAADCSURBVDhPnY8xDsIwFENztlyBpQNjV3qJoswcgI2eoxO9
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADCSURBVDhPnY8xDsIwFENztlyBpQNjV3qJoswcgI2eoxO9
         CbACS9ciW3X0iZKWYslyf/L9lLpxHKc1uyVhwXtf9CZA2x6n1/PN/AswXAcCkCkAac0yhAGLVVWx3Bwa
         JuYU4HZnOgvoLh2LMuZNgPvtEf8diXkNwBSgZNzLFhDP7FDy/tQzLSCe6SlLRgkFAfTNOwGWnm/LFvIF
         kEMILNd1HReQ6Qt0F1UqS4L8XJbnFSp3RuFQ/22dXc5J5JznlYKc+wCcTTH9ws8vcAAAAABJRU5ErkJg
@@ -442,7 +433,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonSortSelectedBySpeedTestResult.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonSortSelectedBySpeedTestResult.Text" xml:space="preserve">
     <value>toolStripButton10</value>
@@ -451,12 +442,12 @@
     <value>Sort selected by speed test result</value>
   </data>
   <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 32</value>
+    <value>6, 25</value>
   </data>
   <data name="toolStripButtonFormOption.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAEmSURBVDhPrZPLbYVADEXZpYI0kFIoALGmCERB7EAUQAdA
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAEmSURBVDhPrZPLbYVADEXZpYI0kFIoALGmCERB7EAUQAdA
         Ca8GVuwQHykLnDkTPDLvoydFsWTN4Lm2ry8zkbXjOD5Y933/2rZNrBOzmAeb5/nTAW/rupZuzfq+lziO
         vQ/DQJHsPLuBPdN+TZPrupa2bWUcx++maUIB9sQ4A3MpAiVN1oSiKCRN0/CdJInkeR6+tUgYB2pUV8A7
         B0uOTz4Fy6Bou+B0xm0MdmDJ8cK6jXRdJ1VVXcBlWdLFO3uNMxqaIOyyLOIL6KE6hUjkDGd/zwSfpumf
@@ -468,7 +459,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripButtonFormOption.Size" type="System.Drawing.Size, System.Drawing">
-    <value>28, 29</value>
+    <value>23, 22</value>
   </data>
   <data name="toolStripButtonFormOption.Text" xml:space="preserve">
     <value>toolStripButton11</value>
@@ -477,7 +468,7 @@
     <value>Options</value>
   </data>
   <data name="toolStripSeparator10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 32</value>
+    <value>6, 25</value>
   </data>
   <data name="toolStripLabelMarkFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -490,19 +481,19 @@
 </value>
   </data>
   <data name="toolStripLabelMarkFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>24, 29</value>
+    <value>16, 22</value>
   </data>
   <data name="toolStripLabelMarkFilter.ToolTipText" xml:space="preserve">
     <value>Filter servers list. Click this to clear filter keywords.</value>
   </data>
   <data name="toolStripComboBoxMarkFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>90, 32</value>
+    <value>90, 25</value>
   </data>
   <data name="toolStrip1.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 0</value>
   </data>
   <data name="toolStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>466, 32</value>
+    <value>403, 25</value>
   </data>
   <data name="toolStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -550,13 +541,13 @@
     <value>宋体, 9pt</value>
   </data>
   <data name="toolMenuItemSimAddVmessServer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 30</value>
+    <value>196, 22</value>
   </data>
   <data name="toolMenuItemSimAddVmessServer.Text" xml:space="preserve">
     <value>Add vmess client</value>
   </data>
   <data name="toolMenuItemImportLinkFromClipboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 30</value>
+    <value>196, 22</value>
   </data>
   <data name="toolMenuItemImportLinkFromClipboard.Text" xml:space="preserve">
     <value>Import from clipboard</value>
@@ -565,16 +556,16 @@
     <value>Include v2ray://... share links.</value>
   </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 6</value>
+    <value>193, 6</value>
   </data>
   <data name="toolMenuItemExportAllServerToFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 30</value>
+    <value>196, 22</value>
   </data>
   <data name="toolMenuItemExportAllServerToFile.Text" xml:space="preserve">
     <value>Export to file</value>
   </data>
   <data name="toolMenuItemImportFromFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 30</value>
+    <value>196, 22</value>
   </data>
   <data name="toolMenuItemImportFromFile.Text" xml:space="preserve">
     <value>Import from file</value>
@@ -583,208 +574,220 @@
     <value>Include v2ray://... share links.</value>
   </data>
   <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 6</value>
+    <value>193, 6</value>
   </data>
   <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>277, 30</value>
+    <value>196, 22</value>
   </data>
   <data name="exitToolStripMenuItem.Text" xml:space="preserve">
     <value>Close</value>
   </data>
+  <data name="exitToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Close window.</value>
+  </data>
+  <data name="exitToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>196, 22</value>
+  </data>
+  <data name="exitToolStripMenuItem1.Text" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="exitToolStripMenuItem1.ToolTipText" xml:space="preserve">
+    <value>Exit this app.</value>
+  </data>
   <data name="operationToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>56, 28</value>
+    <value>41, 20</value>
   </data>
   <data name="operationToolStripMenuItem.Text" xml:space="preserve">
     <value>File</value>
   </data>
   <data name="selectAllCurPageToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 30</value>
+    <value>166, 22</value>
   </data>
   <data name="selectAllCurPageToolStripMenuItem.Text" xml:space="preserve">
     <value>Select all</value>
   </data>
   <data name="invertSelectionCurPageToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 30</value>
+    <value>166, 22</value>
   </data>
   <data name="invertSelectionCurPageToolStripMenuItem.Text" xml:space="preserve">
     <value>Invert selection</value>
   </data>
   <data name="selectNoneCurPageToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>232, 30</value>
+    <value>166, 22</value>
   </data>
   <data name="selectNoneCurPageToolStripMenuItem1.Text" xml:space="preserve">
     <value>Select none</value>
   </data>
   <data name="currentPageToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 30</value>
+    <value>142, 22</value>
   </data>
   <data name="currentPageToolStripMenuItem.Text" xml:space="preserve">
     <value>Current page</value>
   </data>
   <data name="selectAllAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectAllAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select all</value>
   </data>
   <data name="invertSelectionAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="invertSelectionAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Invert selection</value>
   </data>
   <data name="selectNoneAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectNoneAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select none</value>
   </data>
   <data name="toolStripMenuItem3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>265, 6</value>
+    <value>187, 6</value>
   </data>
   <data name="selectNoSpeedTestAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectNoSpeedTestAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select no speed test</value>
   </data>
   <data name="selectTimeoutAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectTimeoutAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select timeout</value>
   </data>
   <data name="selectNoMarkAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectNoMarkAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select no mark</value>
   </data>
   <data name="selectAutorunAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectAutorunAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select autorun</value>
   </data>
   <data name="selectRunningAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectRunningAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select running</value>
   </data>
   <data name="selectUntrackAllPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectUntrackAllPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>Select untrack</value>
   </data>
   <data name="allPagesToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 30</value>
+    <value>142, 22</value>
   </data>
   <data name="allPagesToolStripMenuItem.Text" xml:space="preserve">
     <value>All pages</value>
   </data>
   <data name="selectAllAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectAllAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select all</value>
   </data>
   <data name="invertSelectionAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="invertSelectionAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Invert selection</value>
   </data>
   <data name="selectNoneAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectNoneAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select none</value>
   </data>
   <data name="toolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>265, 6</value>
+    <value>187, 6</value>
   </data>
   <data name="selectNoSpeedTestAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectNoSpeedTestAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select no speed test</value>
   </data>
   <data name="selectTimeoutAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectTimeoutAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select timeout</value>
   </data>
   <data name="selectNoMarkAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectNoMarkAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select no mark</value>
   </data>
   <data name="selectAutorunAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectAutorunAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select autorun</value>
   </data>
   <data name="selectRunningAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectRunningAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select running</value>
   </data>
   <data name="selectUntrackAllServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>268, 30</value>
+    <value>190, 22</value>
   </data>
   <data name="selectUntrackAllServersToolStripMenuItem.Text" xml:space="preserve">
     <value>Select untrack</value>
   </data>
   <data name="allServersToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 30</value>
+    <value>142, 22</value>
   </data>
   <data name="allServersToolStripMenuItem.Text" xml:space="preserve">
     <value>All servers</value>
   </data>
   <data name="selectToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 28</value>
+    <value>53, 20</value>
   </data>
   <data name="selectToolStripMenuItem.Text" xml:space="preserve">
     <value>Select</value>
   </data>
   <data name="toolStripMenuItemMoveToTop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemMoveToTop.Text" xml:space="preserve">
     <value>Move to top</value>
   </data>
   <data name="toolStripMenuItemMoveToBottom.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemMoveToBottom.Text" xml:space="preserve">
     <value>Move to bottom</value>
   </data>
   <data name="toolStripSeparator11.Size" type="System.Drawing.Size, System.Drawing">
-    <value>247, 6</value>
+    <value>175, 6</value>
   </data>
   <data name="toolStripMenuItemSortBySpeedTest.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemSortBySpeedTest.Text" xml:space="preserve">
     <value>Sort by speed test</value>
   </data>
   <data name="toolStripMenuItemSortBySummary.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemSortBySummary.Text" xml:space="preserve">
     <value>Sort by summary</value>
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>247, 6</value>
+    <value>175, 6</value>
   </data>
   <data name="toolStripMenuItemModifySettings.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemModifySettings.Text" xml:space="preserve">
     <value>Modify settings</value>
@@ -793,10 +796,10 @@
     <value>Batch modify servers settings. Selected servers which are running will reboot.</value>
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>247, 6</value>
+    <value>175, 6</value>
   </data>
   <data name="toolStripMenuItemFoldingPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemFoldingPanel.Text" xml:space="preserve">
     <value>Folding panel</value>
@@ -805,7 +808,7 @@
     <value>Fold server panel into a single line mode.</value>
   </data>
   <data name="toolStripMenuItemExpansePanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>250, 30</value>
+    <value>178, 22</value>
   </data>
   <data name="toolStripMenuItemExpansePanel.Text" xml:space="preserve">
     <value>Expand panel</value>
@@ -814,13 +817,13 @@
     <value>Full server panel</value>
   </data>
   <data name="toolStripMenuItemModifySelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItemModifySelected.Text" xml:space="preserve">
     <value>Adjust selected</value>
   </data>
   <data name="toolStripMenuItemCopyAsV2rayLink.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>142, 22</value>
   </data>
   <data name="toolStripMenuItemCopyAsV2rayLink.Text" xml:space="preserve">
     <value>v2ray://...</value>
@@ -829,7 +832,7 @@
     <value>Contain all config information.</value>
   </data>
   <data name="toolStripMenuItemCopyAsVmessLink.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>142, 22</value>
   </data>
   <data name="toolStripMenuItemCopyAsVmessLink.Text" xml:space="preserve">
     <value>vmess://...</value>
@@ -838,7 +841,7 @@
     <value>Contain main config information.</value>
   </data>
   <data name="toolStripMenuItemCopyAsSubscription.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>142, 22</value>
   </data>
   <data name="toolStripMenuItemCopyAsSubscription.Text" xml:space="preserve">
     <value>subscription</value>
@@ -847,13 +850,13 @@
     <value>Encode selected servers as subscription content. (vmess server only)</value>
   </data>
   <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItem1.Text" xml:space="preserve">
     <value>Copy selected</value>
   </data>
   <data name="toolStripMenuItemPackSelectedServers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItemPackSelectedServers.Text" xml:space="preserve">
     <value>Pack selected</value>
@@ -862,10 +865,10 @@
     <value>Pack selected servers into one server.</value>
   </data>
   <data name="toolStripSeparator12.Size" type="System.Drawing.Size, System.Drawing">
-    <value>256, 6</value>
+    <value>181, 6</value>
   </data>
   <data name="toolStripMenuItemRestartSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItemRestartSelected.Text" xml:space="preserve">
     <value>Restart selected</value>
@@ -874,7 +877,7 @@
     <value>Restart all selected servers.</value>
   </data>
   <data name="toolStripMenuItemStopSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItemStopSelected.Text" xml:space="preserve">
     <value>Stop selected</value>
@@ -883,7 +886,7 @@
     <value>Stop all selected servers.</value>
   </data>
   <data name="toolStripMenuItemSpeedTestOnSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItemSpeedTestOnSelected.Text" xml:space="preserve">
     <value>Speed test selected</value>
@@ -892,28 +895,28 @@
     <value>Run speed test on selected servers.</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>256, 6</value>
+    <value>181, 6</value>
   </data>
   <data name="toolStripMenuItemDeleteAllServer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>304, 30</value>
+    <value>214, 22</value>
   </data>
   <data name="toolStripMenuItemDeleteAllServer.Text" xml:space="preserve">
     <value>Delete all servers.</value>
   </data>
   <data name="toolStripMenuItemDeleteSelectedServers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>304, 30</value>
+    <value>214, 22</value>
   </data>
   <data name="toolStripMenuItemDeleteSelectedServers.Text" xml:space="preserve">
     <value>Delete selected servers.</value>
   </data>
   <data name="toolStripMenuItemDeleteServers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="toolStripMenuItemDeleteServers.Text" xml:space="preserve">
     <value>Delete servers</value>
   </data>
   <data name="refreshSummaryToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>259, 30</value>
+    <value>184, 22</value>
   </data>
   <data name="refreshSummaryToolStripMenuItem.Text" xml:space="preserve">
     <value>Refresh summary</value>
@@ -922,49 +925,49 @@
     <value>Refresh summary of all servers.</value>
   </data>
   <data name="toolMenuItemServer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 28</value>
+    <value>53, 20</value>
   </data>
   <data name="toolMenuItemServer.Text" xml:space="preserve">
     <value>Server</value>
   </data>
   <data name="toolMenuItemConfigEditor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>205, 30</value>
+    <value>148, 22</value>
   </data>
   <data name="toolMenuItemConfigEditor.Text" xml:space="preserve">
     <value>Config editor</value>
   </data>
   <data name="toolMenuItemQRCode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>205, 30</value>
+    <value>148, 22</value>
   </data>
   <data name="toolMenuItemQRCode.Text" xml:space="preserve">
     <value>QRCode</value>
   </data>
   <data name="toolMenuItemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>205, 30</value>
+    <value>148, 22</value>
   </data>
   <data name="toolMenuItemLog.Text" xml:space="preserve">
     <value>Log</value>
   </data>
   <data name="toolMenuItemOptions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>205, 30</value>
+    <value>148, 22</value>
   </data>
   <data name="toolMenuItemOptions.Text" xml:space="preserve">
     <value>Options</value>
   </data>
   <data name="windowToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 28</value>
+    <value>53, 20</value>
   </data>
   <data name="windowToolStripMenuItem.Text" xml:space="preserve">
     <value>Window</value>
   </data>
   <data name="toolStripMenuItemDownLoadV2rayCore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 30</value>
+    <value>202, 22</value>
   </data>
   <data name="toolStripMenuItemDownLoadV2rayCore.Text" xml:space="preserve">
     <value>Download v2ray-core</value>
   </data>
   <data name="toolStripMenuItemRemoveV2rayCore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 30</value>
+    <value>202, 22</value>
   </data>
   <data name="toolStripMenuItemRemoveV2rayCore.Text" xml:space="preserve">
     <value>Remove v2ray-core</value>
@@ -973,7 +976,7 @@
     <value>Delete V2RayGCon folder in %ProgramData%.</value>
   </data>
   <data name="toolMenuItemCheckUpdate.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 30</value>
+    <value>202, 22</value>
   </data>
   <data name="toolMenuItemCheckUpdate.Text" xml:space="preserve">
     <value>Check V2RayGCon update</value>
@@ -982,13 +985,13 @@
     <value>False</value>
   </data>
   <data name="toolMenuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 30</value>
+    <value>202, 22</value>
   </data>
   <data name="toolMenuItemAbout.Text" xml:space="preserve">
     <value>About</value>
   </data>
   <data name="toolMenuItemHelp.Size" type="System.Drawing.Size, System.Drawing">
-    <value>286, 30</value>
+    <value>202, 22</value>
   </data>
   <data name="toolMenuItemHelp.Text" xml:space="preserve">
     <value>Help</value>
@@ -997,7 +1000,7 @@
     <value>False</value>
   </data>
   <data name="aboutToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 28</value>
+    <value>47, 20</value>
   </data>
   <data name="aboutToolStripMenuItem1.Text" xml:space="preserve">
     <value>About</value>
@@ -1005,11 +1008,8 @@
   <data name="mainMneuStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 0</value>
   </data>
-  <data name="mainMneuStrip.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>9, 3, 0, 3</value>
-  </data>
   <data name="mainMneuStrip.Size" type="System.Drawing.Size, System.Drawing">
-    <value>615, 34</value>
+    <value>410, 24</value>
   </data>
   <data name="mainMneuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1036,7 +1036,7 @@
     <value>350, 17</value>
   </metadata>
   <data name="toolStripStatusLabelTotal.Size" type="System.Drawing.Size, System.Drawing">
-    <value>73, 25</value>
+    <value>51, 25</value>
   </data>
   <data name="toolStripStatusLabelTotal.Text" xml:space="preserve">
     <value>Total: 1</value>
@@ -1044,7 +1044,7 @@
   <data name="toolStripDropDownButtonPager.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAFiUAABYlAUlSJPAAAAD9SURBVDhPrZM9DoMwDIXpUnWquvUuHWFhQeIEQeI67Cyc
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAD9SURBVDhPrZM9DoMwDIXpUnWquvUuHWFhQeIEQeI67Cyc
         oAsnqMQNeoOegCGlJIy4Nolp+REtVZ/0KYoVPzsmOH9T0zQCkQjMoZQ6A8DWHp+qrmslhADXdSf4vg9F
         UYDW+tK27d6mDEVV6PBdVhOCIADP8yDPc+rmisWONu2lTwbcTZZlgAY3vM7OphqNDbDd/v5UnQ0Iikkp
         DzbVaGzAe1o5RvxkQJRl2cH71QZpmkIYht36lQHNII7jLvZOFEVscrKpRmODqnr01YkkSdZ1wGhlvsbq
@@ -1055,7 +1055,7 @@
     <value>Magenta</value>
   </data>
   <data name="toolStripDropDownButtonPager.Size" type="System.Drawing.Size, System.Drawing">
-    <value>102, 28</value>
+    <value>79, 28</value>
   </data>
   <data name="toolStripDropDownButtonPager.Text" xml:space="preserve">
     <value>Pager</value>
@@ -1097,13 +1097,10 @@
     <value>Next page.</value>
   </data>
   <data name="statusStrip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 506</value>
-  </data>
-  <data name="statusStrip1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 21, 0</value>
+    <value>0, 327</value>
   </data>
   <data name="statusStrip1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>615, 30</value>
+    <value>410, 30</value>
   </data>
   <data name="statusStrip1.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
@@ -1127,13 +1124,10 @@
     <value>Fill</value>
   </data>
   <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 34</value>
-  </data>
-  <data name="panel1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>0, 24</value>
   </data>
   <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>615, 472</value>
+    <value>410, 303</value>
   </data>
   <data name="panel1.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -1154,16 +1148,13 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>9, 18</value>
+    <value>6, 12</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>615, 536</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>410, 357</value>
   </data>
   <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>556, 209</value>
+    <value>376, 152</value>
   </data>
   <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
     <value>CenterScreen</value>
@@ -1325,6 +1316,12 @@
     <value>exitToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;exitToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;exitToolStripMenuItem1.Name" xml:space="preserve">
+    <value>exitToolStripMenuItem1</value>
+  </data>
+  <data name="&gt;&gt;exitToolStripMenuItem1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;selectToolStripMenuItem.Name" xml:space="preserve">
@@ -1585,6 +1582,12 @@
   <data name="&gt;&gt;toolStripMenuItemCopyAsSubscription.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;toolStripMenuItemPackSelectedServers.Name" xml:space="preserve">
+    <value>toolStripMenuItemPackSelectedServers</value>
+  </data>
+  <data name="&gt;&gt;toolStripMenuItemPackSelectedServers.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;toolStripSeparator12.Name" xml:space="preserve">
     <value>toolStripSeparator12</value>
   </data>
@@ -1609,23 +1612,11 @@
   <data name="&gt;&gt;toolStripMenuItemSpeedTestOnSelected.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItemPackSelectedServers.Name" xml:space="preserve">
-    <value>toolStripMenuItemPackSelectedServers</value>
-  </data>
-  <data name="&gt;&gt;toolStripMenuItemPackSelectedServers.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;toolStripSeparator1.Name" xml:space="preserve">
     <value>toolStripSeparator1</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;refreshSummaryToolStripMenuItem.Name" xml:space="preserve">
-    <value>refreshSummaryToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;refreshSummaryToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemDeleteServers.Name" xml:space="preserve">
     <value>toolStripMenuItemDeleteServers</value>
@@ -1643,6 +1634,12 @@
     <value>toolStripMenuItemDeleteSelectedServers</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItemDeleteSelectedServers.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;refreshSummaryToolStripMenuItem.Name" xml:space="preserve">
+    <value>refreshSummaryToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;refreshSummaryToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;windowToolStripMenuItem.Name" xml:space="preserve">

@@ -276,10 +276,18 @@ namespace V2RayGCon.Views.WinForms
         #endregion
 
         #region UI event handler
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void closeWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
         #endregion
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Lib.UI.Confirm(I18N.ConfirmExitApp))
+            {
+                Application.Exit();
+            }
+        }
     }
 }
