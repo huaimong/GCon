@@ -121,9 +121,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.5</value>
-    <comment>Try 修复中文问题
-但KeraLua 5.3有点bug无法解决.
-在KeraLua 5.2中可以正确输出中文.</comment>
+    <value>0.0.6</value>
+    <comment>NLua降级至v1.3.2.1解决中文问题</comment>
   </data>
 </root>
