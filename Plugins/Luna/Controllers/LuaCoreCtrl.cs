@@ -168,8 +168,7 @@ namespace Luna.Controllers
             try
             {
                 var core = CreateLuaCore();
-                var script = coreSetting.script;
-                //var bytes = Encoding.UTF8.GetBytes(script);
+                var script = Encoding.UTF8.GetBytes(coreSetting.script);
                 core.DoString(script);
             }
             catch (Exception e)
