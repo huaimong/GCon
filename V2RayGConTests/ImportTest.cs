@@ -241,6 +241,7 @@ namespace V2RayGCon.Test
                 {
                     isUseOnActivate = includeActivate,
                     isUseOnSpeedTest = includeSpeedTest,
+                    isUseOnPackage = false,
                     url = url,
                     alias = alias,
                 };
@@ -262,7 +263,7 @@ namespace V2RayGCon.Test
             for (var i = 0; i < items.Count; i++)
             {
                 var expect = JObject.Parse(expects[i]);
-                var json = Lib.Utils.ImportItemList2JObject(items[i], true, false);
+                var json = Lib.Utils.ImportItemList2JObject(items[i], true, false, false);
                 var result = JObject.DeepEquals(expect, json);
                 Assert.AreEqual(true, result);
             }

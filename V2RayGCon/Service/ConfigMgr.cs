@@ -55,7 +55,8 @@ namespace V2RayGCon.Service
             JObject import = Lib.Utils.ImportItemList2JObject(
                 setting.GetGlobalImportItems(),
                 isIncludeSpeedTest,
-                isIncludeActivate);
+                isIncludeActivate,
+                false);
 
             Lib.Utils.MergeJson(ref import, JObject.Parse(config));
             return import.ToString();
@@ -390,7 +391,6 @@ namespace V2RayGCon.Service
             string packageName)
         {
             var package = cache.tpl.LoadPackage("pkgV4Tpl");
-            package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
             var outbounds = package["outbounds"] as JArray;
             var description = "";
 
@@ -416,8 +416,29 @@ namespace V2RayGCon.Service
                     setting.SendLog(I18N.PackageSuccess + ": " + name);
                 }
             }
+
+            package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
             package["v2raygcon"]["description"] = description;
-            return package;
+
+            try
+            {
+                var finalConfig = GetGlobalImportConfigForPacking();
+                Lib.Utils.CombineConfigWithOutRouting(ref finalConfig, package);
+                return finalConfig;
+            }
+            catch
+            {
+                setting.SendLog(I18N.InjectPackagingImportsFail);
+                return package;
+            }
+        }
+
+        JObject GetGlobalImportConfigForPacking()
+        {
+            var imports = Lib.Utils.ImportItemList2JObject(
+                setting.GetGlobalImportItems(),
+                false, false, true);
+            return ParseImport(imports.ToString());
         }
 
 

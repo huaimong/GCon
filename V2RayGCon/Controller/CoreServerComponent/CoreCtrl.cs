@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using V2RayGCon.Resource.Resx;
@@ -150,44 +148,23 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         void RestartCoreWorker(Action next)
         {
-            JObject cfg = configMgr.DecodeConfig(
-                configer.GetConfig(),
-                true, 
-                false, 
-                coreStates.IsInjectImport());
-
-            if (cfg == null)
+            var finalConfig = configer.GetFinalConfig();
+            if (finalConfig == null)
             {
                 StopCoreThen(next);
                 return;
             }
-
-            if (!configMgr.ModifyInboundByCustomSetting(
-                ref cfg,
-                coreStates.GetCustomInbType(),
-                coreStates.GetInbIp(),
-                coreStates.GetInbPort()))
-            {
-                StopCoreThen(next);
-                return;
-            }
-
-            configer.InjectSkipCnSitesConfigOnDemand(ref cfg);
-            configer.InjectStatisticsConfigOnDemand(ref cfg);
-
-            // debug
-            var configStr = cfg.ToString(Formatting.Indented);
 
             coreServ.title = coreStates.GetTitle();
             coreServ.RestartCoreThen(
-                cfg.ToString(),
+                finalConfig.ToString(),
                 () =>
                 {
                     container.InvokeEventOnRequireNotifierUpdate();
                     container.InvokeEventOnTrackCoreStart();
                     next?.Invoke();
                 },
-                Lib.Utils.GetEnvVarsFromConfig(cfg));
+                Lib.Utils.GetEnvVarsFromConfig(finalConfig));
         }
         #endregion
     }

@@ -435,18 +435,41 @@ namespace V2RayGCon.Lib
 
         }
 
+        public static void CombineConfigWithOutRouting(ref JObject body, JObject mixin)
+        {
+            List<string> keys = new List<string>
+            {
+                "inbounds",
+                "outbounds",
+                "inboundDetour",
+                "outboundDetour",
+            };
+            CombineConfigWorker(ref body, mixin, keys);
+        }
+
         public static void CombineConfig(ref JObject body, JObject mixin)
+        {
+            List<string> keys = new List<string>
+            {
+                "inbounds",
+                "outbounds",
+                "inboundDetour",
+                "outboundDetour",
+                "routing.rules",
+                "routing.balancers",
+                "routing.settings.rules",
+            };
+            CombineConfigWorker(ref body, mixin, keys);
+        }
+
+        static void CombineConfigWorker(
+            ref JObject body,
+            JObject mixin,
+            IEnumerable<string> keys)
         {
             JObject backup = JObject.Parse(@"{}");
 
-            foreach (var key in new string[] {
-                    "inbounds",
-                    "outbounds",
-                    "inboundDetour",
-                    "outboundDetour",
-                    "routing.rules",
-                    "routing.balancers",
-                    "routing.settings.rules"})
+            foreach (var key in keys)
             {
                 if (TryExtractJObjectPart(body, key, out JObject nodeBody))
                 {
@@ -475,7 +498,8 @@ namespace V2RayGCon.Lib
         public static JObject ImportItemList2JObject(
             List<Model.Data.ImportItem> items,
             bool isIncludeSpeedTest,
-            bool isIncludeActivate)
+            bool isIncludeActivate,
+            bool isIncludePackage)
         {
             var result = CreateJObject(@"v2raygcon.import");
             foreach (var item in items)
@@ -486,7 +510,8 @@ namespace V2RayGCon.Lib
                     continue;
                 }
                 if ((isIncludeSpeedTest && item.isUseOnSpeedTest)
-                    || (isIncludeActivate && item.isUseOnActivate))
+                    || (isIncludeActivate && item.isUseOnActivate)
+                    || (isIncludePackage && item.isUseOnPackage))
                 {
                     result["v2raygcon"]["import"][url] = item.alias ?? string.Empty;
                 }

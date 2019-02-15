@@ -31,10 +31,12 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.7.18")]
+[assembly: AssemblyVersion("1.1.7.19")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.7.19 打包时可注入import项，routing会前置
+ *           添加查看最终配置功能（服务器的“调试”菜单项）
  * v1.1.7.18 NLua降级至v1.3.2.1解决中文问题
  * v1.1.7.17 尝试修复Luna输出中文问题失败(KeraLua 5.3导致)
  * v1.1.7.16 改回左键显示主窗口，主窗口菜单添加退出程序功能

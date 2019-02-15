@@ -2,7 +2,11 @@
 {
     public class ImportItem
     {
-        public bool isUseOnActivate, isUseOnSpeedTest;
+        public bool
+            isUseOnActivate,
+            isUseOnSpeedTest,
+            isUseOnPackage;
+
         public string alias, url;
     }
 }

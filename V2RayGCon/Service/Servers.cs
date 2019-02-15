@@ -341,7 +341,6 @@ namespace V2RayGCon.Service
                 return "";
             }
 
-
             JObject package = configMgr.GenV4ServersPackage(servList, packageName);
 
             var newConfig = package.ToString(Formatting.None);

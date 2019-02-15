@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
@@ -386,9 +387,8 @@ namespace V2RayGCon.Views.UserControls
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var item = this.coreServCtrl;
-            var config = item.GetConfiger().GetConfig();
-            new Views.WinForms.FormConfiger(this.coreServCtrl.GetConfiger().GetConfig());
+            var config = coreServCtrl.GetConfiger().GetConfig();
+            new Views.WinForms.FormConfiger(config);
         }
 
         private void vmessToolStripMenuItem_Click(object sender, EventArgs e)
@@ -530,6 +530,12 @@ namespace V2RayGCon.Views.UserControls
         {
             coreServCtrl.GetCoreStates().SetIndex(double.MaxValue);
             servers.InvokeEventOnRequireFlyPanelReload();
+        }
+
+        private void debugToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var finalConfig = coreServCtrl.GetConfiger().GetFinalConfig();
+            new WinForms.FormConfiger(finalConfig.ToString(Formatting.Indented));
         }
 
         #endregion

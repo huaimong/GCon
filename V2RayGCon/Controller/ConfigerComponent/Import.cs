@@ -109,7 +109,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             {
                 var configWithGlobalImports =
                     Lib.Utils.ImportItemList2JObject(
-                        setting.GetGlobalImportItems(), false, true);
+                        setting.GetGlobalImportItems(), false, true, false);
 
                 Lib.Utils.MergeJson(ref configWithGlobalImports, config);
                 plainText = configWithGlobalImports.ToString();
