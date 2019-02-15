@@ -1,6 +1,7 @@
 ﻿using Luna.Resources.Langs;
 using NLua;
 using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Luna.Controllers
 
         Services.Settings settings;
         Models.Data.LuaCoreSetting coreSetting;
-        VgcApis.Models.Interfaces.ILuaApis luaApis;
+        Models.Apis.LuaApis luaApis;
         VgcApis.Models.BaseClasses.LuaSignal luaSignal;
 
         Thread luaCoreThread;
@@ -25,7 +26,7 @@ namespace Luna.Controllers
         public void Run(
             Services.Settings settings,
             Models.Data.LuaCoreSetting luaCoreState,
-            VgcApis.Models.Interfaces.ILuaApis luaApis)
+            Models.Apis.LuaApis luaApis)
         {
             this.settings = settings;
             this.coreSetting = luaCoreState;
@@ -157,7 +158,7 @@ namespace Luna.Controllers
 
         #region private methods
         void SendLog(string content)
-            => luaApis.Print(content);
+            => luaApis.SendLog(content);
 
         void RunLuaScript()
         {
@@ -167,7 +168,9 @@ namespace Luna.Controllers
             try
             {
                 var core = CreateLuaCore();
-                core.DoString(coreSetting.script);
+                var script = coreSetting.script;
+                //var bytes = Encoding.UTF8.GetBytes(script);
+                core.DoString(script);
             }
             catch (Exception e)
             {

@@ -66,15 +66,18 @@ namespace Luna.Models.Apis
         public void Print(params object[] contents)
         {
             var text = "";
-            foreach (var c in contents)
+            foreach (var content in contents)
             {
-                text += c.ToString();
+                text += content.ToString();
             }
-            redirectLogWorker(text);
+            redirectLogWorker?.Invoke(text);
         }
         #endregion
 
         #region public methods
+        public void SendLog(string message) =>
+            redirectLogWorker?.Invoke(message);
+
         public void SetRedirectLogWorker(Action<string> worker)
         {
             if (worker != null)

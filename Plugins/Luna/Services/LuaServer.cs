@@ -131,7 +131,7 @@ namespace Luna.Services
 
         List<Controllers.LuaCoreCtrl> InitLuaCores(
             Settings settings,
-            VgcApis.Models.Interfaces.ILuaApis luaApis)
+            Models.Apis.LuaApis luaApis)
         {
             var cores = new List<Controllers.LuaCoreCtrl>();
             foreach (var luaCoreState in settings.GetLuaCoreSettings())
