@@ -884,6 +884,15 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Inject packageing imports fail, ignore imports. 的本地化字符串。
+        /// </summary>
+        internal static string InjectPackagingImportsFail {
+            get {
+                return ResourceManager.GetString("InjectPackagingImportsFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Last test is not finished yet. Please wait till test finish. 的本地化字符串。
         /// </summary>
         internal static string LastTestNoFinishYet {

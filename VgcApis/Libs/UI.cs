@@ -50,7 +50,7 @@ namespace VgcApis.Libs
         #endregion
 
         #region file
-        static public  string ReadFileContentFromDialog(string extension)
+        static public string ReadFileContentFromDialog(string extension)
         {
             var tuple = ReadFileFromDialog(extension);
             return tuple.Item1;
@@ -79,7 +79,7 @@ namespace VgcApis.Libs
 
             if (readFileDialog.ShowDialog() != DialogResult.OK)
             {
-                return new Tuple<string,string>(null,fileName);
+                return new Tuple<string, string>(null, fileName);
             }
 
             fileName = readFileDialog.FileName;
@@ -89,7 +89,7 @@ namespace VgcApis.Libs
                 content = File.ReadAllText(fileName);
             }
             catch { }
-            return new Tuple<string, string>( content,fileName);
+            return new Tuple<string, string>(content, fileName);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace VgcApis.Libs
         /// <param name="content"></param>
         /// <param name="extentions"></param>
         /// <returns>file name</returns>
-        static public string SaveToFile( string extentions, string content)
+        static public string SaveToFile(string extentions, string content)
         {
             var err = ShowSaveFileDialog(
                     extentions,

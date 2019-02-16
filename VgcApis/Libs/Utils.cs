@@ -38,12 +38,8 @@ namespace VgcApis.Libs
             Models.IServices.ISettingsService vgcSetting)
             where T : class
         {
-            try
-            {
-                var content = Utils.SerializeObject(userSettings);
-                vgcSetting.SavePluginsSetting(pluginName, content);
-            }
-            catch { }
+            var content = Utils.SerializeObject(userSettings);
+            vgcSetting.SavePluginsSetting(pluginName, content);
         }
 
         public static T LoadPluginSetting<T>(
@@ -175,7 +171,7 @@ namespace VgcApis.Libs
         {
             // z:\vgc\libs\vgcapi.dll
             var vgcApiDllFile = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            var parent= new DirectoryInfo(vgcApiDllFile).Parent;
+            var parent = new DirectoryInfo(vgcApiDllFile).Parent;
             if (parent.Name == "libs")
             {
                 parent = parent.Parent;

@@ -26,6 +26,9 @@ namespace VgcApis.Libs.Tasks
         }
 
         #region public methods
+        /// <summary>
+        /// Start routine.
+        /// </summary>
         public void Run() => schedule.Start();
 
         public void Pause() => schedule.Stop();

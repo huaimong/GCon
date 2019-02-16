@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace VgcApis.Models.Interfaces.CoreCtrlComponents
 {
     public interface IConfiger
     {
+        JObject GetFinalConfig();
+
         string GetConfig();
         void SetConfig(string newConfig);
 

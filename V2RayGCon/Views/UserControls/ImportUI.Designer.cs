@@ -39,6 +39,7 @@
             this.chkMergeWhenStart = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.chkMergeWhenSpeedTest = new System.Windows.Forms.CheckBox();
+            this.chkMergeWhenPacking = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lbIndex
@@ -93,11 +94,20 @@
             this.toolTip1.SetToolTip(this.chkMergeWhenSpeedTest, resources.GetString("chkMergeWhenSpeedTest.ToolTip"));
             this.chkMergeWhenSpeedTest.UseVisualStyleBackColor = true;
             // 
+            // chkMergeWhenPacking
+            // 
+            resources.ApplyResources(this.chkMergeWhenPacking, "chkMergeWhenPacking");
+            this.chkMergeWhenPacking.Cursor = System.Windows.Forms.Cursors.Default;
+            this.chkMergeWhenPacking.Name = "chkMergeWhenPacking";
+            this.toolTip1.SetToolTip(this.chkMergeWhenPacking, resources.GetString("chkMergeWhenPacking.ToolTip"));
+            this.chkMergeWhenPacking.UseVisualStyleBackColor = true;
+            // 
             // ImportUI
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.chkMergeWhenPacking);
             this.Controls.Add(this.chkMergeWhenSpeedTest);
             this.Controls.Add(this.chkMergeWhenStart);
             this.Controls.Add(this.btnDelete);
@@ -127,5 +137,6 @@
         private System.Windows.Forms.CheckBox chkMergeWhenStart;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.CheckBox chkMergeWhenSpeedTest;
+        private System.Windows.Forms.CheckBox chkMergeWhenPacking;
     }
 }

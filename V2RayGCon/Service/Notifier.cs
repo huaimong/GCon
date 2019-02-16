@@ -32,12 +32,19 @@ namespace V2RayGCon.Service
             servers.OnRequireNotifyTextUpdate +=
                 OnRequireNotifyTextUpdateHandler;
 
+
             ni.MouseClick += (s, a) =>
             {
-                if (a.Button == MouseButtons.Left)
+                if (a.Button != MouseButtons.Left)
                 {
-                    Views.WinForms.FormMain.ShowForm();
+                    return;
                 }
+
+                // https://stackoverflow.com/questions/2208690/invoke-notifyicons-context-menu
+                // MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
+                // mi.Invoke(ni, null);
+
+                Views.WinForms.FormMain.GetForm()?.Show();
             };
 
             notifierUpdater.DoItLater();

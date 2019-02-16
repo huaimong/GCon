@@ -297,7 +297,7 @@ namespace V2RayGCon.Test
         [DataRow("<a href='a' ></a> https://def.com", 1)]
         public void FindAllHrefTest(string html, int count)
         {
-            var links = Lib.Utils.FindAllHref(html);
+            var links = Lib.Utils.FindAllHrefs(html);
             Assert.AreEqual(count, links.Count());
         }
 

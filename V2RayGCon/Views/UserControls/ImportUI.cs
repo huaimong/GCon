@@ -17,6 +17,7 @@ namespace V2RayGCon.Views.UserControls
             tboxAlias.Text = subItem.alias;
             chkMergeWhenStart.Checked = subItem.isUseOnActivate;
             chkMergeWhenSpeedTest.Checked = subItem.isUseOnSpeedTest;
+            chkMergeWhenPacking.Checked = subItem.isUseOnPackage;
 
             this.OnDeleted = OnDeleted;
         }
@@ -27,6 +28,7 @@ namespace V2RayGCon.Views.UserControls
             {
                 isUseOnActivate = chkMergeWhenStart.Checked,
                 isUseOnSpeedTest = chkMergeWhenSpeedTest.Checked,
+                isUseOnPackage = chkMergeWhenPacking.Checked,
                 alias = tboxAlias.Text,
                 url = tboxUrl.Text,
             };

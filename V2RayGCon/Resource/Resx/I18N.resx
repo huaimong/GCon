@@ -647,4 +647,7 @@ Switch to direct download.</value>
   <data name="DecompressFileFail" xml:space="preserve">
     <value>Decompress fail!</value>
   </data>
+  <data name="InjectPackagingImportsFail" xml:space="preserve">
+    <value>Inject packageing imports fail, ignore imports.</value>
+  </data>
 </root>

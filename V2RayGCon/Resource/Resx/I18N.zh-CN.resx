@@ -632,4 +632,7 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="DecompressFileFail" xml:space="preserve">
     <value>解压文件失败!</value>
   </data>
+  <data name="InjectPackagingImportsFail" xml:space="preserve">
+    <value>注入打包import失败，忽略相应import项</value>
+  </data>
 </root>

@@ -4,7 +4,8 @@ using System.Linq;
 
 namespace Luna.Services
 {
-    public class LuaServer
+    public class LuaServer:
+        VgcApis.Models.BaseClasses.Disposable
     {
         public EventHandler OnLuaCoreCtrlListChange;
 
@@ -86,9 +87,10 @@ namespace Luna.Services
             return true;
         }
 
+        #endregion
 
-
-        public void Cleanup()
+        #region protected methods
+        protected override void Cleanup()
         {
             if (luaCoreCtrls == null)
             {
@@ -129,7 +131,7 @@ namespace Luna.Services
 
         List<Controllers.LuaCoreCtrl> InitLuaCores(
             Settings settings,
-            VgcApis.Models.Interfaces.ILuaApis luaApis)
+            Models.Apis.LuaApis luaApis)
         {
             var cores = new List<Controllers.LuaCoreCtrl>();
             foreach (var luaCoreState in settings.GetLuaCoreSettings())

@@ -10,8 +10,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildCfgVgcFull: 'full'
-  buildCfgVgcLite: 'lite'
-  v2rayCoreVer: '4.8.0'
+  v2rayCoreVer: '4.15.0'
   v2rayCorePkgName: 'v2ray-windows-32.zip'
   v2rayCorePkgFolder: '$(Build.SourcesDirectory)/V2RayGCon/Resource/Pkg'
   v2rayCoreUrl: 'https://github.com/v2ray/v2ray-core/releases/download/v$(v2rayCoreVer)/$(v2rayCorePkgName)'
@@ -42,22 +41,6 @@ steps:
     archiveType: 'zip' # Options: zip, 7z, tar, wim
     #tarCompression: 'gz' # Optional. Options: gz, bz2, xz, none
     archiveFile: '$(Build.ArtifactStagingDirectory)/V2RayGCon-$(buildCfgVgcFull).zip' 
-    replaceExistingArchive: true 
-
-# V2RayGCon-lite.zip
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildCfgVgcLite)'
-
-- task: ArchiveFiles@2
-  inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/V2RayGCon/bin/$(buildCfgVgcLite)/'
-    includeRootFolder: false
-    archiveType: 'zip' # Options: zip, 7z, tar, wim
-    #tarCompression: 'gz' # Optional. Options: gz, bz2, xz, none
-    archiveFile: '$(Build.ArtifactStagingDirectory)/V2RayGCon-$(buildCfgVgcLite).zip'
     replaceExistingArchive: true 
 
 # V2RayGCon-box.zip

@@ -2,12 +2,14 @@
 {
     public static class Webs
     {
-        public const string FakeRequestUrl = "http://localhost:3000/pac/?&t=abc1234";
-        public const string GoogleDotCom = "https://www.google.com";
+        public const string FakeRequestUrl = @"http://localhost:3000/pac/?&t=abc1234";
+        public const string GoogleDotCom = @"https://www.google.com";
 
-        // https://www.google.com/search?q=vmess
-        public const string SearchUrlPrefix = GoogleDotCom + "/search?q=";
-        public const string SearchPagePrefix = "&start=";
+        public const string BingDotCom = @"https://www.bing.com";
+
+        // https://www.bing.com/search?q=vmess&first=21
+        public const string SearchUrlPrefix = BingDotCom + @"/search?q=";
+        public const string SearchPagePrefix = @"&first=";
 
 
     }

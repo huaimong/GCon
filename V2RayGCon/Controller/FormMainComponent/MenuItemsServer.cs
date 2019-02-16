@@ -30,6 +30,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             // batch op
             ToolStripMenuItem speedTestOnSelected,
+
             ToolStripMenuItem modifySelected,
             ToolStripMenuItem packSelected,
             ToolStripMenuItem stopSelected,
@@ -53,7 +54,12 @@ namespace V2RayGCon.Controller.FormMainComponent
             InitCtrlView(moveToTop, moveToBottom, foldPanel, expansePanel);
             InitCtrlCopyToClipboard(copyAsV2rayLinks, copyAsVmessLinks, copyAsSubscriptions);
             InitCtrlMisc(refreshSummary, deleteSelected, deleteAllServers);
-            InitCtrlBatchOperation(stopSelected, restartSelected, speedTestOnSelected, modifySelected, packSelected);
+            InitCtrlBatchOperation(
+                stopSelected,
+                restartSelected,
+                speedTestOnSelected,
+                modifySelected,
+                packSelected);
 
         }
 
@@ -82,8 +88,15 @@ namespace V2RayGCon.Controller.FormMainComponent
             };
         }
 
-        private void InitCtrlBatchOperation(ToolStripMenuItem stopSelected, ToolStripMenuItem restartSelected, ToolStripMenuItem speedTestOnSelected, ToolStripMenuItem modifySelected, ToolStripMenuItem packSelected)
+        private void InitCtrlBatchOperation(
+            ToolStripMenuItem stopSelected,
+            ToolStripMenuItem restartSelected,
+            ToolStripMenuItem speedTestOnSelected,
+            ToolStripMenuItem modifySelected,
+            ToolStripMenuItem packSelected)
         {
+
+
             modifySelected.Click += ApplyActionOnSelectedServers(
                 () => Views.WinForms.FormBatchModifyServerSetting.GetForm());
 

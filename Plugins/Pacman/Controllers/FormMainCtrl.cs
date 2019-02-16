@@ -228,7 +228,7 @@ namespace Pacman.Controllers
                 .Select(b => b.uid)
                 .ToList();
 
-            var list = settings
+            var servList = settings
                 .GetAllServersList()
                 .Where(s => uidList.Contains(s.GetCoreStates().GetUid()))
                 .ToList();
@@ -237,7 +237,7 @@ namespace Pacman.Controllers
                 .GetPackageList()
                 .FirstOrDefault(p => p.name == tboxName.Text);
 
-            var newUid = settings.Pack(list, package?.uid, tboxName.Text);
+            var newUid = settings.Pack(servList, package?.uid, tboxName.Text);
             if (package != null)
             {
                 package.uid = newUid;

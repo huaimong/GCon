@@ -16,7 +16,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
-using System.Web.UI;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -436,18 +435,41 @@ namespace V2RayGCon.Lib
 
         }
 
+        public static void CombineConfigWithOutRouting(ref JObject body, JObject mixin)
+        {
+            List<string> keys = new List<string>
+            {
+                "inbounds",
+                "outbounds",
+                "inboundDetour",
+                "outboundDetour",
+            };
+            CombineConfigWorker(ref body, mixin, keys);
+        }
+
         public static void CombineConfig(ref JObject body, JObject mixin)
+        {
+            List<string> keys = new List<string>
+            {
+                "inbounds",
+                "outbounds",
+                "inboundDetour",
+                "outboundDetour",
+                "routing.rules",
+                "routing.balancers",
+                "routing.settings.rules",
+            };
+            CombineConfigWorker(ref body, mixin, keys);
+        }
+
+        static void CombineConfigWorker(
+            ref JObject body,
+            JObject mixin,
+            IEnumerable<string> keys)
         {
             JObject backup = JObject.Parse(@"{}");
 
-            foreach (var key in new string[] {
-                    "inbounds",
-                    "outbounds",
-                    "inboundDetour",
-                    "outboundDetour",
-                    "routing.rules",
-                    "routing.balancers",
-                    "routing.settings.rules"})
+            foreach (var key in keys)
             {
                 if (TryExtractJObjectPart(body, key, out JObject nodeBody))
                 {
@@ -476,7 +498,8 @@ namespace V2RayGCon.Lib
         public static JObject ImportItemList2JObject(
             List<Model.Data.ImportItem> items,
             bool isIncludeSpeedTest,
-            bool isIncludeActivate)
+            bool isIncludeActivate,
+            bool isIncludePackage)
         {
             var result = CreateJObject(@"v2raygcon.import");
             foreach (var item in items)
@@ -487,7 +510,8 @@ namespace V2RayGCon.Lib
                     continue;
                 }
                 if ((isIncludeSpeedTest && item.isUseOnSpeedTest)
-                    || (isIncludeActivate && item.isUseOnActivate))
+                    || (isIncludeActivate && item.isUseOnActivate)
+                    || (isIncludePackage && item.isUseOnPackage))
                 {
                     result["v2raygcon"]["import"][url] = item.alias ?? string.Empty;
                 }
@@ -844,7 +868,7 @@ namespace V2RayGCon.Lib
             return baseUrl + href;
         }
 
-        public static List<string> FindAllHref(string text)
+        public static List<string> FindAllHrefs(string text)
         {
             var empty = new List<string>();
 
@@ -853,15 +877,20 @@ namespace V2RayGCon.Lib
                 return empty;
             }
 
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(text);
+            try
+            {
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(text);
 
-            var result = doc.DocumentNode.SelectNodes("//a")
-                ?.Select(p => p.GetAttributeValue("href", ""))
-                ?.Where(s => !string.IsNullOrEmpty(s))
-                ?.ToList();
+                var result = doc.DocumentNode.SelectNodes("//a")
+                    ?.Select(p => p.GetAttributeValue("href", ""))
+                    ?.Where(s => !string.IsNullOrEmpty(s))
+                    ?.ToList();
 
-            return result ?? empty;
+                return result ?? empty;
+            }
+            catch { }
+            return empty;
         }
 
         public static string GenSearchUrl(string query, int start)
@@ -969,6 +998,7 @@ namespace V2RayGCon.Lib
                 }
                 catch { }
             }
+
             return html;
         }
 
@@ -1005,7 +1035,7 @@ namespace V2RayGCon.Lib
             List<string> versions = new List<string> { };
             var url = StrConst.V2rayCoreReleasePageUrl;
 
-            string html = Fetch(url, proxyPort);
+            string html = Fetch(url, proxyPort, -1);
             if (string.IsNullOrEmpty(html))
             {
                 return versions;

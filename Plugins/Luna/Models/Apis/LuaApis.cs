@@ -31,8 +31,8 @@ namespace Luna.Models.Apis
         public string PatchHref(string url, string href) =>
             vgcWeb.PatchHref(url, href);
 
-        public List<string> FindAllHref(string text) =>
-            vgcWeb.FindAllHref(text);
+        public List<string> FindAllHrefs(string text) =>
+            vgcWeb.FindAllHrefs(text);
 
         public string GetAppDir() => VgcApis.Libs.Utils.GetAppDir();
 
@@ -40,11 +40,15 @@ namespace Luna.Models.Apis
             vgcConfigMgr.VmessLink2ConfigString(vmessLink);
 
         public string Search(string query, int start, int proxyPort) =>
-            vgcWeb.Search(query, 0, proxyPort, 20 * 1000);
-        
-        public List<string> ExtractVmessLink(string text) =>
+            vgcWeb.Search(query, start, proxyPort, 20 * 1000);
+
+        public List<string> ExtractVmessLinks(string text) =>
             vgcWeb.ExtractLinks(text,
                 VgcApis.Models.Datas.Enum.LinkTypes.vmess);
+
+        public List<string> ExtractSsLinks(string text) =>
+            vgcWeb.ExtractLinks(text,
+                VgcApis.Models.Datas.Enum.LinkTypes.ss);
 
         public long RunSpeedTest(string rawConfig) =>
             vgcConfigMgr.RunSpeedTest(rawConfig);
@@ -66,15 +70,18 @@ namespace Luna.Models.Apis
         public void Print(params object[] contents)
         {
             var text = "";
-            foreach (var c in contents)
+            foreach (var content in contents)
             {
-                text += c.ToString();
+                text += content.ToString();
             }
-            redirectLogWorker(text);
+            redirectLogWorker?.Invoke(text);
         }
         #endregion
 
         #region public methods
+        public void SendLog(string message) =>
+            redirectLogWorker?.Invoke(message);
+
         public void SetRedirectLogWorker(Action<string> worker)
         {
             if (worker != null)
@@ -84,7 +91,7 @@ namespace Luna.Models.Apis
         }
 
         public string PerdefinedFunctions() =>
-            VgcApis.Models.Consts.Libs.LuaPerdefinedFunctions;
+            Resources.Files.Datas.LuaPerdefinedFunctions;
         #endregion
 
         #region private methods

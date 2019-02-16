@@ -25,6 +25,8 @@ namespace VgcApis.Libs.Tasks
         }
 
         #region properties
+        readonly object taskLocker = new object();
+
         CancelableTimeout _lazyTimer = null;
         CancelableTimeout lazyTimer
         {
@@ -60,25 +62,20 @@ namespace VgcApis.Libs.Tasks
         {
             lazyTimer.Cancel();
 
-            // Don't hurt me.
-            try
+            lock (taskLocker)
             {
-                lock (task)
+                if (cancel)
                 {
-                    if (cancel)
-                    {
-                        return;
-                    }
-                    task?.Invoke();
+                    return;
                 }
+                task?.Invoke();
             }
-            catch { }
         }
 
         public void Quit()
         {
             cancel = true;
-            lock (task)
+            lock (taskLocker)
             {
                 lazyTimer.Cancel();
                 lazyTimer.Release();

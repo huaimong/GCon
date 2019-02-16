@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Libs\Tasks\Bar.cs" />
     <Compile Include="Libs\Tasks\Routine.cs" />
+    <Compile Include="Libs\Views\RepaintCtrl.cs" />
     <Compile Include="Models\BaseClasses\ComponentOf.cs" />
     <Compile Include="Models\BaseClasses\ContainerTpl.cs" />
     <Compile Include="Models\BaseClasses\Disposable.cs" />
