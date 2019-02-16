@@ -272,7 +272,7 @@ namespace V2RayGCon.Views.UserControls
                new char[] { ' ', ',' },
                StringSplitOptions.RemoveEmptyEntries);
 
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 // control may be desposed, the sun may explode while this function is running
                 try
@@ -517,7 +517,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void runSpeedTestToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Task.Factory.StartNew(() => coreServCtrl.GetCoreCtrl().RunSpeedTest());
+            VgcApis.Libs.Utils.RunInBackground(() => coreServCtrl.GetCoreCtrl().RunSpeedTest());
         }
 
         private void moveToTopToolStripMenuItem_Click(object sender, EventArgs e)

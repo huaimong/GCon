@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -201,7 +200,7 @@ namespace V2RayGCon.Controller
             if (o == null)
             {
                 o = Service.Cache.Instance.tpl.LoadMinConfig();
-                Task.Factory.StartNew(
+                VgcApis.Libs.Utils.RunInBackground(
                     () => MessageBox.Show(
                         I18N.EditorCannotLoadServerConfig));
             }

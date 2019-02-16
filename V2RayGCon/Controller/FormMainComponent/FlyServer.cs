@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -117,7 +116,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
             else
             {
-                Task.Factory.StartNew(
+                VgcApis.Libs.Utils.RunInBackground(
                     () => DisposeFlyPanelControlByList(
                         controlList));
             }
@@ -380,7 +379,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
 
             flyPanel.ResumeLayout();
-            Task.Factory.StartNew(() => DisposeFlyPanelControlByList(deletedControlList));
+            VgcApis.Libs.Utils.RunInBackground(() => DisposeFlyPanelControlByList(deletedControlList));
         }
 
         List<Views.UserControls.ServerUI> GetDeletedControlList(

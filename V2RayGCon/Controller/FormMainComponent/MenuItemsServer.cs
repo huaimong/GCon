@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -81,7 +80,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 if (!servers.IsSelecteAnyServer())
                 {
-                    Task.Factory.StartNew(() => MessageBox.Show(I18N.SelectServerFirst));
+                    VgcApis.Libs.Utils.RunInBackground(() => MessageBox.Show(I18N.SelectServerFirst));
                     return;
                 }
                 lambda();

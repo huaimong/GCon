@@ -95,7 +95,7 @@ namespace Statistics.Services
             var uid = coreCtrl.GetCoreStates().GetUid();
             var sample = coreCtrl.GetCoreCtrl().TakeStatisticsSample();
             var title = coreCtrl.GetCoreStates().GetTitle();
-            Task.Factory.StartNew(
+            VgcApis.Libs.Utils.RunInBackground(
                 () => AddToHistoryStatsData(uid, title, sample));
         }
 

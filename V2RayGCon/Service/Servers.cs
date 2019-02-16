@@ -411,7 +411,7 @@ namespace V2RayGCon.Service
 
             var list = queryHandler.GetSelectedServers(false);
 
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 Lib.Utils.ExecuteInParallel(list, (server) =>
                 {
@@ -599,7 +599,7 @@ namespace V2RayGCon.Service
                 return;
             }
 
-            Task.Factory.StartNew(
+            VgcApis.Libs.Utils.RunInBackground(
                 () => RemoveServerItemFromListThen(index, () =>
                 {
                     NotifierTextUpdateHandler(this, EventArgs.Empty);
@@ -737,7 +737,7 @@ namespace V2RayGCon.Service
         void RemoveServerItemFromListThen(int index, Action next = null)
         {
             var server = coreServList[index];
-            Task.Run(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 lock (serverListWriteLock)
                 {
@@ -759,7 +759,7 @@ namespace V2RayGCon.Service
             var rnd = new Random();
 
             var count = list.Count;
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 var taskList = new List<Task>();
                 for (int i = 0; i < round; i++)
@@ -780,7 +780,7 @@ namespace V2RayGCon.Service
                             server.GetCoreCtrl().RestartCoreThen(() => sayGoodbye.Set());
                         }
                         sayGoodbye.WaitOne();
-                    });
+                    }, TaskCreationOptions.LongRunning);
 
                     taskList.Add(task);
                     task.Start();

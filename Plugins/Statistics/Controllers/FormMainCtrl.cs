@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Statistics.Controllers
@@ -79,7 +78,7 @@ namespace Statistics.Controllers
         {
             miReset.Click += (s, a) =>
             {
-                Task.Factory.StartNew(() =>
+                VgcApis.Libs.Utils.RunInBackground(() =>
                 {
                     if (VgcApis.Libs.UI.Confirm(I18N.ConfirmResetStatsData))
                     {
@@ -133,7 +132,7 @@ namespace Statistics.Controllers
 
         void UpdateDataViewHandler(object sender, EventArgs args)
         {
-            Task.Factory.StartNew(UpdateDataViewWorker);
+            VgcApis.Libs.Utils.RunInBackground(UpdateDataViewWorker);
         }
 
         void ReleaseUpdateTimer()

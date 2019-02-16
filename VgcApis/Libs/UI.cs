@@ -184,7 +184,7 @@ namespace VgcApis.Libs
             var text = string.Format("{0}\n{1}", msg, url);
             if (Confirm(text))
             {
-                Task.Factory.StartNew(() => System.Diagnostics.Process.Start(url));
+                VgcApis.Libs.Utils.RunInBackground(() => System.Diagnostics.Process.Start(url));
             }
         }
 
@@ -195,7 +195,7 @@ namespace VgcApis.Libs
 
         public static void MsgBoxAsync(string title, string content)
         {
-            Task.Factory.StartNew(() => MsgBox(title, content));
+            VgcApis.Libs.Utils.RunInBackground(() => MsgBox(title, content));
         }
 
         public static bool Confirm(string content)

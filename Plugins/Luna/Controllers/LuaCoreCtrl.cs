@@ -145,9 +145,8 @@ namespace Luna.Controllers
             }
 
             SendLog($"{I18N.Start} {coreSetting.name}");
-            luaCoreTask = Task.Factory.StartNew(
-                RunLuaScript,
-                TaskCreationOptions.LongRunning);
+            luaCoreTask = VgcApis.Libs.Utils.RunInBackground(
+                RunLuaScript);
         }
 
         public void Cleanup()
