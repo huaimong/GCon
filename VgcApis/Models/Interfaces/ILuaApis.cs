@@ -8,8 +8,9 @@ namespace VgcApis.Models.Interfaces
         string GetAppDir();
         string VmessLink2ConfigString(string vmessLink);
         string Search(string query, int start, int proxyPort);
-        List<string> FindAllHref(string text);
-        List<string> ExtractVmessLink(string text);
+        List<string> FindAllHrefs(string text);
+        List<string> ExtractVmessLinks(string text);
+        List<string> ExtractSsLinks(string text);
 
         /// <summary>
         /// First running http server port.

@@ -5,7 +5,7 @@ namespace VgcApis.Models.IServices
     public interface IWebService
     {
         string PatchHref(string url, string href);
-        List<string> FindAllHref(string text);
+        List<string> FindAllHrefs(string text);
         List<string> ExtractLinks(string text, Datas.Enum.LinkTypes linkType);
 
         string Search(string query, int start, int proxyPort, int timeout);
