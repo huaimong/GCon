@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Luna.Properties {
+namespace Luna.Resources.Files {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Luna.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class Datas {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal Datas() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Luna.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Luna.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Luna.Resources.Files.Datas", typeof(Datas).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,20 +61,32 @@ namespace Luna.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Luna 的本地化字符串。
+        ///   查找类似 import = function () end
+        ///print = function(...) Api:Print(...) end
+        ///                
+        ///-- copy from NLua
+        ///function Each(o)
+        ///    local e = o:GetEnumerator()
+        ///    return function()
+        ///        if e:MoveNext() then
+        ///        return e.Current
+        ///        end
+        ///    end
+        ///end
+        ///
+        ///string.startswith = function (text, keyWord)
+        ///    if text == nil or keyWord == nil then   
+        ///        return false
+        ///    end
+        ///    local t = string.lower(text)
+        ///    local kw =&apos;^&apos; .. string.lower(keyWord)
+        ///    if string.find(t, kw) then
+        ///        return true
+        ///    e [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static string Name {
+        internal static string LuaPerdefinedFunctions {
             get {
-                return ResourceManager.GetString("Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 0.0.7 的本地化字符串。
-        /// </summary>
-        internal static string Version {
-            get {
-                return ResourceManager.GetString("Version", resourceCulture);
+                return ResourceManager.GetString("LuaPerdefinedFunctions", resourceCulture);
             }
         }
     }

@@ -1,0 +1,36 @@
+﻿import = function () end
+print = function(...) Api:Print(...) end
+                
+-- copy from NLua
+function Each(o)
+    local e = o:GetEnumerator()
+    return function()
+        if e:MoveNext() then
+        return e.Current
+        end
+    end
+end
+
+string.startswith = function (text, keyword)
+    if text == nil or keyword == nil then   
+        return false
+    end
+    local t = string.lower(text)
+    local kw ='^' .. string.lower(keyword)
+    if string.find(t, kw) then
+        return true
+    end
+    return false
+end
+
+string.endswith = function (text, keyword)
+    if text == nil or keyword == nil then   
+        return false
+    end
+    local t = string.lower(text)
+    local kw = string.lower(keyword) .. '$'
+    if string.find(t, kw) then
+        return true
+    end
+    return false
+end

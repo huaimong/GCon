@@ -91,7 +91,7 @@ namespace Luna.Models.Apis
         }
 
         public string PerdefinedFunctions() =>
-            VgcApis.Models.Consts.Libs.LuaPerdefinedFunctions;
+            Resources.Files.Datas.LuaPerdefinedFunctions;
         #endregion
 
         #region private methods
