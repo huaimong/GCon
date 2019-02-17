@@ -4,6 +4,11 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
+        bool RunSpeedTestOnSelectedServers();
+
+        string PackSelectedServersIntoV4Package(
+            string orgUid, string pkgName);
+
         string PatchHref(string url, string href);
         string GetAppDir();
         string VmessLink2ConfigString(string vmessLink);

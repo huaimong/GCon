@@ -28,6 +28,13 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public bool RunSpeedTestOnSelectedServers() =>
+            vgcServers.RunSpeedTestOnSelectedServers();
+
+        public string PackSelectedServersIntoV4Package(
+            string orgUid, string pkgName) =>
+            vgcServers.PackSelectedServersIntoV4Package(orgUid, pkgName);
+
         public string PatchHref(string url, string href) =>
             vgcWeb.PatchHref(url, href);
 

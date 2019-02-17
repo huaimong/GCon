@@ -34,3 +34,7 @@ string.endswith = function (text, keyword)
     end
     return false
 end
+
+string.isempty = function(text)
+    return text == nil or text == ''
+end

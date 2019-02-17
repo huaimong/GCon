@@ -325,6 +325,12 @@ namespace V2RayGCon.Service
             return coreServList.Any(s => s.GetCoreStates().IsSelected());
         }
 
+        public string PackSelectedServersIntoV4Package(string orgUid, string pkgName)
+        {
+            var servList = queryHandler.GetSelectedServers().ToList();
+            return PackServersIntoV4PackageWorker(servList, orgUid, pkgName, true);
+        }
+
         /// <summary>
         /// packageName is Null or empty ? "PackageV4" : packageName
         /// </summary>
@@ -333,25 +339,9 @@ namespace V2RayGCon.Service
         public string PackServersIntoV4Package(
             List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
             string orgUid,
-            string packageName)
-        {
-            if (servList == null || servList.Count <= 0)
-            {
-                VgcApis.Libs.UI.MsgBoxAsync(null, I18N.ListIsEmpty);
-                return "";
-            }
-
-            JObject package = configMgr.GenV4ServersPackage(servList, packageName);
-
-            var newConfig = package.ToString(Formatting.None);
-            string newUid = ReplaceOrAddNewServer(orgUid, newConfig);
-
-            UpdateMarkList();
-            setting.SendLog(I18N.PackageDone);
-            Lib.UI.ShowMessageBoxDoneAsync();
-
-            return newUid;
-        }
+            string packageName) =>
+            PackServersIntoV4PackageWorker(
+                servList, orgUid, packageName, false);
 
         public void PackServersIntoV3Package(
             List<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
@@ -404,28 +394,21 @@ namespace V2RayGCon.Service
 
         public bool RunSpeedTestOnSelectedServers()
         {
-            if (!speedTestingBar.Install())
-            {
-                return false;
-            }
+            var selectedServers = queryHandler.GetSelectedServers(false).ToList();
+            return SpeedTestWorker(selectedServers);
+        }
 
-            var list = queryHandler.GetSelectedServers(false);
-
+        public void RunSpeedTestOnSelectedServersBg()
+        {
+            var selectedServers = queryHandler.GetSelectedServers(false).ToList();
             VgcApis.Libs.Utils.RunInBackground(() =>
             {
-                Lib.Utils.ExecuteInParallel(list, (server) =>
-                {
-                    server.GetCoreCtrl().RunSpeedTest();
-
-                    // ExecuteInParallel require a return value
-                    return "";
-                });
-
-                speedTestingBar.Remove();
-                MessageBox.Show(I18N.SpeedTestFinished);
+                var result = SpeedTestWorker(selectedServers);
+                MessageBox.Show(
+                    result ?
+                    I18N.SpeedTestFinished :
+                    I18N.LastTestNoFinishYet);
             });
-
-            return true;
         }
 
         public void RestartServersThen(
@@ -691,6 +674,49 @@ namespace V2RayGCon.Service
         #endregion
 
         #region private method
+        string PackServersIntoV4PackageWorker(
+           List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
+           string orgUid,
+           string packageName,
+           bool quiet)
+        {
+            if (servList == null || servList.Count <= 0)
+            {
+                if (!quiet)
+                {
+                    VgcApis.Libs.UI.MsgBoxAsync(I18N.ListIsEmpty);
+                }
+                return "";
+            }
+
+            JObject package = configMgr.GenV4ServersPackage(servList, packageName);
+
+            var newConfig = package.ToString(Formatting.None);
+            string newUid = ReplaceOrAddNewServer(orgUid, newConfig);
+
+            UpdateMarkList();
+            setting.SendLog(I18N.PackageDone);
+            if (!quiet)
+            {
+                Lib.UI.ShowMessageBoxDoneAsync();
+            }
+            return newUid;
+        }
+
+        bool SpeedTestWorker(
+           IEnumerable<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
+        {
+            if (!speedTestingBar.Install())
+            {
+                return false;
+            }
+            Lib.Utils.ExecuteInParallel(
+                servList,
+                serv => serv.GetCoreCtrl().RunSpeedTest());
+            speedTestingBar.Remove();
+            return true;
+        }
+
         void InitServerCtrlList()
         {
             lock (serverListWriteLock)

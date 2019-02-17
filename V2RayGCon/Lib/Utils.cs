@@ -1415,6 +1415,17 @@ namespace V2RayGCon.Lib
             };
         }
 
+        public static void ExecuteInParallel<TParam>(
+            IEnumerable<TParam> param,
+            Action<TParam> worker) =>
+            ExecuteInParallel(param,
+                (p) =>
+                {
+                    worker(p);
+                    // ExecuteInParallel require a return value
+                    return "nothing";
+                });
+
         public static List<TResult> ExecuteInParallel<TParam, TResult>(
             IEnumerable<TParam> param,
             Func<TParam, TResult> worker)

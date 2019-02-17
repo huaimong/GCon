@@ -8,6 +8,11 @@ namespace VgcApis.Models.IServices
     {
         event EventHandler OnCoreStart, OnCoreClosing;
 
+        bool RunSpeedTestOnSelectedServers();
+
+        string PackSelectedServersIntoV4Package(
+            string orgUid, string pkgName);
+
         string PackServersIntoV4Package(
             List<Interfaces.ICoreServCtrl> servList,
             string orgServerUid,

@@ -125,10 +125,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                     return;
                 }
 
-                if (!servers.RunSpeedTestOnSelectedServers())
-                {
-                    MessageBox.Show(I18N.LastTestNoFinishYet);
-                }
+                servers.RunSpeedTestOnSelectedServersBg();
             });
 
             stopSelected.Click += ApplyActionOnSelectedServers(() =>
