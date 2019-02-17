@@ -25,4 +25,5 @@ Self-use only!
 [ravibpatel/AutoUpdater.NET](https://github.com/ravibpatel/AutoUpdater.NET) 自动更新功能  
 [shadowsocksr-backup/shadowsocksr-csharp](https://github.com/shadowsocksr-backup/shadowsocksr-csharp) 屏幕扫码实现代码  
 [txthinking/pac](https://github.com/txthinking/pac) ProxySetter插件中的默认PAC  
+[Yonaba/Lua-Class-System](https://github.com/Yonaba/Lua-Class-System) Lua类支持  
 [v2ray/v2ray-core](https://github.com/v2ray/v2ray-core) v2ray-core服务端  

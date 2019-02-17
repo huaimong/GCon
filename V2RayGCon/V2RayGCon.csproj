@@ -468,6 +468,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resource\Files\" />
     <Folder Include="Resource\Icon\FormMainToolStrip\" />
   </ItemGroup>
   <ItemGroup>
@@ -495,19 +496,26 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
+set "luaScriptSrc=$(ProjectDir)Resource\Files\lua"
+set "luaScriptDest=lua"
 set "allDlls=Luna NLua liblua53 lua53 KeraLua ProxySetter Statistics Pacman HtmlAgilityPack DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
-
 
 call:CreateFolderOnDemand "%25libsDir%25"
 call:MoveFilesByList "%25allDlls%25"
 
 rem NLua v1.3.2.1 require this
 call:CopyLuaNativeDlls
+call:CopyLuaScripts
 
-rem NLua v1.4+ require this
+rem NLua v1.4+ require these
 rem set "luaFolders=x86 x64"
 rem call:MoveFolders "%25luaFolders%25"
 
+goto:eof
+
+:CopyLuaScripts
+	call:CreateFolderOnDemand "%25luaScriptDest%25"
+	xcopy /s /e /y "%25luaScriptSrc%25" "%25luaScriptDest%25"
 goto:eof
 
 :MoveFolders
