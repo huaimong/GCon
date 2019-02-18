@@ -21,6 +21,7 @@ namespace V2RayGCon.Service
 
         ServersComponents.LinkImporter linkImporter;
         ServersComponents.QueryHandler queryHandler;
+        ServersComponents.IndexHandler indexHandler;
 
         public event EventHandler
             OnCoreStart, // ICoreServCtrl sender
@@ -64,7 +65,39 @@ namespace V2RayGCon.Service
             queryHandler = new ServersComponents.QueryHandler(
                 serverListWriteLock,
                 coreServList);
+
+            indexHandler = new ServersComponents.IndexHandler(
+                serverListWriteLock,
+                coreServList);
         }
+
+        #region sort
+        public void ResteIndexQuiet()
+        {
+            indexHandler.ResetIndexQuiet();
+        }
+
+        public void SortSelectedBySpeedTest()
+        {
+            lock (serverListWriteLock)
+            {
+                var selectedServers = queryHandler.GetSelectedServers().ToList();
+                indexHandler.SortCoreServCtrlListBySpeedTestResult(ref selectedServers);
+            }
+            RequireFormMainReload();
+        }
+
+        public void SortSelectedBySummary()
+        {
+            lock (serverListWriteLock)
+            {
+                var selectedServers = queryHandler.GetSelectedServers().ToList();
+                indexHandler.SortCoreServCtrlListBySummary(ref selectedServers);
+            }
+            RequireFormMainReload();
+        }
+
+        #endregion
 
         #region querys
         public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
@@ -109,12 +142,6 @@ namespace V2RayGCon.Service
 
         void InvokeEventOnRequireMenuUpdate(object sender, EventArgs args) =>
             InvokeEventHandlerIgnoreError(OnRequireMenuUpdate, null, EventArgs.Empty);
-
-        public void InvokeEventOnRequireFlyPanelUpdate() =>
-            InvokeEventHandlerIgnoreError(OnRequireFlyPanelUpdate, this, EventArgs.Empty);
-
-        public void InvokeEventOnRequireFlyPanelReload() =>
-            InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
 
         void ServerItemPropertyChangedHandler(object sender, EventArgs arg) =>
             serverSaver.DoItLater();
@@ -207,6 +234,19 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public method
+        /// <summary>
+        /// Add new only.
+        /// </summary>
+        public void RequireFormMainUpdate() =>
+            InvokeEventHandlerIgnoreError(OnRequireFlyPanelUpdate, this, EventArgs.Empty);
+
+        /// <summary>
+        /// Remove all then add new.
+        /// </summary>
+        public void RequireFormMainReload() =>
+            InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
+
+
         /// <summary>
         /// linkList=List(string[]{0: text, 1: mark}>)
         /// </summary>
@@ -504,7 +544,7 @@ namespace V2RayGCon.Service
                 NotifierTextUpdateHandler(this, EventArgs.Empty);
                 serverSaver.DoItLater();
                 UpdateMarkList();
-                InvokeEventOnRequireFlyPanelUpdate();
+                RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
 
                 speedTestingBar.Remove();
@@ -527,7 +567,7 @@ namespace V2RayGCon.Service
             {
                 serverSaver.DoItLater();
                 UpdateMarkList();
-                InvokeEventOnRequireFlyPanelUpdate();
+                RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
 
                 speedTestingBar.Remove();
@@ -559,7 +599,7 @@ namespace V2RayGCon.Service
             {
                 setting.LazyGC();
                 serverSaver.DoItLater();
-                InvokeEventOnRequireFlyPanelUpdate();
+                RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
             }
 
@@ -589,7 +629,7 @@ namespace V2RayGCon.Service
                     serverSaver.DoItLater();
                     UpdateMarkList();
                     InvokeEventOnRequireMenuUpdate(coreServList, EventArgs.Empty);
-                    InvokeEventOnRequireFlyPanelUpdate();
+                    RequireFormMainUpdate();
                     speedTestingBar.Remove();
                 }));
         }
@@ -627,7 +667,7 @@ namespace V2RayGCon.Service
                 newServer.GetConfiger().UpdateSummaryThen(() =>
                 {
                     InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
-                    InvokeEventOnRequireFlyPanelUpdate();
+                    RequireFormMainUpdate();
                 });
             }
 

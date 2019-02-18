@@ -31,10 +31,11 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.7.24")]
+[assembly: AssemblyVersion("1.1.7.25")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.7.25 Luna插件添加Api函数
  * v1.1.7.24 生成文件中添加lua文件夹
  * v1.1.7.23 添加两个用于打包的函数
  * v1.1.7.22 Task改用longrun

@@ -179,6 +179,7 @@
     <Compile Include="Service\Launcher.cs" />
     <Compile Include="Service\PluginsServer.cs" />
     <Compile Include="Service\ServersComponents\LinkImporter.cs" />
+    <Compile Include="Service\ServersComponents\IndexHandler.cs" />
     <Compile Include="Service\ServersComponents\QueryHandler.cs" />
     <Compile Include="Views\UserControls\ImportUI.cs">
       <SubType>UserControl</SubType>
@@ -496,16 +497,15 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
-set "luaScriptSrc=$(ProjectDir)Resource\Files\lua"
-set "luaScriptDest=lua"
+set "copyFolderList=lua templates"
 set "allDlls=Luna NLua liblua53 lua53 KeraLua ProxySetter Statistics Pacman HtmlAgilityPack DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
 
-call:CreateFolderOnDemand "%25libsDir%25"
+call:CreateFoldersOnDemand "%25libsDir%25 %25copyFolderList%25"
 call:MoveFilesByList "%25allDlls%25"
+call:CopyFolders "%25copyFolderList%25"
 
 rem NLua v1.3.2.1 require this
 call:CopyLuaNativeDlls
-call:CopyLuaScripts
 
 rem NLua v1.4+ require these
 rem set "luaFolders=x86 x64"
@@ -513,9 +513,10 @@ rem call:MoveFolders "%25luaFolders%25"
 
 goto:eof
 
-:CopyLuaScripts
-	call:CreateFolderOnDemand "%25luaScriptDest%25"
-	xcopy /s /e /y "%25luaScriptSrc%25" "%25luaScriptDest%25"
+:CopyFolders
+  for %25%25i in (%25~1) do ( 
+	xcopy /s /e /y "$(ProjectDir)Resource\Files\%25%25i" "%25%25i"
+  ) 
 goto:eof
 
 :MoveFolders
@@ -541,10 +542,12 @@ goto:eof
   ) 
 goto:eof
 
-:CreateFolderOnDemand
-  if not exist "%25~1" ( 
-   echo "Create dir %25~1"
-   mkdir "%25~1"
+:CreateFoldersOnDemand
+  for %25%25i in (%25~1) do ( 
+	  if not exist "%25%25i" ( 
+	   echo "Create dir %25%25i"
+	   mkdir "%25%25i"
+	  ) 
   ) 
 goto:eof
 

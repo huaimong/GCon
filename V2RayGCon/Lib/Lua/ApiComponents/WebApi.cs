@@ -17,9 +17,9 @@ namespace V2RayGCon.Lib.Lua.ApiComponents
             VgcApis.Models.Datas.Enum.LinkTypes linkType) =>
             Lib.Utils.ExtractLinks(text, linkType);
 
-        public string Search(string query, int start, int proxyPort, int timeout)
+        public string Search(string keywords, int first, int proxyPort, int timeout)
         {
-            var url = Lib.Utils.GenSearchUrl(query, start);
+            var url = Lib.Utils.GenSearchUrl(keywords, first);
             return Fetch(url, proxyPort, timeout);
         }
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
@@ -51,8 +50,17 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             InitCtrlSorting(sortBySpeed, sortBySummary);
             InitCtrlView(moveToTop, moveToBottom, foldPanel, expansePanel);
-            InitCtrlCopyToClipboard(copyAsV2rayLinks, copyAsVmessLinks, copyAsSubscriptions);
-            InitCtrlMisc(refreshSummary, deleteSelected, deleteAllServers);
+
+            InitCtrlCopyToClipboard(
+                copyAsV2rayLinks,
+                copyAsVmessLinks,
+                copyAsSubscriptions);
+
+            InitCtrlMisc(
+                refreshSummary,
+                deleteSelected,
+                deleteAllServers);
+
             InitCtrlBatchOperation(
                 stopSelected,
                 restartSelected,
@@ -244,62 +252,10 @@ namespace V2RayGCon.Controller.FormMainComponent
         private void InitCtrlSorting(ToolStripMenuItem sortBySpeed, ToolStripMenuItem sortBySummary)
         {
             sortBySummary.Click += ApplyActionOnSelectedServers(
-                SortServerListBySummary);
+                () => servers.SortSelectedBySummary());
 
             sortBySpeed.Click += ApplyActionOnSelectedServers(
-                SortServerListBySpeedTestResult);
-        }
-
-        void SortServerListBySummary()
-        {
-            var list = servers.GetAllServersOrderByIndex().Where(s => s.GetCoreStates().IsSelected()).ToList();
-            if (list.Count < 2)
-            {
-                return;
-            }
-
-            SortServerItemList(
-                ref list,
-                (a, b) => a.GetCoreStates().GetSummary().CompareTo(b.GetCoreStates().GetSummary()));
-
-            RemoveAllControlsAndRefreshFlyPanel();
-        }
-
-        static void SortServerItemList(
-             ref List<VgcApis.Models.Interfaces.ICoreServCtrl> list,
-             Comparison<VgcApis.Models.Interfaces.ICoreServCtrl> comparer)
-        {
-            if (list == null || list.Count < 2)
-            {
-                return;
-            }
-
-            list.Sort(comparer);
-            var minIndex = list.First().GetCoreStates().GetIndex();
-            var delta = 1.0 / 2 / list.Count;
-            for (int i = 1; i < list.Count; i++)
-            {
-                list[i].GetCoreStates().SetIndexQuiet(minIndex + delta * i);
-            }
-        }
-
-        private void SortServerListBySpeedTestResult()
-        {
-            var list = servers.GetAllServersOrderByIndex().Where(s => s.GetCoreStates().IsSelected()).ToList();
-            if (list.Count < 2)
-            {
-                return;
-            }
-
-            SortServerItemList(
-                ref list,
-                (a, b) =>
-                {
-                    var spa = a.GetCoreStates().GetSpeedTestResult();
-                    var spb = b.GetCoreStates().GetSpeedTestResult();
-                    return spa.CompareTo(spb);
-                });
-            RemoveAllControlsAndRefreshFlyPanel();
+                () => servers.SortSelectedBySpeedTest());
         }
 
         void SetServerItemPanelCollapseLevel(int collapseLevel)

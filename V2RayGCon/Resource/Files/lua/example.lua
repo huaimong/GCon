@@ -1,40 +1,31 @@
--- import libs and models
-local Utils = require "lua.libs.utils"
+local Writer = require "lua.models.writer"
 local Logger = require "lua.models.logger"
-local Set = require "lua.models.set"
 
-function Main()
-    UtilsExample()
-    LoggerExample()
-    SetExample()
-end
+local testDataFileName = "testData.txt"
+local testLogFileName = "testLog.txt"
 
-function UtilsExample()
-    -- Example 1. how-to use libs.utils.lua
-    Utils.Echo("Hello")
+function WriterExample()
+    local dw = Writer(testDataFileName)
+    print("Write hello to file.")
+    dw:WriteLine("hello")
+    print("Clear file.")
+    dw:Clear()
+    print("Write hello world to file.")
+    dw:WriteLine("Hello, world!")
 end
 
 function LoggerExample()
-    -- Example 2. how-to use class
-    local logger = Logger("logExample.txt")
+    print("Run logger tests")
+    local logger = Logger(testLogFileName)
     logger:Info("Hello")
     logger:Warn("world")
     logger:Error("!")
     logger:Log("nothing", "here")
 end
 
-function SetExample()
-    -- Example 3. how-to use set
-    local cache = Set()
-
-    cache:Add(1)
-    print(cache:Contains(1))
-
-    cache:Add(1)
-    cache:Add(2)
-    cache:Remove(1)
-    print(cache:Contains(1))
-    print(cache:Contains(2))
+function Main()
+   WriterExample() 
+   LoggerExample()
 end
 
 Main()

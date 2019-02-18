@@ -28,10 +28,22 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public void ResetIndexQuiet() =>
+            vgcServers.ResteIndexQuiet();
+
+        public void RequireFormMainReload() =>
+            vgcServers.RequireFormMainReload();
+
+        public void SortSelectedServersBySummary() =>
+            vgcServers.SortSelectedBySummary();
+
+        public void SortSelectedServersBySpeedTest() =>
+            vgcServers.SortSelectedBySpeedTest();
+
         public bool RunSpeedTestOnSelectedServers() =>
             vgcServers.RunSpeedTestOnSelectedServers();
 
-        public string PackSelectedServersIntoV4Package(
+        public string PackSelectedServers(
             string orgUid, string pkgName) =>
             vgcServers.PackSelectedServersIntoV4Package(orgUid, pkgName);
 
@@ -46,8 +58,8 @@ namespace Luna.Models.Apis
         public string VmessLink2ConfigString(string vmessLink) =>
             vgcConfigMgr.VmessLink2ConfigString(vmessLink);
 
-        public string Search(string query, int start, int proxyPort) =>
-            vgcWeb.Search(query, start, proxyPort, 20 * 1000);
+        public string Search(string keywords, int first, int proxyPort) =>
+            vgcWeb.Search(keywords, first, proxyPort, 20 * 1000);
 
         public List<string> ExtractVmessLinks(string text) =>
             vgcWeb.ExtractLinks(text,

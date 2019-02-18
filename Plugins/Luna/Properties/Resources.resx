@@ -121,7 +121,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.8</value>
-    <comment>add 2 functions</comment>
+    <value>0.0.9</value>
+    <comment>add functions</comment>
   </data>
 </root>

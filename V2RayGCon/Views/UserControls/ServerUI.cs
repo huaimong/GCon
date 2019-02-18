@@ -523,13 +523,13 @@ namespace V2RayGCon.Views.UserControls
         private void moveToTopToolStripMenuItem_Click(object sender, EventArgs e)
         {
             coreServCtrl.GetCoreStates().SetIndex(0);
-            servers.InvokeEventOnRequireFlyPanelReload();
+            servers.RequireFormMainReload();
         }
 
         private void moveToBottomToolStripMenuItem_Click(object sender, EventArgs e)
         {
             coreServCtrl.GetCoreStates().SetIndex(double.MaxValue);
-            servers.InvokeEventOnRequireFlyPanelReload();
+            servers.RequireFormMainReload();
         }
 
         private void debugToolStripMenuItem_Click(object sender, EventArgs e)

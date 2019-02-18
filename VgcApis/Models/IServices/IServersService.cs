@@ -8,6 +8,11 @@ namespace VgcApis.Models.IServices
     {
         event EventHandler OnCoreStart, OnCoreClosing;
 
+        void RequireFormMainReload();
+        void ResteIndexQuiet();
+        void SortSelectedBySpeedTest();
+        void SortSelectedBySummary();
+
         bool RunSpeedTestOnSelectedServers();
 
         string PackSelectedServersIntoV4Package(

@@ -10,10 +10,20 @@ function u.WriteLine(filename, content)
     file:close()
 end
 
-function u.IsInList(needle, haystack)
-	for _, item in ipairs(haystack)
+function u.IsInTable(haystack, needle)
+	for _, item in pairs(haystack)
     do
         if string.lower(needle) == string.lower(item) then
+            return true
+        end
+    end
+    return false
+end
+
+function u.IsInTablePartially(haystack, needle)
+	for _, item in pairs(haystack)
+    do
+        if string.find(string.lower(item), string.lower(needle)) then
             return true
         end
     end

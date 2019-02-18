@@ -38,7 +38,6 @@ namespace V2RayGCon.Lib.Lua
         public IUtilsService GetUtilsService() => utilsService;
         public IWebService GetWebService() => webService;
 
-
         #endregion
 
         #region protected methods

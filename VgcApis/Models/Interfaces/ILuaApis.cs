@@ -4,47 +4,54 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
-        bool RunSpeedTestOnSelectedServers();
-
-        string PackSelectedServersIntoV4Package(
-            string orgUid, string pkgName);
-
-        string PatchHref(string url, string href);
-        string GetAppDir();
-        string VmessLink2ConfigString(string vmessLink);
-        string Search(string query, int start, int proxyPort);
-        List<string> FindAllHrefs(string text);
         List<string> ExtractVmessLinks(string text);
+
         List<string> ExtractSsLinks(string text);
 
-        /// <summary>
-        /// First running http server port.
-        /// </summary>
-        /// <returns></returns>
-        int GetProxyPort();
-
-        /// <summary>
-        /// timeout seconds
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="proxyPort"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        string Fetch(string url, int proxyPort, int timeout);
+        List<string> FindAllHrefs(string text);
 
         string Fetch(string url);
 
         /// <summary>
+        /// timeout seconds
+        /// </summary>
+        string Fetch(string url, int proxyPort, int timeout);
+
+        List<ICoreServCtrl> GetAllServers();
+
+        string GetAppDir();
+
+        /// <summary>
+        /// First running http server port.
+        /// </summary>
+        int GetProxyPort();
+
+        /// <summary>
+        /// V4 format. params can set to string.Empty
+        /// </summary>
+        string PackSelectedServers(string orgUid, string pkgName);
+
+        string PatchHref(string url, string href);
+
+        /// <summary>
         /// Show perdefined functions.
         /// </summary>
-        /// <returns></returns>
         string PerdefinedFunctions();
 
         /// <summary>
         /// Api:Print("hello",", ","world","!")
         /// </summary>
-        /// <param name="contents">objects</param>
         void Print(params object[] contents);
+
+        void RequireFormMainReload();
+        void ResetIndexQuiet();
+        long RunSpeedTest(string rawConfig);
+        bool RunSpeedTestOnSelectedServers();
+
+        void SortSelectedServersBySummary();
+        void SortSelectedServersBySpeedTest();
+
+        string Search(string keywords, int first, int proxyPort);
 
         /// <summary>
         /// Api:Sleep(1000) // one second
@@ -52,7 +59,6 @@ namespace VgcApis.Models.Interfaces
         /// <param name="millisecond"></param>
         void Sleep(int millisecond);
 
-        List<Interfaces.ICoreServCtrl> GetAllServers();
-        long RunSpeedTest(string rawConfig);
+        string VmessLink2ConfigString(string vmessLink);
     }
 }
