@@ -175,8 +175,8 @@ namespace V2RayGCon.Lib.Nets
         string GetLocalFolderPath()
         {
             var path = setting.isPortable ?
-                StrConst.V2RayCoreFolder :
-                Lib.Utils.GetSysAppDataFolder();
+                VgcApis.Libs.Utils.GetCoreFolderFullPath() :
+                Utils.GetSysAppDataFolder();
 
             if (!Directory.Exists(path))
             {

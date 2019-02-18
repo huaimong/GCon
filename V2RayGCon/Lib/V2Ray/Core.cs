@@ -144,7 +144,7 @@ namespace V2RayGCon.Lib.V2Ray
             var folders = new List<string>{
                 Lib.Utils.GetSysAppDataFolder(), // %appdata%
                 VgcApis.Libs.Utils.GetAppDir(),
-                StrConst.V2RayCoreFolder,
+                VgcApis.Libs.Utils.GetCoreFolderFullPath(),
             };
 
             if (isPortable)

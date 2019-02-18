@@ -455,15 +455,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 core 的本地化字符串。
-        /// </summary>
-        internal static string V2RayCoreFolder {
-            get {
-                return ResourceManager.GetString("V2RayCoreFolder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 https://github.com/v2ray/v2ray-core/releases 的本地化字符串。
         /// </summary>
         internal static string V2rayCoreReleasePageUrl {

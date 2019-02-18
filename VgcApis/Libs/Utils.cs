@@ -211,6 +211,9 @@ namespace VgcApis.Libs
             return parent.FullName;
         }
 
+        public static string GetCoreFolderFullPath() =>
+            Path.Combine(GetAppDir(), Models.Consts.Files.CoreFolderName);
+
         public static string GetAppDir() => appDirCache;
 
         public static int Clamp(int value, int min, int max)

@@ -1,3 +1,4 @@
+Lcs = require "lua.models.lcs"
 local Writer = require "lua.models.writer"
 local Logger = require "lua.models.logger"
 

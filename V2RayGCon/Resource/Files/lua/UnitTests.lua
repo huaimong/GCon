@@ -1,4 +1,5 @@
 -- import libs and models
+Lcs = require "lua.models.lcs"
 local Utils = require "lua.libs.utils"
 local Set = require "lua.models.set"
 
@@ -8,13 +9,14 @@ local successCounter = 0
 function Main()
 	print("Run utils tests")
     UtilsTest()
+    print(" ")
     SetTest()
+    print(" ")
     ShowTestResult()
 end
 
 function ShowTestResult()
     local total = failCounter + successCounter
-    print(" ")
     print("Total: ", total)
     print("success: ", successCounter)
     print("fail: ", failCounter)
@@ -62,6 +64,9 @@ function SetTest()
 
     Assert("Set.ContainsCi.True", true, cache:ContainsCi("abc123"))
     Assert("Set.ContainsPartially.True", true, cache:ContainsPartially("1B2"))
+	
+	Assert("Set.MatchesPartially.True", true, cache:MatchesPartially("aabc1234"))
+	Assert("Set.MatchesPartially.False", false, cache:MatchesPartially("bc123"))
 end
 
 Main()

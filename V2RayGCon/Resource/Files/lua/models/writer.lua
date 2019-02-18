@@ -1,11 +1,11 @@
-local Lcs = require "lua.models.lcs"
+assert(Lcs, "Please add 'Lcs = require \"lua.models.lcs\"' at the top of this script")
 
 -- settings
 local DefaultFilename = "LuaData.txt"
 
 -- helper functions
 function WriteToFile(filename, content)
-	local file=io.open(filename, "a")
+	local file = io.open(filename, "a")
     file:write(content .. "\n")
     file:close()
 end
