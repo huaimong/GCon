@@ -1,42 +1,38 @@
-assert(Lcs, "Please add 'Lcs = require \"lua.models.lcs\"' at the top of this script")
-
 -- settings
 local DefaultLogFilename = "LuaLog.txt"
 
--- helper functions
-function WriteLine(filename, content)
+-- helper function
+local function WriteLine(filename, content)
 	local file = io.open(filename, "a")
     file:write(content .. "\n")
     file:close()
 end
 
--- Logger
-local Logger = Lcs.class()
-
-function Logger:init(filename)
+-- class function
+local function Init(self, filename)
 	if filename == nil then
 		filename = DefaultLogFilename
 	end
 	self.filename = filename
 end
 
-function Logger:Warn(text)
+local function Warn(self, text)
 	self:Log("Warn", text)
 end
 
-function Logger:Debug(text)
+local function Debug(self, text)
 	self:Log("Debug", text)
 end
 
-function Logger:Error(text)
+local function Error(self, text)
 	self:Log("Error", text)
 end
 
-function Logger:Info(text)
+local function Info(self, text)
 	self:Log("Info", text)
 end
 
-function Logger:Log(prefix, content)
+local function Log(self, prefix, content)
 	if prefix == nil then
 		prefix = ""
 	else
@@ -47,4 +43,17 @@ function Logger:Log(prefix, content)
 	WriteLine(self.filename, line)
 end
 
-return Logger
+local function Create(filename)
+	local Logger = {}
+	Init(Logger, filename)
+	
+	Logger.Debug = Debug
+	Logger.Error = Error
+	Logger.Info = Info
+	Logger.Log = Log
+	Logger.Warn = Warn
+	
+	return Logger
+end
+
+return Create

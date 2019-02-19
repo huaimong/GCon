@@ -1,28 +1,10 @@
--- import libs and models
-Lcs = require "lua.models.lcs"
 local Utils = require "lua.libs.utils"
-local Set = require "lua.models.set"
+local Set = require "lua.modules.set"
 
 local failCounter = 0
 local successCounter = 0
 
-function Main()
-	print("Run utils tests")
-    UtilsTest()
-    print(" ")
-    SetTest()
-    print(" ")
-    ShowTestResult()
-end
-
-function ShowTestResult()
-    local total = failCounter + successCounter
-    print("Total: ", total)
-    print("success: ", successCounter)
-    print("fail: ", failCounter)
-end
-
-function Assert(testName, expect, result)
+local function Assert(testName, expect, result)
 	if expect == result then
 		print("pass ", testName)
         successCounter = successCounter + 1
@@ -32,7 +14,14 @@ function Assert(testName, expect, result)
 	end
 end
 
-function UtilsTest()
+local function ShowTestResult()
+    local total = failCounter + successCounter
+    print("Total: ", total)
+    print("success: ", successCounter)
+    print("fail: ", failCounter)
+end
+
+local function UtilsTest()
     -- Test 1. how-to use libs.utils.lua
     Utils.Echo("Hello")
 	local data = {"AbC123", "123BcD"}
@@ -42,7 +31,7 @@ function UtilsTest()
 	Assert("Utils.IsInTablePartially.False", false, Utils.IsInTablePartially(data, "b2"))
 end
 
-function SetTest()
+local function SetTest()
     -- Test 3. how-to use set
     local cache = Set()
     Assert("Set.Init.Count", 0, cache:Count())
@@ -67,6 +56,15 @@ function SetTest()
 	
 	Assert("Set.MatchesPartially.True", true, cache:MatchesPartially("aabc1234"))
 	Assert("Set.MatchesPartially.False", false, cache:MatchesPartially("bc123"))
+end
+
+local function Main()
+	print("Run utils tests")
+    UtilsTest()
+    print(" ")
+    SetTest()
+    print(" ")
+    ShowTestResult()
 end
 
 Main()

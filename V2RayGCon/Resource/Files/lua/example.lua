@@ -1,11 +1,10 @@
-Lcs = require "lua.models.lcs"
-local Writer = require "lua.models.writer"
-local Logger = require "lua.models.logger"
+local Writer = require "lua.modules.writer"
+local Logger = require "lua.modules.logger"
 
 local testDataFileName = "testData.txt"
 local testLogFileName = "testLog.txt"
 
-function WriterExample()
+local function WriterExample()
     local dw = Writer(testDataFileName)
     print("Write hello to file.")
     dw:WriteLine("hello")
@@ -15,7 +14,7 @@ function WriterExample()
     dw:WriteLine("Hello, world!")
 end
 
-function LoggerExample()
+local function LoggerExample()
     print("Run logger tests")
     local logger = Logger(testLogFileName)
     logger:Info("Hello")
@@ -24,7 +23,7 @@ function LoggerExample()
     logger:Log("nothing", "here")
 end
 
-function Main()
+local function Main()
    WriterExample() 
    LoggerExample()
 end
