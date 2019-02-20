@@ -2,6 +2,9 @@
 {
     static public class Intervals
     {
+        public const int SpeedTestTimeout = 20 * 1000;
+        public const int FetchDefaultTimeout = 30 * 1000;
+
         public const int SaveServerListIntreval = 30 * 1000;
         public const int NotifierTextUpdateIntreval = 3 * 1000;
 

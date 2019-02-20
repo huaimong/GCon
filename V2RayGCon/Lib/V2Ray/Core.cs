@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -145,7 +144,7 @@ namespace V2RayGCon.Lib.V2Ray
             var folders = new List<string>{
                 Lib.Utils.GetSysAppDataFolder(), // %appdata%
                 VgcApis.Libs.Utils.GetAppDir(),
-                StrConst.V2RayCoreFolder,
+                VgcApis.Libs.Utils.GetCoreFolderFullPath(),
             };
 
             if (isPortable)
@@ -174,11 +173,11 @@ namespace V2RayGCon.Lib.V2Ray
                 }
                 else
                 {
-                    Task.Factory.StartNew(
+                    VgcApis.Libs.Utils.RunInBackground(
                         () => MessageBox.Show(I18N.ExeNotFound));
                 }
             }
-            Task.Factory.StartNew(() => InvokeEventOnCoreStatusChanged());
+            VgcApis.Libs.Utils.RunInBackground(() => InvokeEventOnCoreStatusChanged());
         }
 
         // non-blocking 
@@ -187,7 +186,7 @@ namespace V2RayGCon.Lib.V2Ray
             Action next = null,
             Dictionary<string, string> env = null)
         {
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 RestartCore(config, env);
                 InvokeActionIgnoreError(next);
@@ -206,7 +205,7 @@ namespace V2RayGCon.Lib.V2Ray
         // non-blocking
         public void StopCoreThen(Action next = null)
         {
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 StopCore();
                 InvokeActionIgnoreError(next);
@@ -363,12 +362,12 @@ namespace V2RayGCon.Lib.V2Ray
             if (err != 0)
             {
                 v2rayCore.Close();
-                Task.Factory.StartNew(ShowExitErrorMessage);
+                VgcApis.Libs.Utils.RunInBackground(() => ShowExitErrorMessage());
             }
 
             // SendLog("Exit code: " + err);
             isRunning = false;
-            Task.Factory.StartNew(() => InvokeEventOnCoreStatusChanged());
+            VgcApis.Libs.Utils.RunInBackground(() => InvokeEventOnCoreStatusChanged());
         }
 
         void BindEvents(Process proc)

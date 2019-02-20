@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -190,7 +189,7 @@ namespace V2RayGCon.Controller.OptionComponent
         private void ImportFromSubscriptionUrls(
             Dictionary<string, string> subscriptions)
         {
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 // dict( [url]=>mark ) to list(url,mark) mark maybe null
                 var subsUrl = subscriptions.Select(s => s).ToList();
@@ -214,7 +213,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 return port;
             }
 
-            Task.Factory.StartNew(
+            VgcApis.Libs.Utils.RunInBackground(
                 () => MessageBox.Show(
                     I18N.NoQualifyProxyServer));
 

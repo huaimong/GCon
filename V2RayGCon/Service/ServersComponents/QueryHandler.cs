@@ -16,7 +16,6 @@ namespace V2RayGCon.Service.ServersComponents
         {
             this.serverListWriteLock = serverListWriteLock;
             this.coreServList = coreServList;
-
         }
 
         #region public methods

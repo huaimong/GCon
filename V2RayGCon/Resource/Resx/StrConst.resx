@@ -195,10 +195,6 @@
     <value>180</value>
     <comment>seconds</comment>
   </data>
-  <data name="SpeedTestTimeout" xml:space="preserve">
-    <value>20</value>
-    <comment>seconds</comment>
-  </data>
   <data name="BugFileName" xml:space="preserve">
     <value>bug.txt</value>
   </data>
@@ -225,10 +221,6 @@
   <data name="LazySaveUserSettingsDelay" xml:space="preserve">
     <value>30</value>
     <comment>seconds</comment>
-  </data>
-  <data name="V2RayCoreFolder" xml:space="preserve">
-    <value>core</value>
-    <comment>V2RayGCon\core\v2ray.exe</comment>
   </data>
   <data name="ExecutableV2ctl" xml:space="preserve">
     <value>v2ctl.exe</value>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ProxySetter.Lib.Sys
 {
@@ -25,9 +24,8 @@ namespace ProxySetter.Lib.Sys
             {
                 return;
             }
-            Task.Factory.StartNew(
-                this.LongRunningTaskWrapper,
-                TaskCreationOptions.LongRunning);
+            VgcApis.Libs.Utils.RunInBackground(
+                this.LongRunningTaskWrapper);
         }
         #endregion
 

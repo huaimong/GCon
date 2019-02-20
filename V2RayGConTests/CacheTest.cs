@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 
 namespace V2RayGCon.Test
@@ -31,8 +32,8 @@ namespace V2RayGCon.Test
         }
 
         [DataTestMethod]
-        [DataRow("https://www.baidu.com")]
-        [DataRow("https://www.163.com,https://www.baidu.com")]
+        [DataRow("https://www.baidu.com/")]
+        [DataRow("https://www.sogou.com/,https://www.baidu.com/")]
         public void HTMLNormalTest(string rawData)
         {
             var data = rawData.Split(',');
@@ -47,7 +48,7 @@ namespace V2RayGCon.Test
 
             try
             {
-                Lib.Utils.ExecuteInParallel<string, string>(urls, (url) =>
+                Lib.Utils.ExecuteInParallel(urls, (url) =>
                 {
                     return html[url];
                 });

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
-using System.Threading.Tasks;
 
 using System.Windows.Forms;
 using ZXing;
@@ -256,7 +255,7 @@ namespace V2RayGCon.Lib.QRCode
                 Application.Run();
             }
 
-            Task.Factory.StartNew(() => ShowFormInBackground());
+            VgcApis.Libs.Utils.RunInBackground(() => ShowFormInBackground());
         }
 
         static bool ScanWindow(Bitmap screenshot, Point screenLocation, Rectangle winRect, Rectangle screenRect, Action<string> success)

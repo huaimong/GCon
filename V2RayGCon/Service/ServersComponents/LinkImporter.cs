@@ -43,19 +43,22 @@ namespace V2RayGCon.Service.ServersComponents
             foreach (var link in linkList)
             {
                 taskList.Add(new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportVmessLinks(link[0], link[1])));
+                    () => ImportVmessLinks(link[0], link[1]),
+                    TaskCreationOptions.LongRunning));
                 taskList.Add(new Task<Tuple<bool, List<string[]>>>(
-                    () => ImportSSLinks(link[0], link[1])));
+                    () => ImportSSLinks(link[0], link[1]),
+                    TaskCreationOptions.LongRunning));
 
                 if (includingV2rayLinks)
                 {
                     taskList.Add(new Task<Tuple<bool, List<string[]>>>(
-                        () => ImportV2RayLinks(link[0], link[1])));
+                        () => ImportV2RayLinks(link[0], link[1]),
+                        TaskCreationOptions.LongRunning));
                 }
             }
 
             var tasks = taskList.ToArray();
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 foreach (var task in tasks)
                 {

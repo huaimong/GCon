@@ -262,12 +262,12 @@ namespace V2RayGCon.Service
             {
                 if (userSettings.isPortable)
                 {
-                    DebugSendLog("Try save to setting file");
+                    DebugSendLog("Try save settings to file.");
                     SaveUserSettingsToFile();
                     return;
                 }
 
-                DebugSendLog("Try save to properties");
+                DebugSendLog("Try save settings to properties");
                 SetUserSettingFileIsPortableToFalse();
                 SaveUserSettingsToProperties();
             }

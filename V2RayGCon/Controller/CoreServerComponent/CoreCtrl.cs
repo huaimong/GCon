@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Controller.CoreServerComponent
@@ -82,14 +81,14 @@ namespace V2RayGCon.Controller.CoreServerComponent
         }
 
         public void StopCoreThen() =>
-            Task.Run(() => StopCoreWorker(null));
+            VgcApis.Libs.Utils.RunInBackground(() => StopCoreWorker(null));
 
         public void StopCoreThen(Action next) =>
-            Task.Run(() => StopCoreWorker(next));
+            VgcApis.Libs.Utils.RunInBackground(() => StopCoreWorker(next));
 
         public void RestartCoreThen() => RestartCoreThen(null);
         public void RestartCoreThen(Action next) =>
-            Task.Factory.StartNew(() => RestartCoreWorker(next));
+            VgcApis.Libs.Utils.RunInBackground(() => RestartCoreWorker(next));
 
         public bool IsCoreRunning() => coreServ.isRunning;
 

@@ -21,6 +21,7 @@ namespace V2RayGCon.Service
 
         ServersComponents.LinkImporter linkImporter;
         ServersComponents.QueryHandler queryHandler;
+        ServersComponents.IndexHandler indexHandler;
 
         public event EventHandler
             OnCoreStart, // ICoreServCtrl sender
@@ -64,7 +65,39 @@ namespace V2RayGCon.Service
             queryHandler = new ServersComponents.QueryHandler(
                 serverListWriteLock,
                 coreServList);
+
+            indexHandler = new ServersComponents.IndexHandler(
+                serverListWriteLock,
+                coreServList);
         }
+
+        #region sort
+        public void ResteIndexQuiet()
+        {
+            indexHandler.ResetIndexQuiet();
+        }
+
+        public void SortSelectedBySpeedTest()
+        {
+            lock (serverListWriteLock)
+            {
+                var selectedServers = queryHandler.GetSelectedServers().ToList();
+                indexHandler.SortCoreServCtrlListBySpeedTestResult(ref selectedServers);
+            }
+            RequireFormMainReload();
+        }
+
+        public void SortSelectedBySummary()
+        {
+            lock (serverListWriteLock)
+            {
+                var selectedServers = queryHandler.GetSelectedServers().ToList();
+                indexHandler.SortCoreServCtrlListBySummary(ref selectedServers);
+            }
+            RequireFormMainReload();
+        }
+
+        #endregion
 
         #region querys
         public ReadOnlyCollection<VgcApis.Models.Interfaces.ICoreServCtrl>
@@ -109,12 +142,6 @@ namespace V2RayGCon.Service
 
         void InvokeEventOnRequireMenuUpdate(object sender, EventArgs args) =>
             InvokeEventHandlerIgnoreError(OnRequireMenuUpdate, null, EventArgs.Empty);
-
-        public void InvokeEventOnRequireFlyPanelUpdate() =>
-            InvokeEventHandlerIgnoreError(OnRequireFlyPanelUpdate, this, EventArgs.Empty);
-
-        public void InvokeEventOnRequireFlyPanelReload() =>
-            InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
 
         void ServerItemPropertyChangedHandler(object sender, EventArgs arg) =>
             serverSaver.DoItLater();
@@ -207,6 +234,19 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public method
+        /// <summary>
+        /// Add new only.
+        /// </summary>
+        public void RequireFormMainUpdate() =>
+            InvokeEventHandlerIgnoreError(OnRequireFlyPanelUpdate, this, EventArgs.Empty);
+
+        /// <summary>
+        /// Remove all then add new.
+        /// </summary>
+        public void RequireFormMainReload() =>
+            InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
+
+
         /// <summary>
         /// linkList=List(string[]{0: text, 1: mark}>)
         /// </summary>
@@ -325,6 +365,12 @@ namespace V2RayGCon.Service
             return coreServList.Any(s => s.GetCoreStates().IsSelected());
         }
 
+        public string PackSelectedServersIntoV4Package(string orgUid, string pkgName)
+        {
+            var servList = queryHandler.GetSelectedServers().ToList();
+            return PackServersIntoV4PackageWorker(servList, orgUid, pkgName, true);
+        }
+
         /// <summary>
         /// packageName is Null or empty ? "PackageV4" : packageName
         /// </summary>
@@ -333,25 +379,9 @@ namespace V2RayGCon.Service
         public string PackServersIntoV4Package(
             List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
             string orgUid,
-            string packageName)
-        {
-            if (servList == null || servList.Count <= 0)
-            {
-                VgcApis.Libs.UI.MsgBoxAsync(null, I18N.ListIsEmpty);
-                return "";
-            }
-
-            JObject package = configMgr.GenV4ServersPackage(servList, packageName);
-
-            var newConfig = package.ToString(Formatting.None);
-            string newUid = ReplaceOrAddNewServer(orgUid, newConfig);
-
-            UpdateMarkList();
-            setting.SendLog(I18N.PackageDone);
-            Lib.UI.ShowMessageBoxDoneAsync();
-
-            return newUid;
-        }
+            string packageName) =>
+            PackServersIntoV4PackageWorker(
+                servList, orgUid, packageName, false);
 
         public void PackServersIntoV3Package(
             List<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
@@ -404,28 +434,21 @@ namespace V2RayGCon.Service
 
         public bool RunSpeedTestOnSelectedServers()
         {
-            if (!speedTestingBar.Install())
+            var selectedServers = queryHandler.GetSelectedServers(false).ToList();
+            return SpeedTestWorker(selectedServers);
+        }
+
+        public void RunSpeedTestOnSelectedServersBg()
+        {
+            var selectedServers = queryHandler.GetSelectedServers(false).ToList();
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
-                return false;
-            }
-
-            var list = queryHandler.GetSelectedServers(false);
-
-            Task.Factory.StartNew(() =>
-            {
-                Lib.Utils.ExecuteInParallel(list, (server) =>
-                {
-                    server.GetCoreCtrl().RunSpeedTest();
-
-                    // ExecuteInParallel require a return value
-                    return "";
-                });
-
-                speedTestingBar.Remove();
-                MessageBox.Show(I18N.SpeedTestFinished);
+                var result = SpeedTestWorker(selectedServers);
+                MessageBox.Show(
+                    result ?
+                    I18N.SpeedTestFinished :
+                    I18N.LastTestNoFinishYet);
             });
-
-            return true;
         }
 
         public void RestartServersThen(
@@ -521,7 +544,7 @@ namespace V2RayGCon.Service
                 NotifierTextUpdateHandler(this, EventArgs.Empty);
                 serverSaver.DoItLater();
                 UpdateMarkList();
-                InvokeEventOnRequireFlyPanelUpdate();
+                RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
 
                 speedTestingBar.Remove();
@@ -544,7 +567,7 @@ namespace V2RayGCon.Service
             {
                 serverSaver.DoItLater();
                 UpdateMarkList();
-                InvokeEventOnRequireFlyPanelUpdate();
+                RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
 
                 speedTestingBar.Remove();
@@ -576,7 +599,7 @@ namespace V2RayGCon.Service
             {
                 setting.LazyGC();
                 serverSaver.DoItLater();
-                InvokeEventOnRequireFlyPanelUpdate();
+                RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
             }
 
@@ -599,14 +622,14 @@ namespace V2RayGCon.Service
                 return;
             }
 
-            Task.Factory.StartNew(
+            VgcApis.Libs.Utils.RunInBackground(
                 () => RemoveServerItemFromListThen(index, () =>
                 {
                     NotifierTextUpdateHandler(this, EventArgs.Empty);
                     serverSaver.DoItLater();
                     UpdateMarkList();
                     InvokeEventOnRequireMenuUpdate(coreServList, EventArgs.Empty);
-                    InvokeEventOnRequireFlyPanelUpdate();
+                    RequireFormMainUpdate();
                     speedTestingBar.Remove();
                 }));
         }
@@ -644,7 +667,7 @@ namespace V2RayGCon.Service
                 newServer.GetConfiger().UpdateSummaryThen(() =>
                 {
                     InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
-                    InvokeEventOnRequireFlyPanelUpdate();
+                    RequireFormMainUpdate();
                 });
             }
 
@@ -691,6 +714,49 @@ namespace V2RayGCon.Service
         #endregion
 
         #region private method
+        string PackServersIntoV4PackageWorker(
+           List<VgcApis.Models.Interfaces.ICoreServCtrl> servList,
+           string orgUid,
+           string packageName,
+           bool quiet)
+        {
+            if (servList == null || servList.Count <= 0)
+            {
+                if (!quiet)
+                {
+                    VgcApis.Libs.UI.MsgBoxAsync(I18N.ListIsEmpty);
+                }
+                return "";
+            }
+
+            JObject package = configMgr.GenV4ServersPackage(servList, packageName);
+
+            var newConfig = package.ToString(Formatting.None);
+            string newUid = ReplaceOrAddNewServer(orgUid, newConfig);
+
+            UpdateMarkList();
+            setting.SendLog(I18N.PackageDone);
+            if (!quiet)
+            {
+                Lib.UI.ShowMessageBoxDoneAsync();
+            }
+            return newUid;
+        }
+
+        bool SpeedTestWorker(
+           IEnumerable<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
+        {
+            if (!speedTestingBar.Install())
+            {
+                return false;
+            }
+            Lib.Utils.ExecuteInParallel(
+                servList,
+                serv => serv.GetCoreCtrl().RunSpeedTest());
+            speedTestingBar.Remove();
+            return true;
+        }
+
         void InitServerCtrlList()
         {
             lock (serverListWriteLock)
@@ -737,7 +803,7 @@ namespace V2RayGCon.Service
         void RemoveServerItemFromListThen(int index, Action next = null)
         {
             var server = coreServList[index];
-            Task.Run(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 lock (serverListWriteLock)
                 {
@@ -759,7 +825,7 @@ namespace V2RayGCon.Service
             var rnd = new Random();
 
             var count = list.Count;
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 var taskList = new List<Task>();
                 for (int i = 0; i < round; i++)
@@ -780,7 +846,7 @@ namespace V2RayGCon.Service
                             server.GetCoreCtrl().RestartCoreThen(() => sayGoodbye.Set());
                         }
                         sayGoodbye.WaitOne();
-                    });
+                    }, TaskCreationOptions.LongRunning);
 
                     taskList.Add(task);
                     task.Start();

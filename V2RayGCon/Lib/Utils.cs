@@ -905,56 +905,24 @@ namespace V2RayGCon.Lib
 
         public static string UrlEncode(string value) => HttpUtility.UrlEncode(value);
 
-        public static long VisitWebPageSpeedTest(string url = "https://www.google.com", int port = -1)
+        public static long VisitWebPageSpeedTest(string url, int port)
         {
-            var timeout = Str2Int(StrConst.SpeedTestTimeout) * 1000;
-
-            long elasped = long.MaxValue;
-            try
+            if (string.IsNullOrEmpty(url))
             {
-                using (WebClient wc = new Lib.Nets.TimedWebClient
-                {
-                    Encoding = System.Text.Encoding.UTF8,
-                    Timeout = timeout,
-                })
-                {
-
-                    if (port > 0)
-                    {
-                        wc.Proxy = new WebProxy("127.0.0.1", port);
-                    }
-
-                    var result = string.Empty;
-                    AutoResetEvent speedTestCompleted = new AutoResetEvent(false);
-                    wc.DownloadStringCompleted += (s, a) =>
-                    {
-                        try
-                        {
-                            result = a.Result;
-                        }
-                        catch { }
-                        speedTestCompleted.Set();
-                    };
-
-                    Stopwatch sw = new Stopwatch();
-                    sw.Reset();
-                    sw.Start();
-                    wc.DownloadStringAsync(new Uri(url));
-
-                    // 收到信号为True
-                    if (!speedTestCompleted.WaitOne(timeout))
-                    {
-                        wc.CancelAsync();
-                        return elasped;
-                    }
-                    sw.Stop();
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        elasped = sw.ElapsedMilliseconds;
-                    }
-                }
+                throw new ArgumentNullException("URL must not null!");
             }
-            catch { }
+
+            var timeout = VgcApis.Models.Consts.Intervals.SpeedTestTimeout;
+            long elasped = long.MaxValue;
+            Stopwatch sw = new Stopwatch();
+            sw.Reset();
+            sw.Start();
+            var html = Fetch(url, port, timeout);
+            sw.Stop();
+            if (!string.IsNullOrEmpty(html))
+            {
+                elasped = sw.ElapsedMilliseconds;
+            }
             return elasped;
         }
 
@@ -981,22 +949,54 @@ namespace V2RayGCon.Lib
         {
             var html = string.Empty;
 
-            using (WebClient wc = new Lib.Nets.TimedWebClient
+            if (timeout <= 1)
             {
-                Encoding = System.Text.Encoding.UTF8,
-                Timeout = timeout,
-            })
+                timeout = VgcApis.Models.Consts.Intervals.FetchDefaultTimeout;
+            }
+
+            WebClient wc = new WebClient
+            {
+                Encoding = Encoding.UTF8,
+            };
+
+            try
             {
                 if (proxyPort > 0 && proxyPort < 65536)
                 {
                     wc.Proxy = new WebProxy("127.0.0.1", proxyPort);
                 }
 
-                try
+                AutoResetEvent dlCompleted = new AutoResetEvent(false);
+                wc.DownloadStringCompleted += (s, a) =>
                 {
-                    html = wc.DownloadString(url);
+                    try
+                    {
+                        html = a.Result;
+                    }
+                    catch { }
+                    dlCompleted.Set();
+                };
+
+                if (!VgcApis.Libs.Utils.IsHttpLink(url))
+                {
+                    url = VgcApis.Libs.Utils.RelativePath2FullPath(url);
                 }
-                catch { }
+
+                wc.DownloadStringAsync(new Uri(url));
+
+                // 收到信号为True
+                if (!dlCompleted.WaitOne(timeout))
+                {
+                    wc.CancelAsync();
+                }
+            }
+            catch
+            {
+                // network operation always buggy.
+            }
+            finally
+            {
+                wc.Dispose();
             }
 
             return html;
@@ -1011,7 +1011,7 @@ namespace V2RayGCon.Lib
         public static string Fetch(string url, int timeout) =>
             FetchWorker(url, -1, timeout);
 
-        public static string GetLatestVGCVersion()
+        public static string GetLatestVgcVersion()
         {
             string html = Fetch(StrConst.UrlLatestVGC);
 
@@ -1387,7 +1387,7 @@ namespace V2RayGCon.Lib
 
         public static void ChainActionHelperAsync(int countdown, Action<int, Action> worker, Action done = null)
         {
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 ChainActionHelperWorker(countdown, worker, done)();
             });
@@ -1415,20 +1415,35 @@ namespace V2RayGCon.Lib
             };
         }
 
+        public static void ExecuteInParallel<TParam>(
+            IEnumerable<TParam> param,
+            Action<TParam> worker) =>
+            ExecuteInParallel(param,
+                (p) =>
+                {
+                    worker(p);
+                    // ExecuteInParallel require a return value
+                    return "nothing";
+                });
+
         public static List<TResult> ExecuteInParallel<TParam, TResult>(
-            IEnumerable<TParam> values, Func<TParam, TResult> lambda)
+            IEnumerable<TParam> param,
+            Func<TParam, TResult> worker)
         {
             var result = new List<TResult>();
 
-            if (values.Count() <= 0)
+            if (param.Count() <= 0)
             {
                 return result;
             }
 
             var taskList = new List<Task<TResult>>();
-            foreach (var value in values)
+            foreach (var value in param)
             {
-                var task = new Task<TResult>(() => lambda(value));
+                var task = new Task<TResult>(
+                    () => worker(value),
+                    TaskCreationOptions.LongRunning);
+
                 taskList.Add(task);
                 task.Start();
             }

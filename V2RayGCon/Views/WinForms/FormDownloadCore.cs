@@ -53,7 +53,7 @@ namespace V2RayGCon.Views.WinForms
         {
             var el = labelCoreVersion;
 
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 var core = new V2RayGCon.Lib.V2Ray.Core(setting);
                 var version = core.GetCoreVersion();
@@ -109,21 +109,21 @@ namespace V2RayGCon.Views.WinForms
             downloader.OnDownloadCompleted += (s, a) =>
             {
                 ResetUI(100);
-                Task.Factory.StartNew(
+                VgcApis.Libs.Utils.RunInBackground(
                     () => MessageBox.Show(I18N.DownloadCompleted));
             };
 
             downloader.OnDownloadCancelled += (s, a) =>
             {
                 ResetUI(0);
-                Task.Factory.StartNew(
+                VgcApis.Libs.Utils.RunInBackground(
                     () => MessageBox.Show(I18N.DownloadCancelled));
             };
 
             downloader.OnDownloadFail += (s, a) =>
             {
                 ResetUI(0);
-                Task.Factory.StartNew(
+                VgcApis.Libs.Utils.RunInBackground(
                     () => MessageBox.Show(I18N.TryManualDownload));
             };
 
@@ -163,7 +163,7 @@ namespace V2RayGCon.Views.WinForms
 
             elRefresh.Enabled = false;
 
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 int proxyPort = -1;
                 if (chkUseProxy.Checked)
@@ -212,7 +212,7 @@ namespace V2RayGCon.Views.WinForms
                 proxyPort = servers.GetAvailableHttpProxyPort();
                 if (proxyPort <= 0)
                 {
-                    Task.Factory.StartNew(
+                    VgcApis.Libs.Utils.RunInBackground(
                         () => MessageBox.Show(
                             I18N.NoQualifyProxyServer));
                 }

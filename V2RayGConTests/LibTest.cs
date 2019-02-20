@@ -10,6 +10,42 @@ namespace V2RayGCon.Test
     [TestClass]
     public class LibTest
     {
+        [DataTestMethod]
+        [DataRow("https://www.baidu.com/")]
+        public void FetchTest(string url)
+        {
+            var html = Lib.Utils.Fetch(url);
+            Assert.AreEqual(false, string.IsNullOrEmpty(html));
+        }
+
+        [DataTestMethod]
+        [DataRow("https://www.baidu.com/", 3)]
+        public void FetchBatchTest(string url, int times)
+        {
+            var urls = new List<string>();
+            for (int i = 0; i < times; i++)
+            {
+                urls.Add(url);
+            }
+
+            List<string> htmls = new List<string>();
+            try
+            {
+                htmls = ExecuteInParallel(urls, (u) =>
+                {
+                    return Fetch(u);
+                });
+            }
+            catch
+            {
+                Assert.Fail();
+            }
+
+            foreach (var html in htmls)
+            {
+                Assert.AreEqual(false, string.IsNullOrEmpty(html));
+            }
+        }
 
         [DataTestMethod]
         [DataRow("http://a.com/b/c/", "/d/e/abc.html", "http://a.com/d/e/abc.html")]
@@ -94,7 +130,7 @@ namespace V2RayGCon.Test
         [DataRow("http://www.baidu.com")]
         public void VisitWebPageSpeedTestTest(string url)
         {
-            var time = Lib.Utils.VisitWebPageSpeedTest(url);
+            var time = Lib.Utils.VisitWebPageSpeedTest(url, -1);
             Assert.AreEqual(true, time < long.MaxValue);
         }
 

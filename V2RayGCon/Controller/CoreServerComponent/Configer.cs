@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Threading.Tasks;
 using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Controller.CoreServerComponent
@@ -75,7 +74,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         public void UpdateSummaryThen(Action next = null)
         {
-            Task.Run(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 var configString = coreInfo.isInjectImport ?
                     configMgr.InjectImportTpls(coreInfo.config, false, true) :
@@ -145,7 +144,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
         public void GetterInboundInfoThen(Action<string> next)
         {
             var serverName = coreInfo.name;
-            Task.Factory.StartNew(() =>
+            VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 var inInfo = GetterParsedInboundInfo(GetConfig());
                 if (inInfo == null)

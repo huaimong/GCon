@@ -238,7 +238,7 @@ namespace ProxySetter.Services
             }
             catch
             {
-                Task.Factory.StartNew(
+                VgcApis.Libs.Utils.RunInBackground(
                     () => MessageBox.Show(I18N.StartPacServFail));
                 return false;
             }

@@ -145,9 +145,8 @@ namespace Luna.Controllers
             }
 
             SendLog($"{I18N.Start} {coreSetting.name}");
-            luaCoreTask = Task.Factory.StartNew(
-                RunLuaScript,
-                TaskCreationOptions.LongRunning);
+            luaCoreTask = VgcApis.Libs.Utils.RunInBackground(
+                RunLuaScript);
         }
 
         public void Cleanup()
@@ -183,7 +182,7 @@ namespace Luna.Controllers
             var state = new Lua();
             state["Api"] = luaApis; // bug: lua can access all public functions
             state["Signal"] = luaSignal;
-            state.DoString(luaApis.PerdefinedFunctions());
+            state.DoString(luaApis.PredefinedFunctions());
             return state;
         }
 
