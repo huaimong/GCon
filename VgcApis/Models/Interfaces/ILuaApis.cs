@@ -36,7 +36,7 @@ namespace VgcApis.Models.Interfaces
         /// <summary>
         /// Show perdefined functions.
         /// </summary>
-        string PerdefinedFunctions();
+        string PredefinedFunctions();
 
         /// <summary>
         /// Api:Print("hello",", ","world","!")

@@ -109,8 +109,8 @@ namespace Luna.Models.Apis
             }
         }
 
-        public string PerdefinedFunctions() =>
-            Resources.Files.Datas.LuaPerdefinedFunctions;
+        public string PredefinedFunctions() =>
+            Resources.Files.Datas.LuaPredefinedFunctions;
         #endregion
 
         #region private methods

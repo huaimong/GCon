@@ -136,7 +136,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Files\LuaPerdefinedFunctions.txt" />
+    <Content Include="Resources\Files\LuaPredefinedFunctions.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
