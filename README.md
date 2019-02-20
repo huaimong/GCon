@@ -1,4 +1,4 @@
-[![Build Status][1][2]]
+[![Build Status][1]][2]
 
 [1]: https://dev.azure.com/adamsmith2019/V2RayGCon/_apis/build/status/Master?branchName=master "Build Status Badge"
 [2]: https://dev.azure.com/adamsmith2019/V2RayGCon/_build/latest?definitionId=2&branchName=master "Azure Build Status"
