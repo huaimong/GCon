@@ -1,7 +1,13 @@
-[![Build Status][1]][2]
+[![Build Status][1]][2] [![Release][3]][4] [![Total Downloads][5]][6] [![License][7]][8]
 
 [1]: https://dev.azure.com/adamsmith2019/V2RayGCon/_apis/build/status/Master?branchName=master "Build Status Badge"
 [2]: https://dev.azure.com/adamsmith2019/V2RayGCon/_build/latest?definitionId=2&branchName=master "Azure Build Status"
+[3]: https://img.shields.io/github/release/UudrSgMEZ/V2RayGCon.svg "Release Badge"
+[4]: https://github.com/UudrSgMEZ/V2RayGCon/releases/latest "Releases"
+[5]: https://img.shields.io/github/downloads/UudrSgMEZ/V2RayGCon/total.svg "Total Downloads Badge"
+[6]: http://www.somsubhra.com/github-release-stats/?username=UudrSgMEZ&repository=V2RayGCon "Downloads Detail"
+[7]: https://img.shields.io/github/license/UudrSgMEZ/V2RayGCon.svg "Licence Badge"
+[8]: https://github.com/UudrSgMEZ/V2RayGCon/blob/master/LICENSE "Licence"
 
 仅自用  
 Self-use only!  
