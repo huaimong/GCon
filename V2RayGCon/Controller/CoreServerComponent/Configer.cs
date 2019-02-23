@@ -188,7 +188,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 return;
             }
 
-            var freePort = Lib.Utils.GetFreeTcpPort();
+            var freePort = VgcApis.Libs.Utils.GetFreeTcpPort();
             if (freePort <= 0)
             {
                 return;

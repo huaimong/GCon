@@ -3,6 +3,8 @@ using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,34 +13,34 @@ namespace VgcApis.Libs
 {
     public static class Utils
     {
+        #region net
+        static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
+        static readonly object getFreeTcpPortLocker = new object();
+        public static int GetFreeTcpPort()
+        {
+            // https://stackoverflow.com/questions/138043/find-the-next-tcp-port-in-net
+            var port = -1;
+            lock (getFreeTcpPortLocker)
+            {
+                using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    socket.Bind(_defaultLoopbackEndpoint);
+                    port = ((IPEndPoint)socket.LocalEndPoint).Port;
+                }
+            }
+            return port;
+        }
+        #endregion
+
         #region Task
+        public static void Sleep(int milliseconds) =>
+          System.Threading.Thread.Sleep(milliseconds);
+
         public static Task RunInBackground(Action worker) =>
             Task.Factory.StartNew(worker, TaskCreationOptions.LongRunning);
         #endregion
 
-
-        public static void Sleep(int milliseconds) =>
-           System.Threading.Thread.Sleep(milliseconds);
-
-        public static void TrimDownConcurrentQueue<T>(
-            ConcurrentQueue<T> queue,
-            int maxLines,
-            int minLines)
-        {
-            var count = queue.Count();
-            if (maxLines < 1 || count < maxLines)
-            {
-                return;
-            }
-
-            var loop = Clamp(count - minLines, 0, count);
-            var blackHole = default(T);
-            for (int i = 0; i < loop; i++)
-            {
-                queue.TryDequeue(out blackHole);
-            }
-        }
-
+        #region Json
         public static void SavePluginSetting<T>(
             string pluginName,
             T userSettings,
@@ -73,7 +75,6 @@ namespace VgcApis.Libs
             return empty;
         }
 
-        #region Json
         /// <summary>
         /// return null if fail
         /// </summary>
@@ -160,6 +161,25 @@ namespace VgcApis.Libs
         #endregion
 
         #region Misc
+        public static void TrimDownConcurrentQueue<T>(
+            ConcurrentQueue<T> queue,
+            int maxLines,
+            int minLines)
+        {
+            var count = queue.Count();
+            if (maxLines < 1 || count < maxLines)
+            {
+                return;
+            }
+
+            var loop = Clamp(count - minLines, 0, count);
+            var blackHole = default(T);
+            for (int i = 0; i < loop; i++)
+            {
+                queue.TryDequeue(out blackHole);
+            }
+        }
+
         public static bool IsHttpLink(string link)
         {
             if (string.IsNullOrEmpty(link))

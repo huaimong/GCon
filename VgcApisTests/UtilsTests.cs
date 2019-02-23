@@ -1,7 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
+using System.Threading.Tasks;
 using static VgcApis.Libs.Utils;
 
 namespace VgcApisTests
@@ -9,6 +12,57 @@ namespace VgcApisTests
     [TestClass]
     public class UtilsTests
     {
+        [TestMethod]
+        public void GetFreePortMultipleThreadsTest()
+        {
+            List<int> ports = new List<int>();
+            object portsWriteLocker = new object();
+            void checkPort(int p)
+            {
+                lock (portsWriteLocker)
+                {
+                    if (ports.Contains(p))
+                    {
+                        Assert.Fail();
+                    }
+                    ports.Add(p);
+                }
+            }
+
+            void worker()
+            {
+                var freePort = GetFreeTcpPort();
+                checkPort(freePort);
+                IPEndPoint ep = new IPEndPoint(IPAddress.Loopback, port: freePort);
+                using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    socket.Bind(ep);
+                    Sleep(500);
+                }
+            }
+
+            List<Task> tasks = new List<Task>();
+            for (int i = 0; i < 500; i++)
+            {
+                tasks.Add(RunInBackground(worker));
+            }
+
+            Task.WaitAll(tasks.ToArray());
+        }
+
+        [TestMethod]
+        public void GetFreePortSingleThreadTest()
+        {
+            List<int> ports = new List<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                int port = GetFreeTcpPort();
+                Assert.AreEqual(true, port > 0);
+                Assert.AreEqual(false, ports.Contains(port));
+                ports.Add(port);
+            }
+        }
+
         [TestMethod]
         public void LazyGuyTest()
         {

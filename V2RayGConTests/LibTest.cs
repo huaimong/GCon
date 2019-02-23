@@ -118,14 +118,6 @@ namespace V2RayGCon.Test
             Assert.AreEqual(expect, result);
         }
 
-
-        [TestMethod]
-        public void GetFreePortTest()
-        {
-            int port = Lib.Utils.GetFreeTcpPort();
-            Assert.AreEqual(true, port > 0);
-        }
-
         [DataTestMethod]
         [DataRow("http://www.baidu.com")]
         public void VisitWebPageSpeedTestTest(string url)

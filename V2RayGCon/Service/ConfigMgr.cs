@@ -29,7 +29,7 @@ namespace V2RayGCon.Service
             bool isInjectActivateTpl,
             EventHandler<VgcApis.Models.Datas.StrEvent> logDeliever)
         {
-            var port = Lib.Utils.GetFreeTcpPort();
+            var port = VgcApis.Libs.Utils.GetFreeTcpPort();
             var speedTestConfig = CreateSpeedTestConfig(
                 rawConfig, port, isUseCache, isInjectSpeedTestTpl, isInjectActivateTpl);
 

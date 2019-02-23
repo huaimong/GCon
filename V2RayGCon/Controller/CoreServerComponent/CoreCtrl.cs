@@ -93,7 +93,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
         public bool IsCoreRunning() => coreServ.isRunning;
 
         public void RunSpeedTest() =>
-            BeginSpeedTestWorker(configer.GetConfig());
+            SpeedTestWorker(configer.GetConfig());
         #endregion
 
         #region private methods
@@ -106,7 +106,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             container.InvokeEventOnPropertyChange();
         }
 
-        void BeginSpeedTestWorker(string rawConfig)
+        void SpeedTestWorker(string rawConfig)
         {
             coreStates.SetStatus(I18N.Testing);
             logger.Log(I18N.Testing);

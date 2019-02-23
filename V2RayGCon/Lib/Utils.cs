@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net;
-using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -924,18 +923,6 @@ namespace V2RayGCon.Lib
                 elasped = sw.ElapsedMilliseconds;
             }
             return elasped;
-        }
-
-        static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
-        public static int GetFreeTcpPort()
-        {
-            // https://stackoverflow.com/questions/138043/find-the-next-tcp-port-in-net
-
-            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                socket.Bind(_defaultLoopbackEndpoint);
-                return ((IPEndPoint)socket.LocalEndPoint).Port;
-            }
         }
 
         /// <summary>

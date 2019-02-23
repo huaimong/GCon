@@ -65,6 +65,7 @@
     <Compile Include="Models\BaseClasses\Disposable.cs" />
     <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
     <Compile Include="Libs\Sys\QueueLogger.cs" />
+    <Compile Include="Models\Consts\Core.cs" />
     <Compile Include="Models\Consts\Libs.cs" />
     <Compile Include="Models\Consts\Intervals.cs" />
     <Compile Include="Models\Consts\Files.cs" />
