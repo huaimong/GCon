@@ -111,7 +111,8 @@ namespace V2RayGCon.Controller
             if (options.ContainsKey("servers")
                 && Lib.UI.Confirm(I18N.ConfirmImportServers))
             {
-                Service.Servers.Instance.ImportLinkWithV2RayLinks(options["servers"]);
+                Service.ShareLinkMgr.Instance
+                    .ImportLinkWithV2RayLinks(options["servers"]);
             }
             else
             {

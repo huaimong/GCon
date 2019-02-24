@@ -12,6 +12,7 @@ namespace V2RayGCon.Service
         NotifyIcon ni;
         Setting setting;
         Servers servers;
+        ShareLinkMgr slinkMgr;
 
         VgcApis.Libs.Tasks.LazyGuy notifierUpdater;
 
@@ -22,10 +23,14 @@ namespace V2RayGCon.Service
                 VgcApis.Models.Consts.Intervals.NotifierTextUpdateIntreval);
         }
 
-        public void Run(Setting setting, Servers servers)
+        public void Run(
+            Setting setting,
+            Servers servers,
+            ShareLinkMgr shareLinkMgr)
         {
             this.setting = setting;
             this.servers = servers;
+            this.slinkMgr = shareLinkMgr;
 
             CreateNotifyIcon();
 
@@ -232,7 +237,7 @@ namespace V2RayGCon.Service
 
                             var msg=Lib.Utils.CutStr(link,90);
                             setting.SendLog($"QRCode: {msg}");
-                            servers.ImportLinkWithOutV2RayLinks(link);
+                            slinkMgr.ImportLinkWithOutV2RayLinks(link);
                         }
 
                         void Fail()
@@ -248,7 +253,7 @@ namespace V2RayGCon.Service
                     Properties.Resources.CopyLongTextToClipboard_16x,
                     (s,a)=>{
                         string links = Lib.Utils.GetClipboardText();
-                        servers.ImportLinkWithOutV2RayLinks(links);
+                        slinkMgr.ImportLinkWithOutV2RayLinks(links);
                     }),
 
                 new ToolStripMenuItem(

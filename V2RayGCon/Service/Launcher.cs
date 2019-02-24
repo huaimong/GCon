@@ -14,6 +14,7 @@ namespace V2RayGCon.Service
         Notifier notifier;
         ConfigMgr configMgr;
         PluginsServer pluginsServ;
+        ShareLinkMgr slinkMgr;
         bool isCleanupDone = false;
 
         Launcher()
@@ -24,6 +25,7 @@ namespace V2RayGCon.Service
             setting = Setting.Instance;
             servers = Servers.Instance;
             configMgr = ConfigMgr.Instance;
+            slinkMgr = ShareLinkMgr.Instance;
 
             notifier = Notifier.Instance;
             pluginsServ = PluginsServer.Instance;
@@ -34,8 +36,10 @@ namespace V2RayGCon.Service
             cache.Run(setting);
             servers.Run(setting, cache, configMgr);
             configMgr.Run(setting, cache, servers);
-            notifier.Run(setting, servers);
-            pluginsServ.Run(setting, servers, configMgr, notifier);
+            slinkMgr.Run(setting, servers, cache);
+
+            notifier.Run(setting, servers, slinkMgr);
+            pluginsServ.Run(setting, servers, configMgr, slinkMgr, notifier);
 
             Application.ApplicationExit +=
                 (s, a) => OnApplicationExitHandler(false);
@@ -67,6 +71,7 @@ namespace V2RayGCon.Service
                     setting.isShutdown = isShutdown;
                 }
 
+                slinkMgr.Cleanup();
                 configMgr.Cleanup();
                 pluginsServ.Cleanup();
                 notifier.Cleanup();

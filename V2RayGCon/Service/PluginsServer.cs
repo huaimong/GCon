@@ -21,12 +21,13 @@ namespace V2RayGCon.Service
             Setting setting,
             Servers servers,
             ConfigMgr configMgr,
+            ShareLinkMgr slinkMgr,
             Notifier notifier)
         {
             this.setting = setting;
             this.notifier = notifier;
 
-            vgcApis.Run(setting, servers, configMgr);
+            vgcApis.Run(setting, servers, configMgr, slinkMgr);
             plugins = LoadAllPlugins();
             RestartAllPlugins();
         }

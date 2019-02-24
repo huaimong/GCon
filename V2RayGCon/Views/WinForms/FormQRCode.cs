@@ -22,6 +22,7 @@ namespace V2RayGCon.Views.WinForms
         #endregion
 
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
 
         int servIndex, linkType;
         Dictionary<string, string> serverList;
@@ -29,6 +30,7 @@ namespace V2RayGCon.Views.WinForms
         FormQRCode()
         {
             servers = Service.Servers.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             servIndex = 0;
             linkType = 0;
@@ -117,22 +119,11 @@ namespace V2RayGCon.Views.WinForms
                 return;
             }
 
-            string link = string.Empty;
+            string link = linkType == 0 ?
+                link = slinkMgr.EncodeVmessLink(config) :
+                link = slinkMgr.EncodeV2rayLink(config);
 
-            if (linkType == 0)
-            {
-                link = Lib.Utils.Vmess2VmessLink(
-                    Lib.Utils.ConfigString2Vmess(
-                        config));
-            }
-            else
-            {
-                link = Lib.Utils.AddLinkPrefix(
-                    Lib.Utils.Base64Encode(config),
-                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
-            }
-
-            tboxLink.Text = link;
+            tboxLink.Text = link ?? string.Empty;
         }
 
         void ShowQRCode()

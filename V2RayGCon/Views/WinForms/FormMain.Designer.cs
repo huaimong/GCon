@@ -106,7 +106,6 @@ namespace V2RayGCon.Views.WinForms
             this.toolStripMenuItemCopyAsV2rayLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyAsVmessLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyAsSubscription = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemPackSelectedServers = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRestartSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStopSelected = new System.Windows.Forms.ToolStripMenuItem();
@@ -171,6 +170,7 @@ namespace V2RayGCon.Views.WinForms
             // toolStrip1
             // 
             resources.ApplyResources(this.toolStrip1, "toolStrip1");
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonSelectAllCurPage,
             this.toolStripButtonInverseSelectionCurPage,
@@ -349,16 +349,16 @@ namespace V2RayGCon.Views.WinForms
             this.toolStripSeparator8.Name = "toolStripSeparator8";
             resources.ApplyResources(this.toolStripSeparator8, "toolStripSeparator8");
             // 
-            // exitToolStripMenuItem
+            // closeWindowToolStripMenuItem
             // 
-            this.closeWindowToolStripMenuItem.Name = "exitToolStripMenuItem";
-            resources.ApplyResources(this.closeWindowToolStripMenuItem, "exitToolStripMenuItem");
+            this.closeWindowToolStripMenuItem.Name = "closeWindowToolStripMenuItem";
+            resources.ApplyResources(this.closeWindowToolStripMenuItem, "closeWindowToolStripMenuItem");
             this.closeWindowToolStripMenuItem.Click += new System.EventHandler(this.closeWindowToolStripMenuItem_Click);
             // 
-            // exitToolStripMenuItem1
+            // exitToolStripMenuItem
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem1";
-            resources.ApplyResources(this.exitToolStripMenuItem, "exitToolStripMenuItem1");
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            resources.ApplyResources(this.exitToolStripMenuItem, "exitToolStripMenuItem");
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // selectToolStripMenuItem
@@ -531,7 +531,6 @@ namespace V2RayGCon.Views.WinForms
             this.toolMenuItemServer.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuItemModifySelected,
             this.toolStripMenuItem1,
-            this.toolStripMenuItemPackSelectedServers,
             this.toolStripSeparator12,
             this.toolStripMenuItemRestartSelected,
             this.toolStripMenuItemStopSelected,
@@ -631,11 +630,6 @@ namespace V2RayGCon.Views.WinForms
             // 
             this.toolStripMenuItemCopyAsSubscription.Name = "toolStripMenuItemCopyAsSubscription";
             resources.ApplyResources(this.toolStripMenuItemCopyAsSubscription, "toolStripMenuItemCopyAsSubscription");
-            // 
-            // toolStripMenuItemPackSelectedServers
-            // 
-            this.toolStripMenuItemPackSelectedServers.Name = "toolStripMenuItemPackSelectedServers";
-            resources.ApplyResources(this.toolStripMenuItemPackSelectedServers, "toolStripMenuItemPackSelectedServers");
             // 
             // toolStripSeparator12
             // 
@@ -851,7 +845,6 @@ namespace V2RayGCon.Views.WinForms
         private ToolStripMenuItem toolStripMenuItemDownLoadV2rayCore;
         private ToolStripMenuItem toolStripMenuItemRemoveV2rayCore;
         private ToolStripMenuItem toolStripMenuItemCopyAsSubscription;
-        private ToolStripMenuItem toolStripMenuItemPackSelectedServers;
         private ToolStripMenuItem toolStripMenuItemModifySelected;
         private ToolStripMenuItem toolStripMenuItemModifySettings;
         private ToolStripSeparator toolStripSeparator3;

@@ -329,24 +329,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 10800 的本地化字符串。
-        /// </summary>
-        internal static string PacmanInitPort {
-            get {
-                return ResourceManager.GetString("PacmanInitPort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 tag 的本地化字符串。
-        /// </summary>
-        internal static string PacmanTagPrefix {
-            get {
-                return ResourceManager.GetString("PacmanTagPrefix", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 5 的本地化字符串。
         /// </summary>
         internal static string ParseImportDepth {

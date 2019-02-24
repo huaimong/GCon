@@ -19,7 +19,6 @@ namespace V2RayGCon.Service
         Cache cache = null;
         ConfigMgr configMgr;
 
-        ServersComponents.LinkImporter linkImporter;
         ServersComponents.QueryHandler queryHandler;
         ServersComponents.IndexHandler indexHandler;
 
@@ -58,9 +57,6 @@ namespace V2RayGCon.Service
             this.cache = cache;
             this.setting = setting;
             InitServerCtrlList();
-
-            linkImporter = new ServersComponents.LinkImporter(
-                setting, this, configMgr, serverSaver);
 
             queryHandler = new ServersComponents.QueryHandler(
                 serverListWriteLock,
@@ -246,24 +242,6 @@ namespace V2RayGCon.Service
         public void RequireFormMainReload() =>
             InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
 
-
-        /// <summary>
-        /// linkList=List(string[]{0: text, 1: mark}>)
-        /// </summary>
-        /// <param name="linkList"></param>
-        /// <param name="includingV2rayLinks"></param>
-        public void ImportLinksBatchMode(
-            IEnumerable<string[]> linkList,
-            bool includingV2rayLinks) =>
-            linkImporter.ImportLinksBatchMode(
-                linkList, includingV2rayLinks);
-
-        public void ImportLinkWithOutV2RayLinks(string text) =>
-            linkImporter.ImportLinkWithOutV2RayLinks(text);
-
-        public void ImportLinkWithV2RayLinks(string text) =>
-            linkImporter.ImportLinkWithV2RayLinks(text);
-
         /// <summary>
         /// return -1 when fail
         /// </summary>
@@ -382,55 +360,6 @@ namespace V2RayGCon.Service
             string packageName) =>
             PackServersIntoV4PackageWorker(
                 servList, orgUid, packageName, false);
-
-        public void PackServersIntoV3Package(
-            List<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
-        {
-            var packages = JObject.Parse(@"{}");
-            var serverNameList = new List<string>();
-
-            var id = Guid.NewGuid().ToString();
-            var port = Lib.Utils.Str2Int(StrConst.PacmanInitPort);
-            var tagPrefix = StrConst.PacmanTagPrefix;
-
-            void done()
-            {
-                var config = cache.tpl.LoadPackage("main");
-                config["v2raygcon"]["description"] = string.Join(" ", serverNameList);
-                Lib.Utils.UnionJson(ref config, packages);
-                setting.SendLog(I18N.PackageDone);
-                AddServer(config.ToString(Formatting.None), "PackageV3");
-                UpdateMarkList();
-                Lib.UI.ShowMessageBoxDoneAsync();
-            }
-
-            void worker(int index, Action next)
-            {
-                var server = servList[index];
-                var name = server.GetCoreStates().GetName();
-
-                try
-                {
-                    var package = configMgr.ExtractOutboundInfoFromConfig(
-                        server.GetConfiger().GetConfig(), id, port, index, tagPrefix);
-                    Lib.Utils.UnionJson(ref packages, package);
-                    var vnext = configMgr.GenVnextConfigPart(index, port, id);
-                    Lib.Utils.UnionJson(ref packages, vnext);
-
-                    serverNameList.Add(
-                        string.Format("{0}.[{1}]", index, name));
-
-                    setting.SendLog(I18N.PackageSuccess + ": " + name);
-                }
-                catch
-                {
-                    setting.SendLog(I18N.PackageFail + ": " + name);
-                }
-                next();
-            }
-
-            Lib.Utils.ChainActionHelperAsync(servList.Count, worker, done);
-        }
 
         public bool RunSpeedTestOnSelectedServers()
         {

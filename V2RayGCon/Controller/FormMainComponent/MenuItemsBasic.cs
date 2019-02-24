@@ -7,6 +7,7 @@ namespace V2RayGCon.Controller.FormMainComponent
     class MenuItemsBasic : FormMainComponentController
     {
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
 
         public MenuItemsBasic(
             ToolStripMenuItem miSimVmessServer,
@@ -23,6 +24,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem miRemoveV2rayCore)
         {
             servers = Service.Servers.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, miImportFromFile);
             InitMenuWindows(miFormConfigEditor, miFormQRCode, miFormLog, miFormOptions);
@@ -40,7 +42,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 return;
             }
 
-            servers.ImportLinkWithV2RayLinks(v2rayLinks);
+            slinkMgr.ImportLinkWithV2RayLinks(v2rayLinks);
         }
 
         public void ExportAllServersToTextFile()
@@ -95,8 +97,8 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             importLinkFromClipboard.Click += (s, a) =>
             {
-                string links = Lib.Utils.GetClipboardText();
-                servers.ImportLinkWithV2RayLinks(links);
+                string text = Lib.Utils.GetClipboardText();
+                slinkMgr.ImportLinkWithV2RayLinks(text);
             };
 
             exportAllServer.Click += (s, a) => ExportAllServersToTextFile();

@@ -247,12 +247,10 @@ namespace V2RayGCon.Views.WinForms
                 //// batch op
                 //ToolStripMenuItem speedTestOnSelected,
                 //ToolStripMenuItem modifySelected,
-                //ToolStripMenuItem packSelected,
                 //ToolStripMenuItem stopSelected,
                 //ToolStripMenuItem restartSelected,
                 toolStripMenuItemSpeedTestOnSelected,
                 toolStripMenuItemModifySettings,
-                toolStripMenuItemPackSelectedServers,
                 toolStripMenuItemStopSelected,
                 toolStripMenuItemRestartSelected,
 

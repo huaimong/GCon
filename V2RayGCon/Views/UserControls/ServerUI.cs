@@ -2,7 +2,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -15,16 +14,19 @@ namespace V2RayGCon.Views.UserControls
     {
         Service.Setting setting;
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
         VgcApis.Models.Interfaces.ICoreServCtrl coreServCtrl;
 
         int[] formHeight;
         Bitmap[] foldingButtonIcons;
         string[] keywords = null;
 
-        public ServerUI(VgcApis.Models.Interfaces.ICoreServCtrl serverItem)
+        public ServerUI(
+            VgcApis.Models.Interfaces.ICoreServCtrl serverItem)
         {
             setting = Service.Setting.Instance;
             servers = Service.Servers.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             this.coreServCtrl = serverItem;
             InitializeComponent();
@@ -372,7 +374,6 @@ namespace V2RayGCon.Views.UserControls
                     tboxInboundAddr.ForeColor = Color.Red;
                 }
             }
-
         }
 
         private void lbSummary_Click(object sender, EventArgs e)
@@ -393,13 +394,9 @@ namespace V2RayGCon.Views.UserControls
 
         private void vmessToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                           Lib.Utils.CopyToClipboard(
-                               Lib.Utils.Vmess2VmessLink(
-                                   Lib.Utils.ConfigString2Vmess(
-                                       GetConfig()))) ?
-                           I18N.LinksCopied :
-                           I18N.CopyFail);
+            var vmessLink = slinkMgr.EncodeVmessLink(GetConfig());
+            var success = Lib.Utils.CopyToClipboard(vmessLink);
+            MessageBox.Show(success ? I18N.LinksCopied : I18N.CopyFail);
         }
 
         private void v2rayToolStripMenuItem_Click(object sender, EventArgs e)

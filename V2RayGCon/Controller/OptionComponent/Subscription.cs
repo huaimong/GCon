@@ -17,6 +17,7 @@ namespace V2RayGCon.Controller.OptionComponent
 
         Service.Setting setting;
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
 
         string oldOptions;
 
@@ -28,6 +29,7 @@ namespace V2RayGCon.Controller.OptionComponent
         {
             this.setting = Service.Setting.Instance;
             this.servers = Service.Servers.Instance;
+            this.slinkMgr = Service.ShareLinkMgr.Instance;
 
             this.flyPanel = flyPanel;
             this.btnAdd = btnAdd;
@@ -195,7 +197,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 // dict( [url]=>mark ) to list(url,mark) mark maybe null
                 var subsUrl = subscriptions.Select(s => s).ToList();
                 List<string[]> links = BatchGetLinksFromSubsUrl(subsUrl);
-                servers.ImportLinksBatchMode(links, false);
+                slinkMgr.ImportLinkWithOutV2RayLinksBatchMode(links);
                 EnableBtnUpdate();
             });
         }

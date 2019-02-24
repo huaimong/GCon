@@ -21,6 +21,7 @@ namespace V2RayGCon.Views.WinForms
 
         Service.Servers servers;
         Service.Setting setting;
+        Service.ShareLinkMgr slinkMgr;
 
         FormSimAddVmessClient()
         {
@@ -29,6 +30,7 @@ namespace V2RayGCon.Views.WinForms
 
             servers = Service.Servers.Instance;
             setting = Service.Setting.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             VgcApis.Libs.UI.AutoSetFormIcon(this);
             this.Show();
@@ -83,9 +85,7 @@ namespace V2RayGCon.Views.WinForms
                 vmess.tls = "tls";
             }
 
-            var link = Lib.Utils.Vmess2VmessLink(vmess);
-
-            servers.ImportLinkWithOutV2RayLinks(link);
+            slinkMgr.ImportLinkWithOutV2RayLinks(vmess.ToVmessLink());
             this.Close();
         }
 
@@ -101,7 +101,7 @@ namespace V2RayGCon.Views.WinForms
 
         private void btnGenUserID_Click(object sender, EventArgs e)
         {
-            tboxUID.Text= Guid.NewGuid().ToString();
+            tboxUID.Text = Guid.NewGuid().ToString();
         }
     }
 }

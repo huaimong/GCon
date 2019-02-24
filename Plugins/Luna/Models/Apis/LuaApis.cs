@@ -12,6 +12,8 @@ namespace Luna.Models.Apis
         VgcApis.Models.IServices.IConfigMgrService vgcConfigMgr;
         VgcApis.Models.IServices.IWebService vgcWeb;
         VgcApis.Models.IServices.IUtilsService vgcUtils;
+        VgcApis.Models.IServices.IShareLinkMgrService vgcSlinkMgr;
+
 
         Action<string> redirectLogWorker;
 
@@ -21,6 +23,7 @@ namespace Luna.Models.Apis
         {
             this.settings = settings;
             this.vgcConfigMgr = api.GetConfigMgrService();
+            this.vgcSlinkMgr = api.GetShareLinkMgrService();
             this.vgcServers = api.GetServersService();
             this.vgcWeb = api.GetWebService();
             this.vgcUtils = api.GetUtilsService();
@@ -56,7 +59,7 @@ namespace Luna.Models.Apis
         public string GetAppDir() => VgcApis.Libs.Utils.GetAppDir();
 
         public string VmessLink2ConfigString(string vmessLink) =>
-            vgcConfigMgr.VmessLink2ConfigString(vmessLink);
+            vgcSlinkMgr.DecodeVmessLink(vmessLink);
 
         public string Search(string keywords, int first, int proxyPort) =>
             vgcWeb.Search(keywords, first, proxyPort, 20 * 1000);

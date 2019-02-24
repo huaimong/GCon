@@ -178,9 +178,12 @@
     <Compile Include="Service\ConfigMgr.cs" />
     <Compile Include="Service\Launcher.cs" />
     <Compile Include="Service\PluginsServer.cs" />
-    <Compile Include="Service\ServersComponents\LinkImporter.cs" />
     <Compile Include="Service\ServersComponents\IndexHandler.cs" />
     <Compile Include="Service\ServersComponents\QueryHandler.cs" />
+    <Compile Include="Service\ShareLinkComponents\VmessDecoder.cs" />
+    <Compile Include="Service\ShareLinkComponents\SsDecoder.cs" />
+    <Compile Include="Service\ShareLinkComponents\V2rayDecoder.cs" />
+    <Compile Include="Service\ShareLinkMgr.cs" />
     <Compile Include="Views\UserControls\ImportUI.cs">
       <SubType>UserControl</SubType>
     </Compile>

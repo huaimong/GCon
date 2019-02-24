@@ -9,6 +9,7 @@ namespace V2RayGCon.Controller.FormMainComponent
     {
         Service.Cache cache;
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
         readonly Service.Setting setting;
         readonly MenuStrip menuContainer;
 
@@ -30,7 +31,6 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem speedTestOnSelected,
 
             ToolStripMenuItem modifySelected,
-            ToolStripMenuItem packSelected,
             ToolStripMenuItem stopSelected,
             ToolStripMenuItem restartSelected,
 
@@ -45,6 +45,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             cache = Service.Cache.Instance;
             servers = Service.Servers.Instance;
             setting = Service.Setting.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             this.menuContainer = menuContainer; // for invoke ui update
 
@@ -65,8 +66,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 stopSelected,
                 restartSelected,
                 speedTestOnSelected,
-                modifySelected,
-                packSelected);
+                modifySelected);
 
         }
 
@@ -99,32 +99,10 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem stopSelected,
             ToolStripMenuItem restartSelected,
             ToolStripMenuItem speedTestOnSelected,
-            ToolStripMenuItem modifySelected,
-            ToolStripMenuItem packSelected)
+            ToolStripMenuItem modifySelected)
         {
-
-
             modifySelected.Click += ApplyActionOnSelectedServers(
                 () => Views.WinForms.FormBatchModifyServerSetting.GetForm());
-
-            packSelected.Click += ApplyActionOnSelectedServers(() =>
-            {
-                var list = servers
-                    .GetAllServersOrderByIndex()
-                    .Where(s => s.GetCoreStates().IsSelected())
-                    .Select(s => s as VgcApis.Models.Interfaces.ICoreServCtrl)
-                    .ToList();
-
-                if (setting.isUseV4)
-                {
-                    servers.PackServersIntoV4Package(list, null, null);
-                }
-                else
-                {
-                    list.Reverse();
-                    servers.PackServersIntoV3Package(list);
-                }
-            });
 
             speedTestOnSelected.Click += ApplyActionOnSelectedServers(() =>
             {
@@ -304,9 +282,9 @@ namespace V2RayGCon.Controller.FormMainComponent
                 {
                     continue;
                 }
-                var vmess = Lib.Utils.ConfigString2Vmess(server.GetConfiger().GetConfig());
-                var vmessLink = Lib.Utils.Vmess2VmessLink(vmess);
 
+                var configString = server.GetConfiger().GetConfig();
+                var vmessLink = slinkMgr.EncodeVmessLink(configString);
                 if (!string.IsNullOrEmpty(vmessLink))
                 {
                     result += vmessLink + System.Environment.NewLine;

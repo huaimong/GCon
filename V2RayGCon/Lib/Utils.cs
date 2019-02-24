@@ -22,7 +22,6 @@ namespace V2RayGCon.Lib
 {
     public static class Utils
     {
-
         #region Json
         public static JArray ExtractOutboundsFromConfig(string config)
         {
@@ -663,19 +662,6 @@ namespace V2RayGCon.Lib
             return links;
         }
 
-        public static string Vmess2VmessLink(Model.Data.Vmess vmess)
-        {
-            if (vmess == null)
-            {
-                return string.Empty;
-            }
-
-            string content = JsonConvert.SerializeObject(vmess);
-            return AddLinkPrefix(
-                Base64Encode(content),
-                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
-        }
-
         public static Model.Data.Vmess VmessLink2Vmess(string link)
         {
             try
@@ -684,7 +670,7 @@ namespace V2RayGCon.Lib
                 var vmess = JsonConvert.DeserializeObject<Model.Data.Vmess>(plainText);
                 if (!string.IsNullOrEmpty(vmess.add)
                     && !string.IsNullOrEmpty(vmess.port)
-                    && !string.IsNullOrEmpty(vmess.aid))
+                    && !string.IsNullOrEmpty(vmess.id))
                 {
 
                     return vmess;
@@ -694,7 +680,7 @@ namespace V2RayGCon.Lib
             return null;
         }
 
-        public static Model.Data.Shadowsocks SSLink2SS(string ssLink)
+        public static Model.Data.Shadowsocks SsLink2Ss(string ssLink)
         {
             string b64 = GetLinkBody(ssLink);
 
@@ -714,61 +700,6 @@ namespace V2RayGCon.Lib
             }
             catch { }
             return null;
-        }
-
-        public static Model.Data.Vmess ConfigString2Vmess(string config)
-        {
-            JObject json;
-            try
-            {
-                json = JObject.Parse(config);
-            }
-            catch
-            {
-                return null;
-            }
-
-            var GetStr = GetStringByPrefixAndKeyHelper(json);
-
-            Model.Data.Vmess vmess = new Model.Data.Vmess
-            {
-                v = "2",
-                ps = GetStr("v2raygcon", "alias")
-            };
-
-            var isUseV4 = (GetStr("outbounds.0", "protocol")?.ToLower()) == "vmess";
-            var root = isUseV4 ? "outbounds.0" : "outbound";
-
-            var prefix = root + "." + "settings.vnext.0";
-            vmess.add = GetStr(prefix, "address");
-            vmess.port = GetStr(prefix, "port");
-            vmess.id = GetStr(prefix, "users.0.id");
-            vmess.aid = GetStr(prefix, "users.0.alterId");
-
-            prefix = root + "." + "streamSettings";
-            vmess.net = GetStr(prefix, "network");
-            vmess.type = GetStr(prefix, "kcpSettings.header.type");
-            vmess.tls = GetStr(prefix, "security");
-
-            switch (vmess.net)
-            {
-                case "ws":
-                    vmess.path = GetStr(prefix, "wsSettings.path");
-                    vmess.host = GetStr(prefix, "wsSettings.headers.Host");
-                    break;
-                case "h2":
-                    try
-                    {
-                        vmess.path = GetStr(prefix, "httpSettings.path");
-                        var hosts = isUseV4 ?
-                            json["outbounds"][0]["streamSettings"]["httpSettings"]["host"] :
-                            json["outbound"]["streamSettings"]["httpSettings"]["host"];
-                        vmess.host = JArray2Str(hosts as JArray);
-                    }
-                    catch { }
-                    break;
-            }
-            return vmess;
         }
 
         public static JArray Str2JArray(string content)
@@ -1310,6 +1241,11 @@ namespace V2RayGCon.Lib
 
         public static bool CopyToClipboard(string content)
         {
+            if (string.IsNullOrEmpty(content))
+            {
+                return false;
+            }
+
             try
             {
                 Clipboard.SetText(content);
