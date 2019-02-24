@@ -269,18 +269,6 @@ namespace V2RayGCon.Service
             ServerTrackingUpdateWorker(fakeCtrl, false);
         }
 
-        public void Cleanup()
-        {
-            setting.isServerTrackerOn = false;
-            serverSaver.DoItNow();
-            serverSaver.Quit();
-            lazyServerTrackingTimer?.Release();
-
-            AutoResetEvent sayGoodbye = new AutoResetEvent(false);
-            StopAllServersThen(() => sayGoodbye.Set());
-            sayGoodbye.WaitOne();
-        }
-
         public int CountSelectedServers() =>
             coreServList.Count(s => s.GetCoreStates().IsSelected());
 
@@ -742,6 +730,21 @@ namespace V2RayGCon.Service
                 }
                 next?.Invoke();
             });
+        }
+
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            setting.isServerTrackerOn = false;
+            serverSaver.DoItNow();
+            serverSaver.Quit();
+            lazyServerTrackingTimer?.Release();
+
+            AutoResetEvent sayGoodbye = new AutoResetEvent(false);
+            StopAllServersThen(() => sayGoodbye.Set());
+            sayGoodbye.WaitOne();
         }
 
         #endregion

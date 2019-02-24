@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace V2RayGCon.Service.ShareLinkComponents
 {
-    internal sealed class SsDecoder :
+    internal sealed class VgcDecoder :
         VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         Cache cache;
 
-        public SsDecoder(Cache cache)
+        public VgcDecoder(Cache cache)
         {
             this.cache = cache;
         }

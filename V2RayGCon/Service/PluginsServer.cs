@@ -64,13 +64,6 @@ namespace V2RayGCon.Service
             UpdateNotifierMenu(null);
         }
 
-        public void Cleanup()
-        {
-            CleanupPlugins(plugins.Keys.ToList());
-            plugins = new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
-            vgcApis.Dispose();
-        }
-
         public List<Model.Data.PluginInfoItem> GetterAllPluginsInfo()
         {
             return GetPluginInfoFrom(plugins);
@@ -186,6 +179,15 @@ namespace V2RayGCon.Service
                 infos.Add(pluginInfo);
             }
             return infos;
+        }
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            CleanupPlugins(plugins.Keys.ToList());
+            plugins = new Dictionary<string, VgcApis.Models.Interfaces.IPlugin>();
+            vgcApis.Dispose();
         }
         #endregion
     }

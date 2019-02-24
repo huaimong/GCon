@@ -247,14 +247,6 @@ namespace V2RayGCon.Service
             return pluginsSetting;
         }
 
-        public void Cleanup()
-        {
-            lazyGCTimer?.Release();
-            lazySaveUserSettingsTimer?.Release();
-            SaveUserSettingsNow();
-            qLogger.Dispose();
-        }
-
         readonly object saveUserSettingsLocker = new object();
         public void SaveUserSettingsNow()
         {
@@ -614,6 +606,16 @@ namespace V2RayGCon.Service
             }
 
             return winFormRectListCache;
+        }
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            lazyGCTimer?.Release();
+            lazySaveUserSettingsTimer?.Release();
+            SaveUserSettingsNow();
+            qLogger.Dispose();
         }
         #endregion
 

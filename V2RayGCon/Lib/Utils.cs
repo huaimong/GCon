@@ -1194,11 +1194,11 @@ namespace V2RayGCon.Lib
                 case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
                 case VgcApis.Models.Datas.Enum.LinkTypes.v2ray:
                     pattern = GenLinkPrefix(linkType) + "://" +
-                        VgcApis.Models.Consts.Files.PatternBase64;
+                        VgcApis.Models.Consts.Patterns.PatternBase64;
                     break;
                 case VgcApis.Models.Datas.Enum.LinkTypes.http:
                 default:
-                    pattern = VgcApis.Models.Consts.Files.PatternUrl;
+                    pattern = VgcApis.Models.Consts.Patterns.PatternUrl;
                     break;
             }
 

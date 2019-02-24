@@ -57,6 +57,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libs\Streams\BitStream.cs" />
+    <Compile Include="Libs\Streams\BitStreamComponents\Characters.cs" />
+    <Compile Include="Libs\Streams\BitStreamComponents\Numbers.cs" />
     <Compile Include="Libs\Tasks\Bar.cs" />
     <Compile Include="Libs\Tasks\Routine.cs" />
     <Compile Include="Libs\Views\RepaintCtrl.cs" />

@@ -13,15 +13,11 @@ namespace V2RayGCon.Service
         Servers servers;
         Cache cache;
 
-        ShareLinkComponents.SsDecoder ssDecoder;
-        ShareLinkComponents.VmessDecoder vmessDecoder;
-        ShareLinkComponents.V2rayDecoder v2rayDecoder;
+        ShareLinkComponents.Codecs codecs;
 
         public ShareLinkMgr()
         {
-            ssDecoder = new ShareLinkComponents.SsDecoder();
-            vmessDecoder = new ShareLinkComponents.VmessDecoder();
-            v2rayDecoder = new ShareLinkComponents.V2rayDecoder();
+            codecs = new ShareLinkComponents.Codecs();
         }
 
         #region properties
@@ -30,13 +26,13 @@ namespace V2RayGCon.Service
 
         #region IShareLinkMgrService methods
         public string DecodeVmessLink(string vmessLink) =>
-            vmessDecoder.DecodeLink(vmessLink);
+            codecs.Decode<ShareLinkComponents.VmessDecoder>(vmessLink);
 
         public string EncodeVmessLink(string config) =>
-            vmessDecoder.EncodeLink(config);
+            codecs.Encode<ShareLinkComponents.VmessDecoder>(config);
 
         public string EncodeV2rayLink(string config) =>
-            v2rayDecoder.EncodeLink(config);
+            codecs.Encode<ShareLinkComponents.V2rayDecoder>(config);
 
         #endregion
 
@@ -73,15 +69,7 @@ namespace V2RayGCon.Service
             this.servers = servers;
             this.cache = cache;
 
-            ssDecoder.Run(setting, cache);
-            vmessDecoder.Run(setting, cache);
-        }
-
-        public void Cleanup()
-        {
-            ssDecoder?.Dispose();
-            vmessDecoder?.Dispose();
-            v2rayDecoder?.Dispose();
+            codecs.Run(cache, setting);
         }
 
         #endregion
@@ -102,13 +90,13 @@ namespace V2RayGCon.Service
         {
             var decoders = new List<VgcApis.Models.Interfaces.IShareLinkDecoder>
             {
-                ssDecoder,
-                vmessDecoder,
+                codecs.GetComponent<ShareLinkComponents.SsDecoder>(),
+                codecs.GetComponent<ShareLinkComponents.VmessDecoder>(),
             };
 
             if (isIncludeV2rayDecoder)
             {
-                decoders.Add(v2rayDecoder);
+                decoders.Add(codecs.GetComponent<ShareLinkComponents.V2rayDecoder>());
             }
 
             return decoders;
@@ -186,7 +174,7 @@ namespace V2RayGCon.Service
             List<string[]> results = new List<string[]>();
             foreach (var link in links)
             {
-                var decodedConfig = decoder.DecodeLink(link);
+                var decodedConfig = decoder.Decode(link);
                 var result = AddLinkToServerList(mark, decodedConfig);
                 if (result.Item1)
                 {
@@ -228,7 +216,10 @@ namespace V2RayGCon.Service
         #endregion
 
         #region protected methods
-
+        protected override void Cleanup()
+        {
+            codecs?.Dispose();
+        }
         #endregion
     }
 }

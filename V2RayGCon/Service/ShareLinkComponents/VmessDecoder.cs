@@ -5,33 +5,27 @@ using System.Linq;
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     internal sealed class VmessDecoder :
-        VgcApis.Models.BaseClasses.Disposable,
+        VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         Cache cache;
-        Setting setting;
-        public VmessDecoder() { }
 
+        public VmessDecoder(Cache cache)
+        {
+            this.cache = cache;
+        }
         #region properties
 
         #endregion
 
         #region public methods
-        public void Run(
-            Setting setting,
-            Cache cache)
-        {
-            this.cache = cache;
-            this.setting = setting;
-        }
-
-        public string DecodeLink(string shareLink)
+        public string Decode(string shareLink)
         {
             var vmess = Lib.Utils.VmessLink2Vmess(shareLink);
             return Vmess2Config(vmess);
         }
 
-        public string EncodeLink(string config) =>
+        public string Encode(string config) =>
             ConfigString2Vmess(config)?.ToVmessLink();
 
         public List<string> ExtractLinksFromText(string text) =>
@@ -107,10 +101,6 @@ namespace V2RayGCon.Service.ShareLinkComponents
                 return null;
             }
 
-            // prepare template
-            var config = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
-            config["v2raygcon"]["alias"] = vmess.ps;
-
             var outVmess = cache.tpl.LoadTemplate("outbVmess");
             outVmess["streamSettings"] = GenStreamSetting(vmess);
             var node = outVmess["settings"]["vnext"][0];
@@ -119,18 +109,9 @@ namespace V2RayGCon.Service.ShareLinkComponents
             node["users"][0]["id"] = vmess.id;
             node["users"][0]["alterId"] = Lib.Utils.Str2Int(vmess.aid);
 
-            var isV4 = setting.isUseV4;
-            var inbound = Lib.Utils.CreateJObject(
-                (isV4 ? "inbounds.0" : "inbound"),
-                cache.tpl.LoadTemplate("inbSimSock"));
-
-            var outbound = Lib.Utils.CreateJObject(
-                (isV4 ? "outbounds.0" : "outbound"),
-                outVmess);
-
-            Lib.Utils.MergeJson(ref config, inbound);
-            Lib.Utils.MergeJson(ref config, outbound);
-            return Lib.Utils.Config2String(config as JObject);
+            var tpl = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
+            tpl["v2raygcon"]["alias"] = vmess.ps;
+            return GetContainer()?.FillDefConfig(ref tpl, outVmess);
         }
 
         JToken GenStreamSetting(Model.Data.Vmess vmess)

@@ -83,15 +83,6 @@ namespace V2RayGCon.Service
                     2, oldPluginMenu));
         }
 
-        public void Cleanup()
-        {
-            ni.Visible = false;
-
-            servers.OnRequireNotifyTextUpdate -=
-                OnRequireNotifyTextUpdateHandler;
-
-            notifierUpdater.Quit();
-        }
         #endregion
 
         #region private method
@@ -283,6 +274,18 @@ namespace V2RayGCon.Service
             });
 
             return menu;
+        }
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            ni.Visible = false;
+
+            servers.OnRequireNotifyTextUpdate -=
+                OnRequireNotifyTextUpdateHandler;
+
+            notifierUpdater.Quit();
         }
         #endregion
     }

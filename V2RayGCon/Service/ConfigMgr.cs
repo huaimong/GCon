@@ -345,10 +345,6 @@ namespace V2RayGCon.Service
             this.servers = servers;
         }
 
-        public void Cleanup()
-        {
-
-        }
         #endregion
 
         #region private methods

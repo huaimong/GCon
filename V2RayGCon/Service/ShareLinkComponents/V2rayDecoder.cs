@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     internal sealed class V2rayDecoder :
-        VgcApis.Models.BaseClasses.Disposable,
+        VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         public V2rayDecoder() { }
@@ -14,7 +14,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region public methods
-        public string DecodeLink(string shareLink)
+        public string Decode(string shareLink)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
             return null;
         }
 
-        public string EncodeLink(string config)
+        public string Encode(string config)
         {
             if (string.IsNullOrEmpty(config))
             {
