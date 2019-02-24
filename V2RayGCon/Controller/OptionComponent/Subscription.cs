@@ -69,7 +69,8 @@ namespace V2RayGCon.Controller.OptionComponent
         #region private method
         string GetCurOptions()
         {
-            return JsonConvert.SerializeObject(CollectSubscriptionItems());
+            return JsonConvert.SerializeObject(
+                CollectSubscriptionItems());
         }
 
         List<Model.Data.SubscriptionItem> CollectSubscriptionItems()
@@ -156,12 +157,12 @@ namespace V2RayGCon.Controller.OptionComponent
                 var data = a.Data.GetData(typeof(Views.UserControls.SubscriptionUI))
                     as Views.UserControls.SubscriptionUI;
 
-                var _destination = s as FlowLayoutPanel;
-                Point p = _destination.PointToClient(new Point(a.X, a.Y));
-                var item = _destination.GetChildAtPoint(p);
-                int index = _destination.Controls.GetChildIndex(item, false);
-                _destination.Controls.SetChildIndex(data, index);
-                _destination.Invalidate();
+                var dest = s as FlowLayoutPanel;
+                Point p = dest.PointToClient(new Point(a.X, a.Y));
+                var item = dest.GetChildAtPoint(p);
+                int index = dest.Controls.GetChildIndex(item, false);
+                dest.Controls.SetChildIndex(data, index);
+                dest.Invalidate();
             };
         }
 
@@ -196,7 +197,6 @@ namespace V2RayGCon.Controller.OptionComponent
                 List<string[]> links = BatchGetLinksFromSubsUrl(subsUrl);
                 servers.ImportLinksBatchMode(links, false);
                 EnableBtnUpdate();
-
             });
         }
 
@@ -223,13 +223,15 @@ namespace V2RayGCon.Controller.OptionComponent
         private List<string[]> BatchGetLinksFromSubsUrl(
             List<KeyValuePair<string, string>> subscriptionInfos)
         {
-            var timeout = Lib.Utils.Str2Int(StrConst.ParseImportTimeOut) * 1000;
             var proxyPort = GetAvailableHttpProxyPort();
 
             Func<KeyValuePair<string, string>, string[]> worker = (item) =>
             {
                 // item[url]=mark
-                var subsString = Lib.Utils.Fetch(item.Key, proxyPort, timeout);
+                var subsString = Lib.Utils.Fetch(
+                    item.Key,
+                    proxyPort,
+                    VgcApis.Models.Consts.Import.ParseImportTimeout);
 
                 if (string.IsNullOrEmpty(subsString))
                 {
@@ -238,7 +240,9 @@ namespace V2RayGCon.Controller.OptionComponent
                 }
 
                 var links = new List<string>();
-                var matches = Regex.Matches(subsString, StrConst.PatternBase64NonStandard);
+                var matches = Regex.Matches(
+                    subsString,
+                    VgcApis.Models.Consts.Patterns.PatternBase64NonStandard);
                 foreach (Match match in matches)
                 {
                     try

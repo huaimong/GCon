@@ -151,10 +151,6 @@
   <data name="PatternNonAlphabet" xml:space="preserve">
     <value>[^0-9a-zA-Z]</value>
   </data>
-  <data name="PatternBase64NonStandard" xml:space="preserve">
-    <value>[A-Za-z0-9+/]+</value>
-    <comment>Why people always do not follow the standard!</comment>
-  </data>
   <data name="LatestCoreLink" xml:space="preserve">
     <value>https://github.com/v2ray/v2ray-core/releases/latest</value>
   </data>
@@ -175,10 +171,6 @@
   </data>
   <data name="VlinkWiki" xml:space="preserve">
     <value>https://github.com/nobody3u/V2RayGCon/wiki/vlink</value>
-  </data>
-  <data name="ParseImportTimeOut" xml:space="preserve">
-    <value>12</value>
-    <comment>seconds</comment>
   </data>
   <data name="ParseImportDepth" xml:space="preserve">
     <value>5</value>

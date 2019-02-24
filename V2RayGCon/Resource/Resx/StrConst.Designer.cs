@@ -365,24 +365,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 12 的本地化字符串。
-        /// </summary>
-        internal static string ParseImportTimeOut {
-            get {
-                return ResourceManager.GetString("ParseImportTimeOut", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 [A-Za-z0-9+/]+ 的本地化字符串。
-        /// </summary>
-        internal static string PatternBase64NonStandard {
-            get {
-                return ResourceManager.GetString("PatternBase64NonStandard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 /v2ray/v2ray-core/releases/download/(v[\.0-9]+)/v2ray-windows-64.zip 的本地化字符串。
         /// </summary>
         internal static string PatternDownloadLink {

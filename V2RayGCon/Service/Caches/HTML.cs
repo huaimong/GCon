@@ -26,9 +26,6 @@ namespace V2RayGCon.Service.Caches
             var c = data[url];
             lock (c.rwLock)
             {
-                var timeout = Lib.Utils.Str2Int(
-                    StrConst.ParseImportTimeOut);
-
                 var retry = Lib.Utils.Str2Int(
                     StrConst.ParseImportRetry);
 
@@ -36,7 +33,9 @@ namespace V2RayGCon.Service.Caches
                     i < retry && string.IsNullOrEmpty(c.content);
                     i++)
                 {
-                    c.content = Lib.Utils.Fetch(url, timeout * 1000);
+                    c.content = Lib.Utils.Fetch(
+                        url,
+                        VgcApis.Models.Consts.Import.ParseImportTimeout);
                 }
             }
 
