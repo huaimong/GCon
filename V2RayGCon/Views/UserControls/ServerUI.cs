@@ -535,6 +535,12 @@ namespace V2RayGCon.Views.UserControls
             new WinForms.FormConfiger(finalConfig.ToString(Formatting.Indented));
         }
 
+        private void vToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var vee = slinkMgr.EncodeVeeLink(GetConfig());
+            var success = Lib.Utils.CopyToClipboard(vee);
+            MessageBox.Show(success ? I18N.LinksCopied : I18N.CopyFail);
+        }
         #endregion
     }
 }

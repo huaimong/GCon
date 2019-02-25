@@ -242,6 +242,7 @@ namespace V2RayGCon.Views.WinForms
                 //ToolStripMenuItem copyAsSubscriptions,
                 toolStripMenuItemCopyAsV2rayLink,
                 toolStripMenuItemCopyAsVmessLink,
+                toolStripMenuItemCopyAsVeeLink,
                 toolStripMenuItemCopyAsSubscription,
 
                 //// batch op

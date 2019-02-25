@@ -1193,6 +1193,7 @@ namespace V2RayGCon.Lib
                 case VgcApis.Models.Datas.Enum.LinkTypes.ss:
                 case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
                 case VgcApis.Models.Datas.Enum.LinkTypes.v2ray:
+                case VgcApis.Models.Datas.Enum.LinkTypes.v:
                     pattern = GenLinkPrefix(linkType) + "://" +
                         VgcApis.Models.Consts.Patterns.PatternBase64;
                     break;

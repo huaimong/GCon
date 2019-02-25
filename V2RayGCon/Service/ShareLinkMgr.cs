@@ -31,6 +31,9 @@ namespace V2RayGCon.Service
         public string EncodeVmessLink(string config) =>
             codecs.Encode<ShareLinkComponents.VmessDecoder>(config);
 
+        public string EncodeVeeLink(string config) =>
+            codecs.Encode<ShareLinkComponents.VeeDecoder>(config);
+
         public string EncodeV2rayLink(string config) =>
             codecs.Encode<ShareLinkComponents.V2rayDecoder>(config);
 
@@ -92,6 +95,7 @@ namespace V2RayGCon.Service
             {
                 codecs.GetComponent<ShareLinkComponents.SsDecoder>(),
                 codecs.GetComponent<ShareLinkComponents.VmessDecoder>(),
+                codecs.GetComponent<ShareLinkComponents.VeeDecoder>(),
             };
 
             if (isIncludeV2rayDecoder)

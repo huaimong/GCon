@@ -1,13 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace VgcApis.Libs.Streams.BitStreamComponents
 {
     public sealed class Numbers :
         Models.BaseClasses.ComponentOf<BitStream>
     {
+
+        const int BitsPerPort = Models.Consts.BitStream.BitsPerPort;
         public Numbers() { }
 
         #region public methods
+        public void WritePortNum(int val) =>
+            Write(val, BitsPerPort);
+
+        public int ReadPortNum() =>
+            Read(BitsPerPort);
+
         public void Write(int val, int len)
         {
             if (val < 0 || val > 65535)
@@ -17,28 +26,31 @@ namespace VgcApis.Libs.Streams.BitStreamComponents
 
             CheckLen(len);
 
-            var stream = GetContainer().GetBitStream();
+            var cache = new List<bool>();
             while (len > 0)
             {
-                stream.Enqueue(val % 2 == 1);
+                cache.Add(val % 2 == 1);
                 val /= 2;
                 len--;
             }
+
+            GetContainer().Write(cache);
         }
 
         public int Read(int len)
         {
             CheckLen(len);
 
-            var stream = GetContainer().GetBitStream();
+            var cache = GetContainer().Read(len);
+            if (cache.Count != len)
+            {
+                throw new NullReferenceException("Read overflow!");
+            }
             int pow = 1;
             int sum = 0;
             for (int i = 0; i < len; i++)
             {
-                if (!stream.TryDequeue(out bool bit))
-                {
-                    throw new NullReferenceException("Queue is empty!");
-                }
+                var bit = cache[i];
                 sum += pow * (bit ? 1 : 0);
                 pow *= 2;
             }

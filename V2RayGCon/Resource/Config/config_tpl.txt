@@ -51,6 +51,24 @@
     "protocol": "socks",
     "settings": {}
   },
+  "outbVee": {
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [
+        {
+          "address": "",
+          "port": 1234,
+          "users": [
+            {
+              "id": ""
+            }
+          ]
+        }
+      ]
+    },
+    "tag": "agentout",
+    "streamSettings": {}
+  },
   "outbVmess": {
     "protocol": "vmess",
     "settings": {

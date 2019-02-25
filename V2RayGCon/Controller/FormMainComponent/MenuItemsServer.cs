@@ -25,6 +25,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             // copy
             ToolStripMenuItem copyAsV2rayLinks,
             ToolStripMenuItem copyAsVmessLinks,
+            ToolStripMenuItem copyAsVeeLinks,
             ToolStripMenuItem copyAsSubscriptions,
 
             // batch op
@@ -55,6 +56,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             InitCtrlCopyToClipboard(
                 copyAsV2rayLinks,
                 copyAsVmessLinks,
+                copyAsVeeLinks,
                 copyAsSubscriptions);
 
             InitCtrlMisc(
@@ -162,7 +164,11 @@ namespace V2RayGCon.Controller.FormMainComponent
             });
         }
 
-        private void InitCtrlCopyToClipboard(ToolStripMenuItem copyAsV2rayLinks, ToolStripMenuItem copyAsVmessLinks, ToolStripMenuItem copyAsSubscriptions)
+        private void InitCtrlCopyToClipboard(
+            ToolStripMenuItem copyAsV2rayLinks,
+            ToolStripMenuItem copyAsVmessLinks,
+            ToolStripMenuItem copyAsVeeLinks,
+            ToolStripMenuItem copyAsSubscriptions)
         {
             copyAsSubscriptions.Click += ApplyActionOnSelectedServers(() =>
             {
@@ -195,6 +201,15 @@ namespace V2RayGCon.Controller.FormMainComponent
                 MessageBox.Show(
                    Lib.Utils.CopyToClipboard(
                        EncodeAllServersIntoVmessLinks()) ?
+                   I18N.LinksCopied :
+                   I18N.CopyFail);
+            });
+
+            copyAsVeeLinks.Click += ApplyActionOnSelectedServers(() =>
+            {
+                MessageBox.Show(
+                   Lib.Utils.CopyToClipboard(
+                       EncodeAllServersIntoVeeLinks()) ?
                    I18N.LinksCopied :
                    I18N.CopyFail);
             });
@@ -270,6 +285,30 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             RemoveAllControlsAndRefreshFlyPanel();
         }
+
+        string EncodeAllServersIntoVeeLinks()
+        {
+            var serverList = servers.GetAllServersOrderByIndex();
+            string result = string.Empty;
+
+            foreach (var server in serverList)
+            {
+                if (!server.GetCoreStates().IsSelected())
+                {
+                    continue;
+                }
+
+                var configString = server.GetConfiger().GetConfig();
+                var veeLink = slinkMgr.EncodeVeeLink(configString);
+                if (!string.IsNullOrEmpty(veeLink))
+                {
+                    result += veeLink + System.Environment.NewLine;
+                }
+            }
+
+            return result;
+        }
+
 
         string EncodeAllServersIntoVmessLinks()
         {

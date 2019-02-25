@@ -121,6 +121,10 @@
   <data name="cboxMark.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
   </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="toolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>237, 6</value>
+  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="lbStatus.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -128,12 +132,11 @@
   <data name="btnMultiboxing.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="moveToBottomToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>119, 22</value>
+    <value>156, 30</value>
   </data>
   <data name="rtboxServerTitle.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 13</value>
+    <value>345, 20</value>
   </data>
   <data name="label4.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
     <value>MiddleCenter</value>
@@ -144,47 +147,59 @@
   <data name="label4.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
+  <data name="stopToolStripMenuItem1.Text" xml:space="preserve">
+    <value>Stop</value>
+  </data>
   <data name="untrackToolStripMenuItem.Text" xml:space="preserve">
     <value>Untrack</value>
   </data>
   <data name="btnIsCollapse.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
-  <data name="lbStatus.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
-  </data>
-  <data name="&gt;&gt;toolStripMenuItem6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;btnIsCollapse.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;btnMenu.Name" xml:space="preserve">
     <value>btnMenu</value>
   </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="&gt;&gt;btnMenu.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="cboxMark.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="vToolStripMenuItem.Text" xml:space="preserve">
+    <value>v:// ...</value>
+  </data>
+  <data name="copyToolStripMenuItem.Text" xml:space="preserve">
+    <value>Copy</value>
   </data>
   <data name="lbRunning.Size" type="System.Drawing.Size, System.Drawing">
-    <value>26, 20</value>
+    <value>39, 30</value>
+  </data>
+  <data name="&gt;&gt;vmessToolStripMenuItem.Name" xml:space="preserve">
+    <value>vmessToolStripMenuItem</value>
   </data>
   <data name="lbStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 21</value>
+    <value>112, 32</value>
   </data>
-  <data name="&gt;&gt;lbStatus.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;cboxInbound.Name" xml:space="preserve">
+    <value>cboxInbound</value>
   </data>
-  <data name="&gt;&gt;logOfThisServerToolStripMenuItem.Name" xml:space="preserve">
-    <value>logOfThisServerToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;autorunToolStripMenuItem.Name" xml:space="preserve">
-    <value>autorunToolStripMenuItem</value>
+  <data name="&gt;&gt;toolStripMenuItem6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;cboxInbound.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;moveToTopToolStripMenuItem.Name" xml:space="preserve">
-    <value>moveToTopToolStripMenuItem</value>
+  <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
+    <value>toolTip1</value>
+  </data>
+  <data name="untrackToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Do not track this server.</value>
+  </data>
+  <data name="ctxMenuStripMore.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="&gt;&gt;tboxInboundAddr.Name" xml:space="preserve">
     <value>tboxInboundAddr</value>
@@ -196,13 +211,13 @@
     <value>1</value>
   </data>
   <data name="toolStripMenuItem6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
   <data name="runSpeedTestToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
-  <data name="&gt;&gt;btnStart.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="lbStatus.ToolTip" xml:space="preserve">
+    <value>Drag and drop to adjust order.</value>
   </data>
   <data name="label4.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -210,17 +225,17 @@
   <data name="&gt;&gt;chkSelected.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="runSpeedTestToolStripMenuItem1.Text" xml:space="preserve">
-    <value>Run speed test</value>
+  <data name="logOfThisServerToolStripMenuItem.Text" xml:space="preserve">
+    <value>Log of this server</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItem4.Name" xml:space="preserve">
-    <value>toolStripMenuItem4</value>
+  <data name="btnMultiboxing.TabIndex" type="System.Int32, mscorlib">
+    <value>15</value>
   </data>
-  <data name="tboxInboundAddr.Size" type="System.Drawing.Size, System.Drawing">
-    <value>96, 21</value>
+  <data name="lbIsAutorun.Text" xml:space="preserve">
+    <value>ACIU</value>
   </data>
-  <data name="stopToolStripMenuItem1.Text" xml:space="preserve">
-    <value>Stop</value>
+  <data name="lbStatus.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="&gt;&gt;cboxInbound.ZOrder" xml:space="preserve">
     <value>11</value>
@@ -228,8 +243,8 @@
   <data name="&gt;&gt;cboxMark.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="toolStripMenuItem4.Text" xml:space="preserve">
-    <value>Setting</value>
+  <data name="btnStart.Location" type="System.Drawing.Point, System.Drawing">
+    <value>442, 8</value>
   </data>
   <data name="btnMenu.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -237,14 +252,20 @@
   <data name="&gt;&gt;untrackToolStripMenuItem.Name" xml:space="preserve">
     <value>untrackToolStripMenuItem</value>
   </data>
+  <data name="&gt;&gt;btnStop.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="&gt;&gt;cboxMark.Name" xml:space="preserve">
     <value>cboxMark</value>
   </data>
-  <data name="&gt;&gt;ctxMenuStripMore.Name" xml:space="preserve">
-    <value>ctxMenuStripMore</value>
+  <data name="&gt;&gt;lbStatus.Name" xml:space="preserve">
+    <value>lbStatus</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;deleteToolStripMenuItem.Name" xml:space="preserve">
+    <value>deleteToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;cboxMark.Parent" xml:space="preserve">
     <value>$this</value>
@@ -255,14 +276,20 @@
   <data name="&gt;&gt;btnStart.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <data name="&gt;&gt;runSpeedTestToolStripMenuItem1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;moveToBottomToolStripMenuItem.Name" xml:space="preserve">
+    <value>moveToBottomToolStripMenuItem</value>
+  </data>
+  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
+    <value>616, 88</value>
   </data>
   <data name="lbIsAutorun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>34, 21</value>
+    <value>51, 32</value>
+  </data>
+  <data name="&gt;&gt;copyToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="btnMultiboxing.Location" type="System.Drawing.Point, System.Drawing">
-    <value>315, 5</value>
+    <value>472, 8</value>
   </data>
   <data name="&gt;&gt;tboxInboundAddr.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -270,47 +297,53 @@
   <data name="moveToBottomToolStripMenuItem.Text" xml:space="preserve">
     <value>Bottom</value>
   </data>
-  <data name="globalImportToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Inject global import when this server start.</value>
+  <data name="lbRunning.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="&gt;&gt;btnStop.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="ctxMenuStripMore.ToolTip" xml:space="preserve">
-    <value />
+  <data name="&gt;&gt;moveToTopToolStripMenuItem.Name" xml:space="preserve">
+    <value>moveToTopToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;tboxInboundAddr.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <data name="stopToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+  <data name="&gt;&gt;toolStripMenuItem4.Name" xml:space="preserve">
+    <value>toolStripMenuItem4</value>
   </data>
-  <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="stopToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>198, 30</value>
+  </data>
+  <data name="runSpeedTestToolStripMenuItem1.ToolTipText" xml:space="preserve">
+    <value>The time it took to download webpage https://www.google.com.</value>
   </data>
   <data name="&gt;&gt;lbRunning.ZOrder" xml:space="preserve">
     <value>13</value>
   </data>
+  <data name="&gt;&gt;stopToolStripMenuItem1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="rtboxServerTitle.Location" type="System.Drawing.Point, System.Drawing">
-    <value>59, 9</value>
+    <value>88, 13</value>
   </data>
   <data name="&gt;&gt;ctxMenuStripMore.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tboxInboundAddr.Parent" xml:space="preserve">
-    <value>$this</value>
   </data>
   <data name="&gt;&gt;copyToolStripMenuItem.Name" xml:space="preserve">
     <value>copyToolStripMenuItem</value>
   </data>
   <data name="cboxMark.Location" type="System.Drawing.Point, System.Drawing">
-    <value>295, 32</value>
+    <value>444, 48</value>
   </data>
-  <data name="lbIsAutorun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>377, 32</value>
+  <data name="btnMultiboxing.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
-  <data name="&gt;&gt;vmessToolStripMenuItem.Name" xml:space="preserve">
-    <value>vmessToolStripMenuItem</value>
+  <data name="&gt;&gt;runSpeedTestToolStripMenuItem1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="btnStop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="btnStop.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -323,13 +356,13 @@
     <value>MiddleCenter</value>
   </data>
   <data name="editToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
-  <data name="&gt;&gt;autorunToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="editToolStripMenuItem.Text" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="v2rayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 22</value>
+  <data name="&gt;&gt;btnStop.Name" xml:space="preserve">
+    <value>btnStop</value>
   </data>
   <data name="&gt;&gt;rtboxServerTitle.Type" xml:space="preserve">
     <value>System.Windows.Forms.RichTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -338,7 +371,7 @@
     <value>btnIsCollapse</value>
   </data>
   <data name="cboxInbound.Location" type="System.Drawing.Point, System.Drawing">
-    <value>40, 32</value>
+    <value>60, 48</value>
   </data>
   <data name="rtboxServerTitle.TabIndex" type="System.Int32, mscorlib">
     <value>16</value>
@@ -347,7 +380,10 @@
     <value>v2rayToolStripMenuItem</value>
   </data>
   <data name="startToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>198, 30</value>
+  </data>
+  <data name="&gt;&gt;moveToBottomToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="btnMultiboxing.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -358,8 +394,8 @@
         /BvPoOv7PhnmJAIOS0DZQ9qC5rKnXEp283uoegLMLHdaNBg49QAAAABJRU5ErkJggg==
 </value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItem2.Name" xml:space="preserve">
-    <value>toolStripMenuItem2</value>
+  <data name="&gt;&gt;btnStart.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="lbRunning.ToolTip" xml:space="preserve">
     <value>Drag and drop to adjust order.</value>
@@ -371,13 +407,19 @@
     <value>Move</value>
   </data>
   <data name="logOfThisServerToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
   <data name="&gt;&gt;lbIsAutorun.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="&gt;&gt;stopToolStripMenuItem1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="autorunToolStripMenuItem.Text" xml:space="preserve">
+    <value>Autorun</value>
+  </data>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>9, 18</value>
+  </data>
+  <data name="v2rayToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>252, 30</value>
   </data>
   <data name="&gt;&gt;v2rayToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -386,25 +428,25 @@
     <value>startToolStripMenuItem</value>
   </data>
   <data name="untrackToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>232, 30</value>
   </data>
   <data name="label4.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 36</value>
+    <value>12, 52</value>
   </data>
   <data name="lbIsAutorun.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="toolStripMenuItem3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
-  <data name="btnMultiboxing.TabIndex" type="System.Int32, mscorlib">
-    <value>15</value>
+  <data name="cboxMark.Size" type="System.Drawing.Size, System.Drawing">
+    <value>118, 26</value>
   </data>
   <data name="btnMultiboxing.ToolTip" xml:space="preserve">
     <value>Start this server along with others.</value>
   </data>
-  <data name="btnMenu.Location" type="System.Drawing.Point, System.Drawing">
-    <value>355, 5</value>
+  <data name="tboxInboundAddr.Size" type="System.Drawing.Size, System.Drawing">
+    <value>142, 28</value>
   </data>
   <data name="btnStart.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
@@ -412,14 +454,17 @@
   <data name="&gt;&gt;chkSelected.Name" xml:space="preserve">
     <value>chkSelected</value>
   </data>
-  <data name="btnIsCollapse.ImageIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="btnStop.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 30</value>
   </data>
   <data name="cboxInbound.Items2" xml:space="preserve">
     <value>SOCKS</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>ServerUI</value>
+  </data>
+  <data name="&gt;&gt;logOfThisServerToolStripMenuItem.Name" xml:space="preserve">
+    <value>logOfThisServerToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;btnMenu.ZOrder" xml:space="preserve">
     <value>10</value>
@@ -430,14 +475,14 @@
   <data name="&gt;&gt;logOfThisServerToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
-    <value>toolTip1</value>
+  <data name="tboxInboundAddr.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="&gt;&gt;moveToTopToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="btnIsCollapse.Location" type="System.Drawing.Point, System.Drawing">
-    <value>383, 5</value>
+    <value>574, 8</value>
   </data>
   <data name="&gt;&gt;editToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -445,11 +490,8 @@
   <data name="&gt;&gt;skipCNWebsiteToolStripMenuItem.Name" xml:space="preserve">
     <value>skipCNWebsiteToolStripMenuItem</value>
   </data>
-  <data name="startToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Stop all running servers and start this server.</value>
-  </data>
-  <data name="&gt;&gt;deleteToolStripMenuItem.Name" xml:space="preserve">
-    <value>deleteToolStripMenuItem</value>
+  <data name="debugToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Final config for v2ray-core.</value>
   </data>
   <data name="rtboxServerTitle.Multiline" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -457,8 +499,14 @@
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
     <value>12</value>
   </data>
-  <data name="&gt;&gt;editToolStripMenuItem.Name" xml:space="preserve">
-    <value>editToolStripMenuItem</value>
+  <data name="&gt;&gt;toolStripMenuItem4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;vToolStripMenuItem.Name" xml:space="preserve">
+    <value>vToolStripMenuItem</value>
+  </data>
+  <data name="btnIsCollapse.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 30</value>
   </data>
   <data name="lbStatus.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -466,29 +514,26 @@
   <data name="&gt;&gt;cboxMark.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="lbIsAutorun.Text" xml:space="preserve">
-    <value>ACIU</value>
+  <data name="label4.ToolTip" xml:space="preserve">
+    <value>Inbound protocol. Config means keep original inbound config.</value>
   </data>
   <data name="btnStart.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>30, 30</value>
   </data>
   <data name="moveToTopToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Move this server to top.</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItem4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="btnMenu.Location" type="System.Drawing.Point, System.Drawing">
+    <value>532, 8</value>
   </data>
-  <data name="autorunToolStripMenuItem.Text" xml:space="preserve">
-    <value>Autorun</value>
+  <data name="&gt;&gt;tboxInboundAddr.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="&gt;&gt;chkSelected.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="vmessToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>138, 22</value>
-  </data>
-  <data name="skipCNWebsiteToolStripMenuItem.Text" xml:space="preserve">
-    <value>Skip CN website</value>
+    <value>252, 30</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem6.Name" xml:space="preserve">
     <value>toolStripMenuItem6</value>
@@ -496,8 +541,11 @@
   <data name="stopToolStripMenuItem1.ToolTipText" xml:space="preserve">
     <value>Stop this server.</value>
   </data>
+  <data name="&gt;&gt;lbRunning.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
   <data name="btnMenu.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>30, 30</value>
   </data>
   <data name="v2rayToolStripMenuItem.Text" xml:space="preserve">
     <value>v2ray:// ...</value>
@@ -505,11 +553,17 @@
   <data name="&gt;&gt;untrackToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="label4.ToolTip" xml:space="preserve">
-    <value>Inbound protocol. Config means keep original inbound config.</value>
+  <data name="globalImportToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Inject global import when this server start.</value>
   </data>
-  <data name="&gt;&gt;moveToBottomToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="label4.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="&gt;&gt;stopToolStripMenuItem1.Name" xml:space="preserve">
+    <value>stopToolStripMenuItem1</value>
+  </data>
+  <data name="v2rayToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Contain all config information.</value>
   </data>
   <data name="btnMenu.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
@@ -517,8 +571,8 @@
   <data name="btnStop.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
   </data>
-  <data name="&gt;&gt;toolStripMenuItem3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="vToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Contain main config information.</value>
   </data>
   <data name="chkSelected.ToolTip" xml:space="preserve">
     <value>Select this server.</value>
@@ -526,8 +580,8 @@
   <data name="btnStart.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
   </data>
-  <data name="&gt;&gt;lbRunning.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="chkSelected.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
   </data>
   <data name="&gt;&gt;skipCNWebsiteToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -535,18 +589,12 @@
   <data name="vmessToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Contain main config information.</value>
   </data>
-  <data name="cboxMark.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 20</value>
-  </data>
   <data name="btnMenu.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
         xAAADsQBlSsOGwAAAERJREFUOE+1zqENADAMA8HOlv3nCXVZSR/ErQxOigJeXpK+4NNxju6WAwNVNZIL
         ODIBmktyAUcmQHNJLuC4Aq/wOae1ARVS/s9sUlFoAAAAAElFTkSuQmCC
 </value>
-  </data>
-  <data name="autorunToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Start this server along with this software.</value>
   </data>
   <data name="&gt;&gt;multiboxingToolStripMenuItem1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -558,22 +606,13 @@
     <value>NoControl</value>
   </data>
   <data name="debugToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
-  </data>
-  <data name="lbRunning.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+    <value>240, 28</value>
   </data>
   <data name="autorunToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>232, 30</value>
   </data>
   <data name="deleteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
-  </data>
-  <data name="debugToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Final config for v2ray-core.</value>
-  </data>
-  <data name="&gt;&gt;btnStart.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>240, 28</value>
   </data>
   <data name="&gt;&gt;label4.Name" xml:space="preserve">
     <value>label4</value>
@@ -584,23 +623,23 @@
   <data name="lbIsAutorun.TabIndex" type="System.Int32, mscorlib">
     <value>14</value>
   </data>
-  <data name="&gt;&gt;btnIsCollapse.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;vToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="btnMenu.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+  <data name="autorunToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Start this server along with this software.</value>
+  </data>
+  <data name="chkSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="tboxInboundAddr.ToolTip" xml:space="preserve">
     <value>Valid only for HTTP or SOCKS mode.</value>
   </data>
-  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
   <data name="&gt;&gt;startToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="untrackToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Do not track this server.</value>
+  <data name="toolStripMenuItem3.Text" xml:space="preserve">
+    <value>Action</value>
   </data>
   <data name="&gt;&gt;rtboxServerTitle.Parent" xml:space="preserve">
     <value>$this</value>
@@ -608,8 +647,8 @@
   <data name="&gt;&gt;lbIsAutorun.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="btnMenu.ToolTip" xml:space="preserve">
-    <value>Show menu.</value>
+  <data name="lbIsAutorun.Location" type="System.Drawing.Point, System.Drawing">
+    <value>564, 45</value>
   </data>
   <data name="btnStart.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -619,9 +658,6 @@
         iKFgdFZCDAWjTwVn8HZPDIUb8CZibMDSL8/4/iPt0pLnX/mNq8P7lmYFTOJvU/foAJoAAAAASUVORK5C
         YII=
 </value>
-  </data>
-  <data name="&gt;&gt;btnStop.Name" xml:space="preserve">
-    <value>btnStop</value>
   </data>
   <data name="multiboxingToolStripMenuItem1.Text" xml:space="preserve">
     <value>Multiboxing</value>
@@ -635,20 +671,17 @@
   <data name="&gt;&gt;lbIsAutorun.Name" xml:space="preserve">
     <value>lbIsAutorun</value>
   </data>
-  <data name="lbIsAutorun.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
   <data name="ctxMenuStripMore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>179, 214</value>
+    <value>227, 268</value>
   </data>
   <data name="cboxInbound.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 20</value>
+    <value>97, 26</value>
   </data>
-  <data name="toolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 6</value>
+  <data name="lbIsAutorun.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
   </data>
   <data name="tboxInboundAddr.Location" type="System.Drawing.Point, System.Drawing">
-    <value>113, 32</value>
+    <value>170, 47</value>
   </data>
   <data name="lbRunning.Text" xml:space="preserve">
     <value>OFF</value>
@@ -656,20 +689,17 @@
   <data name="&gt;&gt;btnStop.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>410, 58</value>
+  <data name="&gt;&gt;lbStatus.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnMenu.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="toolStripMenuItem3.Text" xml:space="preserve">
-    <value>Action</value>
-  </data>
   <data name="&gt;&gt;btnIsCollapse.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
-  <data name="btnStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+  <data name="&gt;&gt;toolStripMenuItem3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="rtboxServerTitle.Text" xml:space="preserve">
     <value>1.[lovely] vmess@1.2.3.4 very loooong</value>
@@ -683,11 +713,17 @@
   <data name="btnStop.TabIndex" type="System.Int32, mscorlib">
     <value>15</value>
   </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;btnIsCollapse.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="&gt;&gt;toolTip1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="copyToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
   <data name="&gt;&gt;toolStripMenuItem3.Name" xml:space="preserve">
     <value>toolStripMenuItem3</value>
@@ -695,8 +731,8 @@
   <data name="btnStart.ToolTip" xml:space="preserve">
     <value>Stop other servers then start this server.</value>
   </data>
-  <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.UserControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="toolStripMenuItem4.Text" xml:space="preserve">
+    <value>Setting</value>
   </data>
   <data name="tboxInboundAddr.Text" xml:space="preserve">
     <value>127.0.0.1:1080</value>
@@ -710,8 +746,8 @@
   <data name="&gt;&gt;lbStatus.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="runSpeedTestToolStripMenuItem1.ToolTipText" xml:space="preserve">
-    <value>The time it took to download webpage https://www.google.com.</value>
+  <data name="&gt;&gt;toolStripMenuItem2.Name" xml:space="preserve">
+    <value>toolStripMenuItem2</value>
   </data>
   <data name="btnMultiboxing.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
@@ -719,14 +755,20 @@
   <data name="moveToTopToolStripMenuItem.Text" xml:space="preserve">
     <value>Top</value>
   </data>
-  <data name="&gt;&gt;multiboxingToolStripMenuItem1.Name" xml:space="preserve">
-    <value>multiboxingToolStripMenuItem1</value>
+  <data name="runSpeedTestToolStripMenuItem1.Text" xml:space="preserve">
+    <value>Run speed test</value>
   </data>
   <data name="btnIsCollapse.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
     <value>Stretch</value>
   </data>
+  <data name="cboxInbound.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="vmessToolStripMenuItem.Text" xml:space="preserve">
     <value>vmess:// ...</value>
+  </data>
+  <data name="&gt;&gt;autorunToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="cboxInbound.ToolTip" xml:space="preserve">
     <value>Overwrite inbound temporary.</value>
@@ -734,14 +776,11 @@
   <data name="tboxInboundAddr.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
   </data>
-  <data name="btnStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>295, 5</value>
+  <data name="&gt;&gt;cboxInbound.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="lbRunning.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 9pt, style=Bold</value>
-  </data>
-  <data name="&gt;&gt;stopToolStripMenuItem1.Name" xml:space="preserve">
-    <value>stopToolStripMenuItem1</value>
   </data>
   <data name="&gt;&gt;rtboxServerTitle.Name" xml:space="preserve">
     <value>rtboxServerTitle</value>
@@ -750,16 +789,16 @@
     <value>Set mark.  (Any string that you like.)</value>
   </data>
   <data name="btnMultiboxing.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>30, 30</value>
   </data>
-  <data name="&gt;&gt;btnStop.ZOrder" xml:space="preserve">
-    <value>3</value>
+  <data name="&gt;&gt;btnStart.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
+  <data name="btnMenu.ToolTip" xml:space="preserve">
+    <value>Show menu.</value>
   </data>
-  <data name="lbIsAutorun.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleCenter</value>
+  <data name="&gt;&gt;autorunToolStripMenuItem.Name" xml:space="preserve">
+    <value>autorunToolStripMenuItem</value>
   </data>
   <data name="&gt;&gt;lbRunning.Name" xml:space="preserve">
     <value>lbRunning</value>
@@ -771,16 +810,19 @@
     <value>Drag and drop to adjust order.</value>
   </data>
   <data name="skipCNWebsiteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>232, 30</value>
   </data>
-  <data name="copyToolStripMenuItem.Text" xml:space="preserve">
-    <value>Copy</value>
+  <data name="&gt;&gt;ctxMenuStripMore.Name" xml:space="preserve">
+    <value>ctxMenuStripMore</value>
   </data>
-  <data name="&gt;&gt;copyToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="btnMenu.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
-  <data name="editToolStripMenuItem.Text" xml:space="preserve">
-    <value>Edit</value>
+  <data name="lbStatus.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="btnIsCollapse.ImageIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="deleteToolStripMenuItem.Text" xml:space="preserve">
     <value>Delete</value>
@@ -789,10 +831,7 @@
     <value>(A)utorun / Global (I)mport / Skip (C)N website / (U)ntrack</value>
   </data>
   <data name="chkSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>40, 8</value>
-  </data>
-  <data name="&gt;&gt;moveToBottomToolStripMenuItem.Name" xml:space="preserve">
-    <value>moveToBottomToolStripMenuItem</value>
+    <value>60, 13</value>
   </data>
   <data name="&gt;&gt;debugToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -803,11 +842,11 @@
   <data name="startToolStripMenuItem.Text" xml:space="preserve">
     <value>Start</value>
   </data>
-  <data name="lbStatus.ToolTip" xml:space="preserve">
-    <value>Drag and drop to adjust order.</value>
+  <data name="startToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>Stop all running servers and start this server.</value>
   </data>
   <data name="moveToTopToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>119, 22</value>
+    <value>156, 30</value>
   </data>
   <data name="debugToolStripMenuItem.Text" xml:space="preserve">
     <value>Debug</value>
@@ -821,38 +860,32 @@
   <data name="&gt;&gt;lbStatus.ZOrder" xml:space="preserve">
     <value>14</value>
   </data>
-  <data name="&gt;&gt;cboxInbound.Name" xml:space="preserve">
-    <value>cboxInbound</value>
-  </data>
   <data name="multiboxingToolStripMenuItem1.ToolTipText" xml:space="preserve">
     <value>Start this server along with other started server. Inbound port should not duplicate.</value>
   </data>
   <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>175, 6</value>
+    <value>237, 6</value>
   </data>
   <data name="moveToBottomToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>Move this server to bottom.</value>
   </data>
-  <data name="&gt;&gt;btnStart.Name" xml:space="preserve">
-    <value>btnStart</value>
+  <data name="lbRunning.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
   </data>
   <data name="&gt;&gt;btnMultiboxing.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="logOfThisServerToolStripMenuItem.Text" xml:space="preserve">
-    <value>Log of this server</value>
+  <data name="vToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>252, 30</value>
   </data>
   <data name="&gt;&gt;debugToolStripMenuItem.Name" xml:space="preserve">
     <value>debugToolStripMenuItem</value>
   </data>
-  <data name="chkSelected.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="&gt;&gt;cboxInbound.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;editToolStripMenuItem.Name" xml:space="preserve">
+    <value>editToolStripMenuItem</value>
   </data>
   <data name="btnStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>335, 5</value>
+    <value>502, 8</value>
   </data>
   <data name="btnStop.ToolTip" xml:space="preserve">
     <value>Stop this server.</value>
@@ -860,14 +893,11 @@
   <data name="&gt;&gt;btnMultiboxing.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="btnIsCollapse.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="btnMenu.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
+  <data name="&gt;&gt;multiboxingToolStripMenuItem1.Name" xml:space="preserve">
+    <value>multiboxingToolStripMenuItem1</value>
   </data>
   <data name="globalImportToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>171, 22</value>
+    <value>232, 30</value>
   </data>
   <data name="btnIsCollapse.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -881,25 +911,25 @@
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="chkSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>15, 14</value>
+    <value>22, 21</value>
   </data>
   <data name="toolStripMenuItem4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>178, 22</value>
+    <value>240, 28</value>
   </data>
-  <data name="btnIsCollapse.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+  <data name="&gt;&gt;btnStart.Name" xml:space="preserve">
+    <value>btnStart</value>
   </data>
-  <data name="&gt;&gt;lbStatus.Name" xml:space="preserve">
-    <value>lbStatus</value>
+  <data name="skipCNWebsiteToolStripMenuItem.Text" xml:space="preserve">
+    <value>Skip CN website</value>
   </data>
   <data name="lbRunning.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 5</value>
+    <value>14, 8</value>
   </data>
   <data name="lbStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>215, 32</value>
+    <value>322, 45</value>
   </data>
   <data name="multiboxingToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>145, 22</value>
+    <value>198, 30</value>
   </data>
   <data name="rtboxServerTitle.ToolTip" xml:space="preserve">
     <value />
@@ -914,22 +944,16 @@
     <value>13</value>
   </data>
   <data name="label4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 12</value>
-  </data>
-  <data name="btnStart.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>44, 18</value>
   </data>
   <data name="lbRunning.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="rtboxServerTitle.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
   <data name="lbStatus.Text" xml:space="preserve">
     <value>2000ms</value>
   </data>
-  <data name="v2rayToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>Contain all config information.</value>
+  <data name="&gt;&gt;label4.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="cboxInbound.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -951,9 +975,6 @@
   </metadata>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>zh-CN</value>
   </metadata>
   <metadata name="ctxMenuStripMore.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>119, 18</value>

@@ -200,17 +200,11 @@
   <data name="btnMultiboxing.ToolTip" xml:space="preserve">
     <value>和其他服务器并行运行（注意错开端口）</value>
   </data>
-  <data name="startToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
-  </data>
   <data name="startToolStripMenuItem.Text" xml:space="preserve">
     <value>开启</value>
   </data>
   <data name="startToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>关闭全部服务器，然后运行这个服务器</value>
-  </data>
-  <data name="multiboxingToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
   </data>
   <data name="multiboxingToolStripMenuItem1.Text" xml:space="preserve">
     <value>多开</value>
@@ -218,23 +212,14 @@
   <data name="multiboxingToolStripMenuItem1.ToolTipText" xml:space="preserve">
     <value>和其他已开启服务器并行运行（注意错开inbound端口）</value>
   </data>
-  <data name="stopToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
-  </data>
   <data name="stopToolStripMenuItem1.Text" xml:space="preserve">
     <value>停止</value>
   </data>
   <data name="stopToolStripMenuItem1.ToolTipText" xml:space="preserve">
     <value>停止这个服务器</value>
   </data>
-  <data name="toolStripMenuItem3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="toolStripMenuItem3.Text" xml:space="preserve">
     <value>操作</value>
-  </data>
-  <data name="moveToTopToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
   </data>
   <data name="moveToTopToolStripMenuItem.Text" xml:space="preserve">
     <value>置顶</value>
@@ -242,23 +227,14 @@
   <data name="moveToTopToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>将此服务器移至顶部</value>
   </data>
-  <data name="moveToBottomToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 22</value>
-  </data>
   <data name="moveToBottomToolStripMenuItem.Text" xml:space="preserve">
     <value>置底</value>
   </data>
   <data name="moveToBottomToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>将此服务器移至底部</value>
   </data>
-  <data name="toolStripMenuItem6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="toolStripMenuItem6.Text" xml:space="preserve">
     <value>移动</value>
-  </data>
-  <data name="autorunToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 22</value>
   </data>
   <data name="autorunToolStripMenuItem.Text" xml:space="preserve">
     <value>自启动</value>
@@ -266,17 +242,11 @@
   <data name="autorunToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>跟随软件启动</value>
   </data>
-  <data name="globalImportToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 22</value>
-  </data>
   <data name="globalImportToolStripMenuItem.Text" xml:space="preserve">
     <value>全局import</value>
   </data>
   <data name="globalImportToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>服务器启动时注入全局import</value>
-  </data>
-  <data name="skipCNWebsiteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 22</value>
   </data>
   <data name="skipCNWebsiteToolStripMenuItem.Text" xml:space="preserve">
     <value>分流CN网站</value>
@@ -284,23 +254,17 @@
   <data name="skipCNWebsiteToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>不代理国内网址。高级用户请使用v2ray-core的routing</value>
   </data>
-  <data name="untrackToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>142, 22</value>
-  </data>
   <data name="untrackToolStripMenuItem.Text" xml:space="preserve">
     <value>不追踪</value>
   </data>
   <data name="untrackToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>不追踪这个服务器</value>
   </data>
-  <data name="toolStripMenuItem4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="toolStripMenuItem4.Text" xml:space="preserve">
     <value>设定</value>
   </data>
-  <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
+  <data name="vToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>包含主要配置信息</value>
   </data>
   <data name="vmessToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>包含主要配置信息</value>
@@ -308,20 +272,11 @@
   <data name="v2rayToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>包含完整配置信息</value>
   </data>
-  <data name="copyToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="copyToolStripMenuItem.Text" xml:space="preserve">
     <value>复制</value>
   </data>
-  <data name="editToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="editToolStripMenuItem.Text" xml:space="preserve">
     <value>编辑</value>
-  </data>
-  <data name="debugToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
   </data>
   <data name="debugToolStripMenuItem.Text" xml:space="preserve">
     <value>调试</value>
@@ -329,23 +284,11 @@
   <data name="debugToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>传给v2ray-core的最终配置</value>
   </data>
-  <data name="deleteToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="deleteToolStripMenuItem.Text" xml:space="preserve">
     <value>删除</value>
   </data>
-  <data name="toolStripMenuItem2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>177, 6</value>
-  </data>
-  <data name="logOfThisServerToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
-  </data>
   <data name="logOfThisServerToolStripMenuItem.Text" xml:space="preserve">
     <value>此服务器日志</value>
-  </data>
-  <data name="runSpeedTestToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>180, 22</value>
   </data>
   <data name="runSpeedTestToolStripMenuItem1.Text" xml:space="preserve">
     <value>速度测试</value>
@@ -353,8 +296,11 @@
   <data name="runSpeedTestToolStripMenuItem1.ToolTipText" xml:space="preserve">
     <value>下载google主页所需时间</value>
   </data>
-  <data name="ctxMenuStripMore.Size" type="System.Drawing.Size, System.Drawing">
-    <value>181, 236</value>
+  <data name="ctxMenuStripMore.ToolTip" xml:space="preserve">
+    <value />
+  </data>
+  <data name="rtboxServerTitle.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="$this.ToolTip" xml:space="preserve">
     <value>拖放可调整顺序</value>

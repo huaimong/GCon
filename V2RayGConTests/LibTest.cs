@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using V2RayGCon.Test.Resource.Resx;
@@ -10,6 +11,25 @@ namespace V2RayGCon.Test
     [TestClass]
     public class LibTest
     {
+        [TestMethod]
+        public void VeeLinkTest()
+        {
+            var v1 = new Model.Data.Vee
+            {
+                address = "::1",
+                alias = "中文abc 123",
+                description = "描述abc123",
+                isUseTls = true,
+                streamParam = "/v2ray?#abc",
+                streamType = "ws",
+                port = 123,
+                uuid = Guid.NewGuid().ToString(),
+            };
+            var shareLink = v1.ToShareLink();
+            var v2 = new Model.Data.Vee(shareLink);
+            Assert.AreEqual(true, v1.EqTo(v2));
+        }
+
         [DataTestMethod]
         [DataRow("https://www.baidu.com/")]
         public void FetchTest(string url)

@@ -41,6 +41,7 @@
             v2ray = 1,
             ss = 2,
             http = 3,
+            v = 4,
         }
 
         /// <summary>

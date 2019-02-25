@@ -58,8 +58,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libs\Streams\BitStream.cs" />
+    <Compile Include="Libs\Streams\BitStreamComponents\AsciiString.cs" />
     <Compile Include="Libs\Streams\BitStreamComponents\Characters.cs" />
+    <Compile Include="Libs\Streams\BitStreamComponents\Address.cs" />
     <Compile Include="Libs\Streams\BitStreamComponents\Numbers.cs" />
+    <Compile Include="Libs\Streams\BitStreamComponents\Utf16String.cs" />
+    <Compile Include="Libs\Streams\BitStreamComponents\Uuids.cs" />
     <Compile Include="Libs\Tasks\Bar.cs" />
     <Compile Include="Libs\Tasks\Routine.cs" />
     <Compile Include="Libs\Views\RepaintCtrl.cs" />
@@ -68,6 +72,7 @@
     <Compile Include="Models\BaseClasses\Disposable.cs" />
     <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
     <Compile Include="Libs\Sys\QueueLogger.cs" />
+    <Compile Include="Models\Consts\BitStream.cs" />
     <Compile Include="Models\Consts\Core.cs" />
     <Compile Include="Models\Consts\Patterns.cs" />
     <Compile Include="Models\Consts\Import.cs" />
@@ -148,7 +153,6 @@
     <None Include="Resources\icons\icon_light.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libs\Factory\" />
     <Folder Include="Models\Grpcs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
