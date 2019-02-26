@@ -4,7 +4,7 @@ using VgcApis.Models.Interfaces;
 
 namespace VgcApis.Models.BaseClasses
 {
-    public class ContainerTpl<TContainer> :
+    public class ContainerOf<TContainer> :
         Disposable,
         IContainer<TContainer>
         where TContainer : class

@@ -1,177 +1,139 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Text;
 
 namespace VgcApis.Libs.Streams
 {
     public sealed class BitStream :
-        Models.BaseClasses.ContainerTpl<BitStream>
+        VgcApis.Models.BaseClasses.Disposable
     {
-        int readPos = 0;
-        readonly object streamWriteLock = new object();
-        List<bool> bitStream = new List<bool>();
-        const int BitsPerUtf16 = Models.Consts.BitStream.BitsPerUtf16;
+        const int BitsPerInt = VgcApis.Models.Consts.BitStream.BitsPerInt;
 
-        public BitStream() { }
+        readonly object rbsWriteLock = new object();
 
-        public void Run()
+        RawBitStream.RawBitStream rawBitStream;
+        RawBitStream.Numbers numberWriter;
+        RawBitStream.Bytes bytesWriter;
+        RawBitStream.Uuids uuidsWriter;
+        RawBitStream.Address addressWriter;
+
+        public BitStream(string str) : this()
         {
-            var numbers = new BitStreamComponents.Numbers();
-            var characters = new BitStreamComponents.Characters();
-            var asciiString = new BitStreamComponents.AsciiString();
-            var utf16String = new BitStreamComponents.Utf16String();
-            var uuids = new BitStreamComponents.Uuids();
-            var address = new BitStreamComponents.Address();
-
-            Plug(numbers);
-            Plug(characters);
-            Plug(asciiString);
-            Plug(utf16String);
-            Plug(uuids);
-            Plug(address);
-
-            characters.Run(numbers);
-            asciiString.Run(numbers, characters);
-            utf16String.Run(numbers);
-            uuids.Run(numbers);
-            address.Run(numbers, asciiString);
+            rawBitStream.FromString(str);
         }
+
+        public BitStream()
+        {
+            rawBitStream = new RawBitStream.RawBitStream();
+            rawBitStream.Run();
+            numberWriter = rawBitStream.GetComponent<RawBitStream.Numbers>();
+            bytesWriter = rawBitStream.GetComponent<RawBitStream.Bytes>();
+            uuidsWriter = rawBitStream.GetComponent<RawBitStream.Uuids>();
+            addressWriter = rawBitStream.GetComponent<RawBitStream.Address>();
+        }
+
+        #region properties
+
+        #endregion
 
         #region public methods
-        List<bool> GetPatchdList()
-        {
-            lock (streamWriteLock)
-            {
-                var result = new List<bool>(bitStream);
-                for (int i = 0; i < result.Count % BitsPerUtf16; i++)
-                {
-                    result.Add(false);
-                }
-                return result;
-            }
-        }
-
-        public void FromString(string str)
-        {
-            lock (streamWriteLock)
-            {
-                Clear();
-                foreach (var c in str)
-                {
-                    int ascii = c;
-                    for (int i = 0; i < BitsPerUtf16; i++)
-                    {
-                        bitStream.Add(ascii % 2 == 1);
-                        ascii /= 2;
-                    }
-                }
-            }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder("");
-            var clone = GetPatchdList();
-            lock (streamWriteLock)
-            {
-                for (int i = 0; i < clone.Count / BitsPerUtf16; i++)
-                {
-                    var sum = 0;
-                    var pow = 1;
-                    for (int j = 0; j < BitsPerUtf16; j++)
-                    {
-                        var bit = clone[i * BitsPerUtf16 + j];
-                        sum += pow * (bit ? 1 : 0);
-                        pow *= 2;
-                    }
-                    sb.Append((char)sum);
-                }
-            }
-            return sb.ToString();
-        }
-
-        public string CutString(string str)
-        {
-            const int MaxLen = Models.Consts.BitStream.MaxStringLen;
-
-            if (str.Length > MaxLen)
-            {
-                return str.Substring(0, MaxLen);
-            }
-            return str;
-        }
-
-        public int Count() => bitStream.Count;
-
-        public int GetIndex() => readPos;
+        public override string ToString() =>
+            rawBitStream.ToString();
 
         public void Clear()
         {
-            lock (streamWriteLock)
+            lock (rbsWriteLock)
             {
-                readPos = 0;
-                bitStream = new List<bool>();
+                rawBitStream.Clear();
             }
         }
 
-        public void Rewind()
+        public string ReadAddress()
         {
-            lock (streamWriteLock)
+            lock (rbsWriteLock)
             {
-                readPos = 0;
+                return addressWriter.Read();
             }
         }
 
-        public List<bool> Read(int len)
+        public string Read()
         {
-            var result = new List<bool>();
-            lock (streamWriteLock)
+            lock (rbsWriteLock)
             {
-                for (int i = 0; i < len && readPos < bitStream.Count; i++)
+                var cache = bytesWriter.Read();
+                return Encoding.UTF8.GetString(cache);
+            }
+        }
+
+        public T Read<T>()
+            where T : struct
+        {
+            lock (rbsWriteLock)
+            {
+                var typeName = typeof(T).Name;
+                switch (typeof(T).Name)
                 {
-                    var val = bitStream[readPos++];
-                    result.Add(val);
-                }
-            }
-            return result;
-        }
-
-        public bool? Read()
-        {
-            lock (streamWriteLock)
-            {
-                if (readPos >= bitStream.Count)
-                {
-                    return null;
-                }
-                var result = bitStream[readPos++];
-                return result;
-            }
-        }
-
-        public void Write(IEnumerable<bool> values)
-        {
-            lock (streamWriteLock)
-            {
-                foreach (var val in values)
-                {
-                    bitStream.Add(val);
+                    case nameof(Int32):
+                        return (T)(numberWriter.Read(BitsPerInt) as object);
+                    case nameof(Boolean):
+                        return (T)((rawBitStream.Read() == true) as object);
+                    case nameof(Guid):
+                        return (T)(uuidsWriter.Read() as object);
+                    default:
+                        throw new NotSupportedException($"Not support type {typeName}");
                 }
             }
         }
 
-        public void Write(bool val)
+        public void WriteAddress(string address)
         {
-            lock (streamWriteLock)
+            lock (rbsWriteLock)
             {
-                bitStream.Add(val);
+                addressWriter.Write(address);
+            }
+        }
+
+        public void Write(string str)
+        {
+            lock (rbsWriteLock)
+            {
+                var cache = Encoding.UTF8.GetBytes(str);
+                bytesWriter.Write(cache);
+            }
+        }
+
+        public void Write<T>(T val)
+            where T : struct
+        {
+            lock (rbsWriteLock)
+            {
+                switch (val)
+                {
+                    case int number:
+                        numberWriter.Write(number, BitsPerInt);
+                        break;
+                    case bool flag:
+                        rawBitStream.Write(flag);
+                        break;
+                    case Guid uuid:
+                        uuidsWriter.Write(uuid);
+                        break;
+                    default:
+                        throw new NotSupportedException(
+                            $"Not supported type {typeof(T)}");
+                }
             }
         }
         #endregion
 
         #region private methods
-        void Plug(Models.BaseClasses.ComponentOf<BitStream> component) =>
-            Plug(this, component);
+
         #endregion
 
+        #region protected methods
+        protected override void Cleanup()
+        {
+            rawBitStream?.Dispose();
+        }
+        #endregion
     }
 }

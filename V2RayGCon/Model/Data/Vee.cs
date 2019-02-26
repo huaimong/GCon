@@ -1,55 +1,33 @@
-﻿namespace V2RayGCon.Model.Data
+﻿using System;
+
+namespace V2RayGCon.Model.Data
 {
     public sealed class Vee
     {
-        VgcApis.Libs.Streams.BitStream bitStream;
-        VgcApis.Libs.Streams.BitStreamComponents.Numbers numbers;
-        VgcApis.Libs.Streams.BitStreamComponents.Uuids uuids;
-        VgcApis.Libs.Streams.BitStreamComponents.AsciiString asciiString;
-        VgcApis.Libs.Streams.BitStreamComponents.Utf16String utf16String;
-        VgcApis.Libs.Streams.BitStreamComponents.Address addressWriter;
-
         public bool isUseTls; // direct write
         public int port; // numbers
-        public string uuid; // uuids
+        public Guid uuid; // uuids
         public string address; // address
         public string streamType, streamParam; // asciiString
         public string alias, description; // utf16String
 
         public Vee()
         {
-            uuid = string.Empty;
+            isUseTls = false;
+            port = 0;
+            uuid = new Guid(); // all zero
             address = string.Empty;
             streamType = string.Empty;
             streamParam = string.Empty;
             alias = string.Empty;
             description = string.Empty;
-
-            bitStream = new VgcApis.Libs.Streams.BitStream();
-            bitStream.Run();
-
-            numbers = bitStream.GetComponent<VgcApis.Libs.Streams.BitStreamComponents.Numbers>();
-            uuids = bitStream.GetComponent<VgcApis.Libs.Streams.BitStreamComponents.Uuids>();
-            asciiString = bitStream.GetComponent<VgcApis.Libs.Streams.BitStreamComponents.AsciiString>();
-            utf16String = bitStream.GetComponent<VgcApis.Libs.Streams.BitStreamComponents.Utf16String>();
-            addressWriter = bitStream.GetComponent<VgcApis.Libs.Streams.BitStreamComponents.Address>();
         }
 
-        public Vee(string veeLink) :
-            this()
+        public Vee(string veeLink) : this()
         {
-            bitStream.Clear();
             string b64Body = Lib.Utils.GetLinkBody(veeLink);
             string plainBody = Lib.Utils.Base64Decode(b64Body);
-            bitStream.FromString(plainBody);
-            isUseTls = bitStream.Read() == true;
-            port = numbers.ReadPortNum();
-            uuid = uuids.Read().ToString();
-            address = addressWriter.Read();
-            streamType = asciiString.Read();
-            streamParam = asciiString.Read();
-            alias = utf16String.Read();
-            description = utf16String.Read();
+            DecodeProperties(plainBody);
         }
 
         #region public methods
@@ -69,28 +47,57 @@
             return true;
         }
 
+        public override string ToString() =>
+            EncodeProperties();
+
         public string ToShareLink()
         {
-            bitStream.Clear();
-            bitStream.Write(isUseTls);
-            numbers.WritePortNum(port);
-            uuids.Write(uuid);
-            addressWriter.Write(address);
-            asciiString.Write(streamType);
-            asciiString.Write(streamParam);
-            utf16String.Write(alias);
-            utf16String.Write(description);
-            var str = bitStream.ToString();
+            var str = EncodeProperties();
             var b64Str = Lib.Utils.Base64Encode(str);
+
+            // debug
+            // var decoded = Lib.Utils.Base64Decode(b64Str);
+            // var iseq = str == decoded;
+
             return Lib.Utils.AddLinkPrefix(
                 b64Str,
                 VgcApis.Models.Datas.Enum.LinkTypes.v);
         }
-
         #endregion
 
         #region private methods
+        private void DecodeProperties(string plainBody)
+        {
+            using (var bs = new VgcApis.Libs.Streams.BitStream(plainBody))
+            {
+                isUseTls = bs.Read<bool>();
+                port = bs.Read<int>();
+                uuid = bs.Read<Guid>();
+                address = bs.ReadAddress();
+                streamType = bs.Read();
+                streamParam = bs.Read();
+                alias = bs.Read();
+                description = bs.Read();
+            }
+        }
 
+        private string EncodeProperties()
+        {
+            using (var bs = new VgcApis.Libs.Streams.BitStream())
+            {
+                bs.Clear();
+                bs.Write(isUseTls);
+                bs.Write(port);
+                bs.Write(uuid);
+                bs.WriteAddress(address);
+                bs.Write(streamType);
+                bs.Write(streamParam);
+                bs.Write(alias);
+                bs.Write(description);
+                var result = bs.ToString();
+                return result;
+            }
+        }
 
         #endregion
     }

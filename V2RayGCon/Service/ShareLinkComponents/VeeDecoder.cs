@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -77,7 +78,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
                 alias = GetStr("v2raygcon", "alias"),
                 address = GetStr(mainPrefix, "address"),
                 port = Lib.Utils.Str2Int(GetStr(mainPrefix, "port")),
-                uuid = GetStr(mainPrefix, "users.0.id"),
+                uuid = Guid.Parse(GetStr(mainPrefix, "users.0.id")),
                 description = GetStr("v2raygcon", "description"),
             };
 

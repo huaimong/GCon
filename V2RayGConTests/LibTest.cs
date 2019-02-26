@@ -23,7 +23,7 @@ namespace V2RayGCon.Test
                 streamParam = "/v2ray?#abc",
                 streamType = "ws",
                 port = 123,
-                uuid = Guid.NewGuid().ToString(),
+                uuid = Guid.NewGuid(),
             };
             var shareLink = v1.ToShareLink();
             var v2 = new Model.Data.Vee(shareLink);

@@ -3,7 +3,7 @@
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     public sealed class Codecs :
-        VgcApis.Models.BaseClasses.ContainerTpl<Codecs>
+        VgcApis.Models.BaseClasses.ContainerOf<Codecs>
     {
         Setting setting;
         Cache cache;

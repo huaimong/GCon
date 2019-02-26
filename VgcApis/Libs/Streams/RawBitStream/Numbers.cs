@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace VgcApis.Libs.Streams.BitStreamComponents
+namespace VgcApis.Libs.Streams.RawBitStream
 {
     public sealed class Numbers :
-        Models.BaseClasses.ComponentOf<BitStream>
+        Models.BaseClasses.ComponentOf<RawBitStream>
     {
 
-        const int BitsPerPort = Models.Consts.BitStream.BitsPerPort;
+        const int BitsPerPort = Models.Consts.BitStream.BitsPerInt;
         public Numbers() { }
 
         #region public methods
@@ -25,36 +24,20 @@ namespace VgcApis.Libs.Streams.BitStreamComponents
             }
 
             CheckLen(len);
-
-            var cache = new List<bool>();
-            while (len > 0)
-            {
-                cache.Add(val % 2 == 1);
-                val /= 2;
-                len--;
-            }
-
+            var cache = Utils.Int2BoolList(val, len);
             GetContainer().Write(cache);
         }
 
         public int Read(int len)
         {
             CheckLen(len);
-
             var cache = GetContainer().Read(len);
             if (cache.Count != len)
             {
                 throw new NullReferenceException("Read overflow!");
             }
-            int pow = 1;
-            int sum = 0;
-            for (int i = 0; i < len; i++)
-            {
-                var bit = cache[i];
-                sum += pow * (bit ? 1 : 0);
-                pow *= 2;
-            }
-            return sum;
+            var result = Utils.BoolList2Int(cache);
+            return result;
         }
         #endregion
 

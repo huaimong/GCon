@@ -746,8 +746,8 @@ namespace V2RayGCon.Lib
 
         public static string Base64Encode(string plainText)
         {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            var plainTextBytes = Encoding.Unicode.GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
         }
 
         static string Base64PadRight(string base64)
@@ -762,8 +762,8 @@ namespace V2RayGCon.Lib
                 return string.Empty;
             }
             var padded = Base64PadRight(base64EncodedData);
-            var base64EncodedBytes = System.Convert.FromBase64String(padded);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            var base64EncodedBytes = Convert.FromBase64String(padded);
+            return Encoding.Unicode.GetString(base64EncodedBytes);
         }
 
         #endregion
