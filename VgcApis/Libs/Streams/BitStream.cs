@@ -4,9 +4,9 @@ using System.Text;
 namespace VgcApis.Libs.Streams
 {
     public sealed class BitStream :
-        VgcApis.Models.BaseClasses.Disposable
+        Models.BaseClasses.Disposable
     {
-        const int BitsPerInt = VgcApis.Models.Consts.BitStream.BitsPerInt;
+        const int BitsPerInt = Models.Consts.BitStream.BitsPerInt;
 
         readonly object rbsWriteLock = new object();
 
@@ -16,9 +16,9 @@ namespace VgcApis.Libs.Streams
         RawBitStream.Uuids uuidsWriter;
         RawBitStream.Address addressWriter;
 
-        public BitStream(string str) : this()
+        public BitStream(byte[] bytes) : this()
         {
-            rawBitStream.FromString(str);
+            rawBitStream.FromBytes(bytes);
         }
 
         public BitStream()
@@ -36,8 +36,8 @@ namespace VgcApis.Libs.Streams
         #endregion
 
         #region public methods
-        public override string ToString() =>
-            rawBitStream.ToString();
+        public byte[] ToBytes() =>
+            rawBitStream.ToBytes();
 
         public void Clear()
         {

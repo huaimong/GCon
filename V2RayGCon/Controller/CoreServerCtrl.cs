@@ -108,8 +108,8 @@ namespace V2RayGCon.Controller
         protected override void Cleanup()
         {
             InvokeEventOnCoreClosing();
-            coreCtrl.StopCore();
-            coreCtrl.ReleaseEvents();
+            coreCtrl?.StopCore();
+            coreCtrl?.ReleaseEvents();
             base.Cleanup();
         }
         #endregion

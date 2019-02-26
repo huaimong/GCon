@@ -29,18 +29,14 @@ namespace VgcApis.Libs.Streams.RawBitStream
         }
 
         #region public methods
-        public void FromString(string str)
+        public void FromBytes(byte[] bytes)
         {
             Clear();
-            bitStream = Utils.Str2BoolList(str);
+            bitStream = Utils.Bytes2BoolList(bytes);
         }
 
-        public byte[] ToBytes()
-        {
-        }
-
-        public override string ToString() =>
-            Utils.BoolList2Str(bitStream);
+        public byte[] ToBytes() => 
+            Utils.BoolList2Bytes(bitStream);
 
         public int Count() => bitStream.Count;
 

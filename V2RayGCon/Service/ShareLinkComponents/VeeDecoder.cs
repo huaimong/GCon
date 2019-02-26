@@ -10,10 +10,14 @@ namespace V2RayGCon.Service.ShareLinkComponents
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         Cache cache;
+        Setting setting;
 
-        public VeeDecoder(Cache cache)
+        public VeeDecoder(
+            Cache cache,
+            Setting setting)
         {
             this.cache = cache;
+            this.setting = setting;
         }
         #region properties
 
@@ -22,22 +26,48 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #region public methods
         public string Decode(string shareLink)
         {
+            string message = null;
             try
             {
                 var veeLink = new Model.Data.Vee(shareLink);
-                return Vee2Config(veeLink);
+                var version = veeLink.version;
+                switch (version)
+                {
+                    case 1:
+                        return VeeToConfigVer1(veeLink);
+                    default:
+                        throw new NotSupportedException(
+                            $"Not supported vee share link version ${version}");
+                }
+
             }
-            catch { }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                setting.SendLog(message);
+            }
             return null;
         }
 
         public string Encode(string config)
         {
+            string message = null;
             try
             {
-                return ConfigString2Vee(config)?.ToShareLink();
+                return ConfigToVeeVer1(config)?.ToShareLink();
             }
-            catch { }
+            catch (Exception e)
+            {
+                message = e.Message;
+            }
+            if (!string.IsNullOrEmpty(message))
+            {
+                setting.SendLog(message);
+            }
             return null;
         }
 
@@ -48,8 +78,10 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region private methods
-        Model.Data.Vee ConfigString2Vee(string config)
+        Model.Data.Vee ConfigToVeeVer1(string config)
         {
+            var version = 1;
+
             JObject json;
             try
             {
@@ -75,6 +107,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
             var mainPrefix = root + "." + "settings.vnext.0";
             var vee = new Model.Data.Vee
             {
+                version = version,
                 alias = GetStr("v2raygcon", "alias"),
                 address = GetStr(mainPrefix, "address"),
                 port = Lib.Utils.Str2Int(GetStr(mainPrefix, "port")),
@@ -85,24 +118,40 @@ namespace V2RayGCon.Service.ShareLinkComponents
             var subPrefix = root + "." + "streamSettings";
             vee.streamType = GetStr(subPrefix, "network");
             vee.isUseTls = GetStr(subPrefix, "security")?.ToLower() == "tls";
-            var streamParam = "";
+            var mainParam = "";
             switch (vee.streamType)
             {
                 case "kcp":
-                    streamParam = GetStr(subPrefix, "kcpSettings.header.type");
+                    mainParam = GetStr(subPrefix, "kcpSettings.header.type");
                     break;
                 case "ws":
-                    streamParam = GetStr(subPrefix, "wsSettings.path");
+                    mainParam = GetStr(subPrefix, "wsSettings.path");
+                    vee.streamParam2 = GetStr(subPrefix, "wsSettings.headers.Host");
                     break;
                 case "h2":
-                    streamParam = GetStr(subPrefix, "httpSettings.path");
+                    mainParam = GetStr(subPrefix, "httpSettings.path");
+                    try
+                    {
+                        var hosts = isUseV4 ?
+                            json["outbounds"][0]["streamSettings"]["httpSettings"]["host"] :
+                            json["outbound"]["streamSettings"]["httpSettings"]["host"];
+                        vee.streamParam2 = Lib.Utils.JArray2Str(hosts as JArray);
+                    }
+                    catch { }
+                    break;
+                case "quic":
+                    mainParam = GetStr(subPrefix, "quicSettings.header.type");
+                    vee.streamParam2 = GetStr(subPrefix, "quicSettings.security");
+                    vee.streamParam3 = GetStr(subPrefix, "quicSettings.key");
+                    break;
+                default:
                     break;
             }
-            vee.streamParam = streamParam;
+            vee.streamParam1 = mainParam;
             return vee;
         }
 
-        string Vee2Config(Model.Data.Vee vee)
+        string VeeToConfigVer1(Model.Data.Vee vee)
         {
             if (vee == null)
             {
@@ -110,7 +159,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
             }
 
             var outVmess = cache.tpl.LoadTemplate("outbVee");
-            outVmess["streamSettings"] = GenStreamSetting(vee);
+            outVmess["streamSettings"] = GenStreamSettingVer1(vee);
             var node = outVmess["settings"]["vnext"][0];
             node["address"] = vee.address;
             node["port"] = vee.port;
@@ -122,10 +171,10 @@ namespace V2RayGCon.Service.ShareLinkComponents
             return GetContainer()?.FillDefConfig(ref tpl, outVmess);
         }
 
-        JToken GenStreamSetting(Model.Data.Vee vee)
+        JToken GenStreamSettingVer1(Model.Data.Vee vee)
         {
             // insert stream type
-            string[] streamTypes = { "ws", "tcp", "kcp", "h2" };
+            string[] streamTypes = { "ws", "tcp", "kcp", "h2", "quic" };
             string streamType = vee.streamType.ToLower();
 
             if (!streamTypes.Contains(streamType))
@@ -133,7 +182,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
                 return JToken.Parse(@"{}");
             }
 
-            string streamParam = vee.streamParam;
+            string mainParam = vee.streamParam1;
 
             var streamToken = cache.tpl.LoadTemplate(streamType);
             try
@@ -141,13 +190,22 @@ namespace V2RayGCon.Service.ShareLinkComponents
                 switch (streamType)
                 {
                     case "kcp":
-                        streamToken["kcpSettings"]["header"]["type"] = streamParam;
+                        streamToken["kcpSettings"]["header"]["type"] = mainParam;
                         break;
                     case "ws":
-                        streamToken["wsSettings"]["path"] = streamParam;
+                        streamToken["wsSettings"]["path"] = mainParam;
+                        streamToken["wsSettings"]["headers"]["Host"] = vee.streamParam2;
                         break;
                     case "h2":
-                        streamToken["httpSettings"]["path"] = streamParam;
+                        streamToken["httpSettings"]["path"] = mainParam;
+                        streamToken["httpSettings"]["host"] = Lib.Utils.Str2JArray(vee.streamParam2);
+                        break;
+                    case "quic":
+                        streamToken["quicSettings"]["header"]["type"] = mainParam;
+                        streamToken["quicSettings"]["security"] = vee.streamParam2;
+                        streamToken["quicSettings"]["key"] = vee.streamParam3;
+                        break;
+                    default:
                         break;
                 }
             }

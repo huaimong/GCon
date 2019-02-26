@@ -31,6 +31,12 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public void SetShareMemory(string key, string value) =>
+            settings.SetLuaShareMemory(key, value);
+
+        public string GetShareMemory(string key) =>
+            settings.GetLuaShareMemory(key);
+
         public void ResetIndexQuiet() =>
             vgcServers.ResteIndexQuiet();
 
@@ -94,7 +100,14 @@ namespace Luna.Models.Apis
             var text = "";
             foreach (var content in contents)
             {
-                text += content.ToString();
+                if (content == null)
+                {
+                    text += @"nil";
+                }
+                else
+                {
+                    text += content.ToString();
+                }
             }
             redirectLogWorker?.Invoke(text);
         }

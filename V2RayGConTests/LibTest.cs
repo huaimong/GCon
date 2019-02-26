@@ -14,20 +14,25 @@ namespace V2RayGCon.Test
         [TestMethod]
         public void VeeLinkTest()
         {
-            var v1 = new Model.Data.Vee
+            for (int i = 0; i < 10; i++)
             {
-                address = "::1",
-                alias = "中文abc 123",
-                description = "描述abc123",
-                isUseTls = true,
-                streamParam = "/v2ray?#abc",
-                streamType = "ws",
-                port = 123,
-                uuid = Guid.NewGuid(),
-            };
-            var shareLink = v1.ToShareLink();
-            var v2 = new Model.Data.Vee(shareLink);
-            Assert.AreEqual(true, v1.EqTo(v2));
+                var v1 = new Model.Data.Vee
+                {
+                    address = "::1",
+                    alias = "中文abc 123",
+                    description = "描述abc123",
+                    isUseTls = true,
+                    streamParam1 = "/v2ray?#abc",
+                    streamParam2 = Lib.Utils.RandomHex(7),
+                    streamParam3 = Lib.Utils.RandomHex(7),
+                    streamType = Lib.Utils.RandomHex(7),
+                    port = 123,
+                    uuid = Guid.NewGuid(),
+                };
+                var shareLink = v1.ToShareLink();
+                var v2 = new Model.Data.Vee(shareLink);
+                Assert.AreEqual(true, v1.EqTo(v2));
+            }
         }
 
         [DataTestMethod]

@@ -4,6 +4,9 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
+        void SetShareMemory(string key, string value);
+        string GetShareMemory(string key);
+
         List<string> ExtractVmessLinks(string text);
 
         List<string> ExtractSsLinks(string text);

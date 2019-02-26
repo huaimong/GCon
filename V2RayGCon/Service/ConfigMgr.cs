@@ -356,51 +356,6 @@ namespace V2RayGCon.Service
             return ParseImport(imports.ToString());
         }
 
-        JToken GenStreamSetting(Model.Data.Vmess vmess)
-        {
-            // insert stream type
-            string[] streamTypes = { "ws", "tcp", "kcp", "h2" };
-            string streamType = vmess.net.ToLower();
-
-            if (!streamTypes.Contains(streamType))
-            {
-                return JToken.Parse(@"{}");
-            }
-
-            var streamToken = cache.tpl.LoadTemplate(streamType);
-            try
-            {
-                switch (streamType)
-                {
-                    case "kcp":
-                        streamToken["kcpSettings"]["header"]["type"] = vmess.type;
-                        break;
-                    case "ws":
-                        streamToken["wsSettings"]["path"] = string.IsNullOrEmpty(vmess.v) ? vmess.host : vmess.path;
-                        if (vmess.v == "2" && !string.IsNullOrEmpty(vmess.host))
-                        {
-                            streamToken["wsSettings"]["headers"]["Host"] = vmess.host;
-                        }
-                        break;
-                    case "h2":
-                        streamToken["httpSettings"]["path"] = vmess.path;
-                        streamToken["httpSettings"]["host"] = Lib.Utils.Str2JArray(vmess.host);
-                        break;
-                }
-            }
-            catch { }
-
-            try
-            {
-                streamToken["security"] =
-                    vmess.tls?.ToLower() == "tls" ?
-                    "tls" : "none";
-            }
-            catch { }
-
-            return streamToken;
-        }
-
         long DoSpeedTest(
             string speedTestableConfig,
             string title,

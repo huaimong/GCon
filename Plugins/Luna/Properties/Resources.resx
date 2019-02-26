@@ -121,7 +121,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.9</value>
-    <comment>add functions</comment>
+    <value>0.0.10</value>
+    <comment>add share memory between scripts</comment>
   </data>
 </root>

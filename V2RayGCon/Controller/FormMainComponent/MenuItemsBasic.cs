@@ -75,6 +75,8 @@ namespace V2RayGCon.Controller.FormMainComponent
         #endregion
 
         #region private method
+
+
         private void InitMenuAbout(ToolStripMenuItem aboutVGC, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
         {
             // menu about

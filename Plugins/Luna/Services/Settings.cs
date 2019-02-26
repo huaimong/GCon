@@ -34,25 +34,38 @@ namespace Luna.Services
                 .LoadPluginSetting<Models.Data.UserSettings>(
                     pluginName, vgcSetting);
 
+            userSettings.NormalizeData();
+
             bookKeeper = new VgcApis.Libs.Tasks.LazyGuy(
                 SaveUserSettingsNow, 30000);
-        }
 
-        public List<Models.Data.LuaCoreSetting> GetLuaCoreSettings()
-        {
-            if (userSettings.luaServers == null)
-            {
-                userSettings.luaServers =
-                    new List<Models.Data.LuaCoreSetting>();
-                SaveSettings();
-            }
-            return userSettings.luaServers;
-        }
-
-        public void SaveSettings()
-        {
             bookKeeper.DoItLater();
         }
+
+        public string GetLuaShareMemory(string key)
+        {
+            if (!userSettings.luaShareMemory.ContainsKey(key))
+            {
+                return @"";
+            }
+            return userSettings.luaShareMemory[key];
+        }
+
+        readonly object shareMemoryLocker = new object();
+        public void SetLuaShareMemory(string key, string value)
+        {
+            lock (shareMemoryLocker)
+            {
+                userSettings.luaShareMemory[key] = value;
+            }
+            SaveSettings();
+        }
+
+        public List<Models.Data.LuaCoreSetting> GetLuaCoreSettings() =>
+            userSettings.luaServers;
+
+        public void SaveSettings() =>
+            bookKeeper.DoItLater();
         #endregion
 
         #region protected methods

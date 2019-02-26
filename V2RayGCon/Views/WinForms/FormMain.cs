@@ -145,7 +145,8 @@ namespace V2RayGCon.Views.WinForms
                 toolStripStatusLabelTotal,
                 toolStripDropDownButtonPager,
                 toolStripStatusLabelPrePage,
-                toolStripStatusLabelNextPage));
+                toolStripStatusLabelNextPage,
+                toolStripMenuItemResize));
 
             ctrl.Plug(new Controller.FormMainComponent.MenuItemsBasic(
                 toolMenuItemSimAddVmessServer,

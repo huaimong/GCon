@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text;
 
 namespace VgcApis.Libs.Streams.RawBitStream
 {
@@ -9,33 +8,37 @@ namespace VgcApis.Libs.Streams.RawBitStream
         const int BitsPerUnicode = Models.Consts.BitStream.BitsPerUnicode;
         const int BitsPerByte = Models.Consts.BitStream.BitsPerByte;
 
-        public static string BoolList2Str(IEnumerable<bool> stream)
+        public static byte[] BoolList2Bytes(IEnumerable<bool> stream)
         {
-            StringBuilder sb = new StringBuilder("");
             var padStream = PadRight(stream);
-            var cache = new bool[BitsPerUnicode];
-            var index = 0;
-            foreach (var bit in padStream)
+            var len = padStream.Count / BitsPerByte;
+            var cache = new byte[len];
+            for (int i = 0; i < len; i++)
             {
-                cache[index++] = bit;
-                if (index == BitsPerUnicode)
+                var sum = 0;
+                var pow = 1;
+                var baseIndex = i * BitsPerByte;
+                for (int j = 0; j < BitsPerByte; j++)
                 {
-                    sb.Append((char)BoolList2Int(cache));
-                    index = 0;
+                    sum += pow * (padStream[baseIndex + j] ? 1 : 0);
+                    pow *= 2;
                 }
+                cache[i] = (byte)sum;
             }
-            return sb.ToString();
+
+            return cache;
         }
 
-        public static List<bool> Str2BoolList(string str)
+        public static List<bool> Bytes2BoolList(byte[] bytes)
         {
             var result = new List<bool>();
-            foreach (var c in str)
+            foreach (var b in bytes)
             {
-                var cache = Int2BoolList(c, BitsPerUnicode);
-                foreach (var bit in cache)
+                int ascii = b;
+                for (int i = 0; i < BitsPerByte; i++)
                 {
-                    result.Add(bit);
+                    result.Add(ascii % 2 == 1);
+                    ascii /= 2;
                 }
             }
             return result;
@@ -44,7 +47,7 @@ namespace VgcApis.Libs.Streams.RawBitStream
         public static List<bool> PadRight(IEnumerable<bool> bitStream)
         {
             var result = new List<bool>(bitStream);
-            for (int i = 0; i < result.Count % BitsPerUnicode; i++)
+            for (int i = 0; i < result.Count % BitsPerByte; i++)
             {
                 result.Add(false);
             }

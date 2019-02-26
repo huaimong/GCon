@@ -26,12 +26,17 @@ namespace VgcApisTests
             bs1.WriteAddress("1.2.3.4");
             bs1.Write("123");
             bs1.Write("1中23文");
-            var str1 = bs1.ToString();
+            var b1 = bs1.ToBytes();
             bs1.Dispose();
-            var bs2 = new VgcApis.Libs.Streams.BitStream(str1);
-            var str2 = bs2.ToString();
+            var bs2 = new VgcApis.Libs.Streams.BitStream(b1);
+            var b2 = bs2.ToBytes();
             bs2.Dispose();
-            Assert.AreEqual(str1, str2);
+
+            for (int i = 0; i < b1.Length; i++)
+            {
+                Assert.AreEqual(b2[i], b1[i]);
+            }
+
         }
 
         [DataTestMethod]

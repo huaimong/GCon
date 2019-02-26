@@ -39,9 +39,13 @@ namespace VgcApisTests
         {
             var s1 = new VgcApis.Libs.Streams.RawBitStream.RawBitStream();
             s1.Run();
-            s1.FromString(str);
-            var result = s1.ToString();
-            Assert.AreEqual(str, result);
+            var bytes = Encoding.Unicode.GetBytes(str);
+            s1.FromBytes(bytes);
+            var result = s1.ToBytes();
+            for (int i = 0; i < result.Length; i++)
+            {
+                Assert.AreEqual(result[i], bytes[i]);
+            }
         }
 
         [DataTestMethod]
