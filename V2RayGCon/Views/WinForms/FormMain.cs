@@ -238,10 +238,10 @@ namespace V2RayGCon.Views.WinForms
                 toolStripMenuItemDeleteSelectedServers,
 
                 //// copy
-                //ToolStripMenuItem copyAsV2rayLinks,
+                //ToolStripMenuItem copyAsV2cfgLinks,
                 //ToolStripMenuItem copyAsVmessLinks,
                 //ToolStripMenuItem copyAsSubscriptions,
-                toolStripMenuItemCopyAsV2rayLink,
+                toolStripMenuItemCopyAsV2cfgLink,
                 toolStripMenuItemCopyAsVmessLink,
                 toolStripMenuItemCopyAsVeeLink,
                 toolStripMenuItemCopyAsSubscription,

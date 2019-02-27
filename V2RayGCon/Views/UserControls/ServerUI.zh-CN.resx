@@ -269,8 +269,8 @@
   <data name="vmessToolStripMenuItem.ToolTipText" xml:space="preserve">
     <value>包含主要配置信息</value>
   </data>
-  <data name="v2rayToolStripMenuItem.ToolTipText" xml:space="preserve">
-    <value>包含完整配置信息</value>
+  <data name="v2cfgToolStripMenuItem.ToolTipText" xml:space="preserve">
+    <value>包含全部配置信息</value>
   </data>
   <data name="copyToolStripMenuItem.Text" xml:space="preserve">
     <value>复制</value>

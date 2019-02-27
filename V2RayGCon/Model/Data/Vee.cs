@@ -5,25 +5,26 @@ namespace V2RayGCon.Model.Data
     public sealed class Vee
     {
         public int version = 1; // 16 bit
+        public string alias, description; // 256 bytes max
         public bool isUseTls;
         public int port; // 16 bit
         public Guid uuid;
         public string address; // 256 bytes max
         public string streamType, streamParam1, streamParam2, streamParam3; // 256 bytes max
-        public string alias, description; // 256 bytes max
 
         public Vee()
         {
+            version = 1;
+            alias = string.Empty;
+            description = string.Empty;
             isUseTls = false;
             port = 0;
-            uuid = new Guid(); // all zero
+            uuid = new Guid(); // zeros
             address = string.Empty;
             streamType = string.Empty;
             streamParam1 = string.Empty;
             streamParam2 = string.Empty;
             streamParam3 = string.Empty;
-            alias = string.Empty;
-            description = string.Empty;
         }
 
         public Vee(string veeLink) : this()
@@ -111,7 +112,7 @@ namespace V2RayGCon.Model.Data
                     return GenVeeShareLink(EncoderVer1);
                 default:
                     throw new NotSupportedException(
-                        $"Not support vee share link version {version}" );
+                        $"Not support vee share link version {version}");
             }
         }
         #endregion
@@ -137,6 +138,8 @@ namespace V2RayGCon.Model.Data
             using (var bs = new VgcApis.Libs.Streams.BitStream(bytes))
             {
                 version = bs.Read<int>();
+                alias = bs.Read();
+                description = bs.Read();
                 isUseTls = bs.Read<bool>();
                 port = bs.Read<int>();
                 uuid = bs.Read<Guid>();
@@ -145,8 +148,7 @@ namespace V2RayGCon.Model.Data
                 streamParam1 = bs.Read();
                 streamParam2 = bs.Read();
                 streamParam3 = bs.Read();
-                alias = bs.Read();
-                description = bs.Read();
+
             }
         }
 
@@ -158,6 +160,8 @@ namespace V2RayGCon.Model.Data
             {
                 bs.Clear();
                 bs.Write(version);
+                bs.Write(alias);
+                bs.Write(description);
                 bs.Write(isUseTls);
                 bs.Write(port);
                 bs.Write(uuid);
@@ -166,8 +170,6 @@ namespace V2RayGCon.Model.Data
                 bs.Write(streamParam1);
                 bs.Write(streamParam2);
                 bs.Write(streamParam3);
-                bs.Write(alias);
-                bs.Write(description);
                 result = bs.ToBytes();
             }
             return result;

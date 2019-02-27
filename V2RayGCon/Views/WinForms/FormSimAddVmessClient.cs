@@ -85,7 +85,7 @@ namespace V2RayGCon.Views.WinForms
                 vmess.tls = "tls";
             }
 
-            slinkMgr.ImportLinkWithOutV2RayLinks(vmess.ToVmessLink());
+            slinkMgr.ImportLinkWithOutV2cfgLinks(vmess.ToVmessLink());
             this.Close();
         }
 

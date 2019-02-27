@@ -148,9 +148,6 @@
   <data name="ExtPng" xml:space="preserve">
     <value>PNG Files|*.png|All File|*.*</value>
   </data>
-  <data name="PatternNonAlphabet" xml:space="preserve">
-    <value>[^0-9a-zA-Z]</value>
-  </data>
   <data name="LatestCoreLink" xml:space="preserve">
     <value>https://github.com/v2ray/v2ray-core/releases/latest</value>
   </data>
@@ -172,21 +169,6 @@
   <data name="VlinkWiki" xml:space="preserve">
     <value>https://github.com/nobody3u/V2RayGCon/wiki/vlink</value>
   </data>
-  <data name="ParseImportDepth" xml:space="preserve">
-    <value>5</value>
-    <comment>layer</comment>
-  </data>
-  <data name="ParseImportRetry" xml:space="preserve">
-    <value>3</value>
-    <comment>times</comment>
-  </data>
-  <data name="DecodeCacheSize" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="LazyGCDelay" xml:space="preserve">
-    <value>180</value>
-    <comment>seconds</comment>
-  </data>
   <data name="BugFileName" xml:space="preserve">
     <value>bug.txt</value>
   </data>
@@ -201,10 +183,6 @@
   </data>
   <data name="Nobody3uVideoUrl" xml:space="preserve">
     <value>https://www.youtube.com/watch?v=BA7fdSkp8ds</value>
-  </data>
-  <data name="LazySaveUserSettingsDelay" xml:space="preserve">
-    <value>30</value>
-    <comment>seconds</comment>
   </data>
   <data name="ExecutableV2ctl" xml:space="preserve">
     <value>v2ctl.exe</value>

@@ -38,7 +38,7 @@
         public enum LinkTypes
         {
             vmess = 0,
-            v2ray = 1,
+            v2cfg = 1,
             ss = 2,
             http = 3,
             v = 4,

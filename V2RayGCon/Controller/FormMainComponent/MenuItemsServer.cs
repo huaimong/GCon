@@ -23,7 +23,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem deleteSelected,
 
             // copy
-            ToolStripMenuItem copyAsV2rayLinks,
+            ToolStripMenuItem copyAsV2cfgLinks,
             ToolStripMenuItem copyAsVmessLinks,
             ToolStripMenuItem copyAsVeeLinks,
             ToolStripMenuItem copyAsSubscriptions,
@@ -54,7 +54,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             InitCtrlView(moveToTop, moveToBottom, foldPanel, expansePanel);
 
             InitCtrlCopyToClipboard(
-                copyAsV2rayLinks,
+                copyAsV2cfgLinks,
                 copyAsVmessLinks,
                 copyAsVeeLinks,
                 copyAsSubscriptions);
@@ -165,7 +165,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         }
 
         private void InitCtrlCopyToClipboard(
-            ToolStripMenuItem copyAsV2rayLinks,
+            ToolStripMenuItem copyAsV2cfgLinks,
             ToolStripMenuItem copyAsVmessLinks,
             ToolStripMenuItem copyAsVeeLinks,
             ToolStripMenuItem copyAsSubscriptions)
@@ -180,13 +180,13 @@ namespace V2RayGCon.Controller.FormMainComponent
                 I18N.CopyFail);
             });
 
-            copyAsV2rayLinks.Click += ApplyActionOnSelectedServers(() =>
+            copyAsV2cfgLinks.Click += ApplyActionOnSelectedServers(() =>
             {
                 var list = servers.GetAllServersOrderByIndex()
                     .Where(s => s.GetCoreStates().IsSelected())
                     .Select(s => Lib.Utils.AddLinkPrefix(
                         Lib.Utils.Base64Encode(s.GetConfiger().GetConfig()),
-                        VgcApis.Models.Datas.Enum.LinkTypes.v2ray))
+                        VgcApis.Models.Datas.Enum.LinkTypes.v2cfg))
                     .ToList();
 
                 MessageBox.Show(

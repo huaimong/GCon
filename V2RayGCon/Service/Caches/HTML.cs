@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Service.Caches
 {
@@ -26,8 +25,7 @@ namespace V2RayGCon.Service.Caches
             var c = data[url];
             lock (c.rwLock)
             {
-                var retry = Lib.Utils.Str2Int(
-                    StrConst.ParseImportRetry);
+                var retry = VgcApis.Models.Consts.Import.ParseImportRetry;
 
                 for (var i = 0;
                     i < retry && string.IsNullOrEmpty(c.content);

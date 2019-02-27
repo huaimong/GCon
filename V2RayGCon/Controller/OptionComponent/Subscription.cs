@@ -197,7 +197,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 // dict( [url]=>mark ) to list(url,mark) mark maybe null
                 var subsUrl = subscriptions.Select(s => s).ToList();
                 List<string[]> links = BatchGetLinksFromSubsUrl(subsUrl);
-                slinkMgr.ImportLinkWithOutV2RayLinksBatchMode(links);
+                slinkMgr.ImportLinkWithOutV2cfgLinksBatchMode(links);
                 EnableBtnUpdate();
             });
         }
@@ -244,7 +244,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 var links = new List<string>();
                 var matches = Regex.Matches(
                     subsString,
-                    VgcApis.Models.Consts.Patterns.PatternBase64NonStandard);
+                    VgcApis.Models.Consts.Patterns.Base64NonStandard);
                 foreach (Match match in matches)
                 {
                     try

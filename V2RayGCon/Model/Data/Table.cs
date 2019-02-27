@@ -49,14 +49,6 @@ namespace V2RayGCon.Model.Data
             "socks"
         };
 
-
-        public static readonly Dictionary<int, string> linkPrefix = new Dictionary<int, string>
-        {
-            {0,"vmess://" },
-            {1,"v2ray://" },
-            {2,"ss://" },
-        };
-
         public static readonly Dictionary<int, string> ssMethods = new Dictionary<int, string>
         {
             { 0,"aes-128-cfb"},

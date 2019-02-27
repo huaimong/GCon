@@ -48,12 +48,12 @@ namespace V2RayGCon.Service.ShareLinkComponents
             this.cache = cache;
 
             var ssDecoder = new SsDecoder(cache);
-            var v2rayDecoder = new V2rayDecoder();
+            var v2cfgDecoder = new V2cfgDecoder();
             var vmessDecoder = new VmessDecoder(cache);
             var veeDecoder = new VeeDecoder(cache, setting);
 
             Plug(ssDecoder);
-            Plug(v2rayDecoder);
+            Plug(v2cfgDecoder);
             Plug(vmessDecoder);
             Plug(veeDecoder);
         }

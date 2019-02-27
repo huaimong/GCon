@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace V2RayGCon.Service.ShareLinkComponents
 {
-    internal sealed class V2rayDecoder :
+    internal sealed class V2cfgDecoder :
         VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
-        public V2rayDecoder() { }
+        public V2cfgDecoder() { }
 
         #region properties
 
@@ -41,12 +41,12 @@ namespace V2RayGCon.Service.ShareLinkComponents
 
             return Lib.Utils.AddLinkPrefix(
                 body,
-                VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
+                VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
         }
 
 
         public List<string> ExtractLinksFromText(string text) =>
-            Lib.Utils.ExtractLinks(text, VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
+            Lib.Utils.ExtractLinks(text, VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
         #endregion
 
         #region private methods

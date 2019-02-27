@@ -34,20 +34,20 @@ namespace V2RayGCon.Service
         public string EncodeVeeLink(string config) =>
             codecs.Encode<ShareLinkComponents.VeeDecoder>(config);
 
-        public string EncodeV2rayLink(string config) =>
-            codecs.Encode<ShareLinkComponents.V2rayDecoder>(config);
+        public string EncodeV2cfgLink(string config) =>
+            codecs.Encode<ShareLinkComponents.V2cfgDecoder>(config);
 
         #endregion
 
         #region public methods
-        public void ImportLinkWithOutV2RayLinksBatchMode(
+        public void ImportLinkWithOutV2cfgLinksBatchMode(
             IEnumerable<string[]> linkList)
         {
             var decoders = GenDecoderList(false);
             ImportLinksBatchModeBg(linkList, decoders);
         }
 
-        public void ImportLinkWithOutV2RayLinks(string text)
+        public void ImportLinkWithOutV2cfgLinks(string text)
         {
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
@@ -55,7 +55,7 @@ namespace V2RayGCon.Service
             ImportLinksBatchModeBg(linkList, decoders);
         }
 
-        public void ImportLinkWithV2RayLinks(string text)
+        public void ImportLinkWithV2cfgLinks(string text)
         {
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
@@ -89,7 +89,7 @@ namespace V2RayGCon.Service
         }
 
         List<VgcApis.Models.Interfaces.IShareLinkDecoder> GenDecoderList(
-            bool isIncludeV2rayDecoder)
+            bool isIncludeV2cfgDecoder)
         {
             var decoders = new List<VgcApis.Models.Interfaces.IShareLinkDecoder>
             {
@@ -98,9 +98,9 @@ namespace V2RayGCon.Service
                 codecs.GetComponent<ShareLinkComponents.VeeDecoder>(),
             };
 
-            if (isIncludeV2rayDecoder)
+            if (isIncludeV2cfgDecoder)
             {
-                decoders.Add(codecs.GetComponent<ShareLinkComponents.V2rayDecoder>());
+                decoders.Add(codecs.GetComponent<ShareLinkComponents.V2cfgDecoder>());
             }
 
             return decoders;

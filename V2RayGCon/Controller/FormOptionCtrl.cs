@@ -54,7 +54,9 @@ namespace V2RayGCon.Controller
             foreach (var server in Service.Servers.Instance.GetAllServersOrderByIndex())
             {
                 // insert a space in the front for regex matching
-                serverString += " v2ray://"
+                serverString += @" "
+                    + VgcApis.Models.Datas.Enum.LinkTypes.v2cfg.ToString()
+                    + @"://"
                     + Lib.Utils.Base64Encode(server.GetConfiger().GetConfig())
                     + Environment.NewLine;
             }
@@ -112,7 +114,7 @@ namespace V2RayGCon.Controller
                 && Lib.UI.Confirm(I18N.ConfirmImportServers))
             {
                 Service.ShareLinkMgr.Instance
-                    .ImportLinkWithV2RayLinks(options["servers"]);
+                    .ImportLinkWithV2cfgLinks(options["servers"]);
             }
             else
             {

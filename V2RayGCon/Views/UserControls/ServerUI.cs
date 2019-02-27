@@ -399,13 +399,13 @@ namespace V2RayGCon.Views.UserControls
             MessageBox.Show(success ? I18N.LinksCopied : I18N.CopyFail);
         }
 
-        private void v2rayToolStripMenuItem_Click(object sender, EventArgs e)
+        private void v2cfgToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show(
                            Lib.Utils.CopyToClipboard(
                                Lib.Utils.AddLinkPrefix(
                                    Lib.Utils.Base64Encode(GetConfig()),
-                                   VgcApis.Models.Datas.Enum.LinkTypes.v2ray)) ?
+                                   VgcApis.Models.Datas.Enum.LinkTypes.v2cfg)) ?
                            I18N.LinksCopied :
                            I18N.CopyFail);
         }

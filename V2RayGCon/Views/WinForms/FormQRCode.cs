@@ -121,7 +121,7 @@ namespace V2RayGCon.Views.WinForms
 
             string link = linkType == 0 ?
                 link = slinkMgr.EncodeVmessLink(config) :
-                link = slinkMgr.EncodeV2rayLink(config);
+                link = slinkMgr.EncodeV2cfgLink(config);
 
             tboxLink.Text = link ?? string.Empty;
         }

@@ -212,15 +212,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 10 的本地化字符串。
-        /// </summary>
-        internal static string DecodeCacheSize {
-            get {
-                return ResourceManager.GetString("DecodeCacheSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 v3.26 的本地化字符串。
         /// </summary>
         internal static string DefCoreVersion {
@@ -302,47 +293,11 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 180 的本地化字符串。
-        /// </summary>
-        internal static string LazyGCDelay {
-            get {
-                return ResourceManager.GetString("LazyGCDelay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 30 的本地化字符串。
-        /// </summary>
-        internal static string LazySaveUserSettingsDelay {
-            get {
-                return ResourceManager.GetString("LazySaveUserSettingsDelay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 https://www.youtube.com/watch?v=BA7fdSkp8ds 的本地化字符串。
         /// </summary>
         internal static string Nobody3uVideoUrl {
             get {
                 return ResourceManager.GetString("Nobody3uVideoUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 5 的本地化字符串。
-        /// </summary>
-        internal static string ParseImportDepth {
-            get {
-                return ResourceManager.GetString("ParseImportDepth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 3 的本地化字符串。
-        /// </summary>
-        internal static string ParseImportRetry {
-            get {
-                return ResourceManager.GetString("ParseImportRetry", resourceCulture);
             }
         }
         
@@ -361,15 +316,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string PatternLatestVGC {
             get {
                 return ResourceManager.GetString("PatternLatestVGC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 [^0-9a-zA-Z] 的本地化字符串。
-        /// </summary>
-        internal static string PatternNonAlphabet {
-            get {
-                return ResourceManager.GetString("PatternNonAlphabet", resourceCulture);
             }
         }
         

@@ -66,7 +66,7 @@ namespace V2RayGCon.Views.UserControls
         private void lbCopyFromClipboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             string text = Lib.Utils.GetClipboardText();
-            slinkMgr.ImportLinkWithOutV2RayLinks(text);
+            slinkMgr.ImportLinkWithOutV2cfgLinks(text);
         }
 
         private void lbScanQRCode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -75,7 +75,7 @@ namespace V2RayGCon.Views.UserControls
             {
                 var msg = Lib.Utils.CutStr(text, 90);
                 setting.SendLog($"QRCode: {msg}");
-                slinkMgr.ImportLinkWithOutV2RayLinks(text);
+                slinkMgr.ImportLinkWithOutV2cfgLinks(text);
             }
 
             void Fail()

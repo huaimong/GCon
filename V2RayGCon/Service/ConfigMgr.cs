@@ -201,7 +201,7 @@ namespace V2RayGCon.Service
          */
         public JObject ParseImport(string configString)
         {
-            var maxDepth = Lib.Utils.Str2Int(StrConst.ParseImportDepth);
+            var maxDepth = VgcApis.Models.Consts.Import.ParseImportDepth;
 
             var result = Lib.Utils.ParseImportRecursively(
                 GetHtmlContentFromCache,

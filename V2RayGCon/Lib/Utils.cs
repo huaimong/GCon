@@ -1192,18 +1192,20 @@ namespace V2RayGCon.Lib
             {
                 case VgcApis.Models.Datas.Enum.LinkTypes.ss:
                 case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
-                case VgcApis.Models.Datas.Enum.LinkTypes.v2ray:
+                case VgcApis.Models.Datas.Enum.LinkTypes.v2cfg:
                 case VgcApis.Models.Datas.Enum.LinkTypes.v:
                     pattern = GenLinkPrefix(linkType) + "://" +
-                        VgcApis.Models.Consts.Patterns.PatternBase64;
+                        VgcApis.Models.Consts.Patterns.Base64Standard;
                     break;
                 case VgcApis.Models.Datas.Enum.LinkTypes.http:
-                default:
-                    pattern = VgcApis.Models.Consts.Patterns.PatternUrl;
+                    pattern = VgcApis.Models.Consts.Patterns.HttpUrl;
                     break;
+                default:
+                    throw new NotSupportedException(
+                        $"Not supported link type {linkType.ToString()}:// ...");
             }
 
-            return StrConst.PatternNonAlphabet + pattern;
+            return VgcApis.Models.Consts.Patterns.NonAlphabets + pattern;
         }
 
         public static string AddLinkPrefix(

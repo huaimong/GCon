@@ -228,7 +228,7 @@ namespace V2RayGCon.Service
 
                             var msg=Lib.Utils.CutStr(link,90);
                             setting.SendLog($"QRCode: {msg}");
-                            slinkMgr.ImportLinkWithOutV2RayLinks(link);
+                            slinkMgr.ImportLinkWithOutV2cfgLinks(link);
                         }
 
                         void Fail()
@@ -244,7 +244,7 @@ namespace V2RayGCon.Service
                     Properties.Resources.CopyLongTextToClipboard_16x,
                     (s,a)=>{
                         string links = Lib.Utils.GetClipboardText();
-                        slinkMgr.ImportLinkWithOutV2RayLinks(links);
+                        slinkMgr.ImportLinkWithOutV2cfgLinks(links);
                     }),
 
                 new ToolStripMenuItem(

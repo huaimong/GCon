@@ -34,15 +34,15 @@ namespace V2RayGCon.Controller.FormMainComponent
         #region public method
         public void ImportServersFromTextFile()
         {
-            string v2rayLinks = VgcApis.Libs.UI.ReadFileContentFromDialog(
+            string v2cfgLinks = VgcApis.Libs.UI.ReadFileContentFromDialog(
                 VgcApis.Models.Consts.Files.TxtExt);
 
-            if (v2rayLinks == null)
+            if (v2cfgLinks == null)
             {
                 return;
             }
 
-            slinkMgr.ImportLinkWithV2RayLinks(v2rayLinks);
+            slinkMgr.ImportLinkWithV2cfgLinks(v2cfgLinks);
         }
 
         public void ExportAllServersToTextFile()
@@ -60,7 +60,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 var vlink = Lib.Utils.AddLinkPrefix(
                     Lib.Utils.Base64Encode(server.GetConfiger().GetConfig()),
-                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
 
                 s += vlink + System.Environment.NewLine + System.Environment.NewLine;
             }
@@ -100,7 +100,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             importLinkFromClipboard.Click += (s, a) =>
             {
                 string text = Lib.Utils.GetClipboardText();
-                slinkMgr.ImportLinkWithV2RayLinks(text);
+                slinkMgr.ImportLinkWithV2cfgLinks(text);
             };
 
             exportAllServer.Click += (s, a) => ExportAllServersToTextFile();

@@ -277,7 +277,7 @@ namespace V2RayGCon.Service
             {
                 lazyGCTimer = new Lib.Sys.CancelableTimeout(
                     () => GC.Collect(),
-                    1000 * Lib.Utils.Str2Int(StrConst.LazyGCDelay));
+                    VgcApis.Models.Consts.Intervals.LazyGCDelay);
             }
 
             lazyGCTimer.Start();
@@ -577,8 +577,7 @@ namespace V2RayGCon.Service
             {
                 lazySaveUserSettingsTimer = new Lib.Sys.CancelableTimeout(
                     SaveUserSettingsNow,
-                    1000 * Lib.Utils.Str2Int(
-                        StrConst.LazySaveUserSettingsDelay));
+                    VgcApis.Models.Consts.Intervals.LazySaveUserSettingsDelay);
             }
 
             lazySaveUserSettingsTimer.Start();
