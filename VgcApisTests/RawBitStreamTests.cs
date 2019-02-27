@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace VgcApisTests
@@ -29,22 +30,27 @@ namespace VgcApisTests
             address = bitStream.GetComponent<VgcApis.Libs.Streams.RawBitStream.Address>();
         }
 
-        [DataTestMethod]
-        [DataRow(@"")]
-        [DataRow(@"123abcAbc")]
-        [DataRow(@"abcd1234中文")]
-        [DataRow(@"中文abc1{23+}-./")]
-        [DataRow(@"a中文abc1{23+}-./")]
-        public void BitStreamGenTest(string str)
+        [TestMethod]
+        public void UtilsBoolListTest()
         {
-            var s1 = new VgcApis.Libs.Streams.RawBitStream.RawBitStream();
-            s1.Run();
-            var bytes = Encoding.Unicode.GetBytes(str);
-            s1.FromBytes(bytes);
-            var result = s1.ToBytes();
-            for (int i = 0; i < result.Length; i++)
+            var rand = new Random();
+
+            for (int i = 0; i < 60; i += 3)
             {
-                Assert.AreEqual(result[i], bytes[i]);
+                var source = new List<bool>();
+                for (var j = 0; j < i; j++)
+                {
+                    var v = rand.Next(2);
+                    source.Add(v == 1);
+                }
+                var bytes = VgcApis.Libs.Streams.RawBitStream.Utils.BoolList2Bytes(source);
+                var dest = VgcApis.Libs.Streams.RawBitStream.Utils.Bytes2BoolList(bytes);
+
+                Assert.AreEqual(source.Count, dest.Count);
+                for (int j = 0; j < source.Count; j++)
+                {
+                    Assert.AreEqual(source[j], dest[j]);
+                }
             }
         }
 

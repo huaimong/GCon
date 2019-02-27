@@ -177,13 +177,16 @@
     <Compile Include="Model\BaseClass\NotifyComponent.cs" />
     <Compile Include="Model\BaseClass\SingletonService.cs" />
     <Compile Include="Model\Data\ImportItem.cs" />
-    <Compile Include="Model\Data\Vee.cs" />
     <Compile Include="Service\ConfigMgr.cs" />
     <Compile Include="Service\Launcher.cs" />
     <Compile Include="Service\PluginsServer.cs" />
     <Compile Include="Service\ServersComponents\IndexHandler.cs" />
     <Compile Include="Service\ServersComponents\QueryHandler.cs" />
     <Compile Include="Service\ShareLinkComponents\Codecs.cs" />
+    <Compile Include="Service\ShareLinkComponents\VeeCodecs\IVeeDecoder.cs" />
+    <Compile Include="Service\ShareLinkComponents\VeeCodecs\VeeCodecs.cs" />
+    <Compile Include="Model\VeeShareLinks\Ver001.cs" />
+    <Compile Include="Service\ShareLinkComponents\VeeCodecs\Ver001Decoder.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeDecoder.cs" />
     <Compile Include="Service\ShareLinkComponents\VmessDecoder.cs" />
     <Compile Include="Service\ShareLinkComponents\SsDecoder.cs" />

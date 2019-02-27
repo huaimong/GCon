@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace VgcApisTests
 {
@@ -39,6 +40,30 @@ namespace VgcApisTests
 
         }
 
+        [TestMethod]
+        public void ShortIntTest()
+        {
+            var rand = new Random();
+            for (int i = 0; i < 10; i++)
+            {
+                bs.Clear();
+                const int len = 7;
+                var source = new List<int>();
+                for (int j = 0; j < 3; j++)
+                {
+                    var val = rand.Next(127);
+                    source.Add(val);
+                    bs.WriteTinyInt(val, len);
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    var read = bs.ReadTinyInt(len);
+                    Assert.AreEqual(source[j], read);
+                }
+            }
+        }
+
         [DataTestMethod]
         [DataRow("abc.com")]
         [DataRow("1.2.3.4")]
@@ -62,7 +87,7 @@ namespace VgcApisTests
         {
             bs.Clear();
             bs.Write(str);
-            var result = bs.Read();
+            var result = bs.Read<string>();
             Assert.AreEqual(str, result);
         }
 

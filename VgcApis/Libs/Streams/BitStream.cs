@@ -36,6 +36,9 @@ namespace VgcApis.Libs.Streams
         #endregion
 
         #region public methods
+        public void Rewind() =>
+            rawBitStream.Rewind();
+
         public byte[] ToBytes() =>
             rawBitStream.ToBytes();
 
@@ -47,6 +50,15 @@ namespace VgcApis.Libs.Streams
             }
         }
 
+        public int ReadTinyInt(int len)
+        {
+            CheckIntLen(len);
+            lock (rbsWriteLock)
+            {
+                return numberWriter.Read(len);
+            }
+        }
+
         public string ReadAddress()
         {
             lock (rbsWriteLock)
@@ -55,17 +67,7 @@ namespace VgcApis.Libs.Streams
             }
         }
 
-        public string Read()
-        {
-            lock (rbsWriteLock)
-            {
-                var cache = bytesWriter.Read();
-                return Encoding.UTF8.GetString(cache);
-            }
-        }
-
         public T Read<T>()
-            where T : struct
         {
             lock (rbsWriteLock)
             {
@@ -78,9 +80,23 @@ namespace VgcApis.Libs.Streams
                         return (T)((rawBitStream.Read() == true) as object);
                     case nameof(Guid):
                         return (T)(uuidsWriter.Read() as object);
+                    case nameof(String):
+                        var cache = bytesWriter.Read();
+                        var result = Encoding.UTF8.GetString(cache);
+                        return (T)(result as object);
                     default:
                         throw new NotSupportedException($"Not support type {typeName}");
                 }
+            }
+        }
+
+        public void WriteTinyInt(int number, int len)
+        {
+            CheckIntLen(len);
+
+            lock (rbsWriteLock)
+            {
+                numberWriter.Write(number, len);
             }
         }
 
@@ -92,17 +108,7 @@ namespace VgcApis.Libs.Streams
             }
         }
 
-        public void Write(string str)
-        {
-            lock (rbsWriteLock)
-            {
-                var cache = Encoding.UTF8.GetBytes(str);
-                bytesWriter.Write(cache);
-            }
-        }
-
         public void Write<T>(T val)
-            where T : struct
         {
             lock (rbsWriteLock)
             {
@@ -117,6 +123,10 @@ namespace VgcApis.Libs.Streams
                     case Guid uuid:
                         uuidsWriter.Write(uuid);
                         break;
+                    case string str:
+                        var cache = Encoding.UTF8.GetBytes(str);
+                        bytesWriter.Write(cache);
+                        break;
                     default:
                         throw new NotSupportedException(
                             $"Not supported type {typeof(T)}");
@@ -126,7 +136,14 @@ namespace VgcApis.Libs.Streams
         #endregion
 
         #region private methods
-
+        private static void CheckIntLen(int len)
+        {
+            if (len > BitsPerInt)
+            {
+                throw new OverflowException(
+                    $"Int must less then {BitsPerInt} bit");
+            }
+        }
         #endregion
 
         #region protected methods
