@@ -20,8 +20,18 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region public methods
-        public string Decode(string shareLink) =>
-            SsLink2Config(shareLink);
+        public Tuple<JObject, JToken> Decode(string shareLink)
+        {
+            var outbound = SsLink2Outbound(shareLink);
+            if (outbound == null)
+            {
+                return null;
+            }
+            var tpl = cache.tpl.LoadTemplate("tplImportSS") as JObject;
+
+            return new Tuple<JObject, JToken>(tpl, outbound);
+        }
+
 
         public string Encode(string config)
         {
@@ -35,7 +45,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region private methods
-        string SsLink2Config(string ssLink)
+        JToken SsLink2Outbound(string ssLink)
         {
             Model.Data.Shadowsocks ss = Lib.Utils.SsLink2Ss(ssLink);
             if (ss == null)
@@ -51,8 +61,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
             node["method"] = ss.method;
             node["password"] = ss.pass;
 
-            var tpl = cache.tpl.LoadTemplate("tplImportSS") as JObject;
-            return GetContainer()?.FillDefConfig(ref tpl, outbSs);
+            return outbSs;
         }
         #endregion
 

@@ -18,7 +18,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         {
             this.cache = cache;
             this.setting = setting;
-            veeCodecs = new VeeCodecs.VeeCodecs(cache, this);
+            veeCodecs = new VeeCodecs.VeeCodecs(cache);
             veeCodecs.Run();
         }
 
@@ -26,13 +26,8 @@ namespace V2RayGCon.Service.ShareLinkComponents
 
         #endregion
 
-        #region for components
-        public string FillDefConfig(ref JObject template, JToken outbound) =>
-            GetContainer()?.FillDefConfig(ref template, outbound);
-        #endregion
-
         #region public methods
-        public string Decode(string shareLink)
+        public Tuple<JObject, JToken> Decode(string shareLink)
         {
             string message = null;
             try

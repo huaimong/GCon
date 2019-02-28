@@ -15,29 +15,25 @@ namespace V2RayGCon.Service.ShareLinkComponents
             where TDecoder :
                 VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
                 VgcApis.Models.Interfaces.IShareLinkDecoder
-            => GetComponent<TDecoder>()?.Encode(config);
+        => GetComponent<TDecoder>()?.Encode(config);
+
+
+        public string Decode(
+            string shareLink,
+            VgcApis.Models.Interfaces.IShareLinkDecoder decoder)
+        {
+            var tuple = decoder.Decode(shareLink);
+            return GenerateConfing(tuple);
+
+        }
 
         public string Decode<TDecoder>(string shareLink)
             where TDecoder :
                 VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
                 VgcApis.Models.Interfaces.IShareLinkDecoder
-            => GetComponent<TDecoder>()?.Decode(shareLink);
-
-        public string FillDefConfig(ref JObject template, JToken outbound)
         {
-            var isV4 = setting.isUseV4;
-
-            var inb = Lib.Utils.CreateJObject(
-                (isV4 ? "inbounds.0" : "inbound"),
-                cache.tpl.LoadTemplate("inbSimSock"));
-
-            var outb = Lib.Utils.CreateJObject(
-                (isV4 ? "outbounds.0" : "outbound"),
-                outbound);
-
-            Lib.Utils.MergeJson(ref template, inb);
-            Lib.Utils.MergeJson(ref template, outb);
-            return Lib.Utils.Config2String(template as JObject);
+            var tuple = GetComponent<TDecoder>()?.Decode(shareLink);
+            return GenerateConfing(tuple);
         }
 
         public void Run(
@@ -60,6 +56,40 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region private methods
+        private string GenerateConfing(System.Tuple<JObject, JToken> tuple)
+        {
+            if (tuple == null)
+            {
+                return null;
+            }
+
+            // special case for v2cfg:// ...
+            if (tuple.Item2 == null)
+            {
+                return Lib.Utils.Config2String(tuple.Item1);
+            }
+
+            return InjectOutboundIntoTemplate(tuple.Item1, tuple.Item2);
+        }
+
+
+        string InjectOutboundIntoTemplate(JObject template, JToken outbound)
+        {
+            var isV4 = setting.isUseV4;
+
+            var inb = Lib.Utils.CreateJObject(
+                (isV4 ? "inbounds.0" : "inbound"),
+                cache.tpl.LoadTemplate("inbSimSock"));
+
+            var outb = Lib.Utils.CreateJObject(
+                (isV4 ? "outbounds.0" : "outbound"),
+                outbound);
+
+            Lib.Utils.MergeJson(ref template, inb);
+            Lib.Utils.MergeJson(ref template, outb);
+            return Lib.Utils.Config2String(template as JObject);
+        }
+
         void Plug(VgcApis.Models.Interfaces.IComponent<Codecs> component)
             => Plug(this, component);
         #endregion

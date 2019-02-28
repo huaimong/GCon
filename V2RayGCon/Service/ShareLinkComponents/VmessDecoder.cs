@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +20,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region public methods
-        public string Decode(string shareLink)
+        public Tuple<JObject, JToken> Decode(string shareLink)
         {
             var vmess = Lib.Utils.VmessLink2Vmess(shareLink);
             return Vmess2Config(vmess);
@@ -94,7 +95,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
             return vmess;
         }
 
-        string Vmess2Config(Model.Data.Vmess vmess)
+        Tuple<JObject, JToken> Vmess2Config(Model.Data.Vmess vmess)
         {
             if (vmess == null)
             {
@@ -111,7 +112,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
 
             var tpl = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
             tpl["v2raygcon"]["alias"] = vmess.ps;
-            return GetContainer()?.FillDefConfig(ref tpl, outVmess);
+            return new Tuple<JObject, JToken>(tpl, outVmess);
         }
 
         JToken GenStreamSetting(Model.Data.Vmess vmess)

@@ -35,6 +35,14 @@ namespace VgcApis.Libs.Streams
 
         #endregion
 
+        #region static methods
+        public static string ReadVersion(byte[] bytes) =>
+            RawBitStream.Utils.ReadVersion(bytes);
+
+        public static void WriteVersion(string version, byte[] bytes) =>
+            RawBitStream.Utils.WriteVersion(version, bytes);
+        #endregion
+
         #region public methods
         public void Rewind() =>
             rawBitStream.Rewind();

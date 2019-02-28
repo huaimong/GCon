@@ -178,7 +178,7 @@ namespace V2RayGCon.Service
             List<string[]> results = new List<string[]>();
             foreach (var link in links)
             {
-                var decodedConfig = decoder.Decode(link);
+                var decodedConfig = codecs.Decode(link, decoder);
                 var result = AddLinkToServerList(mark, decodedConfig);
                 if (result.Item1)
                 {

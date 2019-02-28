@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace VgcApis.Models.Interfaces
@@ -16,7 +17,7 @@ namespace VgcApis.Models.Interfaces
         /// <summary>
         /// Return null if decode fail!
         /// </summary>
-        string Decode(string shareLink);
+        Tuple<JObject, JToken> Decode(string shareLink);
 
         /// <summary>
         /// Return null if encode fail!

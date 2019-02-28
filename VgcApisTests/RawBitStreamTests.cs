@@ -30,6 +30,67 @@ namespace VgcApisTests
             address = bitStream.GetComponent<VgcApis.Libs.Streams.RawBitStream.Address>();
         }
 
+        [DataTestMethod]
+        [DataRow(@"0a")]
+        [DataRow(@"123Z")]
+        [DataRow(@"255z")]
+        [DataRow(@"200z")]
+        public void VersionNormalTest(string version)
+        {
+            var rand = new Random();
+            var lenMark = rand.Next(8);
+
+            var bytes = new byte[3] ;
+            bytes[1]=(byte) lenMark;
+
+            VgcApis.Libs.Streams.RawBitStream.Utils.WriteVersion(version, bytes);
+            var read = VgcApis.Libs.Streams.RawBitStream.Utils.ReadVersion( bytes);
+            Assert.AreEqual(version.ToLower(), read);
+
+            int result = bytes[1];
+            Assert.AreEqual(lenMark, result % 8);
+        }
+
+        [DataTestMethod]
+        [DataRow(@"00a")]
+        [DataRow(@"023Z")]
+        public void VersionFailTest2(string version)
+        {
+            var rand = new Random();
+            var lenMark = rand.Next(8);
+
+            var bytes = new byte[3];
+            bytes[1] = (byte)lenMark;
+
+            VgcApis.Libs.Streams.RawBitStream.Utils.WriteVersion(version, bytes);
+            var read = VgcApis.Libs.Streams.RawBitStream.Utils.ReadVersion(bytes);
+            Assert.AreNotEqual(version.ToLower(), read);
+
+            int result = bytes[1];
+            Assert.AreEqual(lenMark, result % 8);
+        }
+
+        [DataTestMethod]
+        [DataRow(@"-1a",3)]
+        [DataRow(@"1a", 1)]
+        [DataRow(@"a", 3)]
+        [DataRow(@"1233z", 3)]
+        [DataRow(@"123", 3)]
+        public void VersionFailTest1(string version,int byteLen)
+        {
+            try
+            {
+                var bytes = new byte[byteLen];
+                VgcApis.Libs.Streams.RawBitStream.Utils.WriteVersion(version, bytes);
+                var read = VgcApis.Libs.Streams.RawBitStream.Utils.ReadVersion(bytes);
+            }
+            catch
+            {
+                return;
+            }
+            Assert.Fail();
+        }
+
         [TestMethod]
         public void UtilsBoolListTest()
         {

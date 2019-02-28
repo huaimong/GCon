@@ -24,6 +24,9 @@ namespace VgcApis.Models.BaseClasses
         }
 
         #region protected methods
+        protected IReadOnlyCollection<IComponent<TContainer>> GetAllComponents() =>
+            components.AsReadOnly();
+
         protected void InitComponents()
         {
             lock (components)

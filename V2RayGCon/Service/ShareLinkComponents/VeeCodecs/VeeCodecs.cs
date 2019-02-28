@@ -7,21 +7,17 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
         VgcApis.Models.BaseClasses.ContainerOf<VeeCodecs>
 
     {
-        VeeDecoder container;
         Cache cache;
 
-        public VeeCodecs(
-            Cache cache,
-            VeeDecoder container)
+        public VeeCodecs(Cache cache)
         {
             this.cache = cache;
-            this.container = container;
         }
 
         public void Run()
         {
-            var vee001 = new Ver001Decoder(cache);
-            Plug(this, vee001);
+            var v0a = new Vee0a(cache);
+            Plug(this, v0a);
         }
 
         #region properties
@@ -29,34 +25,28 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
         #endregion
 
         #region public methods
-        public string FillDefConfig(ref JObject template, JToken outbound) =>
-            container.FillDefConfig(ref template, outbound);
-
-        public string Decode(string shareLink)
+        public Tuple<JObject, JToken> Decode(string shareLink)
         {
             var bytes = VeeLink2Bytes(shareLink);
-            var bitStream = new VgcApis.Libs.Streams.BitStream(bytes);
-            var version = bitStream.Read<int>();
-            bitStream.Rewind();
+            var linkVersion = VgcApis.Libs.Streams.BitStream.ReadVersion(bytes);
 
-            IVeeDecoder decoder;
-            switch (version)
+            foreach (var component in GetAllComponents())
             {
-                case 1:
-                    decoder = GetComponent<Ver001Decoder>();
-                    break;
-                default:
-                    throw new NotSupportedException(
-                        $"Not supported vee share link version ${version}");
+                var decoder = component as IVeeDecoder;
+                if (decoder.GetSupportedVersion() == linkVersion)
+                {
+                    return decoder.Bytes2Config(bytes);
+                }
             }
 
-            return decoder.BitStream2Config(bitStream);
+            throw new NotSupportedException(
+                $"Not supported vee share link version {linkVersion}");
         }
 
         public string Encode(string config)
         {
-            var encoder = GetComponent<Ver001Decoder>();
-            var bytes = encoder.Config2Bytes(config);
+            var encoder = GetComponent<Vee0a>();
+            var bytes = encoder?.Config2Bytes(config);
             return Bytes2VeeLink(bytes);
         }
         #endregion

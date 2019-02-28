@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
 {
-    internal sealed class Ver001Decoder :
+    internal sealed class Vee0a :
         VgcApis.Models.BaseClasses.ComponentOf<VeeCodecs>,
         IVeeDecoder
     {
         Cache cache;
 
-        public Ver001Decoder(Cache cache)
+        public Vee0a(Cache cache)
         {
             this.cache = cache;
         }
@@ -20,6 +20,8 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
         #endregion
 
         #region public methods
+        public string GetSupportedVersion() =>
+           Model.VeeShareLinks.Ver0a.SupportedVersion();
 
         public byte[] Config2Bytes(string config)
         {
@@ -27,20 +29,17 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
             return vee?.ToBytes();
         }
 
-        public string BitStream2Config(
-            VgcApis.Libs.Streams.BitStream bitStream)
+        public Tuple<JObject, JToken> Bytes2Config(byte[] bytes)
         {
-            var veeLink = new Model.VeeShareLinks.Ver001(bitStream);
+            var veeLink = new Model.VeeShareLinks.Ver0a(bytes);
             return VeeToConfig(veeLink);
         }
 
         #endregion
 
         #region private methods
-        Model.VeeShareLinks.Ver001 Config2Vee(string config)
+        Model.VeeShareLinks.Ver0a Config2Vee(string config)
         {
-            var version = 1;
-
             JObject json;
             try
             {
@@ -64,9 +63,8 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
             }
 
             var mainPrefix = root + "." + "settings.vnext.0";
-            var vee = new Model.VeeShareLinks.Ver001
+            var vee = new Model.VeeShareLinks.Ver0a
             {
-                version = version,
                 alias = GetStr("v2raygcon", "alias"),
                 address = GetStr(mainPrefix, "address"),
                 port = Lib.Utils.Str2Int(GetStr(mainPrefix, "port")),
@@ -110,7 +108,7 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
             return vee;
         }
 
-        string VeeToConfig(Model.VeeShareLinks.Ver001 vee)
+        Tuple<JObject, JToken> VeeToConfig(Model.VeeShareLinks.Ver0a vee)
         {
             if (vee == null)
             {
@@ -127,10 +125,10 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
             var tpl = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
             tpl["v2raygcon"]["alias"] = vee.alias;
             tpl["v2raygcon"]["description"] = vee.description;
-            return GetContainer()?.FillDefConfig(ref tpl, outVmess);
+            return new Tuple<JObject, JToken>(tpl, outVmess);
         }
 
-        JToken GenStreamSetting(Model.VeeShareLinks.Ver001 vee)
+        JToken GenStreamSetting(Model.VeeShareLinks.Ver0a vee)
         {
             // insert stream type
             string[] streamTypes = { "ws", "tcp", "kcp", "h2", "quic" };

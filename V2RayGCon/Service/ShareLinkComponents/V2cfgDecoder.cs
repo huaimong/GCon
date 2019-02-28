@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace V2RayGCon.Service.ShareLinkComponents
@@ -14,7 +15,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region public methods
-        public string Decode(string shareLink)
+        public Tuple<JObject, JToken> Decode(string shareLink)
         {
             try
             {
@@ -23,7 +24,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
                         Lib.Utils.GetLinkBody(shareLink)));
                 if (config != null)
                 {
-                    return Lib.Utils.Config2String(config);
+                    return new Tuple<JObject, JToken>(config, null);
                 }
             }
             catch { }
