@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -40,11 +41,30 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public methods
+        public int UpdateSubscriptions(int proxyPort)
+        {
+            var subs = setting.GetSubscriptionItems();
+
+            var links = Lib.Utils.FetchLinksFromSubcriptions(
+                    subs, proxyPort);
+
+            var decoders = GenDecoderList(false);
+            var results = ImportLinksBatchModeSync(links, decoders);
+            return results
+                .Where(r => r.Item1)
+                .SelectMany(r => r.Item2)
+                .Where(l => l[3] == "√")
+                .Count();
+        }
+
         public void ImportLinkWithOutV2cfgLinksBatchMode(
             IEnumerable<string[]> linkList)
         {
             var decoders = GenDecoderList(false);
-            ImportLinksBatchModeBg(linkList, decoders);
+            ImportLinksBatchModeThen(
+                linkList,
+                decoders,
+                (result) => ShowImportResults(result));
         }
 
         public void ImportLinkWithOutV2cfgLinks(string text)
@@ -52,7 +72,10 @@ namespace V2RayGCon.Service
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
             var decoders = GenDecoderList(false);
-            ImportLinksBatchModeBg(linkList, decoders);
+            ImportLinksBatchModeThen(
+                linkList,
+                decoders,
+                (result) => ShowImportResults(result));
         }
 
         public void ImportLinkWithV2cfgLinks(string text)
@@ -60,7 +83,10 @@ namespace V2RayGCon.Service
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
             var decoders = GenDecoderList(true);
-            ImportLinksBatchModeBg(linkList, decoders);
+            ImportLinksBatchModeThen(
+                linkList,
+                decoders,
+                (result) => ShowImportResults(result));
         }
 
         public void Run(
@@ -78,13 +104,15 @@ namespace V2RayGCon.Service
         #endregion
 
         #region private methods
-        void ImportLinksBatchModeBg(
+        void ImportLinksBatchModeThen(
             IEnumerable<string[]> linkList,
-            IEnumerable<VgcApis.Models.Interfaces.IShareLinkDecoder> decoders)
+            IEnumerable<VgcApis.Models.Interfaces.IShareLinkDecoder> decoders,
+            Action<List<Tuple<bool, List<string[]>>>> next)
         {
             VgcApis.Libs.Utils.RunInBackground(() =>
             {
-                ImportLinksBatchModeSync(linkList, decoders);
+                var results = ImportLinksBatchModeSync(linkList, decoders);
+                next(results);
             });
         }
 
@@ -110,7 +138,7 @@ namespace V2RayGCon.Service
         /// <para>linkList=List(string[]{0: text, 1: mark}>)</para>
         /// <para>decoders = List(IShareLinkDecoder)</para>
         /// </summary>
-        void ImportLinksBatchModeSync(
+        List<Tuple<bool, List<string[]>>> ImportLinksBatchModeSync(
             IEnumerable<string[]> linkList,
             IEnumerable<VgcApis.Models.Interfaces.IShareLinkDecoder> decoders)
         {
@@ -130,8 +158,8 @@ namespace V2RayGCon.Service
                 return ImportShareLinks(job.Item1, job.Item2, job.Item3);
             }
 
-            var results = Lib.Utils.ExecuteInParallel(jobs, worker);
-            ShowImportResults(results);
+            return Lib.Utils.ExecuteInParallel(jobs, worker);
+
         }
 
         void ShowImportResults(IEnumerable<Tuple<bool, List<string[]>>> results)
@@ -154,18 +182,18 @@ namespace V2RayGCon.Service
 
             if (isAddNewServer)
             {
-                servers.UpdateAllServersSummary();
+                servers.UpdateAllServersSummaryBg();
             }
 
-            if (lines.Count > 0)
-            {
-                new Views.WinForms.FormImportLinksResult(lines);
-                Application.Run();
-            }
-            else
+            if (lines.Count <= 0)
             {
                 MessageBox.Show(I18N.NoLinkFound);
+                return;
             }
+
+            var form = new Views.WinForms.FormImportLinksResult(lines);
+            form.Show();
+            Application.Run();
         }
 
         private Tuple<bool, List<string[]>> ImportShareLinks(

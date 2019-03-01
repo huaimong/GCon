@@ -5,5 +5,6 @@
         string DecodeVmessLink(string vmessLink);
         string EncodeVmessLink(string config);
         string EncodeV2cfgLink(string config);
+        int UpdateSubscriptions(int proxyPort);
     }
 }

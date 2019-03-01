@@ -8,12 +8,14 @@ namespace VgcApis.Models.IServices
     {
         event EventHandler OnCoreStart, OnCoreClosing;
 
+        int GetAvailableHttpProxyPort();
+        string ReplaceOrAddNewServer(string orgUid, string newConfig);
         void RequireFormMainReload();
         void ResteIndexQuiet();
+        bool RunSpeedTestOnSelectedServers();
         void SortSelectedBySpeedTest();
         void SortSelectedBySummary();
-
-        bool RunSpeedTestOnSelectedServers();
+        void UpdateAllServersSummarySync();
 
         string PackSelectedServersIntoV4Package(
             string orgUid, string pkgName);
@@ -22,9 +24,6 @@ namespace VgcApis.Models.IServices
             List<Interfaces.ICoreServCtrl> servList,
             string orgServerUid,
             string packageName);
-
-        int GetAvailableHttpProxyPort();
-        string ReplaceOrAddNewServer(string orgUid, string newConfig);
 
         ReadOnlyCollection<Interfaces.ICoreServCtrl> GetTrackableServerList();
         ReadOnlyCollection<Interfaces.ICoreServCtrl> GetAllServersOrderByIndex();

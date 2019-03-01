@@ -4,7 +4,7 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
-        void SetShareMemory(string key, string value);
+
         string GetShareMemory(string key);
 
         List<string> ExtractVmessLinks(string text);
@@ -15,10 +15,7 @@ namespace VgcApis.Models.Interfaces
 
         string Fetch(string url);
 
-        /// <summary>
-        /// timeout seconds
-        /// </summary>
-        string Fetch(string url, int proxyPort, int timeout);
+        string Fetch(string url, int proxyPort, int milliSeconds);
 
         List<ICoreServCtrl> GetAllServers();
 
@@ -51,16 +48,15 @@ namespace VgcApis.Models.Interfaces
         long RunSpeedTest(string rawConfig);
         bool RunSpeedTestOnSelectedServers();
 
-        void SortSelectedServersBySummary();
-        void SortSelectedServersBySpeedTest();
-
         string Search(string keywords, int first, int proxyPort);
-
-        /// <summary>
-        /// Api:Sleep(1000) // one second
-        /// </summary>
-        /// <param name="millisecond"></param>
+        void SetShareMemory(string key, string value);
         void Sleep(int millisecond);
+        void SortSelectedServersBySpeedTest();
+        void SortSelectedServersBySummary();
+
+        void UpdateAllSummary();
+        int UpdateSubscriptions();
+        int UpdateSubscriptions(int proxyPort);
 
         string VmessLink2ConfigString(string vmessLink);
     }

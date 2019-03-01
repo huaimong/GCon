@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -126,18 +125,7 @@ namespace V2RayGCon.Controller.OptionComponent
             this.btnUpdate.Click += (s, a) =>
             {
                 this.btnUpdate.Enabled = false;
-
-                var subs = new Dictionary<string, string>();
-                foreach (Views.UserControls.SubscriptionUI item in this.flyPanel.Controls)
-                {
-                    var value = item.GetValue();
-                    if (value.isUse
-                        && !string.IsNullOrEmpty(value.url)
-                        && !subs.ContainsKey(value.url))
-                    {
-                        subs[value.url] = value.isSetMark ? value.alias : null;
-                    }
-                }
+                var subs = GetSubsIsInUse();
 
                 if (subs.Count <= 0)
                 {
@@ -146,8 +134,57 @@ namespace V2RayGCon.Controller.OptionComponent
                     return;
                 }
 
-                ImportFromSubscriptionUrls(subs);
+                VgcApis.Libs.Utils.RunInBackground(() =>
+                {
+                    var links = Lib.Utils.FetchLinksFromSubcriptions(
+                    subs,
+                    GetAvailableHttpProxyPort());
+
+                    LogDownloadFails(links
+                        .Where(l => string.IsNullOrEmpty(l[0]))
+                        .Select(l => l[1]));
+
+                    slinkMgr.ImportLinkWithOutV2cfgLinksBatchMode(
+                        links.Where(l => !string.IsNullOrEmpty(l[0])).ToList());
+
+                    EnableBtnUpdate();
+                });
             };
+        }
+
+        private void LogDownloadFails(IEnumerable<string> links)
+        {
+            var downloadFailUrls = links.ToList();
+            if (downloadFailUrls.Count() <= 0)
+            {
+                return;
+            }
+
+            downloadFailUrls.Insert(0, "");
+            setting.SendLog(string.Join(
+                Environment.NewLine + I18N.DownloadFail + @" ",
+                downloadFailUrls));
+        }
+
+        private List<Model.Data.SubscriptionItem> GetSubsIsInUse()
+        {
+            var subs = new List<Model.Data.SubscriptionItem>();
+            var urlCache = new List<string>();
+
+            foreach (Views.UserControls.SubscriptionUI subUi in this.flyPanel.Controls)
+            {
+                var subItem = subUi.GetValue();
+                if (!subItem.isUse
+                    || urlCache.Contains(subItem.url))
+                {
+                    continue;
+                }
+
+                urlCache.Add(subItem.url);
+                subs.Add(subItem);
+            }
+
+            return subs;
         }
 
         void BindEventFlyPanelDragDrop()
@@ -189,19 +226,6 @@ namespace V2RayGCon.Controller.OptionComponent
             }
         }
 
-        private void ImportFromSubscriptionUrls(
-            Dictionary<string, string> subscriptions)
-        {
-            VgcApis.Libs.Utils.RunInBackground(() =>
-            {
-                // dict( [url]=>mark ) to list(url,mark) mark maybe null
-                var subsUrl = subscriptions.Select(s => s).ToList();
-                List<string[]> links = BatchGetLinksFromSubsUrl(subsUrl);
-                slinkMgr.ImportLinkWithOutV2cfgLinksBatchMode(links);
-                EnableBtnUpdate();
-            });
-        }
-
         int GetAvailableHttpProxyPort()
         {
             if (!chkSubsIsUseProxy.Checked)
@@ -220,44 +244,6 @@ namespace V2RayGCon.Controller.OptionComponent
                     I18N.NoQualifyProxyServer));
 
             return -1;
-        }
-
-        private List<string[]> BatchGetLinksFromSubsUrl(
-            List<KeyValuePair<string, string>> subscriptionInfos)
-        {
-            var proxyPort = GetAvailableHttpProxyPort();
-
-            Func<KeyValuePair<string, string>, string[]> worker = (item) =>
-            {
-                // item[url]=mark
-                var subsString = Lib.Utils.Fetch(
-                    item.Key,
-                    proxyPort,
-                    VgcApis.Models.Consts.Import.ParseImportTimeout);
-
-                if (string.IsNullOrEmpty(subsString))
-                {
-                    setting.SendLog(I18N.DownloadFail + "\n" + item.Key);
-                    return new string[] { string.Empty, item.Value };
-                }
-
-                var links = new List<string>();
-                var matches = Regex.Matches(
-                    subsString,
-                    VgcApis.Models.Consts.Patterns.Base64NonStandard);
-                foreach (Match match in matches)
-                {
-                    try
-                    {
-                        links.Add(Lib.Utils.Base64Decode(match.Value));
-                    }
-                    catch { }
-                }
-
-                return new string[] { string.Join("\n", links), item.Value };
-            };
-
-            return Lib.Utils.ExecuteInParallel(subscriptionInfos, worker);
         }
 
         private void EnableBtnUpdate()

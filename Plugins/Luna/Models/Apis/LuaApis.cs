@@ -31,6 +31,15 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public int UpdateSubscriptions() =>
+            vgcSlinkMgr.UpdateSubscriptions(-1);
+
+        public int UpdateSubscriptions(int proxyPort) =>
+            vgcSlinkMgr.UpdateSubscriptions(proxyPort);
+
+        public void UpdateAllSummary() =>
+            vgcServers.UpdateAllServersSummarySync();
+
         public void SetShareMemory(string key, string value) =>
             settings.SetLuaShareMemory(key, value);
 
@@ -84,8 +93,8 @@ namespace Luna.Models.Apis
         public int GetProxyPort() =>
             vgcServers.GetAvailableHttpProxyPort();
 
-        public string Fetch(string url, int proxyPort, int timeout) =>
-            vgcWeb.Fetch(url, proxyPort, timeout * 1000);
+        public string Fetch(string url, int proxyPort, int milliSeconds) =>
+            vgcWeb.Fetch(url, proxyPort, milliSeconds);
 
         public string Fetch(string url) => vgcWeb.Fetch(url, -1, -1);
 

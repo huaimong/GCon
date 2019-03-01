@@ -141,7 +141,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             refreshSummary.Click += (s, a) =>
             {
                 cache.html.Clear();
-                servers.UpdateAllServersSummary();
+                servers.UpdateAllServersSummaryBg();
             };
 
             deleteAllItems.Click += (s, a) =>

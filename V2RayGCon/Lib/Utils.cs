@@ -769,6 +769,53 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region net
+        /// <summary>
+        /// List( success ? ( vmess://... , mark ) : ( "", [alias] url ) )
+        /// </summary>
+        /// <param name="subscriptions"></param>
+        /// <param name="proxyPort"></param>
+        /// <returns></returns>
+        public static List<string[]> FetchLinksFromSubcriptions(
+            List<Model.Data.SubscriptionItem> subscriptions,
+            int proxyPort)
+        {
+            Func<Model.Data.SubscriptionItem, string[]> worker = (subItem) =>
+            {
+                var url = subItem.url;
+                var mark = subItem.isSetMark ? subItem.alias : null;
+
+                var subsString = Lib.Utils.Fetch(
+                    url,
+                    proxyPort,
+                    VgcApis.Models.Consts.Import.ParseImportTimeout);
+
+                if (string.IsNullOrEmpty(subsString))
+                {
+                    return new string[] {
+                        string.Empty,
+                        $"[{subItem.alias}] {url}",
+                    };
+                }
+
+                var links = new List<string>();
+                var matches = Regex.Matches(
+                    subsString,
+                    VgcApis.Models.Consts.Patterns.Base64NonStandard);
+                foreach (Match match in matches)
+                {
+                    try
+                    {
+                        links.Add(Lib.Utils.Base64Decode(match.Value));
+                    }
+                    catch { }
+                }
+
+                return new string[] { string.Join("\n", links), mark };
+            };
+
+            return Lib.Utils.ExecuteInParallel(subscriptions, worker);
+        }
+
         public static string GetBaseUrl(string url)
         {
             try
