@@ -4,13 +4,13 @@ using System.Linq;
 
 namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
 {
-    internal sealed class Vee0a :
+    internal sealed class Vee0b :
         VgcApis.Models.BaseClasses.ComponentOf<VeeCodecs>,
         IVeeDecoder
     {
         Cache cache;
 
-        public Vee0a(Cache cache)
+        public Vee0b(Cache cache)
         {
             this.cache = cache;
         }
@@ -21,7 +21,7 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
 
         #region public methods
         public string GetSupportedVersion() =>
-           Model.VeeShareLinks.Ver0a.SupportedVersion();
+           Model.VeeShareLinks.Ver0b.SupportedVersion();
 
         public byte[] Config2Bytes(JObject config)
         {
@@ -31,37 +31,45 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
 
         public Tuple<JObject, JToken> Bytes2Config(byte[] bytes)
         {
-            var veeLink = new Model.VeeShareLinks.Ver0a(bytes);
+            var veeLink = new Model.VeeShareLinks.Ver0b(bytes);
             return VeeToConfig(veeLink);
         }
 
         #endregion
 
         #region private methods
-        Model.VeeShareLinks.Ver0a Config2Vee(JObject config)
+        Model.VeeShareLinks.Ver0b Config2Vee(JObject config)
         {
             var GetStr = Lib.Utils.GetStringByPrefixAndKeyHelper(config);
-            var isUseV4 = (GetStr("outbounds.0", "protocol")?.ToLower()) == "vmess";
+            var isUseV4 = (GetStr("outbounds.0", "protocol")?.ToLower()) ==
+                VgcApis.Models.Consts.Config.ProtocolNameSs;
+
             var root = isUseV4 ? "outbounds.0" : "outbound";
             if (!isUseV4)
             {
                 var protocol = GetStr(root, "protocol")?.ToLower();
-                if (protocol == null || protocol != "vmess")
+                if (protocol == null ||
+                    protocol != VgcApis.Models.Consts.Config.ProtocolNameSs)
                 {
                     return null;
                 }
             }
 
-            var mainPrefix = root + "." + "settings.vnext.0";
-            var vee = new Model.VeeShareLinks.Ver0a
+            var mainPrefix = root + "." + "settings.servers.0";
+            var vee = new Model.VeeShareLinks.Ver0b
             {
                 alias = GetStr("v2raygcon", "alias"),
+                description = GetStr("v2raygcon", "description"),
+
                 address = GetStr(mainPrefix, "address"),
                 port = Lib.Utils.Str2Int(GetStr(mainPrefix, "port")),
-                alterId = Lib.Utils.Str2Int(GetStr(mainPrefix, "users.0.alterId")),
-                uuid = Guid.Parse(GetStr(mainPrefix, "users.0.id")),
-                description = GetStr("v2raygcon", "description"),
+                method = GetStr(mainPrefix, "method"),
+                password = GetStr(mainPrefix, "password"),
+                isUseOta = GetStr(mainPrefix, "ota")?.ToLower() == "true",
             };
+
+            var networkTypeName = GetStr(mainPrefix, "network");
+            vee.SetNetworkType(networkTypeName);
 
             var subPrefix = root + "." + "streamSettings";
             vee.streamType = GetStr(subPrefix, "network");
@@ -99,32 +107,40 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
             return vee;
         }
 
-        Tuple<JObject, JToken> VeeToConfig(Model.VeeShareLinks.Ver0a vee)
+        JToken GenOutboundFrom(Model.VeeShareLinks.Ver0b vee)
+        {
+            var outbSs = cache.tpl.LoadTemplate("outbVeeSs");
+            var node = outbSs["settings"]["servers"][0];
+
+            node["ota"] = vee.isUseOta;
+            node["address"] = vee.address;
+            node["port"] = vee.port;
+            node["method"] = vee.method;
+            node["password"] = vee.password;
+
+            if (vee.GetCurNetworkTypeIndex() != 0)
+            {
+                node["network"] = vee.GetCurNetworkTypeName();
+            }
+            return outbSs;
+        }
+
+        Tuple<JObject, JToken> VeeToConfig(Model.VeeShareLinks.Ver0b vee)
         {
             if (vee == null)
             {
                 return null;
             }
 
-            var outVmess = cache.tpl.LoadTemplate("outbVeeVmess");
-            outVmess["streamSettings"] = GenStreamSetting(vee);
-            var node = outVmess["settings"]["vnext"][0];
-            node["address"] = vee.address;
-            node["port"] = vee.port;
-            node["users"][0]["id"] = vee.uuid;
-
-            if (vee.alterId > 0)
-            {
-                node["users"][0]["alterId"] = vee.alterId;
-            }
-
-            var tpl = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
+            var outbSs = GenOutboundFrom(vee);
+            outbSs["streamSettings"] = GenStreamSetting(vee);
+            var tpl = cache.tpl.LoadTemplate("tplImportSS") as JObject;
             tpl["v2raygcon"]["alias"] = vee.alias;
             tpl["v2raygcon"]["description"] = vee.description;
-            return new Tuple<JObject, JToken>(tpl, outVmess);
+            return new Tuple<JObject, JToken>(tpl, outbSs);
         }
 
-        JToken GenStreamSetting(Model.VeeShareLinks.Ver0a vee)
+        JToken GenStreamSetting(Model.VeeShareLinks.Ver0b vee)
         {
             // insert stream type
             string[] streamTypes = { "ws", "tcp", "kcp", "h2", "quic" };

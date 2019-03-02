@@ -17,7 +17,10 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
         public void Run()
         {
             var v0a = new Vee0a(cache);
+            var v0b = new Vee0b(cache);
+
             Plug(this, v0a);
+            Plug(this, v0b);
         }
 
         #region properties
@@ -45,8 +48,27 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
 
         public string Encode(string config)
         {
-            var encoder = GetComponent<Vee0a>();
-            var bytes = encoder?.Config2Bytes(config);
+            if (!VgcApis.Libs.Utils.TryParseJObject(
+                config, out JObject json))
+            {
+                return null;
+            }
+
+            IVeeDecoder encoder;
+            var protocol = Lib.Utils.GetProtocolFromConfig(json);
+            switch (protocol)
+            {
+                case VgcApis.Models.Consts.Config.ProtocolNameVmess:
+                    encoder = GetComponent<Vee0a>();
+                    break;
+                case VgcApis.Models.Consts.Config.ProtocolNameSs:
+                    encoder = GetComponent<Vee0b>();
+                    break;
+                default:
+                    return null;
+            }
+
+            var bytes = encoder?.Config2Bytes(json);
             return Bytes2VeeLink(bytes);
         }
         #endregion

@@ -12,6 +12,23 @@ namespace VgcApisTests
     [TestClass]
     public class UtilsTests
     {
+        [DataTestMethod]
+        [DataRow(-4, -1)]
+        [DataRow(-65535, -1)]
+        [DataRow(-65535, -1)]
+        [DataRow(0, 0)]
+        [DataRow(1, 1)]
+        [DataRow(4, 3)]
+        [DataRow(8, 4)]
+        [DataRow(16, 5)]
+        [DataRow(65535, 16)]
+        [DataRow(65536, 17)]
+        public void GetLenInBitsOfIntTest(int value, int expect)
+        {
+            var len = GetLenInBitsOfInt(value);
+            Assert.AreEqual(expect, len);
+        }
+
         [TestMethod]
         public void GetFreePortMultipleThreadsTest()
         {

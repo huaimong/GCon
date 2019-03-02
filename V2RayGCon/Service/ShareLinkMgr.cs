@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
@@ -34,9 +35,6 @@ namespace V2RayGCon.Service
 
         public string EncodeVeeLink(string config) =>
             codecs.Encode<ShareLinkComponents.VeeDecoder>(config);
-
-        public string EncodeV2cfgLink(string config) =>
-            codecs.Encode<ShareLinkComponents.V2cfgDecoder>(config);
 
         #endregion
 
@@ -82,7 +80,14 @@ namespace V2RayGCon.Service
         {
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
-            var decoders = GenDecoderList(true);
+
+            // var decoders = GenDecoderList(true);
+
+            var decoders = new List<VgcApis.Models.Interfaces.IShareLinkDecoder>
+            {
+                codecs.GetComponent<ShareLinkComponents.V2cfgDecoder>(),
+            };
+
             ImportLinksBatchModeThen(
                 linkList,
                 decoders,
@@ -203,16 +208,25 @@ namespace V2RayGCon.Service
         {
             var links = decoder.ExtractLinksFromText(text);
             bool isAddNewServer = false;
-            List<string[]> results = new List<string[]>();
-            foreach (var link in links)
+
+            string[] worker(string link)
             {
+                Stopwatch watch = new Stopwatch();
+                watch.Start();
                 var decodedConfig = codecs.Decode(link, decoder);
-                var result = AddLinkToServerList(mark, decodedConfig);
-                if (result.Item1)
+                watch.Stop();
+                Debug.WriteLine("decode: ", watch.ElapsedTicks)
+                var msg = AddLinkToServerList(mark, decodedConfig);
+                return GenImportResult(link, msg.Item1, msg.Item2, mark);
+            }
+
+            var results = Lib.Utils.ExecuteInParallel(links, worker);
+            foreach (var result in results)
+            {
+                if (result[3] == "√")
                 {
                     isAddNewServer = true;
                 }
-                results.Add(GenImportResult(link, result.Item1, result.Item2, mark));
             }
             return new Tuple<bool, List<string[]>>(isAddNewServer, results);
         }

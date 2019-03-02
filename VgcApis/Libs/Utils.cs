@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
 using System.IO;
@@ -41,6 +42,19 @@ namespace VgcApis.Libs
         #endregion
 
         #region Json
+        public static bool TryParseJObject(
+           string jsonString, out JObject json)
+        {
+            json = null;
+            try
+            {
+                json = JObject.Parse(jsonString);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
         public static void SavePluginSetting<T>(
             string pluginName,
             T userSettings,
@@ -156,6 +170,20 @@ namespace VgcApis.Libs
                 return match.Groups[groupName].Value;
             }
             return string.Empty;
+        }
+
+        #endregion
+
+        #region numbers
+        public static int GetLenInBitsOfInt(int value)
+        {
+            var k = 0;
+            while (value > 0)
+            {
+                value = value >> 1;
+                k++;
+            }
+            return value < 0 ? -1 : k;
         }
 
         #endregion

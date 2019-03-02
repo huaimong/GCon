@@ -123,13 +123,13 @@
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btnSavePic.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 7</value>
+    <value>414, 10</value>
   </data>
   <data name="picQRCode.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 61</value>
+    <value>18, 92</value>
   </data>
   <data name="picQRCode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 320</value>
+    <value>479, 479</value>
   </data>
   <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
     <value>groupBox1</value>
@@ -146,17 +146,20 @@
   <data name="&gt;&gt;picQRCode.Name" xml:space="preserve">
     <value>picQRCode</value>
   </data>
-  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
-    <value>360, 474</value>
+  <data name="label1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
+  </data>
+  <data name="groupBox1.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="btnCopy.Location" type="System.Drawing.Point, System.Drawing">
-    <value>276, 32</value>
+    <value>414, 48</value>
   </data>
   <data name="cboxLinkType.Items1" xml:space="preserve">
-    <value>v2ray</value>
+    <value>vee</value>
   </data>
-  <data name="$this.Text" xml:space="preserve">
-    <value>QRCode generator</value>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="label3.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -174,7 +177,10 @@
     <value>4</value>
   </data>
   <data name="radioButton2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>118, 20</value>
+    <value>177, 30</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>529, 683</value>
   </data>
   <data name="radioButton2.Text" xml:space="preserve">
     <value>Zoom (Scan QRCode may fail!)</value>
@@ -183,10 +189,10 @@
     <value>$this</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>346, 441</value>
+    <value>519, 662</value>
   </data>
   <data name="label3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>29, 12</value>
+    <value>44, 18</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
@@ -196,10 +202,13 @@
     <value>$this</value>
   </data>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
+    <value>9, 18</value>
   </data>
   <data name="&gt;&gt;label3.Name" xml:space="preserve">
     <value>label3</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>QRCode generator</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -217,7 +226,7 @@
     <value>$this</value>
   </data>
   <data name="label3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>170, 12</value>
+    <value>255, 18</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>7</value>
@@ -232,7 +241,13 @@
     <value>1</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 12</value>
+    <value>62, 18</value>
+  </data>
+  <data name="rbtnIsCenterImage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="tboxLink.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="&gt;&gt;rbtnIsCenterImage.Type" xml:space="preserve">
     <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -259,7 +274,7 @@
     <value>vmess</value>
   </data>
   <data name="btnCopy.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 23</value>
+    <value>87, 34</value>
   </data>
   <data name="&gt;&gt;tboxLink.Type" xml:space="preserve">
     <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -277,7 +292,7 @@
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="rbtnIsCenterImage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>21, 20</value>
+    <value>32, 30</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -288,17 +303,26 @@
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="radioButton2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>285, 22</value>
+  </data>
   <data name="cboxLinkType.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
+  <data name="groupBox1.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="label3.Text" xml:space="preserve">
     <value>Type</value>
+  </data>
+  <data name="label3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="&gt;&gt;btnCopy.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 387</value>
+    <value>18, 580</value>
   </data>
   <data name="&gt;&gt;cboxServList.Parent" xml:space="preserve">
     <value>$this</value>
@@ -307,7 +331,7 @@
     <value>cboxServList</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>320, 47</value>
+    <value>480, 70</value>
   </data>
   <data name="btnSavePic.Text" xml:space="preserve">
     <value>Save</value>
@@ -322,7 +346,7 @@
     <value>5</value>
   </data>
   <data name="cboxServList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>105, 20</value>
+    <value>156, 26</value>
   </data>
   <data name="btnCopy.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -345,6 +369,9 @@
   <data name="&gt;&gt;cboxLinkType.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="picQRCode.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="&gt;&gt;btnSavePic.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -352,7 +379,7 @@
     <value>btnCopy</value>
   </data>
   <data name="cboxLinkType.Location" type="System.Drawing.Point, System.Drawing">
-    <value>205, 8</value>
+    <value>308, 12</value>
   </data>
   <data name="btnCopy.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -364,7 +391,7 @@
     <value>FormQRCode</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 12</value>
+    <value>18, 18</value>
   </data>
   <data name="&gt;&gt;radioButton2.Parent" xml:space="preserve">
     <value>groupBox1</value>
@@ -373,7 +400,7 @@
     <value>radioButton2</value>
   </data>
   <data name="tboxLink.Size" type="System.Drawing.Size, System.Drawing">
-    <value>258, 21</value>
+    <value>385, 28</value>
   </data>
   <data name="btnSavePic.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -384,8 +411,8 @@
   <data name="&gt;&gt;btnCopy.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="radioButton2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>191, 16</value>
+  <data name="cboxServList.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="rbtnIsCenterImage.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -399,11 +426,14 @@
   <data name="cboxServList.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
+  <data name="cboxLinkType.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="cboxServList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>59, 8</value>
+    <value>88, 12</value>
   </data>
   <data name="tboxLink.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 34</value>
+    <value>18, 51</value>
   </data>
   <data name="&gt;&gt;cboxServList.Type" xml:space="preserve">
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -411,8 +441,14 @@
   <data name="&gt;&gt;btnSavePic.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
+  <data name="btnSavePic.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
+  <data name="radioButton2.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
+  </data>
   <data name="btnSavePic.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 23</value>
+    <value>87, 34</value>
   </data>
   <data name="cboxLinkType.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -421,7 +457,7 @@
     <value>cboxLinkType</value>
   </data>
   <data name="cboxLinkType.Size" type="System.Drawing.Size, System.Drawing">
-    <value>65, 20</value>
+    <value>96, 26</value>
   </data>
   <data name="label3.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -433,13 +469,16 @@
     <value>System.Windows.Forms.PictureBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="rbtnIsCenterImage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>41, 16</value>
+    <value>60, 22</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="btnCopy.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="radioButton2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>

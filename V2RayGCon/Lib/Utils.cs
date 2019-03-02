@@ -527,6 +527,54 @@ namespace V2RayGCon.Lib
         }
 
         /// <summary>
+        /// Return 0 if not exist.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static int GetAlterIdFromVmessConfig(JObject json)
+        {
+            var paths = new string[] {
+                "outbound.settings.vnext.0.users.0.alterId",
+                "outbounds.0.settings.vnext.0.users.0.alterId",
+            };
+
+            foreach (var path in paths)
+            {
+                var id = Lib.Utils.GetValue<int>(json, path);
+                if (id > 0)
+                {
+                    return VgcApis.Libs.Utils.Clamp(id, 0, 65535);
+                }
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Return null if not found!
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static string GetProtocolFromConfig(JObject config)
+        {
+            var keys = new string[]
+            {
+                "outbound.protocol",
+                "outbounds.0.protocol",
+            };
+
+            foreach (var key in keys)
+            {
+                var value = GetValue<string>(config, key);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return value.ToLower();
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// return null if path is null or path not exists.
         /// </summary>
         /// <param name="json"></param>
@@ -1140,6 +1188,7 @@ namespace V2RayGCon.Lib
             return idxP == p.Length;
         }
 
+        static object genRandomNumberLocker = new object();
         public static string RandomHex(int length)
         {
             //  https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
@@ -1150,10 +1199,19 @@ namespace V2RayGCon.Lib
 
             Random random = new Random();
             const string chars = "0123456789abcdef";
-            return new string(
-                Enumerable.Repeat(chars, length)
-                    .Select(s => s[random.Next(s.Length)])
-                    .ToArray());
+            int charLen = chars.Length;
+
+            int rndIndex;
+            StringBuilder sb = new StringBuilder("");
+            for (int i = 0; i < length; i++)
+            {
+                lock (genRandomNumberLocker)
+                {
+                    rndIndex = random.Next(charLen);
+                }
+                sb.Append(chars[rndIndex]);
+            }
+            return sb.ToString();
         }
 
         public static int Clamp(int value, int min, int max)

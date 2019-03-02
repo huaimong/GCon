@@ -5,12 +5,14 @@ namespace V2RayGCon.Model.VeeShareLinks
 {
     public sealed class Ver0a
     {
+        // ver 0a is optimized for vmess protocol 
+
         const string version = @"0a";
         static public string SupportedVersion() => version;
 
         public string alias, description; // 256 bytes each
         public bool isUseTls;
-        public int port; // 16 bit
+        public int port, alterId; // 16 bit each
         public Guid uuid;
         public string address; // 256 bytes
         public string streamType, streamParam1, streamParam2, streamParam3; // 256 bytes each
@@ -37,6 +39,76 @@ namespace V2RayGCon.Model.VeeShareLinks
             "dtls", "wireguard", "",
         };
 
+        #endregion
+
+        #region public methods
+
+        public Ver0a(byte[] bytes) :
+            this()
+        {
+            var ver = VgcApis.Libs.Streams.BitStream.ReadVersion(bytes);
+            if (ver != version)
+            {
+                throw new NotSupportedException(
+                    $"Not supported version ${ver}");
+            }
+
+            using (var bs = new VgcApis.Libs.Streams.BitStream(bytes))
+            {
+                alias = bs.Read<string>();
+                description = ReadString(bs);
+                isUseTls = bs.Read<bool>();
+                port = bs.Read<int>();
+                alterId = bs.Read<int>();
+                uuid = bs.Read<Guid>();
+                address = bs.ReadAddress();
+                streamType = ReadString(bs);
+                streamParam1 = ReadString(bs);
+                streamParam2 = ReadString(bs);
+                streamParam3 = ReadString(bs);
+            }
+        }
+
+        public byte[] ToBytes()
+        {
+            byte[] result;
+            using (var bs = new VgcApis.Libs.Streams.BitStream())
+            {
+                bs.Clear();
+                bs.Write(alias);
+                WriteString(bs, description);
+                bs.Write(isUseTls);
+                bs.Write(port);
+                bs.Write(alterId);
+                bs.Write(uuid);
+                bs.WriteAddress(address);
+                WriteString(bs, streamType);
+                WriteString(bs, streamParam1);
+                WriteString(bs, streamParam2);
+                WriteString(bs, streamParam3);
+                result = bs.ToBytes();
+            }
+            VgcApis.Libs.Streams.BitStream.WriteVersion(version, result);
+            return result;
+        }
+
+        public bool EqTo(Ver0a veeLink)
+        {
+            if (isUseTls != veeLink.isUseTls
+                || port != veeLink.port
+                || uuid != veeLink.uuid
+                || address != veeLink.address
+                || streamType != veeLink.streamType
+                || streamParam1 != veeLink.streamParam1
+                || streamParam2 != veeLink.streamParam2
+                || streamParam3 != veeLink.streamParam3
+                || alias != veeLink.alias
+                || description != veeLink.description)
+            {
+                return false;
+            }
+            return true;
+        }
         #endregion
 
         #region private methods
@@ -73,72 +145,5 @@ namespace V2RayGCon.Model.VeeShareLinks
         }
         #endregion
 
-        #region public methods
-
-        public Ver0a(byte[] bytes) :
-            this()
-        {
-            var ver = VgcApis.Libs.Streams.BitStream.ReadVersion(bytes);
-            if (ver != version)
-            {
-                throw new NotSupportedException(
-                    $"Not supported version ${ver}");
-            }
-
-            using (var bs = new VgcApis.Libs.Streams.BitStream(bytes))
-            {
-                alias = bs.Read<string>();
-                description = ReadString(bs);
-                isUseTls = bs.Read<bool>();
-                port = bs.Read<int>();
-                uuid = bs.Read<Guid>();
-                address = bs.ReadAddress();
-                streamType = ReadString(bs);
-                streamParam1 = ReadString(bs);
-                streamParam2 = ReadString(bs);
-                streamParam3 = ReadString(bs);
-            }
-        }
-
-        public byte[] ToBytes()
-        {
-            byte[] result;
-            using (var bs = new VgcApis.Libs.Streams.BitStream())
-            {
-                bs.Clear();
-                bs.Write(alias);
-                WriteString(bs, description);
-                bs.Write(isUseTls);
-                bs.Write(port);
-                bs.Write(uuid);
-                bs.WriteAddress(address);
-                WriteString(bs, streamType);
-                WriteString(bs, streamParam1);
-                WriteString(bs, streamParam2);
-                WriteString(bs, streamParam3);
-                result = bs.ToBytes();
-            }
-            VgcApis.Libs.Streams.BitStream.WriteVersion(version, result);
-            return result;
-        }
-
-        public bool EqTo(Ver0a veeLink)
-        {
-            if (isUseTls != veeLink.isUseTls
-                || port != veeLink.port
-                || uuid != veeLink.uuid
-                || address != veeLink.address
-                || streamType != veeLink.streamType
-                || streamParam1 != veeLink.streamParam1
-                || streamParam2 != veeLink.streamParam2
-                || streamParam3 != veeLink.streamParam3
-                || alias != veeLink.alias
-                || description != veeLink.description)
-            {
-                return false;
-            }
-            return true;
-        }
-        #endregion
     }
 }

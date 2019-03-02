@@ -75,6 +75,7 @@
     <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
     <Compile Include="Libs\Sys\QueueLogger.cs" />
     <Compile Include="Models\Consts\BitStream.cs" />
+    <Compile Include="Models\Consts\Config.cs" />
     <Compile Include="Models\Consts\Core.cs" />
     <Compile Include="Models\Consts\Patterns.cs" />
     <Compile Include="Models\Consts\Import.cs" />

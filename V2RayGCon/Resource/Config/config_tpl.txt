@@ -51,7 +51,7 @@
     "protocol": "socks",
     "settings": {}
   },
-  "outbVee": {
+  "outbVeeVmess": {
     "protocol": "vmess",
     "settings": {
       "vnext": [
@@ -221,6 +221,22 @@
         }
       ]
     }
+  },
+  "outbVeeSs": {
+    "protocol": "shadowsocks",
+    "settings": {
+      "servers": [
+        {
+          "address": "127.0.0.1",
+          "port": 1080,
+          "method": "aes-128-cfb",
+          "password": "",
+          "ota": false
+        }
+      ]
+    },
+    "tag": "agentout",
+    "streamSettings": {}
   },
   "outbSs": {
     "protocol": "shadowsocks",
