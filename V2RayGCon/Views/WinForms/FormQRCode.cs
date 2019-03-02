@@ -25,14 +25,14 @@ namespace V2RayGCon.Views.WinForms
         Service.ShareLinkMgr slinkMgr;
 
         int servIndex, linkType;
-        Dictionary<string, string> serverList;
+        List<string> serverList;
 
         FormQRCode()
         {
             servers = Service.Servers.Instance;
             slinkMgr = Service.ShareLinkMgr.Instance;
 
-            servIndex = 0;
+            servIndex = -1;
             linkType = 0;
 
             InitializeComponent();
@@ -43,20 +43,30 @@ namespace V2RayGCon.Views.WinForms
 
         private void FormQRCode_Shown(object sender, EventArgs e)
         {
-            serverList = new Dictionary<string, string>();
-            UpdateCboxServerNameList();
+            ClearServerList();
+            RefreshServerList();
             cboxLinkType.SelectedIndex = linkType;
+            picQRCode.InitialImage = null;
 
             this.FormClosed += (s, a) =>
             {
-                servers.OnRequireMenuUpdate -= SettingChange;
+                servers.OnRequireMenuUpdate -= OnSettingChangeHandler;
             };
 
-            servers.OnRequireMenuUpdate += SettingChange;
+            servers.OnRequireMenuUpdate += OnSettingChangeHandler;
             SetPicZoomMode();
+            if (cboxServList.Items.Count > 0)
+            {
+                cboxServList.SelectedIndex = 0;
+            }
         }
 
         #region private methods
+        void ClearServerList()
+        {
+            serverList = new List<string>();
+        }
+
         void SetPicZoomMode()
         {
             picQRCode.SizeMode = rbtnIsCenterImage.Checked ?
@@ -64,54 +74,48 @@ namespace V2RayGCon.Views.WinForms
                 PictureBoxSizeMode.Zoom;
         }
 
-        void SettingChange(object sender, EventArgs args)
+        void OnSettingChangeHandler(object sender, EventArgs args)
         {
             try
             {
                 VgcApis.Libs.UI.RunInUiThread(cboxServList, () =>
                 {
-                    UpdateCboxServerNameList();
+                    RefreshServerList();
                 });
             }
             catch { }
         }
 
-        void UpdateCboxServerNameList(int index = -1)
+        void RefreshServerList(int index = -1)
         {
-            var oldIndex = index < 0 ? cboxServList.SelectedIndex : index;
-
             cboxServList.Items.Clear();
 
-            var serverList = servers.GetAllServersOrderByIndex();
-
-            if (serverList.Count <= 0)
+            var allServers = servers.GetAllServersOrderByIndex();
+            ClearServerList();
+            foreach (var serv in allServers)
             {
-                cboxServList.SelectedIndex = -1;
-                return;
+                var summary = serv.GetCoreStates().GetTitle();
+                var config = serv.GetConfiger().GetConfig();
+                cboxServList.Items.Add(summary);
+                this.serverList.Add(config);
             }
 
-            this.serverList = new Dictionary<string, string>();
-            foreach (var server in serverList)
-            {
-                var name = server.GetCoreStates().GetName();
-                cboxServList.Items.Add(name);
-                this.serverList[name] = server.GetConfiger().GetConfig();
-            }
-
-            servIndex = Lib.Utils.Clamp(oldIndex, 0, serverList.Count);
-            cboxServList.SelectedIndex = servIndex;
-            UpdateLink();
             Lib.UI.ResetComboBoxDropdownMenuWidth(cboxServList);
+
+            servIndex = -2;
         }
 
-        void UpdateLink()
+        void UpdateTboxLink()
         {
-            var key = cboxServList.Text;
             var config = string.Empty;
-            if (serverList.ContainsKey(key))
+
+            if (servIndex >= 0
+                && serverList != null
+                && servIndex < serverList.Count)
             {
-                config = serverList[key];
+                config = serverList[servIndex];
             }
+
 
             if (string.IsNullOrEmpty(config))
             {
@@ -126,32 +130,42 @@ namespace V2RayGCon.Views.WinForms
             tboxLink.Text = link ?? string.Empty;
         }
 
+        void SetQRCodeImage(Image img)
+        {
+            var oldImage = picQRCode.Image;
+
+            picQRCode.Image = img;
+
+            if (oldImage != img)
+            {
+                oldImage?.Dispose();
+            }
+        }
+
         void ShowQRCode()
         {
-            picQRCode.InitialImage = null;
-
             var link = tboxLink.Text;
 
             if (string.IsNullOrEmpty(link))
             {
+                SetQRCodeImage(null);
                 return;
             }
 
             Tuple<Bitmap, Lib.QRCode.QRCode.WriteErrors> pair =
-                Lib.QRCode.QRCode.GenQRCode(
-                    link, linkType == 0 ? 180 : 320);
+                Lib.QRCode.QRCode.GenQRCode(link, 320);
 
             switch (pair.Item2)
             {
                 case Lib.QRCode.QRCode.WriteErrors.Success:
-                    picQRCode.Image = pair.Item1;
+                    SetQRCodeImage( pair.Item1);
                     break;
                 case Lib.QRCode.QRCode.WriteErrors.DataEmpty:
-                    picQRCode.Image = null;
+                    SetQRCodeImage(null);
                     MessageBox.Show(I18N.EmptyLink);
                     break;
                 case Lib.QRCode.QRCode.WriteErrors.DataTooBig:
-                    picQRCode.Image = null;
+                    SetQRCodeImage(null);
                     MessageBox.Show(I18N.DataTooBig);
                     break;
             }
@@ -162,7 +176,7 @@ namespace V2RayGCon.Views.WinForms
         private void cboxLinkType_SelectedIndexChanged(object sender, EventArgs e)
         {
             linkType = cboxLinkType.SelectedIndex;
-            UpdateLink();
+            UpdateTboxLink();
         }
 
         private void btnSavePic_Click(object sender, EventArgs e)
@@ -202,8 +216,13 @@ namespace V2RayGCon.Views.WinForms
 
         private void cboxServList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            servIndex = cboxServList.SelectedIndex;
-            UpdateLink();
+            var newIndex = cboxServList.SelectedIndex;
+            if (servIndex == newIndex)
+            {
+                return;
+            }
+            servIndex = newIndex;
+            UpdateTboxLink();
         }
         #endregion
     }
