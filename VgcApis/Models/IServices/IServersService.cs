@@ -11,7 +11,7 @@ namespace VgcApis.Models.IServices
         int GetAvailableHttpProxyPort();
         string ReplaceOrAddNewServer(string orgUid, string newConfig);
         void RequireFormMainReload();
-        void ResteIndexQuiet();
+        void ResetIndexQuiet();
         bool RunSpeedTestOnSelectedServers();
         void SortSelectedBySpeedTest();
         void SortSelectedBySummary();

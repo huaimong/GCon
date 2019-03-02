@@ -68,10 +68,11 @@ namespace V2RayGCon.Service
         }
 
         #region sort
-        public void ResteIndexQuiet()
-        {
+        public void ResetIndex() =>
+            indexHandler.ResetIndex();
+
+        public void ResetIndexQuiet()=>
             indexHandler.ResetIndexQuiet();
-        }
 
         public void SortSelectedBySpeedTest()
         {

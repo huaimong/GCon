@@ -47,7 +47,7 @@ namespace Luna.Models.Apis
             settings.GetLuaShareMemory(key);
 
         public void ResetIndexQuiet() =>
-            vgcServers.ResteIndexQuiet();
+            vgcServers.ResetIndexQuiet();
 
         public void RequireFormMainReload() =>
             vgcServers.RequireFormMainReload();

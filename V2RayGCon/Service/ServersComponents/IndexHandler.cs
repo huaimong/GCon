@@ -40,6 +40,24 @@ namespace V2RayGCon.Service.ServersComponents
             }
         }
 
+        public void ResetIndex()
+        {
+            var sortedServers = coreServList
+                .OrderBy(c => c.GetCoreStates().GetIndex())
+                .ToList();
+
+            lock (writeLocker)
+            {
+                for (int i = 0; i < sortedServers.Count(); i++)
+                {
+                    var index = i + 1.0; // closure
+                    sortedServers[i]
+                        .GetCoreStates()
+                        .SetIndex(index);
+                }
+            }
+        }
+
         public void ResetIndexQuiet()
         {
             var sortedServers = coreServList

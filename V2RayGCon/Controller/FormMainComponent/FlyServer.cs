@@ -139,7 +139,8 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         public override bool RefreshUI()
         {
-            servers.ResteIndexQuiet();
+            servers.ResetIndex();
+            
             var list = this.GetFilteredList();
             var pagedList = GenPagedServerList(list);
 
