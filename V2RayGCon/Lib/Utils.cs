@@ -1322,8 +1322,16 @@ namespace V2RayGCon.Lib
 
         public static string GetLinkBody(string link)
         {
-            Regex re = new Regex("[a-zA-Z0-9]+://");
-            return re.Replace(link, string.Empty);
+            var needle = @"://";
+            var index = link.IndexOf(needle);
+
+            if (index < 0)
+            {
+                throw new ArgumentException(
+                    $"Not a valid link ${link}");
+            }
+
+            return link.Substring(index + needle.Length);
         }
 
         public static void ZipFileDecompress(string zipFile, string outFolder)

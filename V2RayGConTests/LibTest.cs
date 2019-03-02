@@ -12,6 +12,35 @@ namespace V2RayGCon.Test
     {
 
         [DataTestMethod]
+        [DataRow(@"http://abc.com", @"abc.com")]
+        [DataRow(@"v://abc.com", @"abc.com")]
+        [DataRow(@"vee://", @"")]
+        [DataRow(@"vmess://abc", @"abc")]
+        [DataRow(@"v2cfg://abc", @"abc")]
+        [DataRow(@"http://abc", @"abc")]
+        [DataRow(@"https://abc", @"abc")]
+        [DataRow(@"any://://", @"://")]
+        public void GetLinkBodyNormalTest(string link, string expect)
+        {
+            var body = GetLinkBody(link);
+            Assert.AreEqual(expect, body);
+
+        }
+
+        [DataTestMethod]
+        [DataRow(@"v/", @"")]
+        [DataRow(@":v/v/", @"")]
+        public void GetLinkBodyFailTest(string link, string expect)
+        {
+            try
+            {
+                var body = GetLinkBody(link);
+            }
+            catch { return; }
+            Assert.Fail();
+        }
+
+        [DataTestMethod]
         [DataRow("https://www.baidu.com/")]
         public void FetchTest(string url)
         {

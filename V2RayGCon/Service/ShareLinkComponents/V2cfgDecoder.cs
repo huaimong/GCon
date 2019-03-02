@@ -19,9 +19,9 @@ namespace V2RayGCon.Service.ShareLinkComponents
         {
             try
             {
-                var config = JObject.Parse(
-                    Lib.Utils.Base64Decode(
-                        Lib.Utils.GetLinkBody(shareLink)));
+                var linkBody = Lib.Utils.GetLinkBody(shareLink);
+                var plainText = Lib.Utils.Base64Decode(linkBody);
+                var config = JObject.Parse(plainText);
                 if (config != null)
                 {
                     return new Tuple<JObject, JToken>(config, null);

@@ -10,5 +10,9 @@
 
         public const int ParseImportRetry = 3;
 
+        public const string MarkImportSuccess = @"√";
+
+        public const string MarkImportFail = @"×";
+
     }
 }

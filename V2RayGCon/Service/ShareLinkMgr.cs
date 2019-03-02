@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
@@ -49,9 +48,7 @@ namespace V2RayGCon.Service
             var decoders = GenDecoderList(false);
             var results = ImportLinksBatchModeSync(links, decoders);
             return results
-                .Where(r => r.Item1)
-                .SelectMany(r => r.Item2)
-                .Where(l => l[3] == "√")
+                .Where(r => IsImportResultSuccess(r))
                 .Count();
         }
 
@@ -59,10 +56,7 @@ namespace V2RayGCon.Service
             IEnumerable<string[]> linkList)
         {
             var decoders = GenDecoderList(false);
-            ImportLinksBatchModeThen(
-                linkList,
-                decoders,
-                (result) => ShowImportResults(result));
+            ImportLinksBatchModeThen(linkList, decoders, true);
         }
 
         public void ImportLinkWithOutV2cfgLinks(string text)
@@ -70,28 +64,16 @@ namespace V2RayGCon.Service
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
             var decoders = GenDecoderList(false);
-            ImportLinksBatchModeThen(
-                linkList,
-                decoders,
-                (result) => ShowImportResults(result));
+            ImportLinksBatchModeThen(linkList, decoders, true);
         }
 
         public void ImportLinkWithV2cfgLinks(string text)
         {
             var pair = new string[] { text, "" };
             var linkList = new List<string[]> { pair };
+            var decoders = GenDecoderList(true);
 
-            // var decoders = GenDecoderList(true);
-
-            var decoders = new List<VgcApis.Models.Interfaces.IShareLinkDecoder>
-            {
-                codecs.GetComponent<ShareLinkComponents.V2cfgDecoder>(),
-            };
-
-            ImportLinksBatchModeThen(
-                linkList,
-                decoders,
-                (result) => ShowImportResults(result));
+            ImportLinksBatchModeThen(linkList, decoders, true);
         }
 
         public void Run(
@@ -112,12 +94,16 @@ namespace V2RayGCon.Service
         void ImportLinksBatchModeThen(
             IEnumerable<string[]> linkList,
             IEnumerable<VgcApis.Models.Interfaces.IShareLinkDecoder> decoders,
-            Action<List<Tuple<bool, List<string[]>>>> next)
+            bool isShowImportResults)
         {
             VgcApis.Libs.Utils.RunInBackground(() =>
             {
                 var results = ImportLinksBatchModeSync(linkList, decoders);
-                next(results);
+                if (isShowImportResults)
+                {
+                    ShowImportResults(results);
+                }
+
             });
         }
 
@@ -143,7 +129,7 @@ namespace V2RayGCon.Service
         /// <para>linkList=List(string[]{0: text, 1: mark}>)</para>
         /// <para>decoders = List(IShareLinkDecoder)</para>
         /// </summary>
-        List<Tuple<bool, List<string[]>>> ImportLinksBatchModeSync(
+        List<string[]> ImportLinksBatchModeSync(
             IEnumerable<string[]> linkList,
             IEnumerable<VgcApis.Models.Interfaces.IShareLinkDecoder> decoders)
         {
@@ -158,77 +144,68 @@ namespace V2RayGCon.Service
                 }
             }
 
-            Tuple<bool, List<string[]>> worker(Tuple<string, string, VgcApis.Models.Interfaces.IShareLinkDecoder> job)
+            List<string[]> worker(Tuple<string, string, VgcApis.Models.Interfaces.IShareLinkDecoder> job)
             {
                 return ImportShareLinks(job.Item1, job.Item2, job.Item3);
             }
 
-            return Lib.Utils.ExecuteInParallel(jobs, worker);
-
+            return Lib.Utils.ExecuteInParallel(jobs, worker)
+                .SelectMany(r => r)
+                .ToList();
         }
 
-        void ShowImportResults(IEnumerable<Tuple<bool, List<string[]>>> results)
+        void ShowImportResults(IEnumerable<string[]> results)
         {
-            var isAddNewServer = false;
-            var lines = new List<string[]>();
+            var list = results.ToList();
 
-            // flatten results
-            foreach (var result in results)
-            {
-                if (result.Item1)
-                {
-                    isAddNewServer = true;
-                }
-                foreach (var line in result.Item2)
-                {
-                    lines.Add(line);
-                }
-            }
-
-            if (isAddNewServer)
-            {
-                servers.UpdateAllServersSummaryBg();
-            }
-
-            if (lines.Count <= 0)
+            if (list.Count <= 0)
             {
                 MessageBox.Show(I18N.NoLinkFound);
                 return;
             }
 
-            var form = new Views.WinForms.FormImportLinksResult(lines);
+            if (IsAddNewServer(list))
+            {
+                servers.UpdateAllServersSummaryBg();
+            }
+
+            var form = new Views.WinForms.FormImportLinksResult(list);
             form.Show();
             Application.Run();
         }
 
-        private Tuple<bool, List<string[]>> ImportShareLinks(
+        private List<string[]> ImportShareLinks(
             string text,
             string mark,
             VgcApis.Models.Interfaces.IShareLinkDecoder decoder)
         {
             var links = decoder.ExtractLinksFromText(text);
-            bool isAddNewServer = false;
 
-            string[] worker(string link)
+            // Do not use ExecuteInParallel here!
+            // Because server's order may changes!
+
+            var results = new List<string[]>();
+            foreach (var link in links)
             {
-                Stopwatch watch = new Stopwatch();
-                watch.Start();
                 var decodedConfig = codecs.Decode(link, decoder);
-                watch.Stop();
-                Debug.WriteLine("decode: ", watch.ElapsedTicks)
                 var msg = AddLinkToServerList(mark, decodedConfig);
-                return GenImportResult(link, msg.Item1, msg.Item2, mark);
+                var result = GenImportResult(link, msg.Item1, msg.Item2, mark);
+                results.Add(result);
             }
 
-            var results = Lib.Utils.ExecuteInParallel(links, worker);
-            foreach (var result in results)
+            return results;
+        }
+
+        bool IsAddNewServer(IEnumerable<string[]> importResults)
+        {
+            foreach (var result in importResults)
             {
-                if (result[3] == "√")
+                if (IsImportResultSuccess(result))
                 {
-                    isAddNewServer = true;
+                    return true;
                 }
             }
-            return new Tuple<bool, List<string[]>>(isAddNewServer, results);
+            return false;
         }
 
         private Tuple<bool, string> AddLinkToServerList(
@@ -244,18 +221,26 @@ namespace V2RayGCon.Service
             return new Tuple<bool, string>(isSuccess, reason);
         }
 
+        bool IsImportResultSuccess(string[] result) =>
+            result[3] == VgcApis.Models.Consts.Import.MarkImportSuccess;
+
         string[] GenImportResult(
             string link,
             bool success,
             string reason,
             string mark)
         {
+            var importSuccessMark = success ?
+                VgcApis.Models.Consts.Import.MarkImportSuccess :
+                VgcApis.Models.Consts.Import.MarkImportFail;
+
+
             return new string[]
             {
                 string.Empty,  // reserved for index
                 link,
                 mark,
-                success?"√":"×",
+                importSuccessMark,  // be aware of IsImportResultSuccess()
                 reason,
             };
         }
