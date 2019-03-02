@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace V2RayGCon.Model.VeeShareLinks
 {
-    public sealed class Ver0b
+    public sealed class Ver1a
     {
         // ver 0b is optimized for shadowshocks protocol
 
-        const string version = @"0b";
+        const string version = @"1a";
         static public string SupportedVersion() => version;
 
         public string alias, description; // 256 bytes each
@@ -21,7 +21,7 @@ namespace V2RayGCon.Model.VeeShareLinks
         public string streamType, streamParam1, streamParam2, streamParam3; // 256 bytes each
 
 
-        public Ver0b()
+        public Ver1a()
         {
             // config
             alias = string.Empty;
@@ -43,7 +43,7 @@ namespace V2RayGCon.Model.VeeShareLinks
             streamParam3 = string.Empty;
         }
 
-        public Ver0b(byte[] bytes) :
+        public Ver1a(byte[] bytes) :
            this()
         {
             var ver = VgcApis.Libs.Streams.BitStream.ReadVersion(bytes);
@@ -142,13 +142,12 @@ namespace V2RayGCon.Model.VeeShareLinks
                 writeString(streamParam2);
                 writeString(streamParam3);
 
-                result = bs.ToBytes();
+                result = bs.ToBytes(version);
             }
-            VgcApis.Libs.Streams.BitStream.WriteVersion(version, result);
             return result;
         }
 
-        public bool EqTo(Ver0b vee)
+        public bool EqTo(Ver1a vee)
         {
             if (isUseOta != vee.isUseOta
                 || port != vee.port

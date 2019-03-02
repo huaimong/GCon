@@ -12,5 +12,11 @@
 
         public const int MaxStringLenInBits = 8;
         public const int MaxStringLen = 1 << (MaxStringLenInBits - 1);
+
+        public const int InfoAreaLenInBytes = 3;
+        public const int LastByteLenInBits = 3;
+        public const int MajorVersionByteIndex = 1;
+        public const int SubVersionByteIndex = 2;
+        public const int Crc8ByteIndex = 0;
     }
 }

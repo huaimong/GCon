@@ -178,7 +178,7 @@
     <Compile Include="Model\BaseClass\SingletonService.cs" />
     <Compile Include="Model\Data\ImportItem.cs" />
     <Compile Include="Model\VeeShareLinks\Utils.cs" />
-    <Compile Include="Model\VeeShareLinks\Ver0b.cs" />
+    <Compile Include="Model\VeeShareLinks\Ver1a.cs" />
     <Compile Include="Service\ConfigMgr.cs" />
     <Compile Include="Service\Launcher.cs" />
     <Compile Include="Service\PluginsServer.cs" />
@@ -186,7 +186,7 @@
     <Compile Include="Service\ServersComponents\QueryHandler.cs" />
     <Compile Include="Service\ShareLinkComponents\Codecs.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeCodecs\IVeeDecoder.cs" />
-    <Compile Include="Service\ShareLinkComponents\VeeCodecs\Vee0b.cs" />
+    <Compile Include="Service\ShareLinkComponents\VeeCodecs\Vee1a.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeCodecs\VeeCodecs.cs" />
     <Compile Include="Model\VeeShareLinks\Ver0a.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeCodecs\Vee0a.cs" />

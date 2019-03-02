@@ -6,17 +6,22 @@ namespace VgcApis.Libs.Streams.RawBitStream
 {
     public static class Utils
     {
+        const int LastByteLenInBits = Models.Consts.BitStream.LastByteLenInBits;
         const int MaxStringLen = Models.Consts.BitStream.MaxStringLen;
         const int BitsPerUnicode = Models.Consts.BitStream.BitsPerUnicode;
         const int BitsPerByte = Models.Consts.BitStream.BitsPerByte;
+        const int InfoAreaLenInBytes = Models.Consts.BitStream.InfoAreaLenInBytes;
+        const int MajorVersionByteIndex = Models.Consts.BitStream.MajorVersionByteIndex;
+        const int SubVersionByteIndex = Models.Consts.BitStream.SubVersionByteIndex;
+        const int Crc8ByteIndex = Models.Consts.BitStream.Crc8ByteIndex;
 
         #region private methods
-        private static void CheckByteLengthIsBiggerThenOne(byte[] bytes)
+        private static void CheckByteLengthIsBiggerThenThree(byte[] bytes)
         {
-            if (bytes == null || bytes.Length < 2)
+            if (bytes == null || bytes.Length < InfoAreaLenInBytes)
             {
                 throw new ArgumentOutOfRangeException(
-                    @"Bytes length must bigger then 2!");
+                    $"Bytes length must bigger then {InfoAreaLenInBytes}!");
             }
         }
 
@@ -78,9 +83,9 @@ namespace VgcApis.Libs.Streams.RawBitStream
 
         public static string ReadVersion(byte[] bytes)
         {
-            CheckByteLengthIsBiggerThenOne(bytes);
-            int major = bytes[0];
-            int sub = bytes[1] / BitsPerByte;
+            CheckByteLengthIsBiggerThenThree(bytes);
+            int major = bytes[MajorVersionByteIndex];
+            int sub = bytes[SubVersionByteIndex] / BitsPerByte;
             CheckSubVersionRange(sub);
             char c = (char)(sub + 'a');
             return $"{major}{c}";
@@ -89,17 +94,19 @@ namespace VgcApis.Libs.Streams.RawBitStream
 
         public static void WriteVersion(string version, byte[] bytes)
         {
-            CheckByteLengthIsBiggerThenOne(bytes);
+            CheckByteLengthIsBiggerThenThree(bytes);
             var ver = ParseVersionString(version);
-            bytes[0] = (byte)ver.Item1;
-            int len = bytes[1] % BitsPerByte;
-            bytes[1] = (byte)(ver.Item2 * BitsPerByte + len);
+            bytes[MajorVersionByteIndex] = (byte)ver.Item1;
+            int len = bytes[SubVersionByteIndex] % BitsPerByte;
+            bytes[SubVersionByteIndex] = (byte)(ver.Item2 * BitsPerByte + len);
         }
 
-        public static byte[] BoolList2Bytes(IEnumerable<bool> stream)
+        public static byte[] BoolList2Bytes(
+            IEnumerable<bool> stream)
         {
-            // The first byte (decimal 256) is reserved for major version.
-            // The second byte record how many valid bits of last byte as length mark.
+            // The first byte is crc8 checksum.
+            // The second byte (decimal 256) is reserved for major version.
+            // The third byte record how many valid bits of last byte as length mark.
             // If the last byte used 8 bits then length mark will be set to zero.
             // So length mark only takes 3 bits max.
             // The rest 5 bits (decimal 32) is reserved for sub version.
@@ -110,10 +117,10 @@ namespace VgcApis.Libs.Streams.RawBitStream
             var byteLen = bitLen / BitsPerByte;
             var lastByteLen = bitLen - byteLen * BitsPerByte;
 
-            var cacheLen = 2 + byteLen + (lastByteLen == 0 ? 0 : 1);
+            var cacheLen = InfoAreaLenInBytes + byteLen + (lastByteLen == 0 ? 0 : 1);
             var cache = new byte[cacheLen];
 
-            int i = 0, j = 1, sum = 0, pow = 1;
+            int i = 0, j = InfoAreaLenInBytes - 1, sum = 0, pow = 1;
             foreach (var bit in stream)
             {
                 if (i % BitsPerByte == 0)
@@ -128,14 +135,14 @@ namespace VgcApis.Libs.Streams.RawBitStream
             }
             cache[cacheLen - 1] = (byte)sum;
 
-            int lenMark = cache[1];
-            cache[1] = (byte)(((lenMark >> 3) << 3) + lastByteLen);
+            int lenMark = cache[SubVersionByteIndex];
+            cache[SubVersionByteIndex] = (byte)(((lenMark >> LastByteLenInBits) << LastByteLenInBits) + lastByteLen);
             return cache;
         }
 
         public static List<bool> Bytes2BoolList(byte[] bytes)
         {
-            if (bytes.Length <= 2)
+            if (bytes.Length <= InfoAreaLenInBytes)
             {
                 return new List<bool>();
             }
@@ -144,7 +151,7 @@ namespace VgcApis.Libs.Streams.RawBitStream
             int ascii;
             var result = new List<bool>();
 
-            for (int i = 2; i < bytes.Length - 1; i++)
+            for (int i = InfoAreaLenInBytes; i < bytes.Length - 1; i++)
             {
                 ascii = bytes[i];
                 for (int j = 0; j < BitsPerByte; j++)
@@ -156,7 +163,7 @@ namespace VgcApis.Libs.Streams.RawBitStream
 
             // last byte
             ascii = bytes[bytes.Length - 1];
-            var lenMark = bytes[1] % BitsPerByte;
+            var lenMark = bytes[SubVersionByteIndex] % BitsPerByte;
             var lastByteLen = lenMark == 0 ? BitsPerByte : lenMark;
             for (int j = 0; j < lastByteLen; j++)
             {

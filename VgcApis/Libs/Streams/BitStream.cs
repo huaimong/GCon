@@ -7,6 +7,7 @@ namespace VgcApis.Libs.Streams
         Models.BaseClasses.Disposable
     {
         const int BitsPerInt = Models.Consts.BitStream.BitsPerInt;
+        const int Crc8ByteIndex = Models.Consts.BitStream.Crc8ByteIndex;
 
         readonly object rbsWriteLock = new object();
 
@@ -18,6 +19,13 @@ namespace VgcApis.Libs.Streams
 
         public BitStream(byte[] bytes) : this()
         {
+            var crc8 = Crc8.ComputeChecksum(bytes, Crc8ByteIndex +1);
+            if (bytes[Crc8ByteIndex] != crc8)
+            {
+                throw new ArgumentException(
+                    @"Crc8 checksum not match!");
+            }
+
             rawBitStream.FromBytes(bytes);
         }
 
@@ -38,17 +46,20 @@ namespace VgcApis.Libs.Streams
         #region static methods
         public static string ReadVersion(byte[] bytes) =>
             RawBitStream.Utils.ReadVersion(bytes);
-
-        public static void WriteVersion(string version, byte[] bytes) =>
-            RawBitStream.Utils.WriteVersion(version, bytes);
         #endregion
 
         #region public methods
         public void Rewind() =>
             rawBitStream.Rewind();
 
-        public byte[] ToBytes() =>
-            rawBitStream.ToBytes();
+        public byte[] ToBytes(string version)
+        {
+            var bytes = rawBitStream.ToBytes();
+            RawBitStream.Utils.WriteVersion(version, bytes);
+            bytes[Crc8ByteIndex] = Crc8.ComputeChecksum(
+                bytes, Crc8ByteIndex + 1);
+            return bytes;
+        }
 
         public void Clear()
         {

@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libs\Streams\BitStream.cs" />
+    <Compile Include="Libs\Streams\Crc8.cs" />
     <Compile Include="Libs\Streams\RawBitStream\Bytes.cs" />
     <Compile Include="Libs\Streams\RawBitStream\RawBitStream.cs" />
     <Compile Include="Libs\Streams\RawBitStream\Address.cs" />

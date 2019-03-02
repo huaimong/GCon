@@ -31,10 +31,11 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.8.10")]
+[assembly: AssemblyVersion("1.1.8.11")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.8.11 v:// ... 添加 crc8 校验位
  * v1.1.8.10 Enhance v:// ... share link format.
  *              ver 0a support vmess.alterId 
  *              ver 0b support shadowsocks protocol

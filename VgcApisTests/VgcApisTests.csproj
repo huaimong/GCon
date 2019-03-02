@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitStreamTests.cs" />
+    <Compile Include="Crc8Tests.cs" />
     <Compile Include="RawBitStreamTests.cs" />
     <Compile Include="UtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -11,6 +11,8 @@ namespace VgcApisTests
         const int BitsPerByte = VgcApis.Models.Consts.BitStream.BitsPerByte;
         const int MaxStrLenInBits = VgcApis.Models.Consts.BitStream.MaxStringLenInBits;
         const int MaxStrLen = VgcApis.Models.Consts.BitStream.MaxStringLen;
+        const int SubVersionIndexInBytes = VgcApis.Models.Consts.BitStream.SubVersionByteIndex;
+        const int InfoAreaLenInBytes = VgcApis.Models.Consts.BitStream.InfoAreaLenInBytes;
 
         VgcApis.Libs.Streams.RawBitStream.RawBitStream bitStream;
         VgcApis.Libs.Streams.RawBitStream.Numbers numbers;
@@ -40,14 +42,14 @@ namespace VgcApisTests
             var rand = new Random();
             var lenMark = rand.Next(8);
 
-            var bytes = new byte[3] ;
-            bytes[1]=(byte) lenMark;
+            var bytes = new byte[InfoAreaLenInBytes + 1];
+            bytes[SubVersionIndexInBytes] = (byte)lenMark;
 
             VgcApis.Libs.Streams.RawBitStream.Utils.WriteVersion(version, bytes);
-            var read = VgcApis.Libs.Streams.RawBitStream.Utils.ReadVersion( bytes);
+            var read = VgcApis.Libs.Streams.RawBitStream.Utils.ReadVersion(bytes);
             Assert.AreEqual(version.ToLower(), read);
 
-            int result = bytes[1];
+            int result = bytes[SubVersionIndexInBytes];
             Assert.AreEqual(lenMark, result % 8);
         }
 
@@ -59,24 +61,24 @@ namespace VgcApisTests
             var rand = new Random();
             var lenMark = rand.Next(8);
 
-            var bytes = new byte[3];
-            bytes[1] = (byte)lenMark;
+            var bytes = new byte[InfoAreaLenInBytes + 1];
+            bytes[SubVersionIndexInBytes] = (byte)lenMark;
 
             VgcApis.Libs.Streams.RawBitStream.Utils.WriteVersion(version, bytes);
             var read = VgcApis.Libs.Streams.RawBitStream.Utils.ReadVersion(bytes);
             Assert.AreNotEqual(version.ToLower(), read);
 
-            int result = bytes[1];
+            int result = bytes[SubVersionIndexInBytes];
             Assert.AreEqual(lenMark, result % 8);
         }
 
         [DataTestMethod]
-        [DataRow(@"-1a",3)]
+        [DataRow(@"-1a", 3)]
         [DataRow(@"1a", 1)]
         [DataRow(@"a", 3)]
         [DataRow(@"1233z", 3)]
         [DataRow(@"123", 3)]
-        public void VersionFailTest1(string version,int byteLen)
+        public void VersionFailTest1(string version, int byteLen)
         {
             try
             {
@@ -104,7 +106,9 @@ namespace VgcApisTests
                     var v = rand.Next(2);
                     source.Add(v == 1);
                 }
+
                 var bytes = VgcApis.Libs.Streams.RawBitStream.Utils.BoolList2Bytes(source);
+
                 var dest = VgcApis.Libs.Streams.RawBitStream.Utils.Bytes2BoolList(bytes);
 
                 Assert.AreEqual(source.Count, dest.Count);

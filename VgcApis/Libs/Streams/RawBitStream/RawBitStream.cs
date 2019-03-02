@@ -35,7 +35,7 @@ namespace VgcApis.Libs.Streams.RawBitStream
             bitStream = Utils.Bytes2BoolList(bytes);
         }
 
-        public byte[] ToBytes() => 
+        public byte[] ToBytes() =>
             Utils.BoolList2Bytes(bitStream);
 
         public int Count() => bitStream.Count;

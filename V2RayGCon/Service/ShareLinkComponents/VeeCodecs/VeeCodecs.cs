@@ -17,10 +17,10 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
         public void Run()
         {
             var v0a = new Vee0a(cache);
-            var v0b = new Vee0b(cache);
+            var v1a = new Vee1a(cache);
 
             Plug(this, v0a);
-            Plug(this, v0b);
+            Plug(this, v1a);
         }
 
         #region properties
@@ -62,7 +62,7 @@ namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
                     encoder = GetComponent<Vee0a>();
                     break;
                 case VgcApis.Models.Consts.Config.ProtocolNameSs:
-                    encoder = GetComponent<Vee0b>();
+                    encoder = GetComponent<Vee1a>();
                     break;
                 default:
                     return null;

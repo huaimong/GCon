@@ -15,6 +15,26 @@ namespace VgcApisTests
         }
 
         [TestMethod]
+        public void Crc8ChecksumFailTest()
+        {
+            var bs1 = new VgcApis.Libs.Streams.BitStream();
+            bs1.Write(12345);
+            bs1.WriteAddress("abc.com");
+
+            var b1 = bs1.ToBytes("2b");
+            b1[0] = (byte)(b1[0]+1);
+            try
+            {
+                var b2 = new VgcApis.Libs.Streams.BitStream(b1);
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
+            Assert.Fail();
+        }
+
+        [TestMethod]
         public void BsNormalTest()
         {
             var bs1 = new VgcApis.Libs.Streams.BitStream();
@@ -27,10 +47,10 @@ namespace VgcApisTests
             bs1.WriteAddress("1.2.3.4");
             bs1.Write("123");
             bs1.Write("1中23文");
-            var b1 = bs1.ToBytes();
+            var b1 = bs1.ToBytes("1a");
             bs1.Dispose();
             var bs2 = new VgcApis.Libs.Streams.BitStream(b1);
-            var b2 = bs2.ToBytes();
+            var b2 = bs2.ToBytes("1a");
             bs2.Dispose();
 
             for (int i = 0; i < b1.Length; i++)
