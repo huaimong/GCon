@@ -95,6 +95,11 @@ namespace Luna.Libs
             scintilla.ClearCmdKey(Keys.Control | Keys.F);
             scintilla.ClearCmdKey(Keys.Control | Keys.S);
             scintilla.ClearCmdKey(Keys.Control | Keys.N);
+
+            // Configure a margin to display line number
+            scintilla.Margins[0].Type = MarginType.Number;
+            scintilla.Margins[0].Width = 16;
+
             return scintilla;
         }
 

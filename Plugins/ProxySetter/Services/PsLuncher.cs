@@ -46,6 +46,7 @@
                 pacServer,
                 serverTracker);
             formMain.FormClosed += (s, a) => formMain = null;
+            formMain.Show();
         }
 
         public void Cleanup()

@@ -124,6 +124,15 @@ namespace ProxySetter.Resources.Langs {
         }
         
         /// <summary>
+        ///   查找类似 Launch notepad fail! 的本地化字符串。
+        /// </summary>
+        internal static string LaunchNotepadFail {
+            get {
+                return ResourceManager.GetString("LaunchNotepadFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 No server capable to be system proxy. 的本地化字符串。
         /// </summary>
         internal static string NoServerCapableOfSysProxy {

@@ -138,6 +138,9 @@
   <data name="GlobalProxyRequireHttpServer" xml:space="preserve">
     <value>HTTP服务器才可以设置为全局代理</value>
   </data>
+  <data name="LaunchNotepadFail" xml:space="preserve">
+    <value>启动记事本失败！</value>
+  </data>
   <data name="NoServerCapableOfSysProxy" xml:space="preserve">
     <value>没有可设置为系统代理的服务器</value>
   </data>

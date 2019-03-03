@@ -31,6 +31,9 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public string ScanQrcode() =>
+            vgcUtils.ScanQrcode();
+
         public int UpdateSubscriptions() =>
             vgcSlinkMgr.UpdateSubscriptions(-1);
 

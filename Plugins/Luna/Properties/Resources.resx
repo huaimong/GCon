@@ -121,7 +121,8 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.11</value>
-    <comment>Show scroll bar.</comment>
+    <value>0.0.12</value>
+    <comment>Add ScanQRCode().
+Add remove script button.</comment>
   </data>
 </root>

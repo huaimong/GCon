@@ -5,6 +5,8 @@ namespace VgcApis.Models.IServices
 {
     public interface IUtilsService
     {
+        string ScanQrcode();
+
         void ExecuteInParallel<TParam>(
             IEnumerable<TParam> source, Action<TParam> worker);
 

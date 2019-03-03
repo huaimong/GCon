@@ -48,6 +48,7 @@ namespace VgcApis.Models.Interfaces
         long RunSpeedTest(string rawConfig);
         bool RunSpeedTestOnSelectedServers();
 
+        string ScanQrcode();
         string Search(string keywords, int first, int proxyPort);
         void SetShareMemory(string key, string value);
         void Sleep(int millisecond);

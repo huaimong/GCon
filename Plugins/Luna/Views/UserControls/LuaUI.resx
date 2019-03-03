@@ -135,13 +135,10 @@
     <value>Zoom</value>
   </data>
   <data name="btnRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>263, 4</value>
-  </data>
-  <data name="btnRun.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>364, 7</value>
   </data>
   <data name="btnRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>30, 30</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="btnRun.TabIndex" type="System.Int32, mscorlib">
@@ -166,7 +163,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnRun.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>6</value>
   </data>
   <data name="btnStop.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -182,13 +179,10 @@
     <value>Zoom</value>
   </data>
   <data name="btnStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>284, 4</value>
-  </data>
-  <data name="btnStop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>397, 7</value>
   </data>
   <data name="btnStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>30, 30</value>
   </data>
   <data name="btnStop.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -206,7 +200,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnStop.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="btnKill.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -224,13 +218,10 @@
     <value>Zoom</value>
   </data>
   <data name="btnKill.Location" type="System.Drawing.Point, System.Drawing">
-    <value>305, 4</value>
-  </data>
-  <data name="btnKill.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
+    <value>430, 7</value>
   </data>
   <data name="btnKill.Size" type="System.Drawing.Size, System.Drawing">
-    <value>20, 20</value>
+    <value>30, 30</value>
   </data>
   <data name="btnKill.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -248,7 +239,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btnKill.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="chkIsAutoRun.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -257,10 +248,13 @@
     <value>True</value>
   </data>
   <data name="chkIsAutoRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>330, 6</value>
+    <value>500, 11</value>
+  </data>
+  <data name="chkIsAutoRun.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="chkIsAutoRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 16</value>
+    <value>97, 22</value>
   </data>
   <data name="chkIsAutoRun.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -281,7 +275,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;chkIsAutoRun.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="lbRunningState.Font" type="System.Drawing.Font, System.Drawing">
     <value>宋体, 9pt, style=Bold</value>
@@ -290,10 +284,13 @@
     <value>NoControl</value>
   </data>
   <data name="lbRunningState.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 4</value>
+    <value>8, 7</value>
+  </data>
+  <data name="lbRunningState.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="lbRunningState.Size" type="System.Drawing.Size, System.Drawing">
-    <value>26, 20</value>
+    <value>39, 30</value>
   </data>
   <data name="lbRunningState.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -317,13 +314,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbRunningState.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="lbName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>37, 4</value>
+    <value>56, 7</value>
+  </data>
+  <data name="lbName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 0, 4, 0</value>
   </data>
   <data name="lbName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>219, 20</value>
+    <value>301, 30</value>
   </data>
   <data name="lbName.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -347,16 +347,56 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;lbName.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="btnRemove.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        xAAADsQBlSsOGwAAAORJREFUOE+1kr0NwjAQhb0AEiNQUVNSu2YIpLABC9CkZwWq1GQDNmCKAFUcEbk9
+        /E4+6wKRlYIUT/f88z7blxjv/cY9mw6CD9p3rweF6jAmIpOTQfC62xIEjzD87XiYBEmAy3rBQfERMKZ7
+        0DIBwoCfIEEdLsuSrLUDVVUlkJUA+M0aAN82Dbm24xCqeAjgkOPnGR3GyeJR+3efwhqgIbiBQ1CappuY
+        A0BhP3EPEIyCp7quf8LfSgA0Igb5c2ESi2MhrQFA628AgeTqvDfQG3VQz893g6IoeENO8UcaBZyxME3+
+        9AGedRb4wHKqBwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="btnRemove.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Zoom</value>
+  </data>
+  <data name="btnRemove.Location" type="System.Drawing.Point, System.Drawing">
+    <value>463, 7</value>
+  </data>
+  <data name="btnRemove.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 30</value>
+  </data>
+  <data name="btnRemove.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="btnRemove.ToolTip" xml:space="preserve">
+    <value>Delete this script.</value>
+  </data>
+  <data name="&gt;&gt;btnRemove.Name" xml:space="preserve">
+    <value>btnRemove</value>
+  </data>
+  <data name="&gt;&gt;btnRemove.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnRemove.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnRemove.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>6, 12</value>
+    <value>9, 18</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>4, 4, 4, 4</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>400, 30</value>
+    <value>598, 42</value>
   </data>
   <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
     <value>toolTip1</value>

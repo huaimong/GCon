@@ -67,6 +67,7 @@
     <Compile Include="Libs\Streams\RawBitStream\Numbers.cs" />
     <Compile Include="Libs\Streams\RawBitStream\Utils.cs" />
     <Compile Include="Libs\Streams\RawBitStream\Uuids.cs" />
+    <Compile Include="Libs\Sys\NotepadHelper.cs" />
     <Compile Include="Libs\Tasks\Bar.cs" />
     <Compile Include="Libs\Tasks\Routine.cs" />
     <Compile Include="Libs\Views\RepaintCtrl.cs" />

@@ -2,6 +2,7 @@
 using ScintillaNET;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Luna.Controllers
@@ -186,6 +187,91 @@ namespace Luna.Controllers
         }
         #endregion
 
+        #region Scintilla
+        private int maxLineNumberCharLength;
+        private void Scintilla_TextChanged(object sender, EventArgs e)
+        {
+            // Did the number of characters in the line number display change?
+            // i.e. nnn VS nn, or nnnn VS nn, etc...
+            var maxLineNumberCharLength = luaEditor.Lines.Count.ToString().Length;
+            if (maxLineNumberCharLength == this.maxLineNumberCharLength)
+                return;
+
+            // Calculate the width required to display the last line number
+            // and include some padding for good measure.
+            const int padding = 2;
+            luaEditor.Margins[0].Width = luaEditor.TextWidth(Style.LineNumber, new string('9', maxLineNumberCharLength + 1)) + padding;
+            this.maxLineNumberCharLength = maxLineNumberCharLength;
+        }
+
+        string GetCurrentLineText(int endPos)
+        {
+            int curPos = luaEditor.CurrentPosition;
+            int lineNumber = luaEditor.LineFromPosition(curPos);
+            int startPos = luaEditor.Lines[lineNumber].Position;
+            return luaEditor.GetTextRange(startPos, (endPos - startPos)); //Text until the caret so that the whitespace is always equal in every line.
+        }
+
+        private void Scintilla_InsertCheck(object sender, InsertCheckEventArgs e)
+        {
+            if ((e.Text.EndsWith("\n") || e.Text.EndsWith("\r")))
+            {
+                //Text until the caret so that the whitespace is always equal in every line.
+                string curLineText = GetCurrentLineText(e.Position);
+                Match curIndentMatch = Regex.Match(curLineText, "^[ \\t]*");
+                string curIndent = curIndentMatch.Value;
+
+                var cline = curLineText
+                    .ToLower()
+                    .Replace("\r", "")
+                    .Replace("\n", "")
+                    .Trim();
+
+                e.Text = (e.Text + curIndent);
+
+                if (cline.StartsWith("function")
+                    || cline.EndsWith("do")
+                    || cline.EndsWith("then")
+                    || cline.EndsWith("else")
+                    || Regex.IsMatch(curLineText, "{\\s*$"))
+                {
+                    e.Text = (e.Text + "\t");
+                }
+            }
+        }
+
+        private void Scintilla_CharAdded(object sender, CharAddedEventArgs e)
+        {
+            int curLine = luaEditor.LineFromPosition(luaEditor.CurrentPosition);
+            if (curLine < 2)
+            {
+                return;
+            }
+
+            string ct = luaEditor.Lines[curLine].Text.Trim().ToLower();
+            if (ct == "}"
+                || ct == "else"
+                || ct == "end")
+            { //Check whether the bracket is the only thing on the line.. For cases like "if() { }".
+                SetIndent(luaEditor, curLine, GetIndent(luaEditor, curLine - 1) - 4);
+            }
+        }
+
+        //Codes for the handling the Indention of the lines.
+        //They are manually added here until they get officially added to the Scintilla control.
+
+        const int SCI_SETLINEINDENTATION = 2126;
+        const int SCI_GETLINEINDENTATION = 2127;
+        private void SetIndent(Scintilla scin, int line, int indent)
+        {
+            scin.DirectMessage(SCI_SETLINEINDENTATION, new IntPtr(line), new IntPtr(indent));
+        }
+        private int GetIndent(Scintilla scin, int line)
+        {
+            return (scin.DirectMessage(SCI_GETLINEINDENTATION, new IntPtr(line), (IntPtr)null).ToInt32());
+        }
+        #endregion
+
         #region private methods
         void ShowFormSearch()
         {
@@ -238,6 +324,10 @@ namespace Luna.Controllers
 
         private void BindEvents()
         {
+            luaEditor.InsertCheck += Scintilla_InsertCheck;
+            luaEditor.CharAdded += Scintilla_CharAdded;
+            luaEditor.TextChanged += Scintilla_TextChanged;
+
             btnNewScript.Click += (s, a) => ClearEditor();
 
             btnKillScript.Click += (s, a) => luaCoreCtrl.Kill();
