@@ -58,6 +58,6 @@ namespace VgcApis.Models.Interfaces
         int UpdateSubscriptions();
         int UpdateSubscriptions(int proxyPort);
 
-        string VmessLink2ConfigString(string vmessLink);
+        string ShareLink2ConfigString(string vmessLink);
     }
 }

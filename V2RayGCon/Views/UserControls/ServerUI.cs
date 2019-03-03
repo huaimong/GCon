@@ -394,20 +394,20 @@ namespace V2RayGCon.Views.UserControls
 
         private void vmessToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var vmessLink = slinkMgr.EncodeVmessLink(GetConfig());
-            var success = Lib.Utils.CopyToClipboard(vmessLink);
-            MessageBox.Show(success ? I18N.LinksCopied : I18N.CopyFail);
+            var vmessLink = slinkMgr.EncodeConfigToShareLink(
+                GetConfig(),
+                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
+
+            Lib.Utils.CopyToClipboardAndPrompt(vmessLink);
         }
 
         private void v2cfgToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                           Lib.Utils.CopyToClipboard(
-                               Lib.Utils.AddLinkPrefix(
-                                   Lib.Utils.Base64Encode(GetConfig()),
-                                   VgcApis.Models.Datas.Enum.LinkTypes.v2cfg)) ?
-                           I18N.LinksCopied :
-                           I18N.CopyFail);
+            var content = slinkMgr.EncodeConfigToShareLink(
+                GetConfig(),
+                VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
+
+            Lib.Utils.CopyToClipboardAndPrompt(content);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -537,9 +537,10 @@ namespace V2RayGCon.Views.UserControls
 
         private void vToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var vee = slinkMgr.EncodeVeeLink(GetConfig());
-            var success = Lib.Utils.CopyToClipboard(vee);
-            MessageBox.Show(success ? I18N.LinksCopied : I18N.CopyFail);
+            var vee = slinkMgr.EncodeConfigToShareLink(
+                GetConfig(),
+                VgcApis.Models.Datas.Enum.LinkTypes.v);
+            Lib.Utils.CopyToClipboardAndPrompt(vee);
         }
         #endregion
     }

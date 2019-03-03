@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -26,7 +27,8 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem copyAsV2cfgLinks,
             ToolStripMenuItem copyAsVmessLinks,
             ToolStripMenuItem copyAsVeeLinks,
-            ToolStripMenuItem copyAsSubscriptions,
+            ToolStripMenuItem copyAsVmessSubscriptions,
+            ToolStripMenuItem copyAsVeeSubscriptions,
 
             // batch op
             ToolStripMenuItem speedTestOnSelected,
@@ -57,7 +59,8 @@ namespace V2RayGCon.Controller.FormMainComponent
                 copyAsV2cfgLinks,
                 copyAsVmessLinks,
                 copyAsVeeLinks,
-                copyAsSubscriptions);
+                copyAsVmessSubscriptions,
+                copyAsVeeSubscriptions);
 
             InitCtrlMisc(
                 refreshSummary,
@@ -168,50 +171,44 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem copyAsV2cfgLinks,
             ToolStripMenuItem copyAsVmessLinks,
             ToolStripMenuItem copyAsVeeLinks,
-            ToolStripMenuItem copyAsSubscriptions)
+            ToolStripMenuItem copyAsVmessSubscriptions,
+            ToolStripMenuItem copyAsVeeSubscriptions)
         {
-            copyAsSubscriptions.Click += ApplyActionOnSelectedServers(() =>
+            copyAsVeeSubscriptions.Click += ApplyActionOnSelectedServers(() =>
             {
-                MessageBox.Show(
-                Lib.Utils.CopyToClipboard(
-                    Lib.Utils.Base64Encode(
-                        EncodeAllServersIntoVmessLinks())) ?
-                I18N.LinksCopied :
-                I18N.CopyFail);
+                var links = EncodeAllServersIntoShareLinks(
+                    VgcApis.Models.Datas.Enum.LinkTypes.v);
+                var b64Links = Lib.Utils.Base64Encode(links);
+                Lib.Utils.CopyToClipboardAndPrompt(b64Links);
+            });
+
+            copyAsVmessSubscriptions.Click += ApplyActionOnSelectedServers(() =>
+            {
+                var links = EncodeAllServersIntoShareLinks(
+                    VgcApis.Models.Datas.Enum.LinkTypes.vmess);
+                var b64Links = Lib.Utils.Base64Encode(links);
+                Lib.Utils.CopyToClipboardAndPrompt(b64Links);
             });
 
             copyAsV2cfgLinks.Click += ApplyActionOnSelectedServers(() =>
             {
-                var list = servers.GetAllServersOrderByIndex()
-                    .Where(s => s.GetCoreStates().IsSelected())
-                    .Select(s => Lib.Utils.AddLinkPrefix(
-                        Lib.Utils.Base64Encode(s.GetConfiger().GetConfig()),
-                        VgcApis.Models.Datas.Enum.LinkTypes.v2cfg))
-                    .ToList();
+                var links = EncodeAllServersIntoShareLinks(
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
 
-                MessageBox.Show(
-                    Lib.Utils.CopyToClipboard(
-                        string.Join(Environment.NewLine, list)) ?
-                    I18N.LinksCopied :
-                    I18N.CopyFail);
+                Lib.Utils.CopyToClipboardAndPrompt(links);
             });
 
             copyAsVmessLinks.Click += ApplyActionOnSelectedServers(() =>
             {
-                MessageBox.Show(
-                   Lib.Utils.CopyToClipboard(
-                       EncodeAllServersIntoVmessLinks()) ?
-                   I18N.LinksCopied :
-                   I18N.CopyFail);
+                var links = EncodeAllServersIntoShareLinks(
+                           VgcApis.Models.Datas.Enum.LinkTypes.vmess);
+                Lib.Utils.CopyToClipboardAndPrompt(links);
             });
 
             copyAsVeeLinks.Click += ApplyActionOnSelectedServers(() =>
             {
-                MessageBox.Show(
-                   Lib.Utils.CopyToClipboard(
-                       EncodeAllServersIntoVeeLinks()) ?
-                   I18N.LinksCopied :
-                   I18N.CopyFail);
+                var links = EncodeAllServersIntoShareLinks(VgcApis.Models.Datas.Enum.LinkTypes.v);
+                Lib.Utils.CopyToClipboardAndPrompt(links);
             });
         }
 
@@ -286,10 +283,12 @@ namespace V2RayGCon.Controller.FormMainComponent
             RemoveAllControlsAndRefreshFlyPanel();
         }
 
-        string EncodeAllServersIntoVeeLinks()
+        string EncodeAllServersIntoShareLinks(
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
         {
             var serverList = servers.GetAllServersOrderByIndex();
-            string result = string.Empty;
+
+            StringBuilder result = new StringBuilder("");
 
             foreach (var server in serverList)
             {
@@ -299,44 +298,24 @@ namespace V2RayGCon.Controller.FormMainComponent
                 }
 
                 var configString = server.GetConfiger().GetConfig();
-                var veeLink = slinkMgr.EncodeVeeLink(configString);
-                if (!string.IsNullOrEmpty(veeLink))
+                var shareLink = slinkMgr.EncodeConfigToShareLink(
+                    configString, linkType);
+
+                if (!string.IsNullOrEmpty(shareLink))
                 {
-                    result += veeLink + System.Environment.NewLine;
+                    result
+                        .Append(shareLink)
+                        .Append(Environment.NewLine);
                 }
             }
 
-            return result;
+            return result.ToString();
         }
 
-
-        string EncodeAllServersIntoVmessLinks()
-        {
-            var serverList = servers.GetAllServersOrderByIndex();
-            string result = string.Empty;
-
-            foreach (var server in serverList)
-            {
-                if (!server.GetCoreStates().IsSelected())
-                {
-                    continue;
-                }
-
-                var configString = server.GetConfiger().GetConfig();
-                var vmessLink = slinkMgr.EncodeVmessLink(configString);
-                if (!string.IsNullOrEmpty(vmessLink))
-                {
-                    result += vmessLink + System.Environment.NewLine;
-                }
-            }
-
-            return result;
-        }
-
-        Controller.FormMainComponent.FlyServer GetFlyPanel()
+        FlyServer GetFlyPanel()
         {
             return this.GetContainer()
-                .GetComponent<Controller.FormMainComponent.FlyServer>();
+                .GetComponent<FlyServer>();
         }
         #endregion
     }

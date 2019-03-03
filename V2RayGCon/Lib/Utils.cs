@@ -696,6 +696,12 @@ namespace V2RayGCon.Lib
             return list;
         }
 
+        /// <summary>
+        /// http is equal to https
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="linkType"></param>
+        /// <returns></returns>
         public static List<string> ExtractLinks(
             string text,
             VgcApis.Models.Datas.Enum.LinkTypes linkType)
@@ -1303,6 +1309,7 @@ namespace V2RayGCon.Lib
                         VgcApis.Models.Consts.Patterns.Base64Standard;
                     break;
                 case VgcApis.Models.Datas.Enum.LinkTypes.http:
+                case VgcApis.Models.Datas.Enum.LinkTypes.https:
                     pattern = VgcApis.Models.Consts.Patterns.HttpUrl;
                     break;
                 default:
@@ -1347,13 +1354,11 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region UI related
-        public static void CopyToClipboardAndPrompt(string content)
-        {
+        public static void CopyToClipboardAndPrompt(string content) =>
             MessageBox.Show(
-                Lib.Utils.CopyToClipboard(content) ?
+                CopyToClipboard(content) ?
                 I18N.CopySuccess :
                 I18N.CopyFail);
-        }
 
         public static bool CopyToClipboard(string content)
         {

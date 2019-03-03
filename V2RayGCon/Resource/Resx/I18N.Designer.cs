@@ -911,15 +911,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Links has been copied to clipboard. 的本地化字符串。
-        /// </summary>
-        internal static string LinksCopied {
-            get {
-                return ResourceManager.GetString("LinksCopied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 List is empty! 的本地化字符串。
         /// </summary>
         internal static string ListIsEmpty {

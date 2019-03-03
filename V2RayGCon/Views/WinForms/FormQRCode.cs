@@ -24,7 +24,8 @@ namespace V2RayGCon.Views.WinForms
         Service.Servers servers;
         Service.ShareLinkMgr slinkMgr;
 
-        int servIndex, linkType;
+        int servIndex;
+        VgcApis.Models.Datas.Enum.LinkTypes linkType;
         List<string> serverList;
 
         FormQRCode()
@@ -33,7 +34,7 @@ namespace V2RayGCon.Views.WinForms
             slinkMgr = Service.ShareLinkMgr.Instance;
 
             servIndex = -1;
-            linkType = 0;
+            linkType = VgcApis.Models.Datas.Enum.LinkTypes.vmess;
 
             InitializeComponent();
 
@@ -41,11 +42,13 @@ namespace V2RayGCon.Views.WinForms
             this.Show();
         }
 
+
+
         private void FormQRCode_Shown(object sender, EventArgs e)
         {
             ClearServerList();
             RefreshServerList();
-            cboxLinkType.SelectedIndex = linkType;
+            cboxLinkType.SelectedIndex = LinkTypeToComboBoxSelectedIndex(linkType);
             picQRCode.InitialImage = null;
 
             this.FormClosed += (s, a) =>
@@ -62,6 +65,35 @@ namespace V2RayGCon.Views.WinForms
         }
 
         #region private methods
+        VgcApis.Models.Datas.Enum.LinkTypes ComboBoxSelectedIndexToLinkType(
+            int index)
+        {
+            switch (index)
+            {
+                case 0:
+                    return VgcApis.Models.Datas.Enum.LinkTypes.vmess;
+                case 1:
+                    return VgcApis.Models.Datas.Enum.LinkTypes.v;
+
+                default:
+                    return VgcApis.Models.Datas.Enum.LinkTypes.unknow;
+            }
+        }
+
+        int LinkTypeToComboBoxSelectedIndex(
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
+        {
+            switch (linkType)
+            {
+                case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
+                    return 0;
+                case VgcApis.Models.Datas.Enum.LinkTypes.v:
+                    return 1;
+                default:
+                    return -1;
+            }
+        }
+
         void ClearServerList()
         {
             serverList = new List<string>();
@@ -116,17 +148,13 @@ namespace V2RayGCon.Views.WinForms
                 config = serverList[servIndex];
             }
 
-
             if (string.IsNullOrEmpty(config))
             {
                 tboxLink.Text = string.Empty;
                 return;
             }
 
-            string link = linkType == 0 ?
-                link = slinkMgr.EncodeVmessLink(config) :
-                link = slinkMgr.EncodeVeeLink(config);
-
+            string link = slinkMgr.EncodeConfigToShareLink(config, linkType);
             tboxLink.Text = link ?? string.Empty;
         }
 
@@ -158,7 +186,7 @@ namespace V2RayGCon.Views.WinForms
             switch (pair.Item2)
             {
                 case Lib.QRCode.QRCode.WriteErrors.Success:
-                    SetQRCodeImage( pair.Item1);
+                    SetQRCodeImage(pair.Item1);
                     break;
                 case Lib.QRCode.QRCode.WriteErrors.DataEmpty:
                     SetQRCodeImage(null);
@@ -175,7 +203,7 @@ namespace V2RayGCon.Views.WinForms
         #region UI event handler
         private void cboxLinkType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            linkType = cboxLinkType.SelectedIndex;
+            linkType = ComboBoxSelectedIndexToLinkType(cboxLinkType.SelectedIndex);
             UpdateTboxLink();
         }
 

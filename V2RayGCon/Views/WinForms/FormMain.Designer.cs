@@ -106,7 +106,8 @@ namespace V2RayGCon.Views.WinForms
             this.toolStripMenuItemCopyAsV2cfgLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyAsVmessLink = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemCopyAsVeeLink = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItemCopyAsSubscription = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemCopyAsVmessSubscription = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItemCopyAsVeeSubscription = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMenuItemRestartSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItemStopSelected = new System.Windows.Forms.ToolStripMenuItem();
@@ -639,7 +640,8 @@ namespace V2RayGCon.Views.WinForms
             this.toolStripMenuItemCopyAsV2cfgLink,
             this.toolStripMenuItemCopyAsVmessLink,
             this.toolStripMenuItemCopyAsVeeLink,
-            this.toolStripMenuItemCopyAsSubscription});
+            this.toolStripMenuItemCopyAsVmessSubscription,
+            this.toolStripMenuItemCopyAsVeeSubscription});
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             // 
             // toolStripMenuItemCopyAsV2cfgLink
@@ -657,10 +659,15 @@ namespace V2RayGCon.Views.WinForms
             resources.ApplyResources(this.toolStripMenuItemCopyAsVeeLink, "toolStripMenuItemCopyAsVeeLink");
             this.toolStripMenuItemCopyAsVeeLink.Name = "toolStripMenuItemCopyAsVeeLink";
             // 
-            // toolStripMenuItemCopyAsSubscription
+            // toolStripMenuItemCopyAsVmessSubscription
             // 
-            resources.ApplyResources(this.toolStripMenuItemCopyAsSubscription, "toolStripMenuItemCopyAsSubscription");
-            this.toolStripMenuItemCopyAsSubscription.Name = "toolStripMenuItemCopyAsSubscription";
+            resources.ApplyResources(this.toolStripMenuItemCopyAsVmessSubscription, "toolStripMenuItemCopyAsVmessSubscription");
+            this.toolStripMenuItemCopyAsVmessSubscription.Name = "toolStripMenuItemCopyAsVmessSubscription";
+            // 
+            // toolStripMenuItemCopyAsVeeSubscription
+            // 
+            resources.ApplyResources(this.toolStripMenuItemCopyAsVeeSubscription, "toolStripMenuItemCopyAsVeeSubscription");
+            this.toolStripMenuItemCopyAsVeeSubscription.Name = "toolStripMenuItemCopyAsVeeSubscription";
             // 
             // toolStripSeparator12
             // 
@@ -890,7 +897,7 @@ namespace V2RayGCon.Views.WinForms
         private ToolStripMenuItem toolStripMenuItemDeleteSelectedServers;
         private ToolStripMenuItem toolStripMenuItemDownLoadV2rayCore;
         private ToolStripMenuItem toolStripMenuItemRemoveV2rayCore;
-        private ToolStripMenuItem toolStripMenuItemCopyAsSubscription;
+        private ToolStripMenuItem toolStripMenuItemCopyAsVmessSubscription;
         private ToolStripMenuItem toolStripMenuItemModifySelected;
         private ToolStripMenuItem toolStripMenuItemModifySettings;
         private ToolStripSeparator toolStripSeparator3;
@@ -961,5 +968,6 @@ namespace V2RayGCon.Views.WinForms
         private ToolStripMenuItem toolStripMenuItemCopyAsVeeLink;
         private ToolStripSeparator toolStripMenuItem4;
         private ToolStripMenuItem toolStripMenuItemResize;
+        private ToolStripMenuItem toolStripMenuItemCopyAsVeeSubscription;
     }
 }

@@ -364,10 +364,14 @@ namespace V2RayGCon.Test
         {
             var html = "http://abc.com https://def.com";
 
-            var links = Lib.Utils.ExtractLinks(html,
+            var httpLinks = Lib.Utils.ExtractLinks(html,
                 VgcApis.Models.Datas.Enum.LinkTypes.http);
 
-            Assert.AreEqual(2, links.Count());
+            var httpsLinks = Lib.Utils.ExtractLinks(html,
+                VgcApis.Models.Datas.Enum.LinkTypes.https);
+
+            Assert.AreEqual(2, httpLinks.Count());
+            Assert.AreEqual(2, httpsLinks.Count());
         }
 
 

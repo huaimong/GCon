@@ -73,8 +73,8 @@ namespace Luna.Models.Apis
 
         public string GetAppDir() => VgcApis.Libs.Utils.GetAppDir();
 
-        public string VmessLink2ConfigString(string vmessLink) =>
-            vgcSlinkMgr.DecodeVmessLink(vmessLink);
+        public string ShareLink2ConfigString(string shareLink) =>
+            vgcSlinkMgr.DecodeShareLinkToConfig(shareLink) ?? @"";
 
         public string Search(string keywords, int first, int proxyPort) =>
             vgcWeb.Search(keywords, first, proxyPort, 20 * 1000);

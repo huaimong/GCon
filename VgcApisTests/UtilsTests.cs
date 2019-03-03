@@ -13,6 +13,38 @@ namespace VgcApisTests
     public class UtilsTests
     {
         [DataTestMethod]
+        [DataRow(@"http://abc.com", @"http")]
+        [DataRow(@"https://abc.com", @"https")]
+        [DataRow(@"VMess://abc.com", @"vmess")]
+        public void GetLinkPrefixTest(string link, string expect)
+        {
+            var prefix = GetLinkPrefix(link);
+            Assert.AreEqual(expect, prefix);
+        }
+
+        [DataTestMethod]
+        [DataRow(@"http://abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.http)]
+        [DataRow(@"V://abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.v)]
+        [DataRow(@"vmess://abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.vmess)]
+        [DataRow(@"v2cfg://abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.v2cfg)]
+        [DataRow(@"linkTypeNotExist://abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.unknow)]
+        [DataRow(@"abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.unknow)]
+        [DataRow(@"ss://abc.com",
+            VgcApis.Models.Datas.Enum.LinkTypes.ss)]
+        public void DetectLinkTypeTest(string link, VgcApis.Models.Datas.Enum.LinkTypes expect)
+        {
+            var linkType = DetectLinkType(link);
+            Assert.AreEqual(expect, linkType);
+        }
+
+
+        [DataTestMethod]
         [DataRow(-4, -1)]
         [DataRow(-65535, -1)]
         [DataRow(-65535, -1)]

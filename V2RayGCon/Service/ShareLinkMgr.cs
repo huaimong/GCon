@@ -26,15 +26,45 @@ namespace V2RayGCon.Service
         #endregion
 
         #region IShareLinkMgrService methods
-        public string DecodeVmessLink(string vmessLink) =>
-            codecs.Decode<ShareLinkComponents.VmessDecoder>(vmessLink);
 
-        public string EncodeVmessLink(string config) =>
-            codecs.Encode<ShareLinkComponents.VmessDecoder>(config);
+        /// <summary>
+        /// return null if fail!
+        /// </summary>
+        public string DecodeShareLinkToConfig(string shareLink)
+        {
+            var linkType = VgcApis.Libs.Utils.DetectLinkType(shareLink);
+            switch (linkType)
+            {
+                case VgcApis.Models.Datas.Enum.LinkTypes.v:
+                    return codecs.Decode<ShareLinkComponents.VeeDecoder>(shareLink);
+                case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
+                    return codecs.Decode<ShareLinkComponents.VmessDecoder>(shareLink);
+                case VgcApis.Models.Datas.Enum.LinkTypes.v2cfg:
+                    return codecs.Decode<ShareLinkComponents.V2cfgDecoder>(shareLink);
+                default:
+                    return null;
+            }
+        }
 
-        public string EncodeVeeLink(string config) =>
-            codecs.Encode<ShareLinkComponents.VeeDecoder>(config);
-
+        /// <summary>
+        /// return null if fail!
+        /// </summary>
+        public string EncodeConfigToShareLink(
+            string config,
+            VgcApis.Models.Datas.Enum.LinkTypes linkType)
+        {
+            switch (linkType)
+            {
+                case VgcApis.Models.Datas.Enum.LinkTypes.v:
+                    return codecs.Encode<ShareLinkComponents.VeeDecoder>(config);
+                case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
+                    return codecs.Encode<ShareLinkComponents.VmessDecoder>(config);
+                case VgcApis.Models.Datas.Enum.LinkTypes.v2cfg:
+                    return codecs.Encode<ShareLinkComponents.V2cfgDecoder>(config);
+                default:
+                    return null;
+            }
+        }
         #endregion
 
         #region public methods

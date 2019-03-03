@@ -41,7 +41,9 @@
             v2cfg = 1,
             ss = 2,
             http = 3,
-            v = 4,
+            https = 4,
+            v = 5,
+            unknow = 256, // for enum parse
         }
 
         /// <summary>

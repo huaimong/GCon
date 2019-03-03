@@ -152,6 +152,31 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
+        public static string GetLinkPrefix(string shareLink)
+        {
+            var index = shareLink.IndexOf(@"://");
+            if (index == -1)
+            {
+                return null;
+            }
+
+            var prefix = shareLink.Substring(0, index);
+            return prefix.ToLower();
+        }
+
+        public static Models.Datas.Enum.LinkTypes DetectLinkType(
+            string shareLink)
+        {
+            var unknow = Models.Datas.Enum.LinkTypes.unknow;
+            var prefix = GetLinkPrefix(shareLink);
+            if (!string.IsNullOrEmpty(prefix)
+                && Enum.TryParse(prefix, out Models.Datas.Enum.LinkTypes linkType))
+            {
+                return linkType;
+            }
+            return unknow;
+        }
+
         /// <summary>
         /// regex = @"(?&lt;groupName>pattern)"
         /// <para>return string.Empty if sth. goes wrong</para>

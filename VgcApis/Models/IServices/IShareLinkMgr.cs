@@ -2,9 +2,11 @@
 {
     public interface IShareLinkMgrService
     {
-        string DecodeVmessLink(string vmessLink);
-        string EncodeVmessLink(string config);
-        string EncodeVeeLink(string config);
+        string DecodeShareLinkToConfig(string shareLink);
+
+        string EncodeConfigToShareLink(
+            string config, Datas.Enum.LinkTypes linkType);
+
         int UpdateSubscriptions(int proxyPort);
     }
 }
