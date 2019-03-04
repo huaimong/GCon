@@ -1177,23 +1177,6 @@ namespace V2RayGCon.Lib
             return hash.ToString();
         }
 
-        public static bool PartialMatch(string source, string partial)
-        {
-            var s = source.ToLower();
-            var p = partial.ToLower();
-
-            int idxS = 0, idxP = 0;
-            while (idxS < s.Length && idxP < p.Length)
-            {
-                if (s[idxS] == p[idxP])
-                {
-                    idxP++;
-                }
-                idxS++;
-            }
-            return idxP == p.Length;
-        }
-
         static object genRandomNumberLocker = new object();
         public static string RandomHex(int length)
         {

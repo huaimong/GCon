@@ -15,7 +15,7 @@ namespace Luna.Libs.LuaSnippet
                     @"luaFuncStr is null!");
             }
 
-            ImageIndex = 0;
+            ImageIndex = 1;
             ToolTipTitle = GenTitle(luaFuncStr);
             ToolTipText = @"";
             Text = GenTitle(luaFuncStr);
@@ -30,7 +30,8 @@ namespace Luna.Libs.LuaSnippet
         {
             if (fragmentText == Text)
                 return CompareResult.VisibleAndSelected;
-            if (lowerText.StartsWith(fragmentText.ToLower()))
+            // if (lowerText.StartsWith(fragmentText.ToLower()))
+            if (VgcApis.Libs.Utils.PartialMatch(lowerText, fragmentText.ToLower()))
                 return CompareResult.Visible;
             return CompareResult.Hidden;
         }

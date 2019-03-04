@@ -152,12 +152,6 @@
   <data name="btnKill.ToolTip" xml:space="preserve">
     <value>强制终止此脚本</value>
   </data>
-  <data name="chkIsAutoRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>509, 11</value>
-  </data>
-  <data name="chkIsAutoRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>88, 22</value>
-  </data>
   <data name="chkIsAutoRun.Text" xml:space="preserve">
     <value>自启动</value>
   </data>
@@ -182,9 +176,6 @@
   </data>
   <data name="btnRemove.ToolTip" xml:space="preserve">
     <value>删除此脚本</value>
-  </data>
-  <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>598, 42</value>
   </data>
   <data name="$this.ToolTip" xml:space="preserve">
     <value />

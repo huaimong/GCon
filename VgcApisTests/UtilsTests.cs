@@ -13,6 +13,19 @@ namespace VgcApisTests
     public class UtilsTests
     {
         [DataTestMethod]
+        [DataRow("EvABk文,tv字vvc", "字文", false)]
+        [DataRow("EvABk文,tv字vvc", "ab字", true)]
+        [DataRow("ab vvvc", "bc", true)]
+        [DataRow("abc", "ac", true)]
+        [DataRow("", "a", false)]
+        [DataRow("", "", true)]
+        public void PartialMatchTest(string source, string partial, bool expect)
+        {
+            var result = PartialMatchCi(source, partial);
+            Assert.AreEqual(expect, result);
+        }
+
+        [DataTestMethod]
         [DataRow(@"http://abc.com", @"http")]
         [DataRow(@"https://abc.com", @"https")]
         [DataRow(@"VMess://abc.com", @"vmess")]

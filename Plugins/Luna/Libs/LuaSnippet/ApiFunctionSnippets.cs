@@ -23,7 +23,7 @@ namespace Luna.Libs.LuaSnippet
                     @"param must not null!");
             }
 
-            ImageIndex = 0;
+            ImageIndex = 2;
             ToolTipTitle = GenTitle(returnType, functionName, defParmaWithTypeInfo);
             ToolTipText = description ?? @"";
             Text = GenText(parent, functionName, defParam);
@@ -45,7 +45,7 @@ namespace Luna.Libs.LuaSnippet
             if (fragmentText == Text)
                 return CompareResult.VisibleAndSelected;
             if (fragmentText.Contains(seperator)
-                && lowerText.Contains(fragmentText.ToLower()))
+                && VgcApis.Libs.Utils.PartialMatch(lowerText, fragmentText.ToLower()))
                 return CompareResult.Visible;
             return CompareResult.Hidden;
         }

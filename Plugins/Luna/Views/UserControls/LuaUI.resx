@@ -132,10 +132,13 @@
     <value>Zoom</value>
   </data>
   <data name="btnRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>364, 7</value>
+    <value>243, 4</value>
+  </data>
+  <data name="btnRun.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="btnRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 30</value>
+    <value>20, 20</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="btnRun.TabIndex" type="System.Int32, mscorlib">
@@ -176,10 +179,13 @@
     <value>NoControl</value>
   </data>
   <data name="btnStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>397, 7</value>
+    <value>265, 4</value>
+  </data>
+  <data name="btnStop.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="btnStop.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 30</value>
+    <value>20, 20</value>
   </data>
   <data name="btnStop.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -212,10 +218,13 @@
     <value>Zoom</value>
   </data>
   <data name="btnKill.Location" type="System.Drawing.Point, System.Drawing">
-    <value>430, 7</value>
+    <value>287, 4</value>
+  </data>
+  <data name="btnKill.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="btnKill.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 30</value>
+    <value>20, 20</value>
   </data>
   <data name="btnKill.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -239,13 +248,10 @@
     <value>True</value>
   </data>
   <data name="chkIsAutoRun.Location" type="System.Drawing.Point, System.Drawing">
-    <value>500, 11</value>
-  </data>
-  <data name="chkIsAutoRun.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>333, 6</value>
   </data>
   <data name="chkIsAutoRun.Size" type="System.Drawing.Size, System.Drawing">
-    <value>97, 22</value>
+    <value>66, 16</value>
   </data>
   <data name="chkIsAutoRun.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -275,13 +281,10 @@
     <value>NoControl</value>
   </data>
   <data name="lbRunningState.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 7</value>
-  </data>
-  <data name="lbRunningState.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+    <value>5, 4</value>
   </data>
   <data name="lbRunningState.Size" type="System.Drawing.Size, System.Drawing">
-    <value>39, 30</value>
+    <value>26, 20</value>
   </data>
   <data name="lbRunningState.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -308,13 +311,10 @@
     <value>2</value>
   </data>
   <data name="lbName.Location" type="System.Drawing.Point, System.Drawing">
-    <value>56, 7</value>
-  </data>
-  <data name="lbName.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 0, 4, 0</value>
+    <value>37, 4</value>
   </data>
   <data name="lbName.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 30</value>
+    <value>201, 20</value>
   </data>
   <data name="lbName.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -354,10 +354,13 @@
     <value>Zoom</value>
   </data>
   <data name="btnRemove.Location" type="System.Drawing.Point, System.Drawing">
-    <value>463, 7</value>
+    <value>309, 4</value>
+  </data>
+  <data name="btnRemove.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
   </data>
   <data name="btnRemove.Size" type="System.Drawing.Size, System.Drawing">
-    <value>30, 30</value>
+    <value>20, 20</value>
   </data>
   <data name="btnRemove.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -381,13 +384,10 @@
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
-    <value>9, 18</value>
-  </data>
-  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>4, 4, 4, 4</value>
+    <value>6, 12</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>602, 46</value>
+    <value>402, 31</value>
   </data>
   <data name="&gt;&gt;toolTip1.Name" xml:space="preserve">
     <value>toolTip1</value>

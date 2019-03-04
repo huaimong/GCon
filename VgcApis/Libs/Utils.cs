@@ -153,6 +153,27 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
+
+        public static bool PartialMatchCi(string source, string partial) =>
+            PartialMatch(source.ToLower(), partial.ToLower());
+
+        public static bool PartialMatch(string source,string partial)
+        {
+            var s = source;
+            var p = partial;
+
+            int idxS = 0, idxP = 0;
+            while (idxS < s.Length && idxP < p.Length)
+            {
+                if (s[idxS] == p[idxP])
+                {
+                    idxP++;
+                }
+                idxS++;
+            }
+            return idxP == p.Length;
+        }
+
         public static string GetLinkPrefix(string shareLink)
         {
             var index = shareLink.IndexOf(@"://");

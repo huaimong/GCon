@@ -72,7 +72,7 @@ namespace V2RayGCon.Views.UserControls
                 var title = box.Text.ToLower();
                 var keyword = keywords.FirstOrDefault(
                     s => !string.IsNullOrEmpty(s)
-                    && Lib.Utils.PartialMatch(title, s))?.ToLower();
+                    && VgcApis.Libs.Utils.PartialMatchCi(title, s))?.ToLower();
 
                 if (keyword == null)
                 {

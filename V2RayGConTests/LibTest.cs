@@ -136,19 +136,6 @@ namespace V2RayGCon.Test
         }
 
         [DataTestMethod]
-        [DataRow("EvABk文,tv字vvc", "字文", false)]
-        [DataRow("EvABk文,tv字vvc", "ab字", true)]
-        [DataRow("ab vvvc", "bc", true)]
-        [DataRow("abc", "ac", true)]
-        [DataRow("", "a", false)]
-        [DataRow("", "", true)]
-        public void PartialMatchTest(string source, string partial, bool expect)
-        {
-            var result = Lib.Utils.PartialMatch(source, partial);
-            Assert.AreEqual(expect, result);
-        }
-
-        [DataTestMethod]
         [DataRow("http://www.baidu.com")]
         public void VisitWebPageSpeedTestTest(string url)
         {

@@ -71,7 +71,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 .Where(serv => serv.GetCoreStates().GetterInfoForSearch(
                     infos => keywords.All(
                         kw => infos.Any(
-                            info => Lib.Utils.PartialMatch(info, kw)))))
+                            info => VgcApis.Libs.Utils.PartialMatchCi(info, kw)))))
                 .ToList();
         }
 
@@ -140,7 +140,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         public override bool RefreshUI()
         {
             servers.ResetIndex();
-            
+
             var list = this.GetFilteredList();
             var pagedList = GenPagedServerList(list);
 
