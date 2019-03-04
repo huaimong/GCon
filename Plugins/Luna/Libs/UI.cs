@@ -104,6 +104,7 @@ namespace Luna.Libs
             // Configure a margin to display line number
             scintilla.Margins[0].Type = MarginType.Number;
             scintilla.Margins[0].Width = 16;
+            scintilla.Styles[Style.LineNumber].ForeColor = Color.DarkGray;
 
             return scintilla;
         }

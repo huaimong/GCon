@@ -26,7 +26,7 @@ namespace Luna.Libs.LuaSnippet
             {
                 SearchPattern = @"[\w\.:]",
                 MaximumSize = new Size(300, 200),
-                ToolTipDuration = 5000,
+                ToolTipDuration = 20000,
             };
 
             acm.TargetControlWrapper = new ScintillaWrapper(editor);
@@ -64,9 +64,9 @@ namespace Luna.Libs.LuaSnippet
 
         List<AutocompleteItem> GenLuaFunctionSnippet()
         {
-            var luaFuncList = VgcApis.Models.Consts.Lua.LuaFunctions.Split(
-                new char[] { ' ' },
-                StringSplitOptions.RemoveEmptyEntries);
+            var luaFuncList = VgcApis.Models.Consts.Lua.LuaFunctions
+                .Replace("dofile", "")
+                .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             var sorted = luaFuncList.OrderBy(s => s).ToList();
             var result = new List<AutocompleteItem>();
@@ -169,9 +169,14 @@ namespace Luna.Libs.LuaSnippet
 
             foreach (var info in sorted)
             {
+                var returnType = info.Item1;
+                var methodName = info.Item2;
+                var paramStr = info.Item3;
+                var paramWithType = info.Item4;
+
                 result.Add(
                     new ApiFunctionSnippets(
-                       info.Item1, name, info.Item2, info.Item3, info.Item4, @""));
+                       returnType, name, methodName, paramStr, paramWithType, @""));
             }
             return result;
         }

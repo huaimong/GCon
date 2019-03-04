@@ -322,6 +322,29 @@ namespace VgcApis.Libs
         #endregion
 
         #region reflection
+        public static string GetFriendlyName(Type type)
+        {
+            string friendlyName = type.Name;
+            if (type.IsGenericType)
+            {
+                int iBacktick = friendlyName.IndexOf('`');
+                if (iBacktick > 0)
+                {
+                    friendlyName = friendlyName.Remove(iBacktick);
+                }
+                friendlyName += "<";
+                Type[] typeParameters = type.GetGenericArguments();
+                for (int i = 0; i < typeParameters.Length; ++i)
+                {
+                    string typeParamName = GetFriendlyName(typeParameters[i]);
+                    friendlyName += (i == 0 ? typeParamName : "," + typeParamName);
+                }
+                friendlyName += ">";
+            }
+
+            return friendlyName;
+        }
+
         /// <summary>
         /// [0: ReturnType 1: MethodName 2: ParamsStr 3: ParamsWithType]
         /// </summary>
@@ -343,7 +366,7 @@ namespace VgcApis.Libs
                 if (method.IsPublic && !exceptList.Contains(name))
                 {
                     var paramStrs = GenParamStr(method);
-                    var returnType = method.ReturnType.Name;
+                    var returnType = GetFriendlyName(method.ReturnType);
                     fullNames.Add(
                         new Tuple<string, string, string, string>(
                             returnType, name, paramStrs.Item1, paramStrs.Item2));
