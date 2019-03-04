@@ -141,7 +141,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
         }
 
-        public void GetterInboundInfoThen(Action<string> next)
+        public void GetterInfoForNotifyIconf(Action<string> next)
         {
             var serverName = coreInfo.name;
             VgcApis.Libs.Utils.RunInBackground(() =>

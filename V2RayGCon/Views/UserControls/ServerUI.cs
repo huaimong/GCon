@@ -111,7 +111,7 @@ namespace V2RayGCon.Views.UserControls
             VgcApis.Libs.UI.RunInUiThread(rtboxServerTitle, () =>
             {
                 Lib.UI.UpdateControlOnDemand(
-                    cboxInbound, coreServCtrl.GetCoreStates().GetCustomInbType());
+                    cboxInbound, coreServCtrl.GetCoreStates().GetInboundType());
 
                 Lib.UI.UpdateControlOnDemand(
                     rtboxServerTitle, coreServCtrl.GetCoreStates().GetTitle());
@@ -134,7 +134,7 @@ namespace V2RayGCon.Views.UserControls
         {
             Lib.UI.UpdateControlOnDemand(
                 globalImportToolStripMenuItem,
-                coreServCtrl.GetCoreStates().IsInjectImport());
+                coreServCtrl.GetCoreStates().IsInjectGlobalImport());
 
             Lib.UI.UpdateControlOnDemand(
                 skipCNWebsiteToolStripMenuItem,
@@ -157,7 +157,7 @@ namespace V2RayGCon.Views.UserControls
                 return;
             }
 
-            var addr = coreServCtrl.GetCoreStates().GetCustomInbAddr();
+            var addr = coreServCtrl.GetCoreStates().GetInboundAddr();
             if (tboxInboundAddr.Text != addr)
             {
                 tboxInboundAddr.Text = addr;
@@ -183,7 +183,7 @@ namespace V2RayGCon.Views.UserControls
         {
             var text = (coreServCtrl.GetCoreStates().IsAutoRun() ? "A" : "")
                 + (coreServCtrl.GetCoreStates().IsInjectSkipCnSite() ? "C" : "")
-                + (coreServCtrl.GetCoreStates().IsInjectImport() ? "I" : "")
+                + (coreServCtrl.GetCoreStates().IsInjectGlobalImport() ? "I" : "")
                 + (coreServCtrl.GetCoreStates().IsUntrack() ? "U" : "");
 
             if (lbIsAutorun.Text != text)
@@ -195,7 +195,7 @@ namespace V2RayGCon.Views.UserControls
         void UpdateBorderFoldingStat()
         {
             var level = Lib.Utils.Clamp(
-                coreServCtrl.GetCoreStates().GetFoldingLevel(), 0, foldingButtonIcons.Length);
+                coreServCtrl.GetCoreStates().GetFoldingState(), 0, foldingButtonIcons.Length);
 
             if (btnIsCollapse.BackgroundImage != foldingButtonIcons[level])
             {
@@ -211,12 +211,12 @@ namespace V2RayGCon.Views.UserControls
 
         void UpdateFilterMarkBox()
         {
-            if (cboxMark.Text == coreServCtrl.GetCoreStates().GetCustomMark())
+            if (cboxMark.Text == coreServCtrl.GetCoreStates().GetMark())
             {
                 return;
             }
 
-            cboxMark.Text = coreServCtrl.GetCoreStates().GetCustomMark();
+            cboxMark.Text = coreServCtrl.GetCoreStates().GetMark();
         }
 
         void UpdateSelectedTickStat()
@@ -342,7 +342,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void cboxInbound_SelectedIndexChanged(object sender, EventArgs e)
         {
-            coreServCtrl.GetCoreStates().SetCustomInbType(cboxInbound.SelectedIndex);
+            coreServCtrl.GetCoreStates().SetInboundType(cboxInbound.SelectedIndex);
         }
 
         private void chkSelected_CheckedChanged(object sender, EventArgs e)
@@ -364,7 +364,7 @@ namespace V2RayGCon.Views.UserControls
                 {
                     tboxInboundAddr.ForeColor = Color.Black;
                 }
-                coreServCtrl.GetCoreStates().SetCustomInbAddr(ip, port);
+                coreServCtrl.GetCoreStates().SetInboundAddr(ip, port);
             }
             else
             {
@@ -422,12 +422,12 @@ namespace V2RayGCon.Views.UserControls
 
         private void logOfThisServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            coreServCtrl.GetLogger().ShowLogForm();
+            coreServCtrl.GetLogger().ShowFormLog();
         }
 
         private void cboxMark_TextChanged(object sender, EventArgs e)
         {
-            this.coreServCtrl.GetCoreStates().SetCustomMark(cboxMark.Text);
+            this.coreServCtrl.GetCoreStates().SetMark(cboxMark.Text);
         }
 
         private void cboxMark_DropDown(object sender, EventArgs e)
@@ -468,8 +468,8 @@ namespace V2RayGCon.Views.UserControls
 
         private void btnIsCollapse_Click(object sender, EventArgs e)
         {
-            var level = (coreServCtrl.GetCoreStates().GetFoldingLevel() + 1) % 2;
-            coreServCtrl.GetCoreStates().SetFoldingLevel(level);
+            var level = (coreServCtrl.GetCoreStates().GetFoldingState() + 1) % 2;
+            coreServCtrl.GetCoreStates().SetFoldingState(level);
         }
 
         private void lbIsAutorun_MouseDown(object sender, MouseEventArgs e)

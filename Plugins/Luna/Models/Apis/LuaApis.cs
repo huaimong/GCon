@@ -43,10 +43,10 @@ namespace Luna.Models.Apis
         public void UpdateAllSummary() =>
             vgcServers.UpdateAllServersSummarySync();
 
-        public void SetShareMemory(string key, string value) =>
+        public void WriteLocalStorage(string key, string value) =>
             settings.SetLuaShareMemory(key, value);
 
-        public string GetShareMemory(string key) =>
+        public string ReadLocalStorage(string key) =>
             settings.GetLuaShareMemory(key);
 
         public void ResetIndexQuiet() =>

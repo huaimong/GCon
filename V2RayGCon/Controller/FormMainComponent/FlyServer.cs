@@ -68,7 +68,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
 
             return list
-                .Where(serv => serv.GetCoreStates().GetterInfoFor(
+                .Where(serv => serv.GetCoreStates().GetterInfoForSearch(
                     infos => keywords.All(
                         kw => infos.Any(
                             info => Lib.Utils.PartialMatch(info, kw)))))

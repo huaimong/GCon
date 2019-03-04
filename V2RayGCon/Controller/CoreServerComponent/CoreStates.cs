@@ -61,8 +61,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
         }
 
-
-        public bool GetterInfoFor(Func<string[], bool> filter)
+        public bool GetterInfoForSearch(Func<string[], bool> filter)
         {
             var ci = coreInfo;
             return filter(new string[] {
@@ -131,8 +130,8 @@ namespace V2RayGCon.Controller.CoreServerComponent
         public string GetSummary() => coreInfo.summary;
 
 
-        public int GetFoldingLevel() => coreInfo.foldingLevel;
-        public void SetFoldingLevel(int level) =>
+        public int GetFoldingState() => coreInfo.foldingLevel;
+        public void SetFoldingState(int level) =>
             SetPropertyOnDemand(ref coreInfo.foldingLevel, level);
 
         public void SetIsSelected(bool selected)
@@ -146,7 +145,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             container.InvokeEventOnPropertyChange();
         }
 
-        public void SetCustomInbAddr(string ip, int port)
+        public void SetInboundAddr(string ip, int port)
         {
             var changed = false;
 
@@ -169,7 +168,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
         }
 
-        public void SetCustomInbType(int type)
+        public void SetInboundType(int type)
         {
             if (coreInfo.customInbType == type)
             {
@@ -186,12 +185,11 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
         }
 
-        public int GetCustomInbType() => coreInfo.customInbType;
-        public string GetCustomInbAddr() =>
+        public int GetInboundType() => coreInfo.customInbType;
+        public string GetInboundAddr() =>
                     $"{coreInfo.inbIp}:{coreInfo.inbPort}";
 
-        public string GetCustomMark() => coreInfo.customMark;
-        public void SetCustomMark(string mark)
+        public void SetMark(string mark)
         {
             if (coreInfo.customMark == mark)
             {
@@ -203,8 +201,8 @@ namespace V2RayGCon.Controller.CoreServerComponent
             container.InvokeEventOnPropertyChange();
         }
 
-        public string GetInbIp() => coreInfo.inbIp;
-        public int GetInbPort() => coreInfo.inbPort;
+        public string GetInboundIp() => coreInfo.inbIp;
+        public int GetInboundPort() => coreInfo.inbPort;
 
         public bool IsAutoRun() => coreInfo.isAutoRun;
         public bool IsSelected() => coreInfo.isSelected;
@@ -212,7 +210,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         public bool IsInjectSkipCnSite() => coreInfo.isInjectSkipCNSite;
 
-        public bool IsInjectImport() => coreInfo.isInjectImport;
+        public bool IsInjectGlobalImport() => coreInfo.isInjectImport;
 
         public string GetTitle()
         {

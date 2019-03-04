@@ -85,6 +85,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutocompleteMenu-ScintillaNET, Version=1.3.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoCompleteMenu-ScintillaNET.1.6.1\lib\net40\AutocompleteMenu-ScintillaNET.dll</HintPath>
+    </Reference>
     <Reference Include="AutoUpdater.NET, Version=1.5.0.0, Culture=neutral, PublicKeyToken=501435c91b35f4bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Autoupdater.NET.Official.1.5.0\lib\net40\AutoUpdater.NET.dll</HintPath>
     </Reference>
@@ -103,8 +106,8 @@
     <Reference Include="NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
       <HintPath>..\packages\NLua.1.3.2.1\lib\net45\NLua.dll</HintPath>
     </Reference>
-    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
-      <HintPath>..\packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -513,7 +516,7 @@
   <PropertyGroup>
     <PostBuildEvent>set "libsDir=libs\"
 set "copyFolderList=lua templates"
-set "allDlls=Luna NLua liblua53 lua53 KeraLua ProxySetter Statistics Pacman HtmlAgilityPack DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
+set "allDlls=AutocompleteMenu-ScintillaNET Luna NLua liblua53 lua53 KeraLua ProxySetter Statistics Pacman HtmlAgilityPack DotNetZip Newtonsoft ScintillaNET VgcApis zxing AutoUpdater.NET"
 
 call:CreateFoldersOnDemand "%25libsDir%25 %25copyFolderList%25"
 call:MoveFilesByList "%25allDlls%25"

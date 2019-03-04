@@ -11,9 +11,11 @@ namespace Luna.Controllers
     {
         Services.Settings settings;
         Services.LuaServer luaServer;
+
         VgcApis.Models.IServices.IApiService api;
         VgcApis.Models.IServices.IConfigMgrService configMgr;
         VgcApis.Models.IServices.IServersService vgcServers;
+
         LuaCoreCtrl luaCoreCtrl;
         VgcApis.WinForms.FormSearch formSearch = null;
         VgcApis.Libs.Views.RepaintCtrl repaintCtrl;
@@ -431,11 +433,11 @@ namespace Luna.Controllers
                 ?.script
                 ?? string.Empty;
 
-
         void InitControls()
         {
             // script editor
             luaEditor = Libs.UI.CreateLuaEditor(pnlEditorContainer);
+            settings.AttachSnippetsTo(luaEditor);
         }
 
         void ReloadScriptName()

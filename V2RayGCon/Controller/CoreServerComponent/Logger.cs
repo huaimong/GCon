@@ -32,7 +32,7 @@
 
         Views.WinForms.FormSingleServerLog logForm = null;
         readonly object formLogLocker = new object();
-        public void ShowLogForm()
+        public void ShowFormLog()
         {
             lock (formLogLocker)
             {

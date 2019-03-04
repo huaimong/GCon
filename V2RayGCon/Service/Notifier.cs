@@ -130,7 +130,7 @@ namespace V2RayGCon.Service
 
             void worker(int index, Action next)
             {
-                list[index].GetConfiger().GetterInboundInfoThen(s =>
+                list[index].GetConfiger().GetterInfoForNotifyIconf(s =>
                 {
                     texts.Add(s);
                     next?.Invoke();

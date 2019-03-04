@@ -71,7 +71,7 @@ namespace V2RayGCon.Service
         public void ResetIndex() =>
             indexHandler.ResetIndex();
 
-        public void ResetIndexQuiet()=>
+        public void ResetIndexQuiet() =>
             indexHandler.ResetIndexQuiet();
 
         public void SortSelectedBySpeedTest()
@@ -320,7 +320,7 @@ namespace V2RayGCon.Service
             lock (serverListWriteLock)
             {
                 markList = coreServList
-                    .Select(s => s.GetCoreStates().GetCustomMark())
+                    .Select(s => s.GetCoreStates().GetMark())
                     .Distinct()
                     .Where(s => !string.IsNullOrEmpty(s))
                     .ToList();
@@ -333,7 +333,7 @@ namespace V2RayGCon.Service
             lock (serverListWriteLock)
             {
                 list = coreServList
-                    .Where(s => s.GetCoreStates().IsInjectImport() && s.GetCoreCtrl().IsCoreRunning())
+                    .Where(s => s.GetCoreStates().IsInjectGlobalImport() && s.GetCoreCtrl().IsCoreRunning())
                     .OrderBy(s => s.GetCoreStates().GetIndex())
                     .ToList();
             }

@@ -45,8 +45,8 @@
     <Reference Include="NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
       <HintPath>..\packages\NLua.1.3.2.1\lib\net45\NLua.dll</HintPath>
     </Reference>
-    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
-      <HintPath>..\packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -79,6 +79,7 @@
     <Compile Include="Models\Consts\BitStream.cs" />
     <Compile Include="Models\Consts\Config.cs" />
     <Compile Include="Models\Consts\Core.cs" />
+    <Compile Include="Models\Consts\Lua.cs" />
     <Compile Include="Models\Consts\Patterns.cs" />
     <Compile Include="Models\Consts\Import.cs" />
     <Compile Include="Models\Consts\Libs.cs" />

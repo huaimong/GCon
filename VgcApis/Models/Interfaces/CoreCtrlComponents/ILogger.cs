@@ -2,6 +2,6 @@
 {
     public interface ILogger
     {
-        void ShowLogForm();
+        void ShowFormLog();
     }
 }

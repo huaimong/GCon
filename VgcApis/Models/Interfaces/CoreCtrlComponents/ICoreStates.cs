@@ -6,48 +6,41 @@ namespace VgcApis.Models.Interfaces.CoreCtrlComponents
     {
         Datas.CoreInfo GetAllRawCoreInfo();
 
-        void SetIndexQuiet(double index);
+        bool GetterInfoForSearch(Func<string[], bool> filter);
 
-        void SetIndex(double index);
-
-
-        bool GetterInfoFor(Func<string[], bool> filter);
-        void ToggleIsAutoRun();
-        void ToggleIsUntrack();
-        void ToggleIsInjectImport();
-        void ToggleIsInjectSkipCnSite();
-
+        int GetFoldingState();
+        string GetInboundAddr();
+        string GetInboundIp();
+        int GetInboundPort();
+        int GetInboundType();
+        double GetIndex();
+        string GetMark();
+        string GetName();
+        string GetRawUid();
+        long GetSpeedTestResult();
+        string GetStatus();
+        string GetSummary();
+        string GetTitle();
         string GetUid();
 
         bool IsAutoRun();
         bool IsUntrack();
         bool IsSelected();
         bool IsInjectSkipCnSite();
-        bool IsInjectImport();
+        bool IsInjectGlobalImport();
 
-        double GetIndex();
-
-        string GetMark();
-        string GetSummary();
-
-        int GetFoldingLevel();
-        void SetFoldingLevel(int level);
-
-        long GetSpeedTestResult();
-        string GetStatus();
-        string GetName();
-        string GetTitle();
-
+        void SetFoldingState(int state);
+        void SetIndex(double index);
+        void SetIndexQuiet(double index);
         void SetIsSelected(bool selected);
-        void SetCustomInbAddr(string ip, int port);
-        void SetCustomInbType(int type);
-        string GetCustomMark();
-        void SetCustomMark(string mark);
+        void SetInboundAddr(string ip, int port);
+        void SetInboundType(int type);
+        void SetMark(string mark);
 
-        int GetCustomInbType();
-        string GetCustomInbAddr();
-        string GetInbIp();
-        int GetInbPort();
-        string GetRawUid();
+        void ToggleIsAutoRun();
+        void ToggleIsUntrack();
+        void ToggleIsInjectImport();
+        void ToggleIsInjectSkipCnSite();
+
     }
 }

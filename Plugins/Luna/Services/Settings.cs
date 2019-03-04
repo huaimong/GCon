@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ScintillaNET;
+using System.Collections.Generic;
 
 namespace Luna.Services
 {
@@ -10,8 +11,14 @@ namespace Luna.Services
         readonly string pluginName = Properties.Resources.Name;
         Models.Data.UserSettings userSettings;
         VgcApis.Libs.Tasks.LazyGuy bookKeeper;
+        Libs.LuaSnippet.LuaAcm luaAcm;
 
         public Settings() { }
+
+        #region internal methods
+        public void AttachSnippetsTo(Scintilla editor) =>
+            luaAcm?.BindToEditor(editor);
+        #endregion
 
         #region public methods
         public void SendLog(string contnet)
@@ -29,6 +36,7 @@ namespace Luna.Services
             VgcApis.Models.IServices.ISettingsService vgcSetting)
         {
             this.vgcSetting = vgcSetting;
+            this.luaAcm = new Libs.LuaSnippet.LuaAcm();
 
             userSettings = VgcApis.Libs.Utils
                 .LoadPluginSetting<Models.Data.UserSettings>(
@@ -71,6 +79,7 @@ namespace Luna.Services
         #region protected methods
         protected override void Cleanup()
         {
+            luaAcm?.Dispose();
             bookKeeper.DoItNow();
             bookKeeper.Quit();
         }

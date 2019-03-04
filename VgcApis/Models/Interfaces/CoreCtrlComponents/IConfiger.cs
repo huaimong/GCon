@@ -16,6 +16,6 @@ namespace VgcApis.Models.Interfaces.CoreCtrlComponents
           out int port);
 
         void UpdateSummaryThen(Action next = null);
-        void GetterInboundInfoThen(Action<string> next);
+        void GetterInfoForNotifyIconf(Action<string> next);
     }
 }

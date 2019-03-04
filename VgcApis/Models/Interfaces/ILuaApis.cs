@@ -4,61 +4,45 @@ namespace VgcApis.Models.Interfaces
 {
     public interface ILuaApis
     {
+        #region local storage
+        string ReadLocalStorage(string key);
+        void WriteLocalStorage(string key, string value);
+        #endregion
 
-        string GetShareMemory(string key);
+        #region Lua script
+        string GetAppDir();
+        string PredefinedFunctions(); // Show perdefined functions.
+        void Print(params object[] contents);// Api:Print("hello",", ","world","!")
+        void Sleep(int millisecond);
+        #endregion
 
-        List<string> ExtractVmessLinks(string text);
-
-        List<string> ExtractSsLinks(string text);
-
-        List<string> FindAllHrefs(string text);
-
-        string Fetch(string url);
-
-        string Fetch(string url, int proxyPort, int milliSeconds);
-
+        #region core controlling
         List<ICoreServCtrl> GetAllServers();
 
-        string GetAppDir();
-
-        /// <summary>
-        /// First running http server port.
-        /// </summary>
-        int GetProxyPort();
-
-        /// <summary>
-        /// V4 format. params can set to string.Empty
-        /// </summary>
-        string PackSelectedServers(string orgUid, string pkgName);
-
-        string PatchHref(string url, string href);
-
-        /// <summary>
-        /// Show perdefined functions.
-        /// </summary>
-        string PredefinedFunctions();
-
-        /// <summary>
-        /// Api:Print("hello",", ","world","!")
-        /// </summary>
-        void Print(params object[] contents);
-
+        int GetProxyPort();  // First running http server port.
+        string PackSelectedServers(string orgUid, string pkgName); // param nullable
         void RequireFormMainReload();
         void ResetIndexQuiet();
         long RunSpeedTest(string rawConfig);
         bool RunSpeedTestOnSelectedServers();
-
         string ScanQrcode();
-        string Search(string keywords, int first, int proxyPort);
-        void SetShareMemory(string key, string value);
-        void Sleep(int millisecond);
+        string ShareLink2ConfigString(string vmessLink);
         void SortSelectedServersBySpeedTest();
         void SortSelectedServersBySummary();
-
         void UpdateAllSummary();
         int UpdateSubscriptions();
         int UpdateSubscriptions(int proxyPort);
+        #endregion
 
-        string ShareLink2ConfigString(string vmessLink);
+        #region web crawling 
+        List<string> ExtractSsLinks(string text);
+        List<string> ExtractVmessLinks(string text);
+        string Fetch(string url);
+        string Fetch(string url, int proxyPort, int milliSeconds);
+        List<string> FindAllHrefs(string text);
+        string PatchHref(string url, string href);
+        string Search(string keywords, int first, int proxyPort);
+        #endregion
+
     }
 }

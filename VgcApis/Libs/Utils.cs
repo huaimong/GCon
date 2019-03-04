@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -317,6 +318,80 @@ namespace VgcApis.Libs
                 return (int)Math.Round(f);
             };
             return 0;
+        }
+        #endregion
+
+        #region reflection
+        /// <summary>
+        /// [0: ReturnType 1: MethodName 2: ParamsStr 3: ParamsWithType]
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<Tuple<string, string, string, string>> GetPublicMethodNameAndParam(Type type)
+        {
+            var exceptList = new List<string>
+            {
+                "add_OnPropertyChanged",
+                "remove_OnPropertyChanged",
+            };
+
+            var fullNames = new List<Tuple<string, string, string, string>>();
+            var methods = type.GetMethods();
+            foreach (var method in type.GetMethods())
+            {
+                var name = method.Name;
+                if (method.IsPublic && !exceptList.Contains(name))
+                {
+                    var paramStrs = GenParamStr(method);
+                    var returnType = method.ReturnType.Name;
+                    fullNames.Add(
+                        new Tuple<string, string, string, string>(
+                            returnType, name, paramStrs.Item1, paramStrs.Item2));
+                }
+            }
+            return fullNames;
+        }
+
+        static Tuple<string, string> GenParamStr(System.Reflection.MethodInfo methodInfo)
+        {
+            var fullParamList = new List<string>();
+            var paramList = new List<string>();
+
+            foreach (var paramInfo in methodInfo.GetParameters())
+            {
+
+                fullParamList.Add(
+                    paramInfo.ParameterType.Name +
+                    " " +
+                    paramInfo.Name);
+
+                paramList.Add(paramInfo.Name);
+            }
+
+            return new Tuple<string, string>(
+                string.Join(@", ", paramList),
+                string.Join(@", ", fullParamList));
+        }
+
+        public static List<string> GetPublicMethodNames(Type type)
+        {
+            var exceptList = new List<string>
+            {
+                "add_OnPropertyChanged",
+                "remove_OnPropertyChanged",
+            };
+
+            var methodsName = new List<string>();
+            var methods = type.GetMethods();
+            foreach (var method in type.GetMethods())
+            {
+                var name = method.Name;
+                if (method.IsPublic && !exceptList.Contains(name))
+                {
+                    methodsName.Add(name);
+                }
+            }
+            return methodsName;
         }
         #endregion
     }

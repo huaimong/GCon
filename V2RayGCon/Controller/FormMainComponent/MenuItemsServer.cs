@@ -256,7 +256,7 @@ namespace V2RayGCon.Controller.FormMainComponent
                 .Where(s => s.GetCoreStates().IsSelected())
                 .Select(s =>
                 {
-                    s.GetCoreStates().SetFoldingLevel(collapseLevel);
+                    s.GetCoreStates().SetFoldingState(collapseLevel);
                     return true;
                 })
                 .ToList(); // force linq to execute
