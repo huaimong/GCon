@@ -46,6 +46,11 @@ steps:
 # V2RayGCon-box.zip
 - task: PythonScript@0
   inputs:
+    scriptSource: 'inline'
+    script: import sys; print("Python version: "); print(sys.version)
+
+- task: PythonScript@0
+  inputs:
     workingDirectory: '$(v2rayCorePkgFolder)'
     scriptSource: 'inline'
     script: from urllib.request import urlretrieve; urlretrieve('$(v2rayCoreUrl)', '$(v2rayCoreFileName)')
