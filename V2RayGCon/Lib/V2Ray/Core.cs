@@ -91,7 +91,9 @@ namespace V2RayGCon.Lib.V2Ray
             try
             {
                 var output = Lib.Utils.GetOutputFromExecutable(
-                    v2ctl, queryParam, 1000);
+                    v2ctl,
+                    queryParam,
+                    VgcApis.Models.Consts.Core.GetStatisticsTimeout);
 
                 // Regex pattern = new Regex(@"(?<value>(\d+))");
                 var value = VgcApis.Libs.Utils.ExtractStringWithPattern(
@@ -111,7 +113,9 @@ namespace V2RayGCon.Lib.V2Ray
             }
 
             var output = Lib.Utils.GetOutputFromExecutable(
-                GetExecutablePath(), "-version", 2000);
+                GetExecutablePath(),
+                "-version",
+                VgcApis.Models.Consts.Core.GetVersionTimeout);
 
             // since 3.46.* v is deleted
             // Regex pattern = new Regex(@"(?<version>(\d+\.)+\d+)");
@@ -276,7 +280,7 @@ namespace V2RayGCon.Lib.V2Ray
                     Lib.Sys.SafeNativeMethods.SetConsoleCtrlHandler(null, true);
                     Lib.Sys.SafeNativeMethods.GenerateConsoleCtrlEvent(CTRL_C_EVENT, 0);
 
-                    if (done.WaitOne(3000))
+                    if (done.WaitOne(VgcApis.Models.Consts.Core.SendCtrlCTimeout))
                     {
                         success = true;
                     }
@@ -303,7 +307,7 @@ namespace V2RayGCon.Lib.V2Ray
             };
 
             Lib.Utils.KillProcessAndChildrens(v2rayCore.Id);
-            finished.WaitOne(2000);
+            finished.WaitOne(VgcApis.Models.Consts.Core.KillCoreTimeout);
         }
 
         static void InvokeActionIgnoreError(Action lambda)
@@ -411,7 +415,7 @@ namespace V2RayGCon.Lib.V2Ray
             v2rayCore.BeginOutputReadLine();
 
             // Assume core ready after 3.5 seconds, in case log set to none.
-            ready.WaitOne(3500);
+            ready.WaitOne(VgcApis.Models.Consts.Core.WaitUntilReadyTimeout);
             OnCoreReady -= onCoreReady;
             isCheckCoreReady = false;
         }
@@ -425,16 +429,24 @@ namespace V2RayGCon.Lib.V2Ray
                 return;
             }
 
-            if (isCheckCoreReady
-                && msg.Contains("[Warning]")
-                && msg.Contains("started")
-                && msg.Contains("ore:")
-                && msg.Contains("V2Ray"))
+            if (isCheckCoreReady && MatchAllReadyMarks(msg))
             {
                 InvokeEventOnCoreReady();
             }
 
             SendLog(msg);
+        }
+
+        bool MatchAllReadyMarks(string message)
+        {
+            foreach (var mark in VgcApis.Models.Consts.Core.ReadyLogMarks)
+            {
+                if (!message.Contains(mark))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         void SendLog(string log)

@@ -182,7 +182,7 @@ namespace Luna.Controllers
             var state = new Lua();
             state["Api"] = luaApis; // bug: lua can access all public functions
             state["Signal"] = luaSignal;
-            state.DoString(luaApis.PerdefinedFunctions());
+            state.DoString(luaApis.PredefinedFunctions());
             return state;
         }
 

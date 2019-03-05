@@ -90,7 +90,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             selectNoMarkAllPages.Click +=
                 (s, a) => SelectAllPagesWhere(
-                    el => string.IsNullOrEmpty(el.GetCoreStates().GetCustomMark()));
+                    el => string.IsNullOrEmpty(el.GetCoreStates().GetMark()));
 
             selectUntrackAllPages.Click +=
                 (s, a) => SelectAllPagesWhere(el => el.GetCoreStates().IsUntrack());
@@ -119,7 +119,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             selectNoMarkAllServers.Click +=
                 (s, a) => SelectAllServersWhere(
-                    el => string.IsNullOrEmpty(el.GetCoreStates().GetCustomMark()));
+                    el => string.IsNullOrEmpty(el.GetCoreStates().GetMark()));
 
             selectNoSpeedTestAllServers.Click +=
                 (s, a) => SelectAllServersWhere(el => el.GetCoreStates().GetSpeedTestResult() < 0);
@@ -171,7 +171,7 @@ namespace V2RayGCon.Controller.FormMainComponent
         }
 
         void SelectAllPagesWhere(
-            Func<VgcApis.Models.Interfaces.ICoreServCtrl, bool> 
+            Func<VgcApis.Models.Interfaces.ICoreServCtrl, bool>
             condiction)
         {
             var configs = GetFlyPanel().GetFilteredList()
@@ -194,7 +194,7 @@ namespace V2RayGCon.Controller.FormMainComponent
 
 
         void SelectAllServersWhere(
-            Func<VgcApis.Models.Interfaces.ICoreServCtrl, bool> 
+            Func<VgcApis.Models.Interfaces.ICoreServCtrl, bool>
             condiction)
         {
             servers.GetAllServersOrderByIndex()

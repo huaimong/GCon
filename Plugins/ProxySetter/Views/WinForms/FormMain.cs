@@ -42,12 +42,14 @@ namespace ProxySetter.Views.WinForms
             };
 
             InitializeComponent();
-            VgcApis.Libs.UI.AutoSetFormIcon(this);
-            this.Show();
+
+
         }
 
         private void FormPluginMain_Shown(object sender, System.EventArgs e)
         {
+            VgcApis.Libs.UI.AutoSetFormIcon(this);
+
             this.Text = string.Format(
                 "{0} v{1}",
                 Properties.Resources.Name,
@@ -109,7 +111,7 @@ namespace ProxySetter.Views.WinForms
                 lbBasicProxyLink,
                 btnBasicStartPacServer,
                 btnBasicStopPacServer,
-                btnBasicSaveAs,
+                btnBasicViewInNotepad,
                 btnBasicDebugPacServer,
                 btnBaiscCopyProxyLink,
                 btnBasicClearSysProxy));

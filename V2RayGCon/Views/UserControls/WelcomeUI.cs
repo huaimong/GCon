@@ -10,6 +10,7 @@ namespace V2RayGCon.Views.UserControls
 
         Service.Servers servers;
         Service.Setting setting;
+        Service.ShareLinkMgr slinkMgr;
 
         int marginBottom;
 
@@ -17,6 +18,7 @@ namespace V2RayGCon.Views.UserControls
         {
             servers = Service.Servers.Instance;
             setting = Service.Setting.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             InitializeComponent();
             marginBottom = this.Height - pnlBasicUsage.Top;
@@ -63,17 +65,17 @@ namespace V2RayGCon.Views.UserControls
 
         private void lbCopyFromClipboard_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string links = Lib.Utils.GetClipboardText();
-            servers.ImportLinkWithOutV2RayLinks(links);
+            string text = Lib.Utils.GetClipboardText();
+            slinkMgr.ImportLinkWithOutV2cfgLinks(text);
         }
 
         private void lbScanQRCode_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            void Success(string link)
+            void Success(string text)
             {
-                var msg = Lib.Utils.CutStr(link, 90);
-                Service.Setting.Instance.SendLog($"QRCode: {msg}");
-                servers.ImportLinkWithOutV2RayLinks(link);
+                var msg = Lib.Utils.CutStr(text, 90);
+                setting.SendLog($"QRCode: {msg}");
+                slinkMgr.ImportLinkWithOutV2cfgLinks(text);
             }
 
             void Fail()

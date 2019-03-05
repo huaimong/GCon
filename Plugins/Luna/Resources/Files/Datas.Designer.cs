@@ -74,19 +74,19 @@ namespace Luna.Resources.Files {
         ///    end
         ///end
         ///
-        ///string.startswith = function (text, keyWord)
-        ///    if text == nil or keyWord == nil then   
+        ///string.startswith = function (text, keyword)
+        ///    if text == nil or keyword == nil then   
         ///        return false
         ///    end
         ///    local t = string.lower(text)
-        ///    local kw =&apos;^&apos; .. string.lower(keyWord)
+        ///    local kw =&apos;^&apos; .. string.lower(keyword)
         ///    if string.find(t, kw) then
         ///        return true
         ///    e [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
-        internal static string LuaPerdefinedFunctions {
+        internal static string LuaPredefinedFunctions {
             get {
-                return ResourceManager.GetString("LuaPerdefinedFunctions", resourceCulture);
+                return ResourceManager.GetString("LuaPredefinedFunctions", resourceCulture);
             }
         }
     }

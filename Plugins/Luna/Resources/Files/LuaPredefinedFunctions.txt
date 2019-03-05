@@ -6,7 +6,7 @@ function Each(o)
     local e = o:GetEnumerator()
     return function()
         if e:MoveNext() then
-        return e.Current
+			return e.Current
         end
     end
 end
@@ -17,10 +17,7 @@ string.startswith = function (text, keyword)
     end
     local t = string.lower(text)
     local kw ='^' .. string.lower(keyword)
-    if string.find(t, kw) then
-        return true
-    end
-    return false
+    return string.find(t, kw) 
 end
 
 string.endswith = function (text, keyword)
@@ -29,10 +26,7 @@ string.endswith = function (text, keyword)
     end
     local t = string.lower(text)
     local kw = string.lower(keyword) .. '$'
-    if string.find(t, kw) then
-        return true
-    end
-    return false
+    return string.find(t, kw)
 end
 
 string.isempty = function(text)

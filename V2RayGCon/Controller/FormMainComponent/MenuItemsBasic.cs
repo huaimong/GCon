@@ -7,6 +7,7 @@ namespace V2RayGCon.Controller.FormMainComponent
     class MenuItemsBasic : FormMainComponentController
     {
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
 
         public MenuItemsBasic(
             ToolStripMenuItem miSimVmessServer,
@@ -23,6 +24,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem miRemoveV2rayCore)
         {
             servers = Service.Servers.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, miImportFromFile);
             InitMenuWindows(miFormConfigEditor, miFormQRCode, miFormLog, miFormOptions);
@@ -32,15 +34,15 @@ namespace V2RayGCon.Controller.FormMainComponent
         #region public method
         public void ImportServersFromTextFile()
         {
-            string v2rayLinks = VgcApis.Libs.UI.ReadFileContentFromDialog(
+            string v2cfgLinks = VgcApis.Libs.UI.ReadFileContentFromDialog(
                 VgcApis.Models.Consts.Files.TxtExt);
 
-            if (v2rayLinks == null)
+            if (v2cfgLinks == null)
             {
                 return;
             }
 
-            servers.ImportLinkWithV2RayLinks(v2rayLinks);
+            slinkMgr.ImportLinkWithV2cfgLinks(v2cfgLinks);
         }
 
         public void ExportAllServersToTextFile()
@@ -58,7 +60,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             {
                 var vlink = Lib.Utils.AddLinkPrefix(
                     Lib.Utils.Base64Encode(server.GetConfiger().GetConfig()),
-                    VgcApis.Models.Datas.Enum.LinkTypes.v2ray);
+                    VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
 
                 s += vlink + System.Environment.NewLine + System.Environment.NewLine;
             }
@@ -73,6 +75,8 @@ namespace V2RayGCon.Controller.FormMainComponent
         #endregion
 
         #region private method
+
+
         private void InitMenuAbout(ToolStripMenuItem aboutVGC, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
         {
             // menu about
@@ -95,8 +99,8 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             importLinkFromClipboard.Click += (s, a) =>
             {
-                string links = Lib.Utils.GetClipboardText();
-                servers.ImportLinkWithV2RayLinks(links);
+                string text = Lib.Utils.GetClipboardText();
+                slinkMgr.ImportLinkWithV2cfgLinks(text);
             };
 
             exportAllServer.Click += (s, a) => ExportAllServersToTextFile();

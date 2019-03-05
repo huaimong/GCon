@@ -247,14 +247,6 @@ namespace V2RayGCon.Service
             return pluginsSetting;
         }
 
-        public void Cleanup()
-        {
-            lazyGCTimer?.Release();
-            lazySaveUserSettingsTimer?.Release();
-            SaveUserSettingsNow();
-            qLogger.Dispose();
-        }
-
         readonly object saveUserSettingsLocker = new object();
         public void SaveUserSettingsNow()
         {
@@ -285,7 +277,7 @@ namespace V2RayGCon.Service
             {
                 lazyGCTimer = new Lib.Sys.CancelableTimeout(
                     () => GC.Collect(),
-                    1000 * Lib.Utils.Str2Int(StrConst.LazyGCDelay));
+                    VgcApis.Models.Consts.Intervals.LazyGCDelay);
             }
 
             lazyGCTimer.Start();
@@ -585,8 +577,7 @@ namespace V2RayGCon.Service
             {
                 lazySaveUserSettingsTimer = new Lib.Sys.CancelableTimeout(
                     SaveUserSettingsNow,
-                    1000 * Lib.Utils.Str2Int(
-                        StrConst.LazySaveUserSettingsDelay));
+                    VgcApis.Models.Consts.Intervals.LazySaveUserSettingsDelay);
             }
 
             lazySaveUserSettingsTimer.Start();
@@ -614,6 +605,16 @@ namespace V2RayGCon.Service
             }
 
             return winFormRectListCache;
+        }
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            lazyGCTimer?.Release();
+            lazySaveUserSettingsTimer?.Release();
+            SaveUserSettingsNow();
+            qLogger.Dispose();
         }
         #endregion
 

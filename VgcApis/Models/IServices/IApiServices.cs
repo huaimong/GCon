@@ -9,5 +9,6 @@
         IConfigMgrService GetConfigMgrService();
         IWebService GetWebService();
         IUtilsService GetUtilsService();
+        IShareLinkMgrService GetShareLinkMgrService();
     }
 }

@@ -12,6 +12,8 @@ namespace Luna.Models.Apis
         VgcApis.Models.IServices.IConfigMgrService vgcConfigMgr;
         VgcApis.Models.IServices.IWebService vgcWeb;
         VgcApis.Models.IServices.IUtilsService vgcUtils;
+        VgcApis.Models.IServices.IShareLinkMgrService vgcSlinkMgr;
+
 
         Action<string> redirectLogWorker;
 
@@ -21,6 +23,7 @@ namespace Luna.Models.Apis
         {
             this.settings = settings;
             this.vgcConfigMgr = api.GetConfigMgrService();
+            this.vgcSlinkMgr = api.GetShareLinkMgrService();
             this.vgcServers = api.GetServersService();
             this.vgcWeb = api.GetWebService();
             this.vgcUtils = api.GetUtilsService();
@@ -28,8 +31,26 @@ namespace Luna.Models.Apis
         }
 
         #region ILuaApis
+        public string ScanQrcode() =>
+            vgcUtils.ScanQrcode();
+
+        public int UpdateSubscriptions() =>
+            vgcSlinkMgr.UpdateSubscriptions(-1);
+
+        public int UpdateSubscriptions(int proxyPort) =>
+            vgcSlinkMgr.UpdateSubscriptions(proxyPort);
+
+        public void UpdateAllSummary() =>
+            vgcServers.UpdateAllServersSummarySync();
+
+        public void WriteLocalStorage(string key, string value) =>
+            settings.SetLuaShareMemory(key, value);
+
+        public string ReadLocalStorage(string key) =>
+            settings.GetLuaShareMemory(key);
+
         public void ResetIndexQuiet() =>
-            vgcServers.ResteIndexQuiet();
+            vgcServers.ResetIndexQuiet();
 
         public void RequireFormMainReload() =>
             vgcServers.RequireFormMainReload();
@@ -55,8 +76,8 @@ namespace Luna.Models.Apis
 
         public string GetAppDir() => VgcApis.Libs.Utils.GetAppDir();
 
-        public string VmessLink2ConfigString(string vmessLink) =>
-            vgcConfigMgr.VmessLink2ConfigString(vmessLink);
+        public string ShareLink2ConfigString(string shareLink) =>
+            vgcSlinkMgr.DecodeShareLinkToConfig(shareLink) ?? @"";
 
         public string Search(string keywords, int first, int proxyPort) =>
             vgcWeb.Search(keywords, first, proxyPort, 20 * 1000);
@@ -75,8 +96,8 @@ namespace Luna.Models.Apis
         public int GetProxyPort() =>
             vgcServers.GetAvailableHttpProxyPort();
 
-        public string Fetch(string url, int proxyPort, int timeout) =>
-            vgcWeb.Fetch(url, proxyPort, timeout * 1000);
+        public string Fetch(string url, int proxyPort, int milliSeconds) =>
+            vgcWeb.Fetch(url, proxyPort, milliSeconds);
 
         public string Fetch(string url) => vgcWeb.Fetch(url, -1, -1);
 
@@ -91,7 +112,14 @@ namespace Luna.Models.Apis
             var text = "";
             foreach (var content in contents)
             {
-                text += content.ToString();
+                if (content == null)
+                {
+                    text += @"nil";
+                }
+                else
+                {
+                    text += content.ToString();
+                }
             }
             redirectLogWorker?.Invoke(text);
         }
@@ -109,8 +137,8 @@ namespace Luna.Models.Apis
             }
         }
 
-        public string PerdefinedFunctions() =>
-            Resources.Files.Datas.LuaPerdefinedFunctions;
+        public string PredefinedFunctions() =>
+            Resources.Files.Datas.LuaPredefinedFunctions;
         #endregion
 
         #region private methods

@@ -141,7 +141,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             }
         }
 
-        public void GetterInboundInfoThen(Action<string> next)
+        public void GetterInfoForNotifyIconf(Action<string> next)
         {
             var serverName = coreInfo.name;
             VgcApis.Libs.Utils.RunInBackground(() =>
@@ -188,7 +188,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
                 return;
             }
 
-            var freePort = Lib.Utils.GetFreeTcpPort();
+            var freePort = VgcApis.Libs.Utils.GetFreeTcpPort();
             if (freePort <= 0)
             {
                 return;

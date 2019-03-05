@@ -10,6 +10,36 @@ namespace V2RayGCon.Test
     [TestClass]
     public class LibTest
     {
+
+        [DataTestMethod]
+        [DataRow(@"http://abc.com", @"abc.com")]
+        [DataRow(@"v://abc.com", @"abc.com")]
+        [DataRow(@"vee://", @"")]
+        [DataRow(@"vmess://abc", @"abc")]
+        [DataRow(@"v2cfg://abc", @"abc")]
+        [DataRow(@"http://abc", @"abc")]
+        [DataRow(@"https://abc", @"abc")]
+        [DataRow(@"any://://", @"://")]
+        public void GetLinkBodyNormalTest(string link, string expect)
+        {
+            var body = GetLinkBody(link);
+            Assert.AreEqual(expect, body);
+
+        }
+
+        [DataTestMethod]
+        [DataRow(@"v/", @"")]
+        [DataRow(@":v/v/", @"")]
+        public void GetLinkBodyFailTest(string link, string expect)
+        {
+            try
+            {
+                var body = GetLinkBody(link);
+            }
+            catch { return; }
+            Assert.Fail();
+        }
+
         [DataTestMethod]
         [DataRow("https://www.baidu.com/")]
         public void FetchTest(string url)
@@ -103,27 +133,6 @@ namespace V2RayGCon.Test
         public void AreEqualTest(double a, double b, bool expect)
         {
             Assert.AreEqual(expect, Lib.Utils.AreEqual(a, b));
-        }
-
-        [DataTestMethod]
-        [DataRow("EvABk文,tv字vvc", "字文", false)]
-        [DataRow("EvABk文,tv字vvc", "ab字", true)]
-        [DataRow("ab vvvc", "bc", true)]
-        [DataRow("abc", "ac", true)]
-        [DataRow("", "a", false)]
-        [DataRow("", "", true)]
-        public void PartialMatchTest(string source, string partial, bool expect)
-        {
-            var result = Lib.Utils.PartialMatch(source, partial);
-            Assert.AreEqual(expect, result);
-        }
-
-
-        [TestMethod]
-        public void GetFreePortTest()
-        {
-            int port = Lib.Utils.GetFreeTcpPort();
-            Assert.AreEqual(true, port > 0);
         }
 
         [DataTestMethod]
@@ -342,10 +351,14 @@ namespace V2RayGCon.Test
         {
             var html = "http://abc.com https://def.com";
 
-            var links = Lib.Utils.ExtractLinks(html,
+            var httpLinks = Lib.Utils.ExtractLinks(html,
                 VgcApis.Models.Datas.Enum.LinkTypes.http);
 
-            Assert.AreEqual(2, links.Count());
+            var httpsLinks = Lib.Utils.ExtractLinks(html,
+                VgcApis.Models.Datas.Enum.LinkTypes.https);
+
+            Assert.AreEqual(2, httpLinks.Count());
+            Assert.AreEqual(2, httpsLinks.Count());
         }
 
 

@@ -29,7 +29,7 @@ namespace V2RayGCon.Service
             bool isInjectActivateTpl,
             EventHandler<VgcApis.Models.Datas.StrEvent> logDeliever)
         {
-            var port = Lib.Utils.GetFreeTcpPort();
+            var port = VgcApis.Libs.Utils.GetFreeTcpPort();
             var speedTestConfig = CreateSpeedTestConfig(
                 rawConfig, port, isUseCache, isInjectSpeedTestTpl, isInjectActivateTpl);
 
@@ -201,7 +201,7 @@ namespace V2RayGCon.Service
          */
         public JObject ParseImport(string configString)
         {
-            var maxDepth = Lib.Utils.Str2Int(StrConst.ParseImportDepth);
+            var maxDepth = VgcApis.Models.Consts.Import.ParseImportDepth;
 
             var result = Lib.Utils.ParseImportRecursively(
                 GetHtmlContentFromCache,
@@ -218,104 +218,6 @@ namespace V2RayGCon.Service
             }
 
             return result;
-        }
-
-        public JObject GenVnextConfigPart(int index, int basePort, string id)
-        {
-            var vnext = cache.tpl.LoadPackage("vnext");
-            vnext["outbound"]["settings"]["vnext"][0]["port"] = basePort + index;
-            vnext["outbound"]["settings"]["vnext"][0]["users"][0]["id"] = id;
-            return vnext;
-        }
-
-        public JObject ExtractOutboundInfoFromConfig(string configString, string id, int portBase, int index, string tagPrefix)
-        {
-            var pkg = cache.tpl.LoadPackage("package");
-            var config = ParseImport(configString);
-
-            var tagin = tagPrefix + "in" + index.ToString();
-            var tagout = tagPrefix + "out" + index.ToString();
-            var port = portBase + index;
-
-            pkg["routing"]["settings"]["rules"][0]["inboundTag"][0] = tagin;
-            pkg["routing"]["settings"]["rules"][0]["outboundTag"] = tagout;
-
-            pkg["inboundDetour"][0]["port"] = port;
-            pkg["inboundDetour"][0]["tag"] = tagin;
-            pkg["inboundDetour"][0]["settings"]["port"] = port;
-            pkg["inboundDetour"][0]["settings"]["clients"][0]["id"] = id;
-
-            pkg["outboundDetour"][0]["protocol"] = config["outbound"]["protocol"];
-            pkg["outboundDetour"][0]["tag"] = tagout;
-            pkg["outboundDetour"][0]["settings"] = config["outbound"]["settings"];
-            pkg["outboundDetour"][0]["streamSettings"] = config["outbound"]["streamSettings"];
-
-            return pkg;
-        }
-
-        public string VmessLink2ConfigString(string vmessLink)
-        {
-            var vmess = Lib.Utils.VmessLink2Vmess(vmessLink);
-            var config = Vmess2Config(vmess);
-            if (config == null)
-            {
-                return "";
-            }
-            return config.ToString();
-        }
-
-        public JObject Vmess2Config(Model.Data.Vmess vmess)
-        {
-            if (vmess == null)
-            {
-                return null;
-            }
-
-            // prepare template
-            var config = cache.tpl.LoadTemplate("tplImportVmess") as JObject;
-            config["v2raygcon"]["alias"] = vmess.ps;
-
-            var outVmess = cache.tpl.LoadTemplate("outbVmess");
-            outVmess["streamSettings"] = GenStreamSetting(vmess);
-            var node = outVmess["settings"]["vnext"][0];
-            node["address"] = vmess.add;
-            node["port"] = Lib.Utils.Str2Int(vmess.port);
-            node["users"][0]["id"] = vmess.id;
-            node["users"][0]["alterId"] = Lib.Utils.Str2Int(vmess.aid);
-
-            var isV4 = setting.isUseV4;
-            var inbound = Lib.Utils.CreateJObject(
-                (isV4 ? "inbounds.0" : "inbound"),
-                cache.tpl.LoadTemplate("inbSimSock"));
-
-            var outbound = Lib.Utils.CreateJObject(
-                (isV4 ? "outbounds.0" : "outbound"),
-                outVmess);
-
-            Lib.Utils.MergeJson(ref config, inbound);
-            Lib.Utils.MergeJson(ref config, outbound);
-            return config.DeepClone() as JObject;
-        }
-
-        public JObject SsLink2Config(string ssLink)
-        {
-            Model.Data.Shadowsocks ss = Lib.Utils.SSLink2SS(ssLink);
-            if (ss == null)
-            {
-                return null;
-            }
-
-            Lib.Utils.TryParseIPAddr(ss.addr, out string ip, out int port);
-
-            var config = cache.tpl.LoadTemplate("tplImportSS");
-
-            var setting = config["outbound"]["settings"]["servers"][0];
-            setting["address"] = ip;
-            setting["port"] = port;
-            setting["method"] = ss.method;
-            setting["password"] = ss.pass;
-
-            return config.DeepClone() as JObject;
         }
 
         /// <summary>
@@ -433,15 +335,6 @@ namespace V2RayGCon.Service
             }
         }
 
-        JObject GetGlobalImportConfigForPacking()
-        {
-            var imports = Lib.Utils.ImportItemList2JObject(
-                setting.GetGlobalImportItems(),
-                false, false, true);
-            return ParseImport(imports.ToString());
-        }
-
-
         public void Run(
             Setting setting,
             Cache cache,
@@ -452,56 +345,15 @@ namespace V2RayGCon.Service
             this.servers = servers;
         }
 
-        public void Cleanup()
-        {
-
-        }
         #endregion
 
         #region private methods
-        JToken GenStreamSetting(Model.Data.Vmess vmess)
+        JObject GetGlobalImportConfigForPacking()
         {
-            // insert stream type
-            string[] streamTypes = { "ws", "tcp", "kcp", "h2" };
-            string streamType = vmess.net.ToLower();
-
-            if (!streamTypes.Contains(streamType))
-            {
-                return JToken.Parse(@"{}");
-            }
-
-            var streamToken = cache.tpl.LoadTemplate(streamType);
-            try
-            {
-                switch (streamType)
-                {
-                    case "kcp":
-                        streamToken["kcpSettings"]["header"]["type"] = vmess.type;
-                        break;
-                    case "ws":
-                        streamToken["wsSettings"]["path"] = string.IsNullOrEmpty(vmess.v) ? vmess.host : vmess.path;
-                        if (vmess.v == "2" && !string.IsNullOrEmpty(vmess.host))
-                        {
-                            streamToken["wsSettings"]["headers"]["Host"] = vmess.host;
-                        }
-                        break;
-                    case "h2":
-                        streamToken["httpSettings"]["path"] = vmess.path;
-                        streamToken["httpSettings"]["host"] = Lib.Utils.Str2JArray(vmess.host);
-                        break;
-                }
-            }
-            catch { }
-
-            try
-            {
-                streamToken["security"] =
-                    vmess.tls?.ToLower() == "tls" ?
-                    "tls" : "none";
-            }
-            catch { }
-
-            return streamToken;
+            var imports = Lib.Utils.ImportItemList2JObject(
+                setting.GetGlobalImportItems(),
+                false, false, true);
+            return ParseImport(imports.ToString());
         }
 
         long DoSpeedTest(

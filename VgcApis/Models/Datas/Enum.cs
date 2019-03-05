@@ -38,9 +38,12 @@
         public enum LinkTypes
         {
             vmess = 0,
-            v2ray = 1,
+            v2cfg = 1,
             ss = 2,
             http = 3,
+            https = 4,
+            v = 5,
+            unknow = 256, // for enum parse
         }
 
         /// <summary>

@@ -37,6 +37,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.lbRunningState = new System.Windows.Forms.Label();
             this.lbName = new System.Windows.Forms.Label();
+            this.btnRemove = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnRun
@@ -91,11 +92,20 @@
             this.lbName.Name = "lbName";
             this.toolTip1.SetToolTip(this.lbName, resources.GetString("lbName.ToolTip"));
             // 
+            // btnRemove
+            // 
+            resources.ApplyResources(this.btnRemove, "btnRemove");
+            this.btnRemove.Name = "btnRemove";
+            this.toolTip1.SetToolTip(this.btnRemove, resources.GetString("btnRemove.ToolTip"));
+            this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
             // LuaUI
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.lbName);
             this.Controls.Add(this.lbRunningState);
             this.Controls.Add(this.chkIsAutoRun);
@@ -119,5 +129,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.Label lbRunningState;
         private System.Windows.Forms.Label lbName;
+        private System.Windows.Forms.Button btnRemove;
     }
 }

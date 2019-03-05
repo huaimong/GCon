@@ -13,10 +13,7 @@ namespace V2RayGCon.Views.WinForms
             InitializeComponent();
             results = importResults;
             linksCache = new List<string>();
-
             VgcApis.Libs.UI.AutoSetFormIcon(this);
-
-            this.Show();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

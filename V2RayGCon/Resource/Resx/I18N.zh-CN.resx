@@ -200,9 +200,6 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="MainWin" xml:space="preserve">
     <value>主窗口</value>
   </data>
-  <data name="LinksCopied" xml:space="preserve">
-    <value>链接已复制到剪切板</value>
-  </data>
   <data name="NoQRCode" xml:space="preserve">
     <value>没有扫到二维码</value>
   </data>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Luna.Resources.Langs;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,10 +8,14 @@ namespace Luna.Views.UserControls
     public partial class LuaUI : UserControl
     {
         Controllers.LuaCoreCtrl luaCoreCtrl;
+        Services.LuaServer luaServer;
 
-        public LuaUI(Controllers.LuaCoreCtrl luaCoreCtrl)
+        public LuaUI(
+            Services.LuaServer luaServer,
+            Controllers.LuaCoreCtrl luaCoreCtrl)
         {
             this.luaCoreCtrl = luaCoreCtrl;
+            this.luaServer = luaServer;
             InitializeComponent();
         }
 
@@ -84,6 +89,24 @@ namespace Luna.Views.UserControls
         private void btnRun_Click(object sender, EventArgs e)
         {
             luaCoreCtrl.Start();
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            var scriptName = luaCoreCtrl.name;
+            if (string.IsNullOrEmpty(scriptName)
+                || !VgcApis.Libs.UI.Confirm(I18N.ConfirmRemoveScript))
+            {
+                return;
+            }
+
+            VgcApis.Libs.Utils.RunInBackground(() =>
+            {
+                if (!luaServer.RemoveScriptByName(scriptName))
+                {
+                    VgcApis.Libs.UI.MsgBoxAsync("", I18N.ScriptNotFound);
+                }
+            });
         }
     }
 }

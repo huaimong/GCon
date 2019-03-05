@@ -4,7 +4,7 @@ using VgcApis.Models.Interfaces;
 
 namespace VgcApis.Models.BaseClasses
 {
-    public class ContainerTpl<TContainer> :
+    public class ContainerOf<TContainer> :
         Disposable,
         IContainer<TContainer>
         where TContainer : class
@@ -24,6 +24,9 @@ namespace VgcApis.Models.BaseClasses
         }
 
         #region protected methods
+        protected IReadOnlyCollection<IComponent<TContainer>> GetAllComponents() =>
+            components.AsReadOnly();
+
         protected void InitComponents()
         {
             lock (components)

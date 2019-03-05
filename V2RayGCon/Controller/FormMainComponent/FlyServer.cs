@@ -30,7 +30,8 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripStatusLabel tslbTotal,
             ToolStripDropDownButton tsdbtnPager,
             ToolStripStatusLabel tslbPrePage,
-            ToolStripStatusLabel tslbNextPage)
+            ToolStripStatusLabel tslbNextPage,
+            ToolStripMenuItem miResizeFormMain)
         {
             this.servers = Service.Servers.Instance;
             this.setting = Service.Setting.Instance;
@@ -44,7 +45,7 @@ namespace V2RayGCon.Controller.FormMainComponent
             this.tslbNextPage = tslbNextPage;
             this.welcomeItem = new Views.UserControls.WelcomeUI();
 
-            InitFormControls(lbMarkFilter);
+            InitFormControls(lbMarkFilter, miResizeFormMain);
             BindDragDropEvent();
             RefreshUI();
             servers.OnRequireFlyPanelUpdate += OnRequireFlyPanelUpdateHandler;
@@ -67,10 +68,10 @@ namespace V2RayGCon.Controller.FormMainComponent
             }
 
             return list
-                .Where(serv => serv.GetCoreStates().GetterInfoFor(
+                .Where(serv => serv.GetCoreStates().GetterInfoForSearch(
                     infos => keywords.All(
                         kw => infos.Any(
-                            info => Lib.Utils.PartialMatch(info, kw)))))
+                            info => VgcApis.Libs.Utils.PartialMatchCi(info, kw)))))
                 .ToList();
         }
 
@@ -138,7 +139,8 @@ namespace V2RayGCon.Controller.FormMainComponent
 
         public override bool RefreshUI()
         {
-            servers.ResteIndexQuiet();
+            servers.ResetIndex();
+
             var list = this.GetFilteredList();
             var pagedList = GenPagedServerList(list);
 
@@ -297,7 +299,9 @@ namespace V2RayGCon.Controller.FormMainComponent
             lazyShowSearchResultTimer.Start();
         }
 
-        private void InitFormControls(ToolStripLabel lbMarkFilter)
+        private void InitFormControls(
+            ToolStripLabel lbMarkFilter,
+            ToolStripMenuItem miResizeFormMain)
         {
             InitComboBoxMarkFilter();
             tslbPrePage.Click += (s, a) =>
@@ -314,6 +318,40 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             lbMarkFilter.Click +=
                 (s, a) => this.cboxMarkFilter.Text = string.Empty;
+
+            miResizeFormMain.Click += (s, a) => ResizeFormMain();
+        }
+
+        private void ResizeFormMain()
+        {
+            var num = setting.serverPanelPageSize;
+            if (num < 1 || num > 10)
+            {
+                return;
+            }
+
+            var height = 0;
+            var width = 0;
+            var first = flyPanel.Controls
+                .OfType<Views.UserControls.ServerUI>()
+                .Select(c =>
+                {
+                    height += c.Height + c.Margin.Vertical;
+                    width = c.Width + c.Margin.Horizontal;
+                    return width;
+                })
+                .ToList();
+
+            if (width == 0)
+            {
+                return;
+            }
+
+            height += flyPanel.Padding.Vertical + 2;
+            width += flyPanel.Padding.Horizontal + 2;
+
+            formMain.Height += height - flyPanel.Height;
+            formMain.Width += width - flyPanel.Width;
         }
 
         private void InitComboBoxMarkFilter()

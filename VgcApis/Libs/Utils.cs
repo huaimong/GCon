@@ -1,8 +1,12 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -11,32 +15,45 @@ namespace VgcApis.Libs
 {
     public static class Utils
     {
+        #region net
+        static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
+        static readonly object getFreeTcpPortLocker = new object();
+        public static int GetFreeTcpPort()
+        {
+            // https://stackoverflow.com/questions/138043/find-the-next-tcp-port-in-net
+            var port = -1;
+            lock (getFreeTcpPortLocker)
+            {
+                using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    socket.Bind(_defaultLoopbackEndpoint);
+                    port = ((IPEndPoint)socket.LocalEndPoint).Port;
+                }
+            }
+            return port;
+        }
+        #endregion
+
         #region Task
+        public static void Sleep(int milliseconds) =>
+          System.Threading.Thread.Sleep(milliseconds);
+
         public static Task RunInBackground(Action worker) =>
             Task.Factory.StartNew(worker, TaskCreationOptions.LongRunning);
         #endregion
 
-
-        public static void Sleep(int milliseconds) =>
-           System.Threading.Thread.Sleep(milliseconds);
-
-        public static void TrimDownConcurrentQueue<T>(
-            ConcurrentQueue<T> queue,
-            int maxLines,
-            int minLines)
+        #region Json
+        public static bool TryParseJObject(
+           string jsonString, out JObject json)
         {
-            var count = queue.Count();
-            if (maxLines < 1 || count < maxLines)
+            json = null;
+            try
             {
-                return;
+                json = JObject.Parse(jsonString);
+                return true;
             }
-
-            var loop = Clamp(count - minLines, 0, count);
-            var blackHole = default(T);
-            for (int i = 0; i < loop; i++)
-            {
-                queue.TryDequeue(out blackHole);
-            }
+            catch { }
+            return false;
         }
 
         public static void SavePluginSetting<T>(
@@ -73,7 +90,6 @@ namespace VgcApis.Libs
             return empty;
         }
 
-        #region Json
         /// <summary>
         /// return null if fail
         /// </summary>
@@ -137,6 +153,52 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
+
+        public static bool PartialMatchCi(string source, string partial) =>
+            PartialMatch(source.ToLower(), partial.ToLower());
+
+        public static bool PartialMatch(string source,string partial)
+        {
+            var s = source;
+            var p = partial;
+
+            int idxS = 0, idxP = 0;
+            while (idxS < s.Length && idxP < p.Length)
+            {
+                if (s[idxS] == p[idxP])
+                {
+                    idxP++;
+                }
+                idxS++;
+            }
+            return idxP == p.Length;
+        }
+
+        public static string GetLinkPrefix(string shareLink)
+        {
+            var index = shareLink.IndexOf(@"://");
+            if (index == -1)
+            {
+                return null;
+            }
+
+            var prefix = shareLink.Substring(0, index);
+            return prefix.ToLower();
+        }
+
+        public static Models.Datas.Enum.LinkTypes DetectLinkType(
+            string shareLink)
+        {
+            var unknow = Models.Datas.Enum.LinkTypes.unknow;
+            var prefix = GetLinkPrefix(shareLink);
+            if (!string.IsNullOrEmpty(prefix)
+                && Enum.TryParse(prefix, out Models.Datas.Enum.LinkTypes linkType))
+            {
+                return linkType;
+            }
+            return unknow;
+        }
+
         /// <summary>
         /// regex = @"(?&lt;groupName>pattern)"
         /// <para>return string.Empty if sth. goes wrong</para>
@@ -159,7 +221,40 @@ namespace VgcApis.Libs
 
         #endregion
 
+        #region numbers
+        public static int GetLenInBitsOfInt(int value)
+        {
+            var k = 0;
+            while (value > 0)
+            {
+                value = value >> 1;
+                k++;
+            }
+            return value < 0 ? -1 : k;
+        }
+
+        #endregion
+
         #region Misc
+        public static void TrimDownConcurrentQueue<T>(
+            ConcurrentQueue<T> queue,
+            int maxLines,
+            int minLines)
+        {
+            var count = queue.Count();
+            if (maxLines < 1 || count < maxLines)
+            {
+                return;
+            }
+
+            var loop = Clamp(count - minLines, 0, count);
+            var blackHole = default(T);
+            for (int i = 0; i < loop; i++)
+            {
+                queue.TryDequeue(out blackHole);
+            }
+        }
+
         public static bool IsHttpLink(string link)
         {
             if (string.IsNullOrEmpty(link))
@@ -244,6 +339,103 @@ namespace VgcApis.Libs
                 return (int)Math.Round(f);
             };
             return 0;
+        }
+        #endregion
+
+        #region reflection
+        public static string GetFriendlyName(Type type)
+        {
+            string friendlyName = type.Name;
+            if (type.IsGenericType)
+            {
+                int iBacktick = friendlyName.IndexOf('`');
+                if (iBacktick > 0)
+                {
+                    friendlyName = friendlyName.Remove(iBacktick);
+                }
+                friendlyName += "<";
+                Type[] typeParameters = type.GetGenericArguments();
+                for (int i = 0; i < typeParameters.Length; ++i)
+                {
+                    string typeParamName = GetFriendlyName(typeParameters[i]);
+                    friendlyName += (i == 0 ? typeParamName : "," + typeParamName);
+                }
+                friendlyName += ">";
+            }
+
+            return friendlyName;
+        }
+
+        /// <summary>
+        /// [0: ReturnType 1: MethodName 2: ParamsStr 3: ParamsWithType]
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<Tuple<string, string, string, string>> GetPublicMethodNameAndParam(Type type)
+        {
+            var exceptList = new List<string>
+            {
+                "add_OnPropertyChanged",
+                "remove_OnPropertyChanged",
+            };
+
+            var fullNames = new List<Tuple<string, string, string, string>>();
+            var methods = type.GetMethods();
+            foreach (var method in type.GetMethods())
+            {
+                var name = method.Name;
+                if (method.IsPublic && !exceptList.Contains(name))
+                {
+                    var paramStrs = GenParamStr(method);
+                    var returnType = GetFriendlyName(method.ReturnType);
+                    fullNames.Add(
+                        new Tuple<string, string, string, string>(
+                            returnType, name, paramStrs.Item1, paramStrs.Item2));
+                }
+            }
+            return fullNames;
+        }
+
+        static Tuple<string, string> GenParamStr(System.Reflection.MethodInfo methodInfo)
+        {
+            var fullParamList = new List<string>();
+            var paramList = new List<string>();
+
+            foreach (var paramInfo in methodInfo.GetParameters())
+            {
+
+                fullParamList.Add(
+                    paramInfo.ParameterType.Name +
+                    " " +
+                    paramInfo.Name);
+
+                paramList.Add(paramInfo.Name);
+            }
+
+            return new Tuple<string, string>(
+                string.Join(@", ", paramList),
+                string.Join(@", ", fullParamList));
+        }
+
+        public static List<string> GetPublicMethodNames(Type type)
+        {
+            var exceptList = new List<string>
+            {
+                "add_OnPropertyChanged",
+                "remove_OnPropertyChanged",
+            };
+
+            var methodsName = new List<string>();
+            var methods = type.GetMethods();
+            foreach (var method in type.GetMethods())
+            {
+                var name = method.Name;
+                if (method.IsPublic && !exceptList.Contains(name))
+                {
+                    methodsName.Add(name);
+                }
+            }
+            return methodsName;
         }
         #endregion
     }
