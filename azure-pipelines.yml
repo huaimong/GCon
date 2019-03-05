@@ -52,7 +52,7 @@ steps:
   inputs:
     workingDirectory: '$(v2rayCorePkgFolder)'
     scriptSource: 'inline'
-    script: from urllib import urlretrieve; urlretrieve('$(v2rayCoreUrl)', '$(v2rayCorePkgName)')
+    script: from urllib import urlretrieve; import ssl; urlretrieve(url = '$(v2rayCoreUrl)', filename = '$(v2rayCoreFileName)', context = ssl._create_unverified_context())
 
 - task: ExtractFiles@1
   inputs:
