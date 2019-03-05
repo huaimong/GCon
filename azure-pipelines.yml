@@ -47,7 +47,7 @@ steps:
 - task: PythonScript@0
   inputs:
     scriptSource: 'inline'
-    script: import sys; print("Python version: "); print(sys.version)
+    script: import sys; print('Python version: '); print(sys.version)
 
 - task: PythonScript@0
   inputs:
