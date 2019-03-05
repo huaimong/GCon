@@ -53,7 +53,7 @@ steps:
   inputs:
     workingDirectory: '$(v2rayCorePkgFolder)'
     scriptSource: 'inline'
-    script: from urllib.request import urlretrieve; urlretrieve('$(v2rayCoreUrl)', '$(v2rayCoreFileName)')
+    script: from urllib import urlretrieve; urlretrieve('$(v2rayCoreUrl)', '$(v2rayCoreFileName)')
 
 - task: ExtractFiles@1
   inputs:
