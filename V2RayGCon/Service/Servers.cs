@@ -19,7 +19,6 @@ namespace V2RayGCon.Service
         Cache cache = null;
         ConfigMgr configMgr;
 
-        ServersComponents.LinkImporter linkImporter;
         ServersComponents.QueryHandler queryHandler;
         ServersComponents.IndexHandler indexHandler;
 
@@ -59,9 +58,6 @@ namespace V2RayGCon.Service
             this.setting = setting;
             InitServerCtrlList();
 
-            linkImporter = new ServersComponents.LinkImporter(
-                setting, this, configMgr, serverSaver);
-
             queryHandler = new ServersComponents.QueryHandler(
                 serverListWriteLock,
                 coreServList);
@@ -72,10 +68,11 @@ namespace V2RayGCon.Service
         }
 
         #region sort
-        public void ResteIndexQuiet()
-        {
+        public void ResetIndex() =>
+            indexHandler.ResetIndex();
+
+        public void ResetIndexQuiet() =>
             indexHandler.ResetIndexQuiet();
-        }
 
         public void SortSelectedBySpeedTest()
         {
@@ -246,42 +243,27 @@ namespace V2RayGCon.Service
         public void RequireFormMainReload() =>
             InvokeEventHandlerIgnoreError(OnRequireFlyPanelReload, this, EventArgs.Empty);
 
-
-        /// <summary>
-        /// linkList=List(string[]{0: text, 1: mark}>)
-        /// </summary>
-        /// <param name="linkList"></param>
-        /// <param name="includingV2rayLinks"></param>
-        public void ImportLinksBatchMode(
-            IEnumerable<string[]> linkList,
-            bool includingV2rayLinks) =>
-            linkImporter.ImportLinksBatchMode(
-                linkList, includingV2rayLinks);
-
-        public void ImportLinkWithOutV2RayLinks(string text) =>
-            linkImporter.ImportLinkWithOutV2RayLinks(text);
-
-        public void ImportLinkWithV2RayLinks(string text) =>
-            linkImporter.ImportLinkWithV2RayLinks(text);
-
         /// <summary>
         /// return -1 when fail
         /// </summary>
         /// <returns></returns>
         public int GetAvailableHttpProxyPort()
         {
-            var list = GetAllServersOrderByIndex()
-                .Where(s => s.GetCoreCtrl().IsCoreRunning());
-
-            foreach (var serv in list)
+            lock (serverListWriteLock)
             {
-                if (serv.GetConfiger().IsSuitableToBeUsedAsSysProxy(
-                    true, out bool isSocks, out int port))
+                var list = GetAllServersOrderByIndex()
+                    .Where(s => s.GetCoreCtrl().IsCoreRunning());
+
+                foreach (var serv in list)
                 {
-                    return port;
+                    if (serv.GetConfiger().IsSuitableToBeUsedAsSysProxy(
+                        true, out bool isSocks, out int port))
+                    {
+                        return port;
+                    }
                 }
+                return -1;
             }
-            return -1;
         }
 
         public void UpdateTrackerSettingNow()
@@ -291,32 +273,29 @@ namespace V2RayGCon.Service
             ServerTrackingUpdateWorker(fakeCtrl, false);
         }
 
-        public void Cleanup()
+        public int CountSelectedServers()
         {
-            setting.isServerTrackerOn = false;
-            serverSaver.DoItNow();
-            serverSaver.Quit();
-            lazyServerTrackingTimer?.Release();
-
-            AutoResetEvent sayGoodbye = new AutoResetEvent(false);
-            StopAllServersThen(() => sayGoodbye.Set());
-            sayGoodbye.WaitOne();
+            lock (serverListWriteLock)
+            {
+                return coreServList
+                     .Count(s => s.GetCoreStates().IsSelected());
+            }
         }
-
-        public int CountSelectedServers() =>
-            coreServList.Count(s => s.GetCoreStates().IsSelected());
 
         public int CountAllServers() => coreServList.Count;
 
         public void SetAllServerIsSelected(bool isSelected)
         {
-            coreServList
+            lock (serverListWriteLock)
+            {
+                coreServList
                 .Select(s =>
                 {
                     s.GetCoreStates().SetIsSelected(isSelected);
                     return true;
                 })
                 .ToList();
+            }
         }
 
         public ReadOnlyCollection<string> GetMarkList()
@@ -338,36 +317,54 @@ namespace V2RayGCon.Service
 
         public void UpdateMarkList()
         {
-            markList = coreServList
-                .Select(s => s.GetCoreStates().GetCustomMark())
-                .Distinct()
-                .Where(s => !string.IsNullOrEmpty(s))
-                .ToList();
+            lock (serverListWriteLock)
+            {
+                markList = coreServList
+                    .Select(s => s.GetCoreStates().GetMark())
+                    .Distinct()
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .ToList();
+            }
         }
 
         public void RestartServersWithImportMark()
         {
-            var list = coreServList
-                .Where(s => s.GetCoreStates().IsInjectImport() && s.GetCoreCtrl().IsCoreRunning())
-                .OrderBy(s => s.GetCoreStates().GetIndex())
-                .ToList();
+            var list = new List<Controller.CoreServerCtrl>();
+            lock (serverListWriteLock)
+            {
+                list = coreServList
+                    .Where(s => s.GetCoreStates().IsInjectGlobalImport() && s.GetCoreCtrl().IsCoreRunning())
+                    .OrderBy(s => s.GetCoreStates().GetIndex())
+                    .ToList();
+            }
 
             RestartServersThen(list);
         }
 
         public bool IsEmpty()
         {
-            return !(this.coreServList.Any());
+            lock (serverListWriteLock)
+            {
+                return !(this.coreServList.Any());
+            }
         }
 
         public bool IsSelecteAnyServer()
         {
-            return coreServList.Any(s => s.GetCoreStates().IsSelected());
+            lock (serverListWriteLock)
+            {
+                return coreServList.Any(s => s.GetCoreStates().IsSelected());
+            }
         }
 
         public string PackSelectedServersIntoV4Package(string orgUid, string pkgName)
         {
-            var servList = queryHandler.GetSelectedServers().ToList();
+
+            var servList = new List<VgcApis.Models.Interfaces.ICoreServCtrl>();
+            lock (serverListWriteLock)
+            {
+                servList = queryHandler.GetSelectedServers().ToList();
+            }
             return PackServersIntoV4PackageWorker(servList, orgUid, pkgName, true);
         }
 
@@ -382,55 +379,6 @@ namespace V2RayGCon.Service
             string packageName) =>
             PackServersIntoV4PackageWorker(
                 servList, orgUid, packageName, false);
-
-        public void PackServersIntoV3Package(
-            List<VgcApis.Models.Interfaces.ICoreServCtrl> servList)
-        {
-            var packages = JObject.Parse(@"{}");
-            var serverNameList = new List<string>();
-
-            var id = Guid.NewGuid().ToString();
-            var port = Lib.Utils.Str2Int(StrConst.PacmanInitPort);
-            var tagPrefix = StrConst.PacmanTagPrefix;
-
-            void done()
-            {
-                var config = cache.tpl.LoadPackage("main");
-                config["v2raygcon"]["description"] = string.Join(" ", serverNameList);
-                Lib.Utils.UnionJson(ref config, packages);
-                setting.SendLog(I18N.PackageDone);
-                AddServer(config.ToString(Formatting.None), "PackageV3");
-                UpdateMarkList();
-                Lib.UI.ShowMessageBoxDoneAsync();
-            }
-
-            void worker(int index, Action next)
-            {
-                var server = servList[index];
-                var name = server.GetCoreStates().GetName();
-
-                try
-                {
-                    var package = configMgr.ExtractOutboundInfoFromConfig(
-                        server.GetConfiger().GetConfig(), id, port, index, tagPrefix);
-                    Lib.Utils.UnionJson(ref packages, package);
-                    var vnext = configMgr.GenVnextConfigPart(index, port, id);
-                    Lib.Utils.UnionJson(ref packages, vnext);
-
-                    serverNameList.Add(
-                        string.Format("{0}.[{1}]", index, name));
-
-                    setting.SendLog(I18N.PackageSuccess + ": " + name);
-                }
-                catch
-                {
-                    setting.SendLog(I18N.PackageFail + ": " + name);
-                }
-                next();
-            }
-
-            Lib.Utils.ChainActionHelperAsync(servList.Count, worker, done);
-        }
 
         public bool RunSpeedTestOnSelectedServers()
         {
@@ -455,7 +403,11 @@ namespace V2RayGCon.Service
             IEnumerable<VgcApis.Models.Interfaces.ICoreServCtrl> servers,
             Action done = null)
         {
-            var list = servers.ToList();
+            var list = new List<VgcApis.Models.Interfaces.ICoreServCtrl>();
+            lock (serverListWriteLock)
+            {
+                list = servers.ToList();
+            }
             void worker(int index, Action next)
             {
                 list[index].GetCoreCtrl().RestartCoreThen(next);
@@ -478,11 +430,13 @@ namespace V2RayGCon.Service
 
         public void RestartSelectedServersThen(Action done = null)
         {
+            var list = coreServList;
+
             void worker(int index, Action next)
             {
-                if (coreServList[index].GetCoreStates().IsSelected())
+                if (list[index].GetCoreStates().IsSelected())
                 {
-                    coreServList[index].GetCoreCtrl().RestartCoreThen(next);
+                    list[index].GetCoreCtrl().RestartCoreThen(next);
                 }
                 else
                 {
@@ -490,16 +444,18 @@ namespace V2RayGCon.Service
                 }
             }
 
-            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, done);
+            Lib.Utils.ChainActionHelperAsync(list.Count, worker, done);
         }
 
         public void StopSelectedServersThen(Action lambda = null)
         {
+            var list = coreServList;
+
             void worker(int index, Action next)
             {
-                if (coreServList[index].GetCoreStates().IsSelected())
+                if (list[index].GetCoreStates().IsSelected())
                 {
-                    coreServList[index].GetCoreCtrl().StopCoreThen(next);
+                    list[index].GetCoreCtrl().StopCoreThen(next);
                 }
                 else
                 {
@@ -507,17 +463,18 @@ namespace V2RayGCon.Service
                 }
             }
 
-            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, lambda);
+            Lib.Utils.ChainActionHelperAsync(list.Count, worker, lambda);
         }
 
         public void StopAllServersThen(Action lambda = null)
         {
+            var list = coreServList;
             void worker(int index, Action next)
             {
-                coreServList[index].GetCoreCtrl().StopCoreThen(next);
+                list[index].GetCoreCtrl().StopCoreThen(next);
             }
 
-            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, lambda);
+            Lib.Utils.ChainActionHelperAsync(list.Count, worker, lambda);
         }
 
         public void DeleteSelectedServersThen(Action done = null)
@@ -528,9 +485,10 @@ namespace V2RayGCon.Service
                 return;
             }
 
+            var list = coreServList;
             void worker(int index, Action next)
             {
-                if (!coreServList[index].GetCoreStates().IsSelected())
+                if (!list[index].GetCoreStates().IsSelected())
                 {
                     next();
                     return;
@@ -552,7 +510,7 @@ namespace V2RayGCon.Service
                 done?.Invoke();
             }
 
-            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, finish);
+            Lib.Utils.ChainActionHelperAsync(list.Count, worker, finish);
         }
 
         public void DeleteAllServersThen(Action done = null)
@@ -580,13 +538,14 @@ namespace V2RayGCon.Service
                 finish);
         }
 
-        public void UpdateAllServersSummary()
+        public void UpdateAllServersSummarySync()
         {
+            var list = coreServList;
             void worker(int index, Action next)
             {
                 try
                 {
-                    coreServList[index].GetConfiger().UpdateSummaryThen(next);
+                    list[index].GetConfiger().UpdateSummaryThen(next);
                 }
                 catch
                 {
@@ -603,7 +562,12 @@ namespace V2RayGCon.Service
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
             }
 
-            Lib.Utils.ChainActionHelperAsync(coreServList.Count, worker, done);
+            Lib.Utils.ChainActionHelper(list.Count, worker, done);
+        }
+
+        public void UpdateAllServersSummaryBg()
+        {
+            VgcApis.Libs.Utils.RunInBackground(UpdateAllServersSummarySync);
         }
 
         public void DeleteServerByConfig(string config)
@@ -636,12 +600,17 @@ namespace V2RayGCon.Service
 
         public bool IsServerExist(string config)
         {
-            return coreServList.Any(s => s.GetConfiger().GetConfig() == config);
+            lock (serverListWriteLock)
+            {
+                return coreServList
+                    .Any(s => s.GetConfiger().GetConfig() == config);
+            }
         }
 
         public bool AddServer(string config, string mark, bool quiet = false)
         {
             // duplicate
+
             if (IsServerExist(config))
             {
                 return false;
@@ -662,6 +631,7 @@ namespace V2RayGCon.Service
             newServer.Run(cache, setting, configMgr, this);
             BindEventsTo(newServer);
 
+
             if (!quiet)
             {
                 newServer.GetConfiger().UpdateSummaryThen(() =>
@@ -678,38 +648,45 @@ namespace V2RayGCon.Service
 
         public bool ReplaceServerConfig(string orgConfig, string newConfig)
         {
-            var index = GetServerIndexByConfig(orgConfig);
-
-            if (index < 0)
+            lock (serverListWriteLock)
             {
-                return false;
+                var index = GetServerIndexByConfig(orgConfig);
+
+                if (index < 0)
+                {
+                    return false;
+                }
+
+                coreServList[index].GetConfiger().SetConfig(newConfig);
+                return true;
             }
 
-            coreServList[index].GetConfiger().SetConfig(newConfig);
-            return true;
         }
 
         public string ReplaceOrAddNewServer(string orgUid, string newConfig)
         {
-            var servUid = "";
+            lock (serverListWriteLock)
+            {
+                var servUid = "";
 
-            var orgServ = coreServList.FirstOrDefault(s => s.GetCoreStates().GetUid() == orgUid);
-            if (orgServ != null)
-            {
-                ReplaceServerConfig(orgServ.GetConfiger().GetConfig(), newConfig);
-                servUid = orgUid;
-            }
-            else
-            {
-                AddServer(newConfig, "PackageV4");
-                var newServ = coreServList.FirstOrDefault(s => s.GetConfiger().GetConfig() == newConfig);
-                if (newServ != null)
+                var orgServ = coreServList.FirstOrDefault(s => s.GetCoreStates().GetUid() == orgUid);
+                if (orgServ != null)
                 {
-                    servUid = newServ.GetCoreStates().GetUid();
+                    ReplaceServerConfig(orgServ.GetConfiger().GetConfig(), newConfig);
+                    servUid = orgUid;
                 }
-            }
+                else
+                {
+                    AddServer(newConfig, "PackageV4");
+                    var newServ = coreServList.FirstOrDefault(s => s.GetConfiger().GetConfig() == newConfig);
+                    if (newServ != null)
+                    {
+                        servUid = newServ.GetCoreStates().GetUid();
+                    }
+                }
 
-            return servUid;
+                return servUid;
+            }
         }
         #endregion
 
@@ -778,15 +755,18 @@ namespace V2RayGCon.Service
 
         int GetServerIndexByConfig(string config)
         {
-            for (int i = 0; i < coreServList.Count; i++)
+            lock (serverListWriteLock)
             {
-                var coreCfg = coreServList[i].GetConfiger().GetConfig();
-                if (coreCfg == config)
+                for (int i = 0; i < coreServList.Count; i++)
                 {
-                    return i;
+                    var coreCfg = coreServList[i].GetConfiger().GetConfig();
+                    if (coreCfg == config)
+                    {
+                        return i;
+                    }
                 }
+                return -1;
             }
-            return -1;
         }
 
         void SaveCurrentServerList()
@@ -813,6 +793,21 @@ namespace V2RayGCon.Service
                 }
                 next?.Invoke();
             });
+        }
+
+        #endregion
+
+        #region protected methods
+        protected override void Cleanup()
+        {
+            setting.isServerTrackerOn = false;
+            serverSaver.DoItNow();
+            serverSaver.Quit();
+            lazyServerTrackingTimer?.Release();
+
+            AutoResetEvent sayGoodbye = new AutoResetEvent(false);
+            StopAllServersThen(() => sayGoodbye.Set());
+            sayGoodbye.WaitOne();
         }
 
         #endregion

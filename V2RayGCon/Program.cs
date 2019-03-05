@@ -46,12 +46,6 @@ namespace V2RayGCon
             );
         #endregion
 
-        #region DPI awareness
-        // PROCESS_DPI_AWARENESS = 0/1/2 None/SystemAware/PerMonitorAware
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        private delegate int SetProcessDpiAwareness(int PROCESS_DPI_AWARENESS);
-        #endregion
-
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -64,7 +58,7 @@ namespace V2RayGCon
             IntPtr pShcoreDll = HiResSupport();
             if (mutex.WaitOne(TimeSpan.Zero, true))
             {
-                var app = Service.Launcher.Instance;
+                var app = new Service.Launcher();
                 app.Run();
                 Application.Run();
                 mutex.ReleaseMutex();
@@ -76,8 +70,11 @@ namespace V2RayGCon
             Lib.Sys.SafeNativeMethods.FreeLibrary(pShcoreDll);
         }
 
-        #region private method
-        private static IntPtr HiResSupport()
+        #region DPI awareness
+        // PROCESS_DPI_AWARENESS = 0/1/2 None/SystemAware/PerMonitorAware
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        private delegate int SetProcessDpiAwareness(int PROCESS_DPI_AWARENESS);
+        static IntPtr HiResSupport()
         {
             // load Shcore.dll and get high resolution support
             IntPtr pDll = Lib.Sys.SafeNativeMethods.LoadLibrary(@"Shcore.DLL");

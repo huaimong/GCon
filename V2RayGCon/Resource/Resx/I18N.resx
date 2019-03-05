@@ -204,9 +204,6 @@ Discard latest changes and continue?</value>
   <data name="MainWin" xml:space="preserve">
     <value>Main Window</value>
   </data>
-  <data name="LinksCopied" xml:space="preserve">
-    <value>Links has been copied to clipboard.</value>
-  </data>
   <data name="NoQRCode" xml:space="preserve">
     <value>Can not find any QR code.</value>
   </data>
@@ -458,12 +455,6 @@ Are you sure want to continue?</value>
   </data>
   <data name="Copy" xml:space="preserve">
     <value>Copy</value>
-  </data>
-  <data name="V2RayLink" xml:space="preserve">
-    <value>v2ray:// ...</value>
-  </data>
-  <data name="VmessLink" xml:space="preserve">
-    <value>vmess:// ...</value>
   </data>
   <data name="NotSet" xml:space="preserve">
     <value>not set</value>

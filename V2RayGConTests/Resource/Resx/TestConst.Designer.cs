@@ -62,11 +62,11 @@ namespace V2RayGCon.Test.Resource.Resx {
         
         /// <summary>
         ///   查找类似 dummy00:
-        ///v2ray://ZHVtbXkwMA==
+        ///v2cfg://ZHVtbXkwMA==
         ///vmess://ZHVtbXkwMA==
         ///ss://ZHVtbXkwMA==
         ///dummy01:
-        ///v2ray://ZHVtbXkwMQ==
+        ///v2cfg://ZHVtbXkwMQ==
         ///vmess://ZHVtbXkwMQ==
         ///ss://ZHVtbXkwMQ==
         /// 的本地化字符串。

@@ -138,6 +138,9 @@
   <data name="GlobalProxyRequireHttpServer" xml:space="preserve">
     <value>Global proxy require http server!</value>
   </data>
+  <data name="LaunchNotepadFail" xml:space="preserve">
+    <value>Launch notepad fail!</value>
+  </data>
   <data name="NoServerCapableOfSysProxy" xml:space="preserve">
     <value>No server capable to be system proxy.</value>
   </data>

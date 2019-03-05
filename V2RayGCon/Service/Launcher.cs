@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -7,36 +8,101 @@ using V2RayGCon.Resource.Resx;
 
 namespace V2RayGCon.Service
 {
-    class Launcher : Model.BaseClass.SingletonService<Launcher>
+    class Launcher
     {
         Setting setting;
         Servers servers;
-        Notifier notifier;
-        ConfigMgr configMgr;
-        PluginsServer pluginsServ;
-        bool isCleanupDone = false;
 
-        Launcher()
+        bool isCleanupDone = false;
+        List<IDisposable> services = new List<IDisposable>();
+
+        public Launcher() { }
+
+        #region public method
+        public void Run()
+        {
+            setting = Setting.Instance;
+            servers = Servers.Instance;
+            SetCulture(setting.culture);
+
+            Prepare();
+
+            BindEvents();
+
+            Lib.Utils.SupportProtocolTLS12();
+
+            if (servers.IsEmpty())
+            {
+                Views.WinForms.FormMain.ShowForm();
+            }
+            else
+            {
+                servers.WakeupServersInBootList();
+            }
+
+#if DEBUG
+            This_Function_Is_Used_For_Debugging();
+#endif
+        }
+
+        #endregion
+
+        #region debug
+#if DEBUG
+        void This_Function_Is_Used_For_Debugging()
+        {
+            //notifier.InjectDebugMenuItem(new ToolStripMenuItem(
+            //    "Debug",
+            //    null,
+            //    (s, a) =>
+            //    {
+            //        servers.DbgFastRestartTest(100);
+            //    }));
+
+            // new Views.WinForms.FormConfiger(@"{}");
+            // new Views.WinForms.FormConfigTester();
+            // Views.WinForms.FormOption.GetForm();
+            Views.WinForms.FormMain.ShowForm();
+            Views.WinForms.FormLog.GetForm();
+            // setting.WakeupAutorunServer();
+            // Views.WinForms.FormSimAddVmessClient.GetForm();
+            // Views.WinForms.FormDownloadCore.GetForm();
+        }
+#endif
+        #endregion
+
+        #region private method
+
+        void Prepare()
         {
             // warn-up
             var cache = Cache.Instance;
+            var configMgr = ConfigMgr.Instance;
+            var slinkMgr = ShareLinkMgr.Instance;
+            var notifier = Notifier.Instance;
+            var pluginsServ = PluginsServer.Instance;
 
-            setting = Setting.Instance;
-            servers = Servers.Instance;
-            configMgr = ConfigMgr.Instance;
-
-            notifier = Notifier.Instance;
-            pluginsServ = PluginsServer.Instance;
-
-            SetCulture(setting.culture);
+            // by dispose order
+            services = new List<IDisposable> {
+                slinkMgr,
+                configMgr,
+                pluginsServ,
+                notifier,
+                servers,
+                setting,
+            };
 
             // dependency injection
             cache.Run(setting);
+            slinkMgr.Run(setting, servers, cache);
             servers.Run(setting, cache, configMgr);
             configMgr.Run(setting, cache, servers);
-            notifier.Run(setting, servers);
-            pluginsServ.Run(setting, servers, configMgr, notifier);
+            notifier.Run(setting, servers, slinkMgr);
+            pluginsServ.Run(setting, servers, configMgr, slinkMgr, notifier);
+        }
 
+        void BindEvents()
+        {
             Application.ApplicationExit +=
                 (s, a) => OnApplicationExitHandler(false);
 
@@ -67,16 +133,16 @@ namespace V2RayGCon.Service
                     setting.isShutdown = isShutdown;
                 }
 
-                configMgr.Cleanup();
-                pluginsServ.Cleanup();
-                notifier.Cleanup();
-                servers.Cleanup();
-                setting.Cleanup();
+                foreach (var service in services)
+                {
+                    service.Dispose();
+                }
+
                 isCleanupDone = true;
             }
         }
 
-        #region private method
+
         void SetCulture(Model.Data.Enum.Cultures culture)
         {
             string cultureString = null;
@@ -103,51 +169,6 @@ namespace V2RayGCon.Service
                 .GetProperty("DefaultThreadCurrentUICulture")
                 .SetValue(Thread.CurrentThread.CurrentCulture, ci, null);
         }
-        #endregion
-
-        #region debug
-#if DEBUG
-        void This_Function_Is_Used_For_Debugging()
-        {
-            //notifier.InjectDebugMenuItem(new ToolStripMenuItem(
-            //    "Debug",
-            //    null,
-            //    (s, a) =>
-            //    {
-            //        servers.DbgFastRestartTest(100);
-            //    }));
-
-            // new Views.WinForms.FormConfiger(@"{}");
-            // new Views.WinForms.FormConfigTester();
-            // Views.WinForms.FormOption.GetForm();
-            // Views.WinForms.FormMain.ShowForm();
-            Views.WinForms.FormLog.GetForm();
-            // setting.WakeupAutorunServer();
-            // Views.WinForms.FormSimAddVmessClient.GetForm();
-            // Views.WinForms.FormDownloadCore.GetForm();
-        }
-#endif
-        #endregion
-
-        #region public method
-        public void Run()
-        {
-            Lib.Utils.SupportProtocolTLS12();
-
-            if (servers.IsEmpty())
-            {
-                Views.WinForms.FormMain.ShowForm();
-            }
-            else
-            {
-                servers.WakeupServersInBootList();
-            }
-
-#if DEBUG
-            This_Function_Is_Used_For_Debugging();
-#endif
-        }
-
         #endregion
 
         #region unhandle exception

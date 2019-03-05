@@ -85,7 +85,8 @@ namespace Luna.Controllers
             var ctrls = luaServer.GetAllLuaCoreCtrls();
             foreach (var c in ctrls)
             {
-                var ui = new Views.UserControls.LuaUI(c);
+                var ui = new Views.UserControls.LuaUI(
+                    luaServer, c);
                 flyLuaUiPanel.Controls.Add(ui);
             }
         }

@@ -51,7 +51,7 @@
             this.tboxBaiscPacPort = new System.Windows.Forms.TextBox();
             this.tboxBasicGlobalPort = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.btnBasicSaveAs = new System.Windows.Forms.Button();
+            this.btnBasicViewInNotepad = new System.Windows.Forms.Button();
             this.btnBasicClearSysProxy = new System.Windows.Forms.Button();
             this.lbBasicProxyLink = new System.Windows.Forms.Label();
             this.lbBasicCurPacServerStatus = new System.Windows.Forms.Label();
@@ -88,20 +88,23 @@
             this.tableLayoutPanel1.Controls.Add(this.tabControl1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 1);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.toolTip1.SetToolTip(this.tableLayoutPanel1, resources.GetString("tableLayoutPanel1.ToolTip"));
             // 
             // tabControl1
             // 
+            resources.ApplyResources(this.tabControl1, "tabControl1");
             this.tabControl1.Controls.Add(this.tabBasic);
             this.tabControl1.Controls.Add(this.tabPac);
-            resources.ApplyResources(this.tabControl1, "tabControl1");
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
+            this.toolTip1.SetToolTip(this.tabControl1, resources.GetString("tabControl1.ToolTip"));
             // 
             // tabBasic
             // 
-            this.tabBasic.Controls.Add(this.tableLayoutPanel2);
             resources.ApplyResources(this.tabBasic, "tabBasic");
+            this.tabBasic.Controls.Add(this.tableLayoutPanel2);
             this.tabBasic.Name = "tabBasic";
+            this.toolTip1.SetToolTip(this.tabBasic, resources.GetString("tabBasic.ToolTip"));
             this.tabBasic.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel2
@@ -110,9 +113,11 @@
             this.tableLayoutPanel2.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.groupBox2, 1, 0);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.toolTip1.SetToolTip(this.tableLayoutPanel2, resources.GetString("tableLayoutPanel2.ToolTip"));
             // 
             // groupBox1
             // 
+            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Controls.Add(this.cboxBasicPacProtocol);
             this.groupBox1.Controls.Add(this.chkBasicUseCustomPac);
             this.groupBox1.Controls.Add(this.cboxBasicPacMode);
@@ -128,19 +133,20 @@
             this.groupBox1.Controls.Add(this.tboxBasicCustomPacPath);
             this.groupBox1.Controls.Add(this.tboxBaiscPacPort);
             this.groupBox1.Controls.Add(this.tboxBasicGlobalPort);
-            resources.ApplyResources(this.groupBox1, "groupBox1");
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
+            this.toolTip1.SetToolTip(this.groupBox1, resources.GetString("groupBox1.ToolTip"));
             // 
             // cboxBasicPacProtocol
             // 
+            resources.ApplyResources(this.cboxBasicPacProtocol, "cboxBasicPacProtocol");
             this.cboxBasicPacProtocol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxBasicPacProtocol.FormattingEnabled = true;
             this.cboxBasicPacProtocol.Items.AddRange(new object[] {
             resources.GetString("cboxBasicPacProtocol.Items"),
             resources.GetString("cboxBasicPacProtocol.Items1")});
-            resources.ApplyResources(this.cboxBasicPacProtocol, "cboxBasicPacProtocol");
             this.cboxBasicPacProtocol.Name = "cboxBasicPacProtocol";
+            this.toolTip1.SetToolTip(this.cboxBasicPacProtocol, resources.GetString("cboxBasicPacProtocol.ToolTip"));
             // 
             // chkBasicUseCustomPac
             // 
@@ -151,24 +157,26 @@
             // 
             // cboxBasicPacMode
             // 
+            resources.ApplyResources(this.cboxBasicPacMode, "cboxBasicPacMode");
             this.cboxBasicPacMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxBasicPacMode.FormattingEnabled = true;
             this.cboxBasicPacMode.Items.AddRange(new object[] {
             resources.GetString("cboxBasicPacMode.Items"),
             resources.GetString("cboxBasicPacMode.Items1")});
-            resources.ApplyResources(this.cboxBasicPacMode, "cboxBasicPacMode");
             this.cboxBasicPacMode.Name = "cboxBasicPacMode";
+            this.toolTip1.SetToolTip(this.cboxBasicPacMode, resources.GetString("cboxBasicPacMode.ToolTip"));
             // 
             // cboxBasicSysProxyMode
             // 
+            resources.ApplyResources(this.cboxBasicSysProxyMode, "cboxBasicSysProxyMode");
             this.cboxBasicSysProxyMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboxBasicSysProxyMode.FormattingEnabled = true;
             this.cboxBasicSysProxyMode.Items.AddRange(new object[] {
             resources.GetString("cboxBasicSysProxyMode.Items"),
             resources.GetString("cboxBasicSysProxyMode.Items1"),
             resources.GetString("cboxBasicSysProxyMode.Items2")});
-            resources.ApplyResources(this.cboxBasicSysProxyMode, "cboxBasicSysProxyMode");
             this.cboxBasicSysProxyMode.Name = "cboxBasicSysProxyMode";
+            this.toolTip1.SetToolTip(this.cboxBasicSysProxyMode, resources.GetString("cboxBasicSysProxyMode.ToolTip"));
             // 
             // label1
             // 
@@ -186,6 +194,7 @@
             // 
             resources.ApplyResources(this.btnBasicBrowseCustomPac, "btnBasicBrowseCustomPac");
             this.btnBasicBrowseCustomPac.Name = "btnBasicBrowseCustomPac";
+            this.toolTip1.SetToolTip(this.btnBasicBrowseCustomPac, resources.GetString("btnBasicBrowseCustomPac.ToolTip"));
             this.btnBasicBrowseCustomPac.UseVisualStyleBackColor = true;
             // 
             // chkBasicAutoUpdateSysProxy
@@ -199,11 +208,13 @@
             // 
             resources.ApplyResources(this.label4, "label4");
             this.label4.Name = "label4";
+            this.toolTip1.SetToolTip(this.label4, resources.GetString("label4.ToolTip"));
             // 
             // label6
             // 
             resources.ApplyResources(this.label6, "label6");
             this.label6.Name = "label6";
+            this.toolTip1.SetToolTip(this.label6, resources.GetString("label6.ToolTip"));
             // 
             // label3
             // 
@@ -222,20 +233,24 @@
             // 
             resources.ApplyResources(this.tboxBasicCustomPacPath, "tboxBasicCustomPacPath");
             this.tboxBasicCustomPacPath.Name = "tboxBasicCustomPacPath";
+            this.toolTip1.SetToolTip(this.tboxBasicCustomPacPath, resources.GetString("tboxBasicCustomPacPath.ToolTip"));
             // 
             // tboxBaiscPacPort
             // 
             resources.ApplyResources(this.tboxBaiscPacPort, "tboxBaiscPacPort");
             this.tboxBaiscPacPort.Name = "tboxBaiscPacPort";
+            this.toolTip1.SetToolTip(this.tboxBaiscPacPort, resources.GetString("tboxBaiscPacPort.ToolTip"));
             // 
             // tboxBasicGlobalPort
             // 
             resources.ApplyResources(this.tboxBasicGlobalPort, "tboxBasicGlobalPort");
             this.tboxBasicGlobalPort.Name = "tboxBasicGlobalPort";
+            this.toolTip1.SetToolTip(this.tboxBasicGlobalPort, resources.GetString("tboxBasicGlobalPort.ToolTip"));
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.btnBasicSaveAs);
+            resources.ApplyResources(this.groupBox2, "groupBox2");
+            this.groupBox2.Controls.Add(this.btnBasicViewInNotepad);
             this.groupBox2.Controls.Add(this.btnBasicClearSysProxy);
             this.groupBox2.Controls.Add(this.lbBasicProxyLink);
             this.groupBox2.Controls.Add(this.lbBasicCurPacServerStatus);
@@ -243,16 +258,16 @@
             this.groupBox2.Controls.Add(this.btnBasicDebugPacServer);
             this.groupBox2.Controls.Add(this.btnBasicStartPacServer);
             this.groupBox2.Controls.Add(this.btnBasicStopPacServer);
-            resources.ApplyResources(this.groupBox2, "groupBox2");
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
+            this.toolTip1.SetToolTip(this.groupBox2, resources.GetString("groupBox2.ToolTip"));
             // 
-            // btnBasicSaveAs
+            // btnBasicViewInNotepad
             // 
-            resources.ApplyResources(this.btnBasicSaveAs, "btnBasicSaveAs");
-            this.btnBasicSaveAs.Name = "btnBasicSaveAs";
-            this.toolTip1.SetToolTip(this.btnBasicSaveAs, resources.GetString("btnBasicSaveAs.ToolTip"));
-            this.btnBasicSaveAs.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.btnBasicViewInNotepad, "btnBasicViewInNotepad");
+            this.btnBasicViewInNotepad.Name = "btnBasicViewInNotepad";
+            this.toolTip1.SetToolTip(this.btnBasicViewInNotepad, resources.GetString("btnBasicViewInNotepad.ToolTip"));
+            this.btnBasicViewInNotepad.UseVisualStyleBackColor = true;
             // 
             // btnBasicClearSysProxy
             // 
@@ -272,6 +287,7 @@
             // 
             resources.ApplyResources(this.lbBasicCurPacServerStatus, "lbBasicCurPacServerStatus");
             this.lbBasicCurPacServerStatus.Name = "lbBasicCurPacServerStatus";
+            this.toolTip1.SetToolTip(this.lbBasicCurPacServerStatus, resources.GetString("lbBasicCurPacServerStatus.ToolTip"));
             // 
             // btnBaiscCopyProxyLink
             // 
@@ -303,9 +319,10 @@
             // 
             // tabPac
             // 
-            this.tabPac.Controls.Add(this.tableLayoutPanel3);
             resources.ApplyResources(this.tabPac, "tabPac");
+            this.tabPac.Controls.Add(this.tableLayoutPanel3);
             this.tabPac.Name = "tabPac";
+            this.toolTip1.SetToolTip(this.tabPac, resources.GetString("tabPac.ToolTip"));
             this.tabPac.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel3
@@ -314,42 +331,49 @@
             this.tableLayoutPanel3.Controls.Add(this.groupBox3, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.groupBox4, 1, 0);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.toolTip1.SetToolTip(this.tableLayoutPanel3, resources.GetString("tableLayoutPanel3.ToolTip"));
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.rtboxPacWhiteList);
             resources.ApplyResources(this.groupBox3, "groupBox3");
+            this.groupBox3.Controls.Add(this.rtboxPacWhiteList);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.TabStop = false;
+            this.toolTip1.SetToolTip(this.groupBox3, resources.GetString("groupBox3.ToolTip"));
             // 
             // rtboxPacWhiteList
             // 
             resources.ApplyResources(this.rtboxPacWhiteList, "rtboxPacWhiteList");
             this.rtboxPacWhiteList.Name = "rtboxPacWhiteList";
+            this.toolTip1.SetToolTip(this.rtboxPacWhiteList, resources.GetString("rtboxPacWhiteList.ToolTip"));
             // 
             // groupBox4
             // 
-            this.groupBox4.Controls.Add(this.rtboxPacBlackList);
             resources.ApplyResources(this.groupBox4, "groupBox4");
+            this.groupBox4.Controls.Add(this.rtboxPacBlackList);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.TabStop = false;
+            this.toolTip1.SetToolTip(this.groupBox4, resources.GetString("groupBox4.ToolTip"));
             // 
             // rtboxPacBlackList
             // 
             resources.ApplyResources(this.rtboxPacBlackList, "rtboxPacBlackList");
             this.rtboxPacBlackList.Name = "rtboxPacBlackList";
+            this.toolTip1.SetToolTip(this.rtboxPacBlackList, resources.GetString("rtboxPacBlackList.ToolTip"));
             // 
             // panel1
             // 
+            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Controls.Add(this.btnCancel);
             this.panel1.Controls.Add(this.btnSave);
-            resources.ApplyResources(this.panel1, "panel1");
             this.panel1.Name = "panel1";
+            this.toolTip1.SetToolTip(this.panel1, resources.GetString("panel1.ToolTip"));
             // 
             // btnCancel
             // 
             resources.ApplyResources(this.btnCancel, "btnCancel");
             this.btnCancel.Name = "btnCancel";
+            this.toolTip1.SetToolTip(this.btnCancel, resources.GetString("btnCancel.ToolTip"));
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
@@ -357,6 +381,7 @@
             // 
             resources.ApplyResources(this.btnSave, "btnSave");
             this.btnSave.Name = "btnSave";
+            this.toolTip1.SetToolTip(this.btnSave, resources.GetString("btnSave.ToolTip"));
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
@@ -366,6 +391,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "FormMain";
+            this.toolTip1.SetToolTip(this, resources.GetString("$this.ToolTip"));
             this.Shown += new System.EventHandler(this.FormPluginMain_Shown);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -424,6 +450,6 @@
         private System.Windows.Forms.ComboBox cboxBasicPacProtocol;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnBasicClearSysProxy;
-        private System.Windows.Forms.Button btnBasicSaveAs;
+        private System.Windows.Forms.Button btnBasicViewInNotepad;
     }
 }

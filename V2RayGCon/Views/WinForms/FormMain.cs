@@ -145,7 +145,8 @@ namespace V2RayGCon.Views.WinForms
                 toolStripStatusLabelTotal,
                 toolStripDropDownButtonPager,
                 toolStripStatusLabelPrePage,
-                toolStripStatusLabelNextPage));
+                toolStripStatusLabelNextPage,
+                toolStripMenuItemResize));
 
             ctrl.Plug(new Controller.FormMainComponent.MenuItemsBasic(
                 toolMenuItemSimAddVmessServer,
@@ -237,22 +238,22 @@ namespace V2RayGCon.Views.WinForms
                 toolStripMenuItemDeleteSelectedServers,
 
                 //// copy
-                //ToolStripMenuItem copyAsV2rayLinks,
+                //ToolStripMenuItem copyAsV2cfgLinks,
                 //ToolStripMenuItem copyAsVmessLinks,
                 //ToolStripMenuItem copyAsSubscriptions,
-                toolStripMenuItemCopyAsV2rayLink,
+                toolStripMenuItemCopyAsV2cfgLink,
                 toolStripMenuItemCopyAsVmessLink,
-                toolStripMenuItemCopyAsSubscription,
+                toolStripMenuItemCopyAsVeeLink,
+                toolStripMenuItemCopyAsVmessSubscription,
+                toolStripMenuItemCopyAsVeeSubscription,
 
                 //// batch op
                 //ToolStripMenuItem speedTestOnSelected,
                 //ToolStripMenuItem modifySelected,
-                //ToolStripMenuItem packSelected,
                 //ToolStripMenuItem stopSelected,
                 //ToolStripMenuItem restartSelected,
                 toolStripMenuItemSpeedTestOnSelected,
                 toolStripMenuItemModifySettings,
-                toolStripMenuItemPackSelectedServers,
                 toolStripMenuItemStopSelected,
                 toolStripMenuItemRestartSelected,
 

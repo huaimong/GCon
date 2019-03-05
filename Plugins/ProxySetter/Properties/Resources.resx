@@ -121,8 +121,7 @@
     <value>ProxySetter</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.6</value>
-    <comment>fix.黑名单无效的问题
-添加保存按钮</comment>
+    <value>0.0.7</value>
+    <comment>Replace save as button with open in notepad.</comment>
   </data>
 </root>

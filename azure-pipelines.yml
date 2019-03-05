@@ -10,10 +10,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildCfgVgcFull: 'full'
-  v2rayCoreVer: '4.15.0'
   v2rayCorePkgName: 'v2ray-windows-32.zip'
   v2rayCorePkgFolder: '$(Build.SourcesDirectory)/V2RayGCon/Resource/Pkg'
-  v2rayCoreUrl: 'https://github.com/v2ray/v2ray-core/releases/download/v$(v2rayCoreVer)/$(v2rayCorePkgName)'
+  v2rayCoreUrl: 'https://github.com/v2ray/dist/raw/master/$(v2rayCorePkgName)'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -46,13 +45,18 @@ steps:
 # V2RayGCon-box.zip
 - task: PythonScript@0
   inputs:
+    scriptSource: 'inline'
+    script: import sys; print('Python version'); print(sys.version)
+
+- task: PythonScript@0
+  inputs:
     workingDirectory: '$(v2rayCorePkgFolder)'
     scriptSource: 'inline'
-    script: from urllib.request import urlretrieve; urlretrieve('$(v2rayCoreUrl)', '$(v2rayCoreFileName)')
+    script: from urllib import urlretrieve; import ssl; urlretrieve(url = '$(v2rayCoreUrl)', filename = '$(v2rayCorePkgName)', context = ssl._create_unverified_context())
 
 - task: ExtractFiles@1
   inputs:
-    archiveFilePatterns: '$(v2rayCorePkgFolder)/$(v2rayCoreFileName)'
+    archiveFilePatterns: '$(v2rayCorePkgFolder)/$(v2rayCorePkgName)'
     destinationFolder: '$(Build.SourcesDirectory)/V2RayGCon/bin/$(buildCfgVgcFull)/core'
     cleanDestinationFolder: true
 

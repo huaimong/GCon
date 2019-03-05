@@ -333,10 +333,10 @@
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             // 
-            // toolStripMenuItemNewWindow
+            // newWindowToolStripMenuItem
             // 
-            resources.ApplyResources(this.newWindowToolStripMenuItem, "toolStripMenuItemNewWindow");
-            this.newWindowToolStripMenuItem.Name = "toolStripMenuItemNewWindow";
+            resources.ApplyResources(this.newWindowToolStripMenuItem, "newWindowToolStripMenuItem");
+            this.newWindowToolStripMenuItem.Name = "newWindowToolStripMenuItem";
             // 
             // toolStripSeparator1
             // 

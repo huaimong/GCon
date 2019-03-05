@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Management;
 using System.Net;
-using System.Net.Sockets;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,7 +22,6 @@ namespace V2RayGCon.Lib
 {
     public static class Utils
     {
-
         #region Json
         public static JArray ExtractOutboundsFromConfig(string config)
         {
@@ -529,6 +527,54 @@ namespace V2RayGCon.Lib
         }
 
         /// <summary>
+        /// Return 0 if not exist.
+        /// </summary>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static int GetAlterIdFromVmessConfig(JObject json)
+        {
+            var paths = new string[] {
+                "outbound.settings.vnext.0.users.0.alterId",
+                "outbounds.0.settings.vnext.0.users.0.alterId",
+            };
+
+            foreach (var path in paths)
+            {
+                var id = Lib.Utils.GetValue<int>(json, path);
+                if (id > 0)
+                {
+                    return VgcApis.Libs.Utils.Clamp(id, 0, 65535);
+                }
+            }
+
+            return 0;
+        }
+
+        /// <summary>
+        /// Return null if not found!
+        /// </summary>
+        /// <param name="config"></param>
+        /// <returns></returns>
+        public static string GetProtocolFromConfig(JObject config)
+        {
+            var keys = new string[]
+            {
+                "outbound.protocol",
+                "outbounds.0.protocol",
+            };
+
+            foreach (var key in keys)
+            {
+                var value = GetValue<string>(config, key);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    return value.ToLower();
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// return null if path is null or path not exists.
         /// </summary>
         /// <param name="json"></param>
@@ -650,6 +696,12 @@ namespace V2RayGCon.Lib
             return list;
         }
 
+        /// <summary>
+        /// http is equal to https
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="linkType"></param>
+        /// <returns></returns>
         public static List<string> ExtractLinks(
             string text,
             VgcApis.Models.Datas.Enum.LinkTypes linkType)
@@ -664,19 +716,6 @@ namespace V2RayGCon.Lib
             return links;
         }
 
-        public static string Vmess2VmessLink(Model.Data.Vmess vmess)
-        {
-            if (vmess == null)
-            {
-                return string.Empty;
-            }
-
-            string content = JsonConvert.SerializeObject(vmess);
-            return AddLinkPrefix(
-                Base64Encode(content),
-                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
-        }
-
         public static Model.Data.Vmess VmessLink2Vmess(string link)
         {
             try
@@ -685,7 +724,7 @@ namespace V2RayGCon.Lib
                 var vmess = JsonConvert.DeserializeObject<Model.Data.Vmess>(plainText);
                 if (!string.IsNullOrEmpty(vmess.add)
                     && !string.IsNullOrEmpty(vmess.port)
-                    && !string.IsNullOrEmpty(vmess.aid))
+                    && !string.IsNullOrEmpty(vmess.id))
                 {
 
                     return vmess;
@@ -695,7 +734,7 @@ namespace V2RayGCon.Lib
             return null;
         }
 
-        public static Model.Data.Shadowsocks SSLink2SS(string ssLink)
+        public static Model.Data.Shadowsocks SsLink2Ss(string ssLink)
         {
             string b64 = GetLinkBody(ssLink);
 
@@ -715,61 +754,6 @@ namespace V2RayGCon.Lib
             }
             catch { }
             return null;
-        }
-
-        public static Model.Data.Vmess ConfigString2Vmess(string config)
-        {
-            JObject json;
-            try
-            {
-                json = JObject.Parse(config);
-            }
-            catch
-            {
-                return null;
-            }
-
-            var GetStr = GetStringByPrefixAndKeyHelper(json);
-
-            Model.Data.Vmess vmess = new Model.Data.Vmess
-            {
-                v = "2",
-                ps = GetStr("v2raygcon", "alias")
-            };
-
-            var isUseV4 = (GetStr("outbounds.0", "protocol")?.ToLower()) == "vmess";
-            var root = isUseV4 ? "outbounds.0" : "outbound";
-
-            var prefix = root + "." + "settings.vnext.0";
-            vmess.add = GetStr(prefix, "address");
-            vmess.port = GetStr(prefix, "port");
-            vmess.id = GetStr(prefix, "users.0.id");
-            vmess.aid = GetStr(prefix, "users.0.alterId");
-
-            prefix = root + "." + "streamSettings";
-            vmess.net = GetStr(prefix, "network");
-            vmess.type = GetStr(prefix, "kcpSettings.header.type");
-            vmess.tls = GetStr(prefix, "security");
-
-            switch (vmess.net)
-            {
-                case "ws":
-                    vmess.path = GetStr(prefix, "wsSettings.path");
-                    vmess.host = GetStr(prefix, "wsSettings.headers.Host");
-                    break;
-                case "h2":
-                    try
-                    {
-                        vmess.path = GetStr(prefix, "httpSettings.path");
-                        var hosts = isUseV4 ?
-                            json["outbounds"][0]["streamSettings"]["httpSettings"]["host"] :
-                            json["outbound"]["streamSettings"]["httpSettings"]["host"];
-                        vmess.host = JArray2Str(hosts as JArray);
-                    }
-                    catch { }
-                    break;
-            }
-            return vmess;
         }
 
         public static JArray Str2JArray(string content)
@@ -816,11 +800,11 @@ namespace V2RayGCon.Lib
 
         public static string Base64Encode(string plainText)
         {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            var plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
         }
 
-        static string Base64PadRight(string base64)
+        public static string Base64PadRight(string base64)
         {
             return base64.PadRight(base64.Length + (4 - base64.Length % 4) % 4, '=');
         }
@@ -832,13 +816,60 @@ namespace V2RayGCon.Lib
                 return string.Empty;
             }
             var padded = Base64PadRight(base64EncodedData);
-            var base64EncodedBytes = System.Convert.FromBase64String(padded);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            var base64EncodedBytes = Convert.FromBase64String(padded);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
         #endregion
 
         #region net
+        /// <summary>
+        /// List( success ? ( vmess://... , mark ) : ( "", [alias] url ) )
+        /// </summary>
+        /// <param name="subscriptions"></param>
+        /// <param name="proxyPort"></param>
+        /// <returns></returns>
+        public static List<string[]> FetchLinksFromSubcriptions(
+            List<Model.Data.SubscriptionItem> subscriptions,
+            int proxyPort)
+        {
+            Func<Model.Data.SubscriptionItem, string[]> worker = (subItem) =>
+            {
+                var url = subItem.url;
+                var mark = subItem.isSetMark ? subItem.alias : null;
+
+                var subsString = Lib.Utils.Fetch(
+                    url,
+                    proxyPort,
+                    VgcApis.Models.Consts.Import.ParseImportTimeout);
+
+                if (string.IsNullOrEmpty(subsString))
+                {
+                    return new string[] {
+                        string.Empty,
+                        $"[{subItem.alias}] {url}",
+                    };
+                }
+
+                var links = new List<string>();
+                var matches = Regex.Matches(
+                    subsString,
+                    VgcApis.Models.Consts.Patterns.Base64NonStandard);
+                foreach (Match match in matches)
+                {
+                    try
+                    {
+                        links.Add(Lib.Utils.Base64Decode(match.Value));
+                    }
+                    catch { }
+                }
+
+                return new string[] { string.Join("\n", links), mark };
+            };
+
+            return Lib.Utils.ExecuteInParallel(subscriptions, worker);
+        }
+
         public static string GetBaseUrl(string url)
         {
             try
@@ -924,18 +955,6 @@ namespace V2RayGCon.Lib
                 elasped = sw.ElapsedMilliseconds;
             }
             return elasped;
-        }
-
-        static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
-        public static int GetFreeTcpPort()
-        {
-            // https://stackoverflow.com/questions/138043/find-the-next-tcp-port-in-net
-
-            using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                socket.Bind(_defaultLoopbackEndpoint);
-                return ((IPEndPoint)socket.LocalEndPoint).Port;
-            }
         }
 
         /// <summary>
@@ -1158,23 +1177,7 @@ namespace V2RayGCon.Lib
             return hash.ToString();
         }
 
-        public static bool PartialMatch(string source, string partial)
-        {
-            var s = source.ToLower();
-            var p = partial.ToLower();
-
-            int idxS = 0, idxP = 0;
-            while (idxS < s.Length && idxP < p.Length)
-            {
-                if (s[idxS] == p[idxP])
-                {
-                    idxP++;
-                }
-                idxS++;
-            }
-            return idxP == p.Length;
-        }
-
+        static object genRandomNumberLocker = new object();
         public static string RandomHex(int length)
         {
             //  https://stackoverflow.com/questions/1344221/how-can-i-generate-random-alphanumeric-strings-in-c
@@ -1185,10 +1188,19 @@ namespace V2RayGCon.Lib
 
             Random random = new Random();
             const string chars = "0123456789abcdef";
-            return new string(
-                Enumerable.Repeat(chars, length)
-                    .Select(s => s[random.Next(s.Length)])
-                    .ToArray());
+            int charLen = chars.Length;
+
+            int rndIndex;
+            StringBuilder sb = new StringBuilder("");
+            for (int i = 0; i < length; i++)
+            {
+                lock (genRandomNumberLocker)
+                {
+                    rndIndex = random.Next(charLen);
+                }
+                sb.Append(chars[rndIndex]);
+            }
+            return sb.ToString();
         }
 
         public static int Clamp(int value, int min, int max)
@@ -1274,17 +1286,21 @@ namespace V2RayGCon.Lib
             {
                 case VgcApis.Models.Datas.Enum.LinkTypes.ss:
                 case VgcApis.Models.Datas.Enum.LinkTypes.vmess:
-                case VgcApis.Models.Datas.Enum.LinkTypes.v2ray:
+                case VgcApis.Models.Datas.Enum.LinkTypes.v2cfg:
+                case VgcApis.Models.Datas.Enum.LinkTypes.v:
                     pattern = GenLinkPrefix(linkType) + "://" +
-                        VgcApis.Models.Consts.Files.PatternBase64;
+                        VgcApis.Models.Consts.Patterns.Base64Standard;
                     break;
                 case VgcApis.Models.Datas.Enum.LinkTypes.http:
-                default:
-                    pattern = VgcApis.Models.Consts.Files.PatternUrl;
+                case VgcApis.Models.Datas.Enum.LinkTypes.https:
+                    pattern = VgcApis.Models.Consts.Patterns.HttpUrl;
                     break;
+                default:
+                    throw new NotSupportedException(
+                        $"Not supported link type {linkType.ToString()}:// ...");
             }
 
-            return StrConst.PatternNonAlphabet + pattern;
+            return VgcApis.Models.Consts.Patterns.NonAlphabets + pattern;
         }
 
         public static string AddLinkPrefix(
@@ -1296,8 +1312,16 @@ namespace V2RayGCon.Lib
 
         public static string GetLinkBody(string link)
         {
-            Regex re = new Regex("[a-zA-Z0-9]+://");
-            return re.Replace(link, string.Empty);
+            var needle = @"://";
+            var index = link.IndexOf(needle);
+
+            if (index < 0)
+            {
+                throw new ArgumentException(
+                    $"Not a valid link ${link}");
+            }
+
+            return link.Substring(index + needle.Length);
         }
 
         public static void ZipFileDecompress(string zipFile, string outFolder)
@@ -1313,16 +1337,19 @@ namespace V2RayGCon.Lib
         #endregion
 
         #region UI related
-        public static void CopyToClipboardAndPrompt(string content)
-        {
+        public static void CopyToClipboardAndPrompt(string content) =>
             MessageBox.Show(
-                Lib.Utils.CopyToClipboard(content) ?
+                CopyToClipboard(content) ?
                 I18N.CopySuccess :
                 I18N.CopyFail);
-        }
 
         public static bool CopyToClipboard(string content)
         {
+            if (string.IsNullOrEmpty(content))
+            {
+                return false;
+            }
+
             try
             {
                 Clipboard.SetText(content);

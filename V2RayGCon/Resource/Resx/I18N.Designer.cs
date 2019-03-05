@@ -911,15 +911,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Links has been copied to clipboard. 的本地化字符串。
-        /// </summary>
-        internal static string LinksCopied {
-            get {
-                return ResourceManager.GetString("LinksCopied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 List is empty! 的本地化字符串。
         /// </summary>
         internal static string ListIsEmpty {
@@ -1508,15 +1499,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 v2ray:// ... 的本地化字符串。
-        /// </summary>
-        internal static string V2RayLink {
-            get {
-                return ResourceManager.GetString("V2RayLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Vist v2ray-core release page? 的本地化字符串。
         /// </summary>
         internal static string VisitV2rayCoreReleasePage {
@@ -1567,15 +1549,6 @@ namespace V2RayGCon.Resource.Resx {
         internal static string VistWikiPage {
             get {
                 return ResourceManager.GetString("VistWikiPage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 vmess:// ... 的本地化字符串。
-        /// </summary>
-        internal static string VmessLink {
-            get {
-                return ResourceManager.GetString("VmessLink", resourceCulture);
             }
         }
         

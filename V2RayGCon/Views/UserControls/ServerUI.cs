@@ -2,7 +2,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -15,16 +14,19 @@ namespace V2RayGCon.Views.UserControls
     {
         Service.Setting setting;
         Service.Servers servers;
+        Service.ShareLinkMgr slinkMgr;
         VgcApis.Models.Interfaces.ICoreServCtrl coreServCtrl;
 
         int[] formHeight;
         Bitmap[] foldingButtonIcons;
         string[] keywords = null;
 
-        public ServerUI(VgcApis.Models.Interfaces.ICoreServCtrl serverItem)
+        public ServerUI(
+            VgcApis.Models.Interfaces.ICoreServCtrl serverItem)
         {
             setting = Service.Setting.Instance;
             servers = Service.Servers.Instance;
+            slinkMgr = Service.ShareLinkMgr.Instance;
 
             this.coreServCtrl = serverItem;
             InitializeComponent();
@@ -70,7 +72,7 @@ namespace V2RayGCon.Views.UserControls
                 var title = box.Text.ToLower();
                 var keyword = keywords.FirstOrDefault(
                     s => !string.IsNullOrEmpty(s)
-                    && Lib.Utils.PartialMatch(title, s))?.ToLower();
+                    && VgcApis.Libs.Utils.PartialMatchCi(title, s))?.ToLower();
 
                 if (keyword == null)
                 {
@@ -109,7 +111,7 @@ namespace V2RayGCon.Views.UserControls
             VgcApis.Libs.UI.RunInUiThread(rtboxServerTitle, () =>
             {
                 Lib.UI.UpdateControlOnDemand(
-                    cboxInbound, coreServCtrl.GetCoreStates().GetCustomInbType());
+                    cboxInbound, coreServCtrl.GetCoreStates().GetInboundType());
 
                 Lib.UI.UpdateControlOnDemand(
                     rtboxServerTitle, coreServCtrl.GetCoreStates().GetTitle());
@@ -132,7 +134,7 @@ namespace V2RayGCon.Views.UserControls
         {
             Lib.UI.UpdateControlOnDemand(
                 globalImportToolStripMenuItem,
-                coreServCtrl.GetCoreStates().IsInjectImport());
+                coreServCtrl.GetCoreStates().IsInjectGlobalImport());
 
             Lib.UI.UpdateControlOnDemand(
                 skipCNWebsiteToolStripMenuItem,
@@ -155,7 +157,7 @@ namespace V2RayGCon.Views.UserControls
                 return;
             }
 
-            var addr = coreServCtrl.GetCoreStates().GetCustomInbAddr();
+            var addr = coreServCtrl.GetCoreStates().GetInboundAddr();
             if (tboxInboundAddr.Text != addr)
             {
                 tboxInboundAddr.Text = addr;
@@ -181,7 +183,7 @@ namespace V2RayGCon.Views.UserControls
         {
             var text = (coreServCtrl.GetCoreStates().IsAutoRun() ? "A" : "")
                 + (coreServCtrl.GetCoreStates().IsInjectSkipCnSite() ? "C" : "")
-                + (coreServCtrl.GetCoreStates().IsInjectImport() ? "I" : "")
+                + (coreServCtrl.GetCoreStates().IsInjectGlobalImport() ? "I" : "")
                 + (coreServCtrl.GetCoreStates().IsUntrack() ? "U" : "");
 
             if (lbIsAutorun.Text != text)
@@ -193,7 +195,7 @@ namespace V2RayGCon.Views.UserControls
         void UpdateBorderFoldingStat()
         {
             var level = Lib.Utils.Clamp(
-                coreServCtrl.GetCoreStates().GetFoldingLevel(), 0, foldingButtonIcons.Length);
+                coreServCtrl.GetCoreStates().GetFoldingState(), 0, foldingButtonIcons.Length);
 
             if (btnIsCollapse.BackgroundImage != foldingButtonIcons[level])
             {
@@ -209,12 +211,12 @@ namespace V2RayGCon.Views.UserControls
 
         void UpdateFilterMarkBox()
         {
-            if (cboxMark.Text == coreServCtrl.GetCoreStates().GetCustomMark())
+            if (cboxMark.Text == coreServCtrl.GetCoreStates().GetMark())
             {
                 return;
             }
 
-            cboxMark.Text = coreServCtrl.GetCoreStates().GetCustomMark();
+            cboxMark.Text = coreServCtrl.GetCoreStates().GetMark();
         }
 
         void UpdateSelectedTickStat()
@@ -340,7 +342,7 @@ namespace V2RayGCon.Views.UserControls
 
         private void cboxInbound_SelectedIndexChanged(object sender, EventArgs e)
         {
-            coreServCtrl.GetCoreStates().SetCustomInbType(cboxInbound.SelectedIndex);
+            coreServCtrl.GetCoreStates().SetInboundType(cboxInbound.SelectedIndex);
         }
 
         private void chkSelected_CheckedChanged(object sender, EventArgs e)
@@ -362,7 +364,7 @@ namespace V2RayGCon.Views.UserControls
                 {
                     tboxInboundAddr.ForeColor = Color.Black;
                 }
-                coreServCtrl.GetCoreStates().SetCustomInbAddr(ip, port);
+                coreServCtrl.GetCoreStates().SetInboundAddr(ip, port);
             }
             else
             {
@@ -372,7 +374,6 @@ namespace V2RayGCon.Views.UserControls
                     tboxInboundAddr.ForeColor = Color.Red;
                 }
             }
-
         }
 
         private void lbSummary_Click(object sender, EventArgs e)
@@ -393,24 +394,20 @@ namespace V2RayGCon.Views.UserControls
 
         private void vmessToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                           Lib.Utils.CopyToClipboard(
-                               Lib.Utils.Vmess2VmessLink(
-                                   Lib.Utils.ConfigString2Vmess(
-                                       GetConfig()))) ?
-                           I18N.LinksCopied :
-                           I18N.CopyFail);
+            var vmessLink = slinkMgr.EncodeConfigToShareLink(
+                GetConfig(),
+                VgcApis.Models.Datas.Enum.LinkTypes.vmess);
+
+            Lib.Utils.CopyToClipboardAndPrompt(vmessLink);
         }
 
-        private void v2rayToolStripMenuItem_Click(object sender, EventArgs e)
+        private void v2cfgToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(
-                           Lib.Utils.CopyToClipboard(
-                               Lib.Utils.AddLinkPrefix(
-                                   Lib.Utils.Base64Encode(GetConfig()),
-                                   VgcApis.Models.Datas.Enum.LinkTypes.v2ray)) ?
-                           I18N.LinksCopied :
-                           I18N.CopyFail);
+            var content = slinkMgr.EncodeConfigToShareLink(
+                GetConfig(),
+                VgcApis.Models.Datas.Enum.LinkTypes.v2cfg);
+
+            Lib.Utils.CopyToClipboardAndPrompt(content);
         }
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
@@ -425,12 +422,12 @@ namespace V2RayGCon.Views.UserControls
 
         private void logOfThisServerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            coreServCtrl.GetLogger().ShowLogForm();
+            coreServCtrl.GetLogger().ShowFormLog();
         }
 
         private void cboxMark_TextChanged(object sender, EventArgs e)
         {
-            this.coreServCtrl.GetCoreStates().SetCustomMark(cboxMark.Text);
+            this.coreServCtrl.GetCoreStates().SetMark(cboxMark.Text);
         }
 
         private void cboxMark_DropDown(object sender, EventArgs e)
@@ -471,8 +468,8 @@ namespace V2RayGCon.Views.UserControls
 
         private void btnIsCollapse_Click(object sender, EventArgs e)
         {
-            var level = (coreServCtrl.GetCoreStates().GetFoldingLevel() + 1) % 2;
-            coreServCtrl.GetCoreStates().SetFoldingLevel(level);
+            var level = (coreServCtrl.GetCoreStates().GetFoldingState() + 1) % 2;
+            coreServCtrl.GetCoreStates().SetFoldingState(level);
         }
 
         private void lbIsAutorun_MouseDown(object sender, MouseEventArgs e)
@@ -538,6 +535,13 @@ namespace V2RayGCon.Views.UserControls
             new WinForms.FormConfiger(finalConfig.ToString(Formatting.Indented));
         }
 
+        private void vToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var vee = slinkMgr.EncodeConfigToShareLink(
+                GetConfig(),
+                VgcApis.Models.Datas.Enum.LinkTypes.v);
+            Lib.Utils.CopyToClipboardAndPrompt(vee);
+        }
         #endregion
     }
 }

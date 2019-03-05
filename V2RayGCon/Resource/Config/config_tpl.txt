@@ -51,6 +51,24 @@
     "protocol": "socks",
     "settings": {}
   },
+  "outbVeeVmess": {
+    "protocol": "vmess",
+    "settings": {
+      "vnext": [
+        {
+          "address": "",
+          "port": 1234,
+          "users": [
+            {
+              "id": ""
+            }
+          ]
+        }
+      ]
+    },
+    "tag": "agentout",
+    "streamSettings": {}
+  },
   "outbVmess": {
     "protocol": "vmess",
     "settings": {
@@ -204,36 +222,42 @@
       ]
     }
   },
+  "outbVeeSs": {
+    "protocol": "shadowsocks",
+    "settings": {
+      "servers": [
+        {
+          "address": "127.0.0.1",
+          "port": 1080,
+          "method": "aes-128-cfb",
+          "password": "",
+          "ota": false
+        }
+      ]
+    },
+    "tag": "agentout",
+    "streamSettings": {}
+  },
+  "outbSs": {
+    "protocol": "shadowsocks",
+    "settings": {
+      "servers": [
+        {
+          "email": "",
+          "address": "127.0.0.1",
+          "port": 1080,
+          "method": "aes-128-cfb",
+          "password": "",
+          "ota": false,
+          "level": 0
+        }
+      ]
+    },
+    "tag": "agentout"
+  },
   "tplImportSS": {
     "log": {
       "loglevel": "warning"
-    },
-    "inbound": {
-      "port": 1080,
-      "listen": "127.0.0.1",
-      "protocol": "socks",
-      "settings": {
-        "auth": "noauth",
-        "udp": false,
-        "ip": "127.0.0.1"
-      }
-    },
-    "outbound": {
-      "protocol": "shadowsocks",
-      "settings": {
-        "servers": [
-          {
-            "email": "",
-            "address": "127.0.0.1",
-            "port": 1080,
-            "method": "aes-128-cfb",
-            "password": "",
-            "ota": false,
-            "level": 0
-          }
-        ]
-      },
-      "tag": "agentout"
     },
     "v2raygcon": {
       "alias": "",

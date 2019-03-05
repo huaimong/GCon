@@ -143,7 +143,7 @@ namespace V2RayGCon.Lib.QRCode
                 screenRect.Width,
                 screenRect.Height);
 
-            ShowSplashForm(formRect, qrcodeRect, () => success(link));
+            ShowSplashForm(formRect, qrcodeRect, () => success?.Invoke(link));
         }
 
         static bool ScanScreen(Screen screen, List<Rectangle[]> scanRectList, Action<string> success)
@@ -205,7 +205,7 @@ namespace V2RayGCon.Lib.QRCode
                     return;
                 }
             }
-            fail();
+            fail?.Invoke();
         }
 
         static Rectangle GetQRCodeRect(Result result, Rectangle winRect, Rectangle screenRect)

@@ -4,7 +4,7 @@ using VgcApis.Models.Interfaces.CoreCtrlComponents;
 namespace V2RayGCon.Controller
 {
     public class CoreServerCtrl :
-        VgcApis.Models.BaseClasses.ContainerTpl<CoreServerCtrl>,
+        VgcApis.Models.BaseClasses.ContainerOf<CoreServerCtrl>,
         VgcApis.Models.Interfaces.ICoreServCtrl
     {
         public event EventHandler
@@ -108,8 +108,8 @@ namespace V2RayGCon.Controller
         protected override void Cleanup()
         {
             InvokeEventOnCoreClosing();
-            coreCtrl.StopCore();
-            coreCtrl.ReleaseEvents();
+            coreCtrl?.StopCore();
+            coreCtrl?.ReleaseEvents();
             base.Cleanup();
         }
         #endregion

@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,6 +33,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="KeraLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=04d04586786c6f34, processorArchitecture=MSIL">
@@ -43,8 +45,8 @@
     <Reference Include="NLua, Version=1.3.2.0, Culture=neutral, PublicKeyToken=8df2ab518030ea95, processorArchitecture=MSIL">
       <HintPath>..\packages\NLua.1.3.2.1\lib\net45\NLua.dll</HintPath>
     </Reference>
-    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, PublicKeyToken=d42c48f11a620156, processorArchitecture=MSIL">
-      <HintPath>..\packages\jacobslusser.ScintillaNET.Signed.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
+    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,14 +59,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libs\Streams\BitStream.cs" />
+    <Compile Include="Libs\Streams\Crc8.cs" />
+    <Compile Include="Libs\Streams\RawBitStream\Bytes.cs" />
+    <Compile Include="Libs\Streams\RawBitStream\RawBitStream.cs" />
+    <Compile Include="Libs\Streams\RawBitStream\Address.cs" />
+    <Compile Include="Libs\Streams\RawBitStream\Numbers.cs" />
+    <Compile Include="Libs\Streams\RawBitStream\Utils.cs" />
+    <Compile Include="Libs\Streams\RawBitStream\Uuids.cs" />
+    <Compile Include="Libs\Sys\NotepadHelper.cs" />
     <Compile Include="Libs\Tasks\Bar.cs" />
     <Compile Include="Libs\Tasks\Routine.cs" />
     <Compile Include="Libs\Views\RepaintCtrl.cs" />
     <Compile Include="Models\BaseClasses\ComponentOf.cs" />
-    <Compile Include="Models\BaseClasses\ContainerTpl.cs" />
+    <Compile Include="Models\BaseClasses\ContainerOf.cs" />
     <Compile Include="Models\BaseClasses\Disposable.cs" />
     <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
     <Compile Include="Libs\Sys\QueueLogger.cs" />
+    <Compile Include="Models\Consts\BitStream.cs" />
+    <Compile Include="Models\Consts\Config.cs" />
+    <Compile Include="Models\Consts\Core.cs" />
+    <Compile Include="Models\Consts\Lua.cs" />
+    <Compile Include="Models\Consts\Patterns.cs" />
+    <Compile Include="Models\Consts\Import.cs" />
     <Compile Include="Models\Consts\Libs.cs" />
     <Compile Include="Models\Consts\Intervals.cs" />
     <Compile Include="Models\Consts\Files.cs" />
@@ -78,6 +95,7 @@
     <Compile Include="Models\Interfaces\IComponent.cs" />
     <Compile Include="Models\Interfaces\IContainer.cs" />
     <Compile Include="Models\Interfaces\ILuaApis.cs" />
+    <Compile Include="Models\Interfaces\IShareLinkDecoder.cs" />
     <Compile Include="Models\IServices\IApiServices.cs" />
     <Compile Include="Models\Interfaces\IPlugin.cs" />
     <Compile Include="Libs\Tasks\CancelableTimeout.cs" />
@@ -89,6 +107,7 @@
     <Compile Include="Models\Interfaces\ICoreServCtrl.cs" />
     <Compile Include="Models\Interfaces\IDropableControl.cs" />
     <Compile Include="Models\Interfaces\ILuaSignal.cs" />
+    <Compile Include="Models\IServices\IShareLinkMgr.cs" />
     <Compile Include="Models\IServices\IConfigMgr.cs" />
     <Compile Include="Models\IServices\IServersService.cs" />
     <Compile Include="Models\IServices\ISettingsService.cs" />
@@ -140,7 +159,6 @@
     <None Include="Resources\icons\icon_light.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libs\Factory\" />
     <Folder Include="Models\Grpcs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

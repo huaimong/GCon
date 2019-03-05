@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ScintillaNET;
+using System.Collections.Generic;
 
 namespace Luna.Services
 {
@@ -10,8 +11,14 @@ namespace Luna.Services
         readonly string pluginName = Properties.Resources.Name;
         Models.Data.UserSettings userSettings;
         VgcApis.Libs.Tasks.LazyGuy bookKeeper;
+        Libs.LuaSnippet.LuaAcm luaAcm;
 
         public Settings() { }
+
+        #region internal methods
+        public void AttachSnippetsTo(Scintilla editor) =>
+            luaAcm?.BindToEditor(editor);
+        #endregion
 
         #region public methods
         public void SendLog(string contnet)
@@ -29,35 +36,50 @@ namespace Luna.Services
             VgcApis.Models.IServices.ISettingsService vgcSetting)
         {
             this.vgcSetting = vgcSetting;
+            this.luaAcm = new Libs.LuaSnippet.LuaAcm();
 
             userSettings = VgcApis.Libs.Utils
                 .LoadPluginSetting<Models.Data.UserSettings>(
                     pluginName, vgcSetting);
 
+            userSettings.NormalizeData();
+
             bookKeeper = new VgcApis.Libs.Tasks.LazyGuy(
                 SaveUserSettingsNow, 30000);
-        }
 
-        public List<Models.Data.LuaCoreSetting> GetLuaCoreSettings()
-        {
-            if (userSettings.luaServers == null)
-            {
-                userSettings.luaServers =
-                    new List<Models.Data.LuaCoreSetting>();
-                SaveSettings();
-            }
-            return userSettings.luaServers;
-        }
-
-        public void SaveSettings()
-        {
             bookKeeper.DoItLater();
         }
+
+        public string GetLuaShareMemory(string key)
+        {
+            if (!userSettings.luaShareMemory.ContainsKey(key))
+            {
+                return @"";
+            }
+            return userSettings.luaShareMemory[key];
+        }
+
+        readonly object shareMemoryLocker = new object();
+        public void SetLuaShareMemory(string key, string value)
+        {
+            lock (shareMemoryLocker)
+            {
+                userSettings.luaShareMemory[key] = value;
+            }
+            SaveSettings();
+        }
+
+        public List<Models.Data.LuaCoreSetting> GetLuaCoreSettings() =>
+            userSettings.luaServers;
+
+        public void SaveSettings() =>
+            bookKeeper.DoItLater();
         #endregion
 
         #region protected methods
         protected override void Cleanup()
         {
+            luaAcm?.Dispose();
             bookKeeper.DoItNow();
             bookKeeper.Quit();
         }

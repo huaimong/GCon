@@ -18,7 +18,7 @@ namespace ProxySetter.Controllers.VGCPluginComponents
             Label lbPacUrl,
             Button btnRestart,
             Button btnStop,
-            Button btnSaveAs,
+            Button btnViewInNotepad,
             Button btnDebug,
             Button btnCopy,
             Button btnClearSysProxy)
@@ -31,7 +31,7 @@ namespace ProxySetter.Controllers.VGCPluginComponents
                 pacServer,
                 btnRestart,
                 btnStop,
-                btnSaveAs,
+                btnViewInNotepad,
                 btnDebug,
                 btnCopy,
                 btnClearSysProxy);
@@ -45,16 +45,23 @@ namespace ProxySetter.Controllers.VGCPluginComponents
             Services.PacServer pacServer,
             Button btnRestart,
             Button btnStop,
-            Button btnSaveAs,
+            Button btnViewInNotepad,
             Button btnDebug,
             Button btnCopy,
             Button btnClearSysProxy)
         {
-            btnSaveAs.Click += (s, a) =>
+            btnViewInNotepad.Click += (s, a) =>
             {
-                VgcApis.Libs.UI.SaveToFile(
-                    VgcApis.Models.Consts.Files.PacExt,
-                    pacServer.GetCurPacFileContent());
+                try
+                {
+                    var content = pacServer.GetCurPacFileContent();
+                    VgcApis.Libs.Sys.NotepadHelper.ShowMessage(
+                        content, @"PAC.js");
+                }
+                catch
+                {
+                    VgcApis.Libs.UI.MsgBoxAsync(I18N.LaunchNotepadFail);
+                }
             };
 
             btnClearSysProxy.Click += (s, a) =>
