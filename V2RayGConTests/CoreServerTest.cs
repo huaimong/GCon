@@ -6,11 +6,12 @@ namespace V2RayGCon.Test
     public class CoreServerTest
     {
         // download v2ray-core into test folder first
-        V2RayGCon.Lib.V2Ray.Core core;
+        Lib.V2Ray.Core core;
 
         public CoreServerTest()
         {
-            core = new V2RayGCon.Lib.V2Ray.Core(Service.Setting.Instance);
+            var setting = Service.Setting.Instance;
+            core = new Lib.V2Ray.Core(setting);
         }
 
         [TestMethod]

@@ -42,11 +42,16 @@ namespace Luna.Libs.LuaSnippet
         #endregion
 
         #region private methods
+        string GetFilteredLuaKeywords() =>
+            VgcApis.Models.Consts.Lua.LuaKeywords
+            .Replace("do", "")
+            .Replace("then", "")
+            .Replace("end", "");
 
         List<string> GenKeywords(IEnumerable<string> initValues) =>
             new StringBuilder(VgcApis.Models.Consts.Lua.LuaModules)
             .Append(@" ")
-            .Append(VgcApis.Models.Consts.Lua.LuaKeywords)
+            .Append(GetFilteredLuaKeywords())
             .ToString()
             .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
             .Union(initValues)
