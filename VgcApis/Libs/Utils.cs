@@ -97,16 +97,16 @@ namespace VgcApis.Libs
             }
         }
 
-        public static Dictionary<string, string> GenConfigSections(JObject json)
+        public static Dictionary<string, string> GetterConfigSections(JObject json)
         {
-            var defSections = Models.Consts.Config.GetDefCfgSections();
+            var dict = new Dictionary<string, string>();
 
             GetterJsonDataStruct(
-                ref defSections,
+                ref dict,
                 json,
                 Models.Consts.Config.ConfigSectionDepth);
 
-            return defSections;
+            return dict;
         }
 
         public static bool TryParseJObject(

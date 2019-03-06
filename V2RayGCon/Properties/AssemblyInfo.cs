@@ -35,6 +35,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.9.3 配置编辑器支持二级分节
  * v1.1.9.2 Reduce FormConfig and FormQrcode loading time.
  * v1.1.9.1 升级NLua至v1.4.9
  */

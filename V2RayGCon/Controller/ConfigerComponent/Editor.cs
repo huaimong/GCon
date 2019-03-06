@@ -16,8 +16,6 @@ namespace V2RayGCon.Controller.ConfigerComponet
         ComboBox cboxSection, cboxExample;
         Button btnFormat, btnRestore;
 
-        bool isDisableCboxSectionChangeEvent = false;
-
         Dictionary<string, string> sections;
         string preSection = @"";
         string ConfigDotJson = VgcApis.Models.Consts.Config.ConfigDotJson;
@@ -58,9 +56,9 @@ namespace V2RayGCon.Controller.ConfigerComponet
         #region pulbic method
         public void Prepare()
         {
-
             preSection = ConfigDotJson;
             RefreshSections();
+            cboxSection.Text = preSection;
             ShowSection();
             UpdateCboxExampleItems();
             AttachEvent();
@@ -70,10 +68,20 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             var config = container.config;
 
-            content =
-                preSection == ConfigDotJson ?
-                config.ToString() :
-                config[sections[preSection]].ToString();
+            if (preSection == ConfigDotJson)
+            {
+                content = config.ToString();
+                return;
+            }
+
+            var part = Lib.Utils.GetKey(config, preSection);
+            if (part != null)
+            {
+                content = part.ToString();
+                return;
+            }
+
+            content = sections[preSection];
         }
 
         public bool IsChanged()
@@ -103,6 +111,12 @@ namespace V2RayGCon.Controller.ConfigerComponet
             return editor;
         }
 
+        public void ReloadSection()
+        {
+            RefreshSections();
+            ShowSection();
+        }
+
         public void ShowSection()
         {
             var key = preSection;
@@ -111,6 +125,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             if (!sections.Keys.Contains(key))
             {
                 key = ConfigDotJson;
+                preSection = key;
             }
 
             if (key == ConfigDotJson)
@@ -118,6 +133,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
                 content = config.ToString();
                 return;
             }
+
             var part = Lib.Utils.GetKey(config, key);
             if (part != null)
             {
@@ -162,62 +178,104 @@ namespace V2RayGCon.Controller.ConfigerComponet
         #endregion
 
         #region private method
+        bool IsJsonCollection(JToken token)
+        {
+            if (token == null)
+            {
+                return false;
+            }
+
+            if (token.Type == JTokenType.Object
+                  || token.Type == JTokenType.Array)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        Dictionary<string, string> GetValidSections()
+        {
+            var config = container.config;
+            var defSections = VgcApis.Models.Consts.Config.GetDefCfgSections();
+
+            VgcApis.Libs.Utils
+                .GetterConfigSections(config)
+                .Where(kv => IsJsonCollection(Lib.Utils.GetKey(config, kv.Key)))
+                .ToList()
+                .ForEach(kv => defSections[kv.Key] = kv.Value);
+
+            return defSections;
+        }
+
         void RefreshSections()
         {
-            isDisableCboxSectionChangeEvent = true;
             var config = container.config;
-            this.sections = VgcApis.Libs.Utils.GenConfigSections(config);
+            sections = GetValidSections();
             RefreshCboxSectionsItems();
         }
 
         void RefreshCboxSectionsItems()
         {
-            VgcApis.Libs.UI.RunInUiThread(
-                cboxSection, () =>
-                {
-                    cboxSection.Items.Clear();
-                    var keys = sections.Keys.OrderBy(k => k).ToList();
-                    keys.Insert(0, ConfigDotJson);
+            var oldText = cboxSection.Text;
+            cboxSection.Items.Clear();
+            var keys = sections.Keys.OrderBy(k => k).ToList();
+            keys.Insert(0, ConfigDotJson);
 
-                    foreach (var key in keys)
-                    {
-                        cboxSection.Items.Add(key);
-                    }
+            foreach (var key in keys)
+            {
+                cboxSection.Items.Add(key);
+            }
 
-                    Lib.UI.ResetComboBoxDropdownMenuWidth(cboxSection);
-
-                    cboxSection.Text = preSection;
-                    isDisableCboxSectionChangeEvent = false;
-                });
+            Lib.UI.ResetComboBoxDropdownMenuWidth(cboxSection);
+            cboxSection.Text = oldText;
         }
+
+        void OnCboxSectionTextChangedHandler(object sender, EventArgs args)
+        {
+            cboxSection.TextChanged -= OnCboxSectionTextChangedHandler;
+
+            CboxSectionTextChangedWorker();
+
+            cboxSection.TextChanged += OnCboxSectionTextChangedHandler;
+        }
+
+        void CboxSectionTextChangedWorker()
+        {
+            var text = cboxSection.Text;
+            if (text == preSection)
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(text))
+            {
+                cboxSection.Text = preSection;
+                return;
+            }
+
+            if (!IsReadyToSwitchSection())
+            {
+                cboxSection.Text = preSection;
+                return;
+            }
+
+            RefreshSections();
+
+            preSection = text;
+            ShowSection();
+
+            // show section may change preSection;
+            cboxSection.Text = preSection;
+
+            UpdateCboxExampleItems();
+            container.Update();
+        }
+
 
         void AttachEvent()
         {
-            cboxSection.TextChanged += (s, e) =>
-            {
-                if (isDisableCboxSectionChangeEvent)
-                {
-                    return;
-                }
-
-                var text = cboxSection.Text;
-                if (text == preSection)
-                {
-                    return;
-                }
-
-                if (string.IsNullOrEmpty(text)
-                || !IsSwitchedToNewSection(text))
-                {
-                    cboxSection.Text = preSection;
-                }
-                else
-                {
-                    // update examples
-                    cboxSection.Text = preSection;
-                    UpdateCboxExampleItems();
-                }
-            };
+            cboxSection.TextChanged += OnCboxSectionTextChangedHandler;
 
             btnFormat.Click += (s, e) =>
             {
@@ -254,6 +312,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             cboxExample.Items.Clear();
 
             cboxExample.Items.Add(I18N.AvailableExamples);
+            cboxExample.SelectedIndex = 0;
             if (descriptions.Count < 1)
             {
                 cboxExample.Enabled = false;
@@ -266,7 +325,6 @@ namespace V2RayGCon.Controller.ConfigerComponet
                 cboxExample.Items.Add(description);
             }
             Lib.UI.ResetComboBoxDropdownMenuWidth(cboxExample);
-            cboxExample.SelectedIndex = 0;
         }
 
         string LoadInOutBoundExample(string[] example, bool isInbound)
@@ -310,28 +368,15 @@ namespace V2RayGCon.Controller.ConfigerComponet
             }
         }
 
-        bool IsSwitchedToNewSection(string curSection)
+        bool IsReadyToSwitchSection()
         {
             if (CheckValid())
             {
                 SaveChanges();
-                preSection = curSection;
-                ShowSection();
-                container.Update();
+                return true;
             }
-            else
-            {
-                if (Lib.UI.Confirm(I18N.CannotParseJson))
-                {
-                    preSection = curSection;
-                    ShowSection();
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            return true;
+
+            return Lib.UI.Confirm(I18N.CannotParseJson);
         }
 
         List<string> GetExampleItemList()
@@ -396,16 +441,15 @@ namespace V2RayGCon.Controller.ConfigerComponet
             }
 
             var config = container.config;
-            var newPart = JToken.Parse(sections[preSection]);
 
             var part = Lib.Utils.GetKey(config, preSection);
             if (part != null)
             {
-                part.Replace(newPart);
+                part.Replace(content);
             }
             else
             {
-                var mixin = Lib.Utils.CreateJObject(preSection, newPart);
+                var mixin = Lib.Utils.CreateJObject(preSection, content);
                 Lib.Utils.MergeJson(ref config, mixin);
             }
             RefreshSections();

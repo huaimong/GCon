@@ -587,6 +587,7 @@ namespace V2RayGCon.Lib
                 return null;
             }
 
+
             var curPos = json;
             var keys = path.Split('.');
 
@@ -598,17 +599,24 @@ namespace V2RayGCon.Lib
                     break;
                 }
 
-                if (int.TryParse(keys[depth], out int n))
+                try
                 {
-                    curPos = curPos[n];
+                    if (int.TryParse(keys[depth], out int n))
+                    {
+                        curPos = curPos[n];
+                    }
+                    else
+                    {
+                        curPos = curPos[keys[depth]];
+                    }
                 }
-                else
-                {
-                    curPos = curPos[keys[depth]];
+                catch {
+                    return null;
                 }
             }
 
             return depth < keys.Length ? null : curPos;
+
         }
 
         public static T GetValue<T>(JToken json, string prefix, string key)

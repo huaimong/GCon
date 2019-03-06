@@ -162,8 +162,8 @@ namespace V2RayGCon.Controller
                 }
                 config = o;
                 Update();
-                editor.ShowSection();
                 MarkOriginalFile();
+                editor.ReloadSection();
                 return true;
             }
             catch { }
@@ -176,7 +176,7 @@ namespace V2RayGCon.Controller
             editor.ShowEntireConfig();
             LoadConfig(configString);
             Update();
-            editor.ShowSection();
+            editor.ReloadSection();
         }
 
         public void InjectConfigHelper(Action lambda)
@@ -189,7 +189,7 @@ namespace V2RayGCon.Controller
             lambda?.Invoke();
 
             Update();
-            editor.ShowSection();
+            editor.ReloadSection();
         }
 
         #endregion

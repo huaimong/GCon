@@ -294,7 +294,7 @@ namespace V2RayGCon.Service
         {
             var package = cache.tpl.LoadPackage("pkgV4Tpl");
             var outbounds = package["outbounds"] as JArray;
-            var description = "";
+            var description = new List<string>();
 
             for (var i = 0; i < servList.Count; i++)
             {
@@ -314,13 +314,15 @@ namespace V2RayGCon.Service
                 }
                 else
                 {
-                    description += $" {i}.[{name}]";
+                    description.Add($"{i}.[{name}]");
                     setting.SendLog(I18N.PackageSuccess + ": " + name);
                 }
             }
 
             package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
-            package["v2raygcon"]["description"] = description;
+            package["v2raygcon"]["description"] =
+                $"[Total: {description.Count()}] " +
+                string.Join(" ", description);
 
             try
             {
