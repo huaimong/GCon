@@ -2,6 +2,7 @@
 using ScintillaNET;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -11,31 +12,31 @@ namespace V2RayGCon.Controller.ConfigerComponet
     {
         Service.Cache cache;
 
-        int preSection;
-        int separator;
         Scintilla editor;
-        ComboBox cboxSection;
+        ComboBox cboxSection, cboxExample;
+        Button btnFormat, btnRestore;
 
-        Dictionary<int, string> sections;
+        bool isDisableCboxSectionChangeEvent = false;
+
+        Dictionary<string, string> sections;
+        string preSection = @"";
+        string ConfigDotJson = VgcApis.Models.Consts.Config.ConfigDotJson;
 
         public Editor(
             Panel container,
-            ComboBox section,
-            ComboBox example,
-            Button format,
-            Button restore)
+            ComboBox cboxSection,
+            ComboBox cboxExample,
+            Button btnFormat,
+            Button btnRestore)
         {
             cache = Service.Cache.Instance;
 
-            separator = (int)Model.Data.Enum.Sections.Seperator;
-            sections = Model.Data.Table.configSections;
-            preSection = 0;
+            this.cboxSection = cboxSection;
+            this.cboxExample = cboxExample;
+            this.btnFormat = btnFormat;
+            this.btnRestore = btnRestore;
 
-            this.cboxSection = section;
             BindEditor(container);
-            AttachEvent(section, example, format, restore);
-
-            Lib.UI.FillComboBox(section, Model.Data.Table.configSections);
         }
 
         #region properties
@@ -55,12 +56,22 @@ namespace V2RayGCon.Controller.ConfigerComponet
         #endregion
 
         #region pulbic method
+        public void Prepare()
+        {
+
+            preSection = ConfigDotJson;
+            RefreshSections();
+            ShowSection();
+            UpdateCboxExampleItems();
+            AttachEvent();
+        }
+
         public void DiscardChanges()
         {
             var config = container.config;
 
             content =
-                preSection == 0 ?
+                preSection == ConfigDotJson ?
                 config.ToString() :
                 config[sections[preSection]].ToString();
         }
@@ -92,38 +103,38 @@ namespace V2RayGCon.Controller.ConfigerComponet
             return editor;
         }
 
-        public void ShowSection(int section = -1)
+        public void ShowSection()
         {
-            var index = section < 0 ? preSection : section;
+            var key = preSection;
             var config = container.config;
 
-            index = Lib.Utils.Clamp(index, 0, sections.Count);
+            if (!sections.Keys.Contains(key))
+            {
+                key = ConfigDotJson;
+            }
 
-            if (index == 0)
+            if (key == ConfigDotJson)
             {
                 content = config.ToString();
                 return;
             }
-
-            var part = config[sections[index]];
-            if (part == null)
+            var part = Lib.Utils.GetKey(config, key);
+            if (part != null)
             {
-                if (index >= separator)
-                {
-                    part = new JArray();
-                }
-                else
-                {
-                    part = new JObject();
-                }
-                config[sections[index]] = part;
+                content = part.ToString();
+                return;
             }
-            content = part.ToString();
+
+            var c = sections[key];
+            var token = Lib.Utils.CreateJObject(key, JToken.Parse(c));
+            Lib.Utils.MergeJson(ref config, token);
+            content = c;
+            RefreshSections();
         }
 
-        public void SelectSection(int index)
+        public void ShowEntireConfig()
         {
-            this.cboxSection.SelectedIndex = index;
+            this.cboxSection.Text = ConfigDotJson;
         }
 
         public bool Flush()
@@ -151,71 +162,111 @@ namespace V2RayGCon.Controller.ConfigerComponet
         #endregion
 
         #region private method
-        void AttachEvent(
-            ComboBox section,
-            ComboBox example,
-            Button format,
-            Button restore)
+        void RefreshSections()
         {
-            section.SelectedIndexChanged += (s, e) =>
-            {
-                if (!OnSectionChanged(section.SelectedIndex))
+            isDisableCboxSectionChangeEvent = true;
+            var config = container.config;
+            this.sections = VgcApis.Libs.Utils.GenConfigSections(config);
+            RefreshCboxSectionsItems();
+        }
+
+        void RefreshCboxSectionsItems()
+        {
+            VgcApis.Libs.UI.RunInUiThread(
+                cboxSection, () =>
                 {
-                    section.SelectedIndex = preSection;
+                    cboxSection.Items.Clear();
+                    var keys = sections.Keys.OrderBy(k => k).ToList();
+                    keys.Insert(0, ConfigDotJson);
+
+                    foreach (var key in keys)
+                    {
+                        cboxSection.Items.Add(key);
+                    }
+
+                    Lib.UI.ResetComboBoxDropdownMenuWidth(cboxSection);
+
+                    cboxSection.Text = preSection;
+                    isDisableCboxSectionChangeEvent = false;
+                });
+        }
+
+        void AttachEvent()
+        {
+            cboxSection.TextChanged += (s, e) =>
+            {
+                if (isDisableCboxSectionChangeEvent)
+                {
+                    return;
+                }
+
+                var text = cboxSection.Text;
+                if (text == preSection)
+                {
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(text)
+                || !IsSwitchedToNewSection(text))
+                {
+                    cboxSection.Text = preSection;
                 }
                 else
                 {
                     // update examples
-                    UpdateExamplesDescription(example);
+                    cboxSection.Text = preSection;
+                    UpdateCboxExampleItems();
                 }
             };
 
-            format.Click += (s, e) =>
+            btnFormat.Click += (s, e) =>
             {
                 FormatCurrentContent();
             };
 
-            restore.Click += (s, e) =>
+            btnRestore.Click += (s, e) =>
             {
-                example.SelectedIndex = 0;
+                cboxExample.SelectedIndex = 0;
                 DiscardChanges();
             };
 
-            example.SelectedIndexChanged += (s, e) =>
+            cboxExample.SelectedIndexChanged += (s, e) =>
             {
-                LoadExample(example.SelectedIndex - 1);
+                var index = cboxExample.SelectedIndex - 1;
+                if (index < 0)
+                {
+                    return;
+                }
+                try
+                {
+                    this.content = LoadExample(index);
+                }
+                catch
+                {
+                    MessageBox.Show(I18N.EditorNoExampleForThisSection);
+                }
             };
         }
 
-        void UpdateExamplesDescription(ComboBox cboxExamples)
+        void UpdateCboxExampleItems()
         {
-            cboxExamples.Items.Clear();
+            List<string> descriptions = GetExampleItemList();
+            cboxExample.Items.Clear();
 
-            cboxExamples.Items.Add(I18N.AvailableExamples);
-            var descriptions = GetExamplesDescription();
+            cboxExample.Items.Add(I18N.AvailableExamples);
             if (descriptions.Count < 1)
             {
-                cboxExamples.Enabled = false;
+                cboxExample.Enabled = false;
+                return;
             }
-            else
+
+            cboxExample.Enabled = true;
+            foreach (var description in descriptions)
             {
-                int maxWidth = 0, temp = 0;
-                var font = cboxExamples.Font;
-                cboxExamples.Enabled = true;
-                foreach (var description in descriptions)
-                {
-                    cboxExamples.Items.Add(description);
-                    temp = TextRenderer.MeasureText(description, font).Width;
-                    if (temp > maxWidth)
-                    {
-                        maxWidth = temp;
-                    }
-                }
-                cboxExamples.DropDownWidth = Math.Max(
-                    cboxExamples.Width,
-                    maxWidth + SystemInformation.VerticalScrollBarWidth);
+                cboxExample.Items.Add(description);
             }
-            cboxExamples.SelectedIndex = 0;
+            Lib.UI.ResetComboBoxDropdownMenuWidth(cboxExample);
+            cboxExample.SelectedIndex = 0;
         }
 
         string LoadInOutBoundExample(string[] example, bool isInbound)
@@ -239,52 +290,28 @@ namespace V2RayGCon.Controller.ConfigerComponet
             return tpl.ToString();
         }
 
-
-        void LoadExample(int index)
+        string LoadExample(int index)
         {
-            if (index < 0)
-            {
-                return;
-            }
-
             var example = Model.Data.Table.examples[preSection][index];
-            try
+            switch (preSection)
             {
-                switch (preSection)
-                {
-                    case (int)Model.Data.Enum.Sections.Inbound:
-                        this.content = LoadInOutBoundExample(example, true);
-                        break;
-                    case (int)Model.Data.Enum.Sections.Outbound:
-                        this.content = LoadInOutBoundExample(example, false);
-                        break;
-                    case (int)Model.Data.Enum.Sections.Inbounds:
-                        this.content = string.Format("[{0}]",
-                            LoadInOutBoundExample(example, true));
-                        break;
-                    case (int)Model.Data.Enum.Sections.Outbounds:
-                        this.content = string.Format("[{0}]",
-                            LoadInOutBoundExample(example, false));
-                        break;
-                    default:
-                        this.content = cache.tpl.LoadExample(example[1]).ToString();
-                        break;
-                }
-            }
-            catch
-            {
-                MessageBox.Show(I18N.EditorNoExample);
+                case "inbound":
+                    return LoadInOutBoundExample(example, true);
+                case "outbound":
+                    return LoadInOutBoundExample(example, false);
+                case "inbounds":
+                    return
+                        string.Format("[{0}]", LoadInOutBoundExample(example, true));
+                case "outbounds":
+                    return
+                        string.Format("[{0}]", LoadInOutBoundExample(example, false));
+                default:
+                    return cache.tpl.LoadExample(example[1]).ToString();
             }
         }
 
-        bool OnSectionChanged(int curSection)
+        bool IsSwitchedToNewSection(string curSection)
         {
-            if (curSection == preSection)
-            {
-                // prevent loop infinitely
-                return true;
-            }
-
             if (CheckValid())
             {
                 SaveChanges();
@@ -307,7 +334,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             return true;
         }
 
-        List<string> GetExamplesDescription()
+        List<string> GetExampleItemList()
         {
             var list = new List<string>();
 
@@ -344,31 +371,44 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             var config = container.config;
 
-            JToken section = preSection == 0 ?
-                config as JToken :
-                config[sections[preSection]];
+            if (preSection == ConfigDotJson)
+            {
+                return config.DeepClone();
+            }
 
-            return section.DeepClone();
+            var part = Lib.Utils.GetKey(config, preSection);
+            if (part != null)
+            {
+                return part.DeepClone();
+            }
+            return JToken.Parse(sections[preSection]);
         }
 
         void SaveChanges()
         {
             var content = JToken.Parse(this.content);
 
-            if (preSection == 0)
+            if (preSection == ConfigDotJson)
             {
                 container.config = content as JObject;
+                RefreshSections();
                 return;
             }
 
-            if (preSection >= separator)
+            var config = container.config;
+            var newPart = JToken.Parse(sections[preSection]);
+
+            var part = Lib.Utils.GetKey(config, preSection);
+            if (part != null)
             {
-                container.config[sections[preSection]] = content as JArray;
+                part.Replace(newPart);
             }
             else
             {
-                container.config[sections[preSection]] = content as JObject;
+                var mixin = Lib.Utils.CreateJObject(preSection, newPart);
+                Lib.Utils.MergeJson(ref config, mixin);
             }
+            RefreshSections();
         }
 
         bool CheckValid()

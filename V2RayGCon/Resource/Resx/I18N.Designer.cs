@@ -643,7 +643,7 @@ namespace V2RayGCon.Resource.Resx {
         /// <summary>
         ///   查找类似 No example for this part. 的本地化字符串。
         /// </summary>
-        internal static string EditorNoExample {
+        internal static string EditorNoExampleForThisSection {
             get {
                 return ResourceManager.GetString("EditorNoExample", resourceCulture);
             }

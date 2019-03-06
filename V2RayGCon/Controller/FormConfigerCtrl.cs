@@ -35,7 +35,7 @@ namespace V2RayGCon.Controller
         public void Prepare()
         {
             editor = GetComponent<ConfigerComponet.Editor>();
-            editor.ShowSection();
+            editor.Prepare();
             Update();
         }
 
@@ -173,7 +173,7 @@ namespace V2RayGCon.Controller
         public void LoadServer(string configString)
         {
             editor.DiscardChanges();
-            editor.SelectSection(0);
+            editor.ShowEntireConfig();
             LoadConfig(configString);
             Update();
             editor.ShowSection();

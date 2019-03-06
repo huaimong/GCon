@@ -12,10 +12,11 @@ namespace VgcApis.Models.Consts
 
         public const string ConfigDotJson = "config.json";
 
+        public const int ConfigSectionDepth = 2;
+
         public static Dictionary<string, string> GetDefCfgSections() =>
             new Dictionary<string, string>
             {
-                { "config.json", JsonDict},
                 { "v2raygcon", JsonDict},
                 { "log", JsonDict},
                 { "inbounds", JsonArray},

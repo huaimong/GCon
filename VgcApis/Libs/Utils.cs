@@ -100,7 +100,12 @@ namespace VgcApis.Libs
         public static Dictionary<string, string> GenConfigSections(JObject json)
         {
             var defSections = Models.Consts.Config.GetDefCfgSections();
-            GetterJsonDataStruct(ref defSections, json, 2);
+
+            GetterJsonDataStruct(
+                ref defSections,
+                json,
+                Models.Consts.Config.ConfigSectionDepth);
+
             return defSections;
         }
 
