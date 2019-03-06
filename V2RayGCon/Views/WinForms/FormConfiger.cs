@@ -59,7 +59,6 @@ namespace V2RayGCon.Views.WinForms
             InitToolsPanel();
             this.configer = InitConfiger();
 
-            UpdateServerMenu();
             SetTitle(configer.GetAlias());
             ToggleToolsPanel(isShowPanel);
 
@@ -86,10 +85,13 @@ namespace V2RayGCon.Views.WinForms
                 formSearch?.Close();
                 editor.Click -= OnMouseLeaveToolsPanel;
                 servers.OnRequireMenuUpdate -= MenuUpdateHandler;
+                configer.Cleanup();
                 setting.SaveFormRect(this);
                 toolsPanelController.Dispose();
                 setting.LazyGC();
             };
+
+            configer.UpdateServerMenusLater();
         }
 
         #region UI event handler
@@ -303,7 +305,12 @@ namespace V2RayGCon.Views.WinForms
                 .Plug(new Controller.ConfigerComponet.Quick(
                     btnQConSkipCN,
                     btnQConMTProto,
-                    chkIsV4));
+                    chkIsV4))
+
+                .Plug(new Controller.ConfigerComponet.MenuUpdater(
+                    this,
+                    replaceExistServerToolStripMenuItem,
+                    loadServerToolStripMenuItem));
 
             configer.Prepare();
             return configer;
@@ -359,7 +366,7 @@ namespace V2RayGCon.Views.WinForms
 
         #region private method
 
-        void SetTitle(string name)
+        public void SetTitle(string name)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -368,52 +375,6 @@ namespace V2RayGCon.Views.WinForms
             else
             {
                 this.Text = string.Format("{0} - {1}", formTitle, name);
-            }
-        }
-
-        void UpdateServerMenu()
-        {
-            var menuReplaceServer = replaceExistServerToolStripMenuItem.DropDownItems;
-            var menuLoadServer = loadServerToolStripMenuItem.DropDownItems;
-
-            menuReplaceServer.Clear();
-            menuLoadServer.Clear();
-
-            var serverList = servers.GetAllServersOrderByIndex();
-
-            var enable = serverList.Count > 0;
-            replaceExistServerToolStripMenuItem.Enabled = enable;
-            loadServerToolStripMenuItem.Enabled = enable;
-
-            for (int i = 0; i < serverList.Count; i++)
-            {
-                var name = string.Format(
-                    "{0}.{1}",
-                    i + 1,
-                    serverList[i].GetCoreStates().GetName());
-
-                var org = serverList[i].GetConfiger().GetConfig();
-                menuReplaceServer.Add(new ToolStripMenuItem(name, null, (s, a) =>
-                {
-                    if (Lib.UI.Confirm(I18N.ReplaceServer))
-                    {
-                        if (configer.ReplaceServer(org))
-                        {
-                            SetTitle(configer.GetAlias());
-                        }
-                    }
-                }));
-
-                menuLoadServer.Add(new ToolStripMenuItem(name, null, (s, a) =>
-                {
-                    if (!configer.IsConfigSaved()
-                    && !Lib.UI.Confirm(I18N.ConfirmLoadNewServer))
-                    {
-                        return;
-                    }
-                    configer.LoadServer(org);
-                    SetTitle(configer.GetAlias());
-                }));
             }
         }
 
@@ -453,14 +414,7 @@ namespace V2RayGCon.Views.WinForms
 
         void MenuUpdateHandler(object sender, EventArgs args)
         {
-            try
-            {
-                VgcApis.Libs.UI.RunInUiThread(mainMenu, () =>
-                {
-                    UpdateServerMenu();
-                });
-            }
-            catch { }
+            configer.UpdateServerMenusLater();
         }
 
         void OnMouseEnterToolsPanel(object sender, EventArgs e)

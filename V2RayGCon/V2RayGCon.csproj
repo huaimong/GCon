@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\ConfigerComponent\MenuUpdater.cs" />
     <Compile Include="Controller\CoreServerComponent\Configer.cs" />
     <Compile Include="Controller\CoreServerComponent\CoreCtrl.cs" />
     <Compile Include="Controller\CoreServerComponent\CoreStates.cs" />

@@ -6,25 +6,19 @@ namespace V2RayGCon.Views.WinForms
     public partial class FormOption : Form
     {
         #region Sigleton
-        static FormOption _instant;
-        public static FormOption GetForm()
-        {
-            if (_instant == null || _instant.IsDisposed)
-            {
-                _instant = new FormOption();
-            }
-            return _instant;
-        }
+        static readonly VgcApis.Models.BaseClasses.AuxSiWinForm<FormOption> auxSiForm =
+            new VgcApis.Models.BaseClasses.AuxSiWinForm<FormOption>();
+        static public FormOption GetForm() => auxSiForm.GetForm();
+        static public void ShowForm() => auxSiForm.ShowForm();
         #endregion
 
         Controller.FormOptionCtrl optionCtrl;
 
-        FormOption()
+        public FormOption()
         {
             InitializeComponent();
 
             VgcApis.Libs.UI.AutoSetFormIcon(this);
-            this.Show();
         }
 
         private void FormOption_Shown(object sender, System.EventArgs e)

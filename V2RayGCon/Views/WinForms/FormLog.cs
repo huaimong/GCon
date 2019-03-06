@@ -6,21 +6,16 @@ namespace V2RayGCon.Views.WinForms
     public partial class FormLog : Form
     {
         #region Sigleton
-        static FormLog _instant;
-        public static FormLog GetForm()
-        {
-            if (_instant == null || _instant.IsDisposed)
-            {
-                _instant = new FormLog();
-            }
-            return _instant;
-        }
+        static readonly VgcApis.Models.BaseClasses.AuxSiWinForm<FormLog> auxSiForm =
+            new VgcApis.Models.BaseClasses.AuxSiWinForm<FormLog>();
+        static public FormLog GetForm() => auxSiForm.GetForm();
+        static public void ShowForm() => auxSiForm.ShowForm();
         #endregion
 
         Service.Setting setting;
         VgcApis.Libs.Views.RepaintCtrl repaintCtrl;
 
-        FormLog()
+        public FormLog()
         {
             setting = Service.Setting.Instance;
 
@@ -38,8 +33,6 @@ namespace V2RayGCon.Views.WinForms
 
             Lib.UI.SetFormLocation<FormLog>(this, Model.Data.Enum.FormLocations.BottomLeft);
             VgcApis.Libs.UI.AutoSetFormIcon(this);
-
-            this.Show();
         }
 
         private void ScrollToBottom()

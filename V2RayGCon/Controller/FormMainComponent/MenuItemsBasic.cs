@@ -113,11 +113,11 @@ namespace V2RayGCon.Controller.FormMainComponent
             // menu window
             miFormConfigEditor.Click += (s, a) => new Views.WinForms.FormConfiger();
 
-            miFormQRCode.Click += (s, a) => Views.WinForms.FormQRCode.GetForm();
+            miFormQRCode.Click += (s, a) => Views.WinForms.FormQRCode.ShowForm();
 
-            miFormLog.Click += (s, a) => Views.WinForms.FormLog.GetForm();
+            miFormLog.Click += (s, a) => Views.WinForms.FormLog.ShowForm();
 
-            miFormOptions.Click += (s, a) => Views.WinForms.FormOption.GetForm();
+            miFormOptions.Click += (s, a) => Views.WinForms.FormOption.ShowForm();
         }
 
         private void RemoveV2RayCore()
