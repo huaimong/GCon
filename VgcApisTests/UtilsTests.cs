@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,6 +14,46 @@ namespace VgcApisTests
     [TestClass]
     public class UtilsTests
     {
+        [DataTestMethod]
+        [DataRow(
+            @"{a:[{},{}],b:{}}",
+            @"a:[],b:{},a.0:{},a.1:{}")]
+        [DataRow(
+            @"{a:[[[],[],[]],[[]]],b:{}}",
+            @"a:[],b:{},a.0:[],a.1:[]")]
+        [DataRow(
+            @"{a:[[[],[],[]],[[]]],b:'abc',c:{a:[],b:{d:1}}}",
+            @"a:[],a.0:[],a.1:[],c:{},c.a:[],c.b:{}")]
+        public void GetterJsonDataStructWorkerTest(string jsonString, string expect)
+        {
+            var sections = new Dictionary<string, string>();
+
+            var expDict = expect
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(part => part.Split(
+                    new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries))
+                .ToDictionary(v => v[0], v => v[1]);
+
+            var jtoken = JObject.Parse(jsonString);
+            GetterJsonDataStruct(ref sections, jtoken, 2);
+
+            foreach (var kv in expDict)
+            {
+                if (kv.Value != sections[kv.Key])
+                {
+                    Assert.Fail();
+                }
+            }
+
+            foreach (var kv in sections)
+            {
+                if (kv.Value != expDict[kv.Key])
+                {
+                    Assert.Fail();
+                }
+            }
+        }
+
         [DataTestMethod]
         [DataRow("EvABk文,tv字vvc", "字文", false)]
         [DataRow("EvABk文,tv字vvc", "ab字", true)]

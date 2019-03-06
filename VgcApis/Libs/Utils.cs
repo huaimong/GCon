@@ -43,6 +43,67 @@ namespace VgcApis.Libs
         #endregion
 
         #region Json
+        public static void GetterJsonDataStruct(
+            ref Dictionary<string, string> dataStruct,
+            JToken jtoken,
+            int depth)
+        {
+            GetterJsonDataStructRecursively(
+                ref dataStruct, jtoken, @"", depth);
+        }
+
+        static void GetterJsonDataStructRecursively(
+            ref Dictionary<string, string> sections,
+            JToken jtoken,
+            string root,
+            int depth)
+        {
+            if (depth < 0)
+            {
+                return;
+            }
+
+            switch (jtoken)
+            {
+                case JObject jobject:
+                    if (!string.IsNullOrEmpty(root))
+                    {
+                        sections[root] = Models.Consts.Config.JsonDict;
+                    }
+                    foreach (var prop in jobject.Properties())
+                    {
+                        var key = prop.Name;
+                        var subRoot = string.IsNullOrEmpty(root) ?
+                            $"{key}" : $"{root}.{key}";
+                        GetterJsonDataStructRecursively(ref sections, jobject[key], subRoot, depth - 1);
+                    }
+                    break;
+
+                case JArray jarry:
+                    if (!string.IsNullOrEmpty(root))
+                    {
+                        sections[root] = Models.Consts.Config.JsonArray;
+                    }
+                    for (int i = 0; i < jarry.Count(); i++)
+                    {
+                        var key = i;
+                        var subRoot = string.IsNullOrEmpty(root) ?
+                            $"{key}" : $"{root}.{key}";
+                        GetterJsonDataStructRecursively(ref sections, jarry[key], subRoot, depth - 1);
+                    }
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        public static Dictionary<string, string> GenConfigSections(JObject json)
+        {
+            var defSections = Models.Consts.Config.GetDefCfgSections();
+            GetterJsonDataStruct(ref defSections, json, 2);
+            return defSections;
+        }
+
         public static bool TryParseJObject(
            string jsonString, out JObject json)
         {
@@ -157,7 +218,7 @@ namespace VgcApis.Libs
         public static bool PartialMatchCi(string source, string partial) =>
             PartialMatch(source.ToLower(), partial.ToLower());
 
-        public static bool PartialMatch(string source,string partial)
+        public static bool PartialMatch(string source, string partial)
         {
             var s = source;
             var p = partial;
