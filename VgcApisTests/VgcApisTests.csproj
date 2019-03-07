@@ -56,6 +56,10 @@
   <ItemGroup>
     <Compile Include="BitStreamTests.cs" />
     <Compile Include="Crc8Tests.cs" />
+    <Compile Include="IPlugableTests\CompLv2.cs" />
+    <Compile Include="IPlugableTests\CompLv1.cs" />
+    <Compile Include="IPlugableTests\Container.cs" />
+    <Compile Include="IPlugableTests\IPlugableTests.cs" />
     <Compile Include="RawBitStreamTests.cs" />
     <Compile Include="UtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
