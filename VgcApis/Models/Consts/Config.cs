@@ -8,26 +8,34 @@ namespace VgcApis.Models.Consts
         public const string ProtocolNameSs = @"shadowsocks";
 
         public const string JsonArray = @"[]";
-        public const string JsonDict = @"{}";
+        public const string JsonObject = @"{}";
 
         public const string ConfigDotJson = "config.json";
 
-        public const int ConfigSectionDepth = 2;
+        public const int ConfigSectionDefDepth = 2;
+
+        public const string ConfigSectionDefRootKey = @"ROOT";
+
+        public static Dictionary<string, int> ConfigSectionDefSetting = new Dictionary<string, int>
+        {
+            { $"{ConfigSectionDefRootKey}.routing", 2 },
+            { $"{ConfigSectionDefRootKey}.routing.settings", 2 },
+        };
 
         public static Dictionary<string, string> GetDefCfgSections() =>
             new Dictionary<string, string>
             {
-                { "v2raygcon", JsonDict},
-                { "log", JsonDict},
+                { "v2raygcon", JsonObject},
+                { "log", JsonObject},
                 { "inbounds", JsonArray},
                 { "outbounds", JsonArray},
-                { "routing", JsonDict},
-                { "policy", JsonDict},
-                { "api", JsonDict},
-                { "dns", JsonDict},
-                { "stats", JsonDict},
-                { "transport", JsonDict},
-                { "reverse", JsonDict},
+                { "routing", JsonObject},
+                { "policy", JsonObject},
+                { "api", JsonObject},
+                { "dns", JsonObject},
+                { "stats", JsonObject},
+                { "transport", JsonObject},
+                { "reverse", JsonObject},
             };
     }
 }

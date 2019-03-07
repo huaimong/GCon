@@ -16,6 +16,12 @@ namespace VgcApisTests
     {
         [DataTestMethod]
         [DataRow(
+            @"{routing:{settings:{rules:[{},{}]},balancers:[{},{}],rules:[{},{}]}}",
+            @"routing:{},routing.settings:{},routing.settings.rules:[],routing.settings.rules.0:{},routing.settings.rules.1:{},routing.balancers:[],routing.balancers.0:{},routing.balancers.1:{},routing.rules:[],routing.rules.0:{},routing.rules.1:{}")]
+        [DataRow(
+            @"{1:[[],[]],'':{},b:123,c:{}}",
+            @"c:{}")]
+        [DataRow(
             @"{a:[{},{}],b:{}}",
             @"a:[],b:{},a.0:{},a.1:{}")]
         [DataRow(
@@ -26,16 +32,14 @@ namespace VgcApisTests
             @"a:[],a.0:[],a.1:[],c:{},c.a:[],c.b:{}")]
         public void GetterJsonDataStructWorkerTest(string jsonString, string expect)
         {
-            var sections = new Dictionary<string, string>();
-
             var expDict = expect
                 .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(part => part.Split(
                     new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries))
                 .ToDictionary(v => v[0], v => v[1]);
 
-            var jtoken = JObject.Parse(jsonString);
-            GetterJsonDataStruct(ref sections, jtoken, 2);
+            var jobject = JObject.Parse(jsonString);
+            var sections = GetterJsonSections(jobject);
 
             foreach (var kv in expDict)
             {

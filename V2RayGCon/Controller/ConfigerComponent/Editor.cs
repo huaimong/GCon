@@ -200,7 +200,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
             var defSections = VgcApis.Models.Consts.Config.GetDefCfgSections();
 
             VgcApis.Libs.Utils
-                .GetterConfigSections(config)
+                .GetterJsonSections(config)
                 .Where(kv => IsJsonCollection(Lib.Utils.GetKey(config, kv.Key)))
                 .ToList()
                 .ForEach(kv => defSections[kv.Key] = kv.Value);

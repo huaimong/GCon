@@ -43,71 +43,87 @@ namespace VgcApis.Libs
         #endregion
 
         #region Json
-        public static void GetterJsonDataStruct(
-            ref Dictionary<string, string> dataStruct,
-            JToken jtoken,
-            int depth)
+        public static Dictionary<string, string> GetterJsonSections(
+            JToken jtoken)
         {
+            var rootKey = Models.Consts.Config.ConfigSectionDefRootKey;
+            var defDepth = Models.Consts.Config.ConfigSectionDefDepth;
+            var setting = Models.Consts.Config.ConfigSectionDefSetting;
+
+            var ds = new Dictionary<string, string>();
+
             GetterJsonDataStructRecursively(
-                ref dataStruct, jtoken, @"", depth);
+                ref ds, jtoken, rootKey, defDepth, setting);
+
+            ds.Remove(rootKey);
+
+            int index = rootKey.Length + 1;
+            return ds
+                .Select(kv => new KeyValuePair<string, string>(kv.Key.Substring(index), kv.Value))
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+        }
+
+        static bool IsValidJobjectKey(string key)
+        {
+            if (string.IsNullOrEmpty(key)
+                || int.TryParse(key, out int blackhole))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         static void GetterJsonDataStructRecursively(
             ref Dictionary<string, string> sections,
             JToken jtoken,
             string root,
-            int depth)
+            int depth,
+            Dictionary<string, int> setting)
         {
             if (depth < 0)
             {
                 return;
             }
 
+            if (setting.ContainsKey(root))
+            {
+                depth = setting[root];
+            }
+
             switch (jtoken)
             {
                 case JObject jobject:
-                    if (!string.IsNullOrEmpty(root))
-                    {
-                        sections[root] = Models.Consts.Config.JsonDict;
-                    }
+                    sections[root] = Models.Consts.Config.JsonObject;
                     foreach (var prop in jobject.Properties())
                     {
                         var key = prop.Name;
-                        var subRoot = string.IsNullOrEmpty(root) ?
-                            $"{key}" : $"{root}.{key}";
-                        GetterJsonDataStructRecursively(ref sections, jobject[key], subRoot, depth - 1);
+                        if (!IsValidJobjectKey(key))
+                        {
+                            continue;
+                        }
+                        var subRoot = $"{root}.{key}";
+                        GetterJsonDataStructRecursively(
+                           ref sections, jobject[key], subRoot, depth - 1, setting);
                     }
                     break;
 
                 case JArray jarry:
-                    if (!string.IsNullOrEmpty(root))
-                    {
-                        sections[root] = Models.Consts.Config.JsonArray;
-                    }
+                    sections[root] = Models.Consts.Config.JsonArray;
                     for (int i = 0; i < jarry.Count(); i++)
                     {
                         var key = i;
-                        var subRoot = string.IsNullOrEmpty(root) ?
-                            $"{key}" : $"{root}.{key}";
-                        GetterJsonDataStructRecursively(ref sections, jarry[key], subRoot, depth - 1);
+                        var subRoot = $"{root}.{key}";
+                        GetterJsonDataStructRecursively(
+                            ref sections, jarry[key], subRoot, depth - 1, setting);
                     }
                     break;
                 default:
-                    return;
+                    break;
             }
         }
 
-        public static Dictionary<string, string> GetterConfigSections(JObject json)
-        {
-            var dict = new Dictionary<string, string>();
 
-            GetterJsonDataStruct(
-                ref dict,
-                json,
-                Models.Consts.Config.ConfigSectionDepth);
-
-            return dict;
-        }
 
         public static bool TryParseJObject(
            string jsonString, out JObject json)
