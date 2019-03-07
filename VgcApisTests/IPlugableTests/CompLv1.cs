@@ -12,7 +12,6 @@ namespace VgcApisTests.IPlugableTests
         protected override void Cleanup()
         {
             Debug.WriteLine("Comp lv1 disposed.");
-            base.Cleanup();
         }
     }
 }

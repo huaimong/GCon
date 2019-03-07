@@ -5,30 +5,25 @@ using VgcApis.Models.Interfaces;
 namespace VgcApis.Models.BaseClasses
 {
     public class PlugableComponent<TContainer> :
-        Disposable,
         IPlugable<TContainer>
         where TContainer : class
     {
-        object container;
-        List<object> components;
+        TContainer container;
+        List<IDisposable> components;
 
         public PlugableComponent()
         {
-            components = new List<object>();
+            components = new List<IDisposable>();
             container = null;
         }
 
-        public virtual TContainer GetContainer() => container as TContainer;
+        #region public methods
+        public virtual void Prepare() { }
 
-        public virtual void Bind(TContainer container)
-        {
-            this.container = container;
-        }
+        public virtual TContainer GetContainer() => container;
 
         public IReadOnlyCollection<object> GetAllComponents() =>
             components.AsReadOnly();
-
-        public virtual void Prepare() { }
 
         public TComponent GetComponent<TComponent>()
             where TComponent : class
@@ -41,6 +36,11 @@ namespace VgcApis.Models.BaseClasses
                 }
             }
             return null;
+        }
+
+        public virtual void Bind(TContainer container)
+        {
+            this.container = container;
         }
 
         public void Plug<TSelf, TComponent>(TSelf container, TComponent component)
@@ -60,13 +60,58 @@ namespace VgcApis.Models.BaseClasses
             component.Bind(container);
         }
 
-        protected override void Cleanup()
+        #endregion
+
+        #region protected methods
+        protected virtual void BeforeCleanup() { }
+        protected virtual void Cleanup() { }
+        #endregion
+
+        #region private methods
+        private void DisposeAllComponents()
         {
             foreach (var obj in components)
             {
                 (obj as IDisposable).Dispose();
             }
-            base.Cleanup();
         }
+        #endregion
+
+        #region IDisposable Support
+        private bool disposedValue = false; // 要检测冗余调用
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    BeforeCleanup();
+                    DisposeAllComponents();
+                    Cleanup();
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
+                // TODO: 将大型字段设置为 null。
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
+        // ~Disposable() {
+        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+        //   Dispose(false);
+        // }
+
+        // 添加此代码以正确实现可处置模式。
+        public void Dispose()
+        {
+            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+            Dispose(true);
+            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }
