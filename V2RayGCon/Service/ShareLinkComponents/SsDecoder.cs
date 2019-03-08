@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     internal sealed class SsDecoder :
-        VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
+        VgcApis.Models.BaseClasses.Plugable<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         Cache cache;

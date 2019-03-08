@@ -5,7 +5,7 @@ using System.Linq;
 namespace V2RayGCon.Service.ShareLinkComponents.VeeCodecs
 {
     internal sealed class Vee0a :
-        VgcApis.Models.BaseClasses.ComponentOf<VeeCodecs>,
+        VgcApis.Models.BaseClasses.Plugable<VeeDecoder>,
         IVeeDecoder
     {
         Cache cache;

@@ -191,7 +191,6 @@
     <Compile Include="Service\ShareLinkComponents\Codecs.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeCodecs\IVeeDecoder.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeCodecs\Vee1a.cs" />
-    <Compile Include="Service\ShareLinkComponents\VeeCodecs\VeeCodecs.cs" />
     <Compile Include="Model\VeeShareLinks\Ver0a.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeCodecs\Vee0a.cs" />
     <Compile Include="Service\ShareLinkComponents\VeeDecoder.cs" />

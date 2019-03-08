@@ -4,14 +4,14 @@ using VgcApis.Models.Interfaces;
 
 namespace VgcApis.Models.BaseClasses
 {
-    public class PlugableComponent<TContainer> :
+    public class Plugable<TContainer> :
         IPlugable<TContainer>
         where TContainer : class
     {
         TContainer container;
         List<IDisposable> components;
 
-        public PlugableComponent()
+        public Plugable()
         {
             components = new List<IDisposable>();
             container = null;
@@ -47,6 +47,19 @@ namespace VgcApis.Models.BaseClasses
             where TSelf : class, IPlugable<TContainer>
             where TComponent : class, IPlugable<TSelf>
         {
+            /*
+             * proxy func:
+             *   void Plug<TComponent>(TComponent component)=>
+             *      Plug(this,component);
+             *      
+             * DO NOT:
+             *   void Plug(InterfaceType component) =>
+             *      Plug(this,component);
+             *      
+             * Because component maybe can not convert to "InterfaceType".
+             * If that happens, this function will throw an exception.
+             */
+
             foreach (var item in components)
             {
                 if (item is TComponent)

@@ -3,7 +3,7 @@
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     public sealed class Codecs :
-        VgcApis.Models.BaseClasses.ContainerOf<Codecs>
+        VgcApis.Models.BaseClasses.Plugable<Codecs>
     {
         Setting setting;
         Cache cache;
@@ -13,7 +13,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #region public methods
         public string Encode<TDecoder>(string config)
             where TDecoder :
-                VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
+                VgcApis.Models.BaseClasses.Plugable<Codecs>,
                 VgcApis.Models.Interfaces.IShareLinkDecoder
         => GetComponent<TDecoder>()?.Encode(config);
 
@@ -29,7 +29,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
 
         public string Decode<TDecoder>(string shareLink)
             where TDecoder :
-                VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
+                VgcApis.Models.BaseClasses.Plugable<Codecs>,
                 VgcApis.Models.Interfaces.IShareLinkDecoder
         {
             var tuple = GetComponent<TDecoder>()?.Decode(shareLink);
@@ -48,10 +48,12 @@ namespace V2RayGCon.Service.ShareLinkComponents
             var vmessDecoder = new VmessDecoder(cache);
             var veeDecoder = new VeeDecoder(cache, setting);
 
-            Plug(ssDecoder);
-            Plug(v2cfgDecoder);
-            Plug(vmessDecoder);
-            Plug(veeDecoder);
+            veeDecoder.Prepare();
+
+            Plug(this,ssDecoder);
+            Plug(this,v2cfgDecoder);
+            Plug(this,vmessDecoder);
+            Plug(this,veeDecoder);
         }
         #endregion
 
@@ -89,9 +91,6 @@ namespace V2RayGCon.Service.ShareLinkComponents
             Lib.Utils.MergeJson(ref template, outb);
             return Lib.Utils.Config2String(template as JObject);
         }
-
-        void Plug(VgcApis.Models.Interfaces.IComponent<Codecs> component)
-            => Plug(this, component);
         #endregion
     }
 }
