@@ -111,7 +111,7 @@ namespace V2RayGCon.Controller.CoreServerComponent
             coreStates.SetStatus(I18N.Testing);
             logger.Log(I18N.Testing);
 
-            var delay = configMgr.SpeedTestWorker(
+            var delay = configMgr.RunSpeedTest(
                 rawConfig,
                 coreStates.GetTitle(),
                 true,

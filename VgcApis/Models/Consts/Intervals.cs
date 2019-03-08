@@ -2,6 +2,9 @@
 {
     static public class Intervals
     {
+        public const int GetCoreTokenIntervalSlow = 97;
+        public const int GetCoreTokenIntervalFast = 37;
+
         // Service.Setting 
         public const int LazyGCDelay = 180 * 1000;
         public const int LazySaveUserSettingsDelay = 30 * 1000;

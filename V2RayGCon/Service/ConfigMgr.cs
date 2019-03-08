@@ -19,9 +19,9 @@ namespace V2RayGCon.Service
 
         #region public methods
         public long RunSpeedTest(string rawConfig) =>
-           SpeedTestWorker(rawConfig, "testing", false, false, false, null);
+           RunSpeedTest(rawConfig, "testing", false, false, false, null);
 
-        public long SpeedTestWorker(
+        public long RunSpeedTest(
             string rawConfig,
             string title,
             bool isUseCache,
@@ -39,7 +39,7 @@ namespace V2RayGCon.Service
                 return long.MaxValue;
             }
 
-            return DoSpeedTest(
+            return RunSpeedTestWorker(
                 speedTestConfig,
                 title,
                 VgcApis.Models.Consts.Webs.GoogleDotCom,
@@ -358,7 +358,7 @@ namespace V2RayGCon.Service
             return ParseImport(imports.ToString());
         }
 
-        long DoSpeedTest(
+        long RunSpeedTestWorker(
             string speedTestableConfig,
             string title,
             string testUrl,
@@ -374,9 +374,29 @@ namespace V2RayGCon.Service
             {
                 speedTester.OnLog += logDeliever;
             }
-            speedTester.RestartCore(speedTestableConfig);
+
+            speedTester.WaitForToken();
+            try
+            {
+                speedTester.RestartCore(speedTestableConfig);
+            }
+            finally
+            {
+                speedTester.ReleaseToken();
+            }
+
             long testResult = Lib.Utils.VisitWebPageSpeedTest(testUrl, testPort);
-            speedTester.StopCore();
+
+            speedTester.WaitForTokenHurry();
+            try
+            {
+                speedTester.StopCore();
+            }
+            finally
+            {
+                speedTester.ReleaseToken();
+            }
+
             if (logDeliever != null)
             {
                 speedTester.OnLog -= logDeliever;
