@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace VgcApis.Models.Interfaces
 {
     // has container
-    public interface IPlugable<TContainer> :
+    public interface IComponentOf<TContainer> :
         IDisposable
         where TContainer : class
     {
@@ -22,8 +22,8 @@ namespace VgcApis.Models.Interfaces
 
 
         void Plug<TSelf, TComponent>(TSelf container, TComponent component)
-            where TSelf : class, IPlugable<TContainer>
-            where TComponent : class, IPlugable<TSelf>;
+            where TSelf : class, IComponentOf<TContainer>
+            where TComponent : class, IComponentOf<TSelf>;
 
     }
 

@@ -3,7 +3,7 @@
 namespace VgcApisTests.IPlugableTests
 {
     public class Container :
-        VgcApis.Models.BaseClasses.Plugable<Container>
+        VgcApis.Models.BaseClasses.ComponentOf<Container>
     {
         public Container() { }
 

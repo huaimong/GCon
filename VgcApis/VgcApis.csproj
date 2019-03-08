@@ -73,12 +73,10 @@
     <Compile Include="Libs\Tasks\Bar.cs" />
     <Compile Include="Libs\Tasks\Routine.cs" />
     <Compile Include="Libs\Views\RepaintCtrl.cs" />
-    <Compile Include="Models\BaseClasses\ComponentOf.cs" />
-    <Compile Include="Models\BaseClasses\ContainerOf.cs" />
     <Compile Include="Models\BaseClasses\Disposable.cs" />
     <Compile Include="Models\BaseClasses\AuxSiWinForm.cs" />
     <Compile Include="Libs\Sys\QueueLogger.cs" />
-    <Compile Include="Models\BaseClasses\Plugable.cs" />
+    <Compile Include="Models\BaseClasses\ComponentOf.cs" />
     <Compile Include="Models\Consts\BitStream.cs" />
     <Compile Include="Models\Consts\Config.cs" />
     <Compile Include="Models\Consts\Core.cs" />
@@ -95,10 +93,8 @@
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ICoreCtrl.cs" />
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ILogger.cs" />
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ICoreStates.cs" />
-    <Compile Include="Models\Interfaces\IComponent.cs" />
-    <Compile Include="Models\Interfaces\IContainer.cs" />
     <Compile Include="Models\Interfaces\ILuaApis.cs" />
-    <Compile Include="Models\Interfaces\IPlugable.cs" />
+    <Compile Include="Models\Interfaces\IComponentOf.cs" />
     <Compile Include="Models\Interfaces\IShareLinkDecoder.cs" />
     <Compile Include="Models\IServices\IApiServices.cs" />
     <Compile Include="Models\Interfaces\IPlugin.cs" />

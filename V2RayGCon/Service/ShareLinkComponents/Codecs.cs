@@ -3,7 +3,7 @@
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     public sealed class Codecs :
-        VgcApis.Models.BaseClasses.Plugable<Codecs>
+        VgcApis.Models.BaseClasses.ComponentOf<Codecs>
     {
         Setting setting;
         Cache cache;
@@ -13,7 +13,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #region public methods
         public string Encode<TDecoder>(string config)
             where TDecoder :
-                VgcApis.Models.BaseClasses.Plugable<Codecs>,
+                VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
                 VgcApis.Models.Interfaces.IShareLinkDecoder
         => GetComponent<TDecoder>()?.Encode(config);
 
@@ -29,7 +29,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
 
         public string Decode<TDecoder>(string shareLink)
             where TDecoder :
-                VgcApis.Models.BaseClasses.Plugable<Codecs>,
+                VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
                 VgcApis.Models.Interfaces.IShareLinkDecoder
         {
             var tuple = GetComponent<TDecoder>()?.Decode(shareLink);

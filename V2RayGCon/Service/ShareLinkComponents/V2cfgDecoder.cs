@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     internal sealed class V2cfgDecoder :
-        VgcApis.Models.BaseClasses.Plugable<Codecs>,
+        VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         public V2cfgDecoder() { }

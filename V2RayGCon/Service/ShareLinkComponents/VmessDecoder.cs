@@ -6,7 +6,7 @@ using System.Linq;
 namespace V2RayGCon.Service.ShareLinkComponents
 {
     internal sealed class VmessDecoder :
-        VgcApis.Models.BaseClasses.Plugable<Codecs>,
+        VgcApis.Models.BaseClasses.ComponentOf<Codecs>,
         VgcApis.Models.Interfaces.IShareLinkDecoder
     {
         Cache cache;

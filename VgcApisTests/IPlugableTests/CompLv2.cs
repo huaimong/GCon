@@ -3,7 +3,7 @@
 namespace VgcApisTests.IPlugableTests
 {
     public class CompLv2 :
-        VgcApis.Models.BaseClasses.Plugable<CompLv1>
+        VgcApis.Models.BaseClasses.ComponentOf<CompLv1>
     {
         public CompLv2() { }
 
