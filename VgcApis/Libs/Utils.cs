@@ -15,6 +15,7 @@ namespace VgcApis.Libs
 {
     public static class Utils
     {
+
         #region net
         static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
         static readonly object getFreeTcpPortLocker = new object();
@@ -236,11 +237,51 @@ namespace VgcApis.Libs
 
         #region string processor
 
+
+        public static string GetFragment(string text, string searchPattern)
+        {
+            if (string.IsNullOrEmpty(text)
+                || string.IsNullOrEmpty(searchPattern))
+            {
+                return @"";
+            }
+
+            var regex = new Regex(searchPattern);
+            int i = text.Length - 1;
+            while (i >= 0)
+            {
+                if (!regex.IsMatch(text[i].ToString()))
+                {
+                    return text.Substring(i + 1);
+                }
+                i--;
+            }
+            return text;
+        }
+
         public static bool PartialMatchCi(string source, string partial) =>
             PartialMatch(source.ToLower(), partial.ToLower());
 
-        public static bool PartialMatch(string source, string partial)
+        public static bool PartialMatch(string source, string partial) =>
+            MeasureSimilarity(source, partial) > 0;
+
+        /// <summary>
+        /// -1: not match 1: equal >=2: the smaller the value, the more similar
+        /// </summary>
+        public static int MeasureSimilarity(string source, string partial)
         {
+            if (string.IsNullOrEmpty(partial))
+            {
+                return 1;
+            }
+
+            if (string.IsNullOrEmpty(source))
+            {
+                return -1;
+            }
+
+            int marks = 1;
+
             var s = source;
             var p = partial;
 
@@ -251,9 +292,19 @@ namespace VgcApis.Libs
                 {
                     idxP++;
                 }
+                else
+                {
+                    marks += idxP + 1;
+                }
                 idxS++;
             }
-            return idxP == p.Length;
+
+            if (idxP != p.Length)
+            {
+                return -1;
+            }
+
+            return marks;
         }
 
         public static string GetLinkPrefix(string shareLink)

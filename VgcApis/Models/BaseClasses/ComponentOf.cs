@@ -8,7 +8,7 @@ namespace VgcApis.Models.BaseClasses
         IComponentOf<TContainer>
         where TContainer : class
     {
-        TContainer container;
+        readonly object componentLocker = new object();
         List<IDisposable> components;
 
         public ComponentOf()
@@ -17,30 +17,62 @@ namespace VgcApis.Models.BaseClasses
             container = null;
         }
 
+        #region properties
+        TContainer _container = null;
+        public TContainer container
+        {
+            get => _container;
+            set
+            {
+                if (_container != null)
+                {
+                    throw new ArgumentException(
+                        @"Can not reassign container!");
+                }
+
+                lock (componentLocker)
+                {
+                    _container = value;
+                }
+            }
+        }
+        #endregion
+
         #region public methods
         public virtual void Prepare() { }
 
-        public virtual TContainer GetContainer() => container;
+        public TContainer GetContainer() => container;
 
-        public IReadOnlyCollection<object> GetAllComponents() =>
-            components.AsReadOnly();
+        public IReadOnlyCollection<object> GetAllComponents()
+        {
+            lock (componentLocker)
+            {
+                return components.AsReadOnly();
+            }
+        }
 
         public TComponent GetComponent<TComponent>()
             where TComponent : class
         {
-            foreach (var component in components)
+            lock (componentLocker)
             {
-                if (component is TComponent)
+                foreach (var component in components)
                 {
-                    return component as TComponent;
+                    if (component is TComponent)
+                    {
+                        return component as TComponent;
+                    }
                 }
             }
             return null;
         }
 
-        public virtual void Bind(TContainer container)
+        public virtual void BindTo(TContainer container)
         {
-            this.container = container;
+            lock (componentLocker)
+            {
+                this.container = container;
+            }
         }
 
         public void Plug<TSelf, TComponent>(TSelf container, TComponent component)
@@ -60,32 +92,33 @@ namespace VgcApis.Models.BaseClasses
              * If that happens, this function will throw an exception.
              */
 
-            foreach (var item in components)
+            lock (componentLocker)
             {
-                if (item is TComponent)
+                var comp = GetComponent<TComponent>();
+                if (comp != null)
                 {
                     throw new ArgumentException(
-                        $"Component type {component.GetType().FullName} already existed!");
+                       $"Component type {component.GetType().FullName} already existed!");
                 }
-            }
 
-            components.Add(component);
-            component.Bind(container);
+                component.BindTo(container);
+                components.Add(component);
+            }
         }
 
         #endregion
 
         #region protected methods
-        protected virtual void BeforeCleanup() { }
-        protected virtual void Cleanup() { }
+        protected virtual void BeforeComponentsDispose() { }
+        protected virtual void AfterComponentsDisposed() { }
         #endregion
 
         #region private methods
-        private void DisposeAllComponents()
+        private void DisposeAllComponentsInReverseOrder()
         {
-            foreach (var obj in components)
+            for (int i = components.Count - 1; i >= 0; i--)
             {
-                (obj as IDisposable).Dispose();
+                (components[i] as IDisposable).Dispose();
             }
         }
         #endregion
@@ -99,9 +132,9 @@ namespace VgcApis.Models.BaseClasses
             {
                 if (disposing)
                 {
-                    BeforeCleanup();
-                    DisposeAllComponents();
-                    Cleanup();
+                    BeforeComponentsDispose();
+                    DisposeAllComponentsInReverseOrder();
+                    AfterComponentsDisposed();
                 }
 
                 // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。

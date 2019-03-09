@@ -106,7 +106,7 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region protected methods
-        protected override void BeforeCleanup()
+        protected override void BeforeComponentsDispose()
         {
             InvokeEventOnCoreClosing();
             coreCtrl?.StopCore();

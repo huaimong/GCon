@@ -15,6 +15,31 @@ namespace VgcApisTests
     public class UtilsTests
     {
         [DataTestMethod]
+        [DataRow(@"abc", @"ac", 1)]
+        //[DataRow(@"", @"", 1)]
+        //[DataRow(@"abc", @"", 1)]
+        //[DataRow(@"abc", @"abc", 1)]
+        public void PartialMatchCounterTest(
+            string source, string partial, int expect)
+        {
+            var result = MeasureSimilarity(source, partial);
+            Assert.AreEqual(expect, result);
+        }
+
+        [DataTestMethod]
+        [DataRow(@"-", @"-")]
+        [DataRow(@"daaef  -a:b.c0_1", @"-a:b.c0_1")]
+        [DataRow(@"  abc", @"abc")]
+        // [DataRow(@" ", @"")]
+        [DataRow(@"  abc   ", @"")]
+        public void GetFragmentTest(string text, string expect)
+        {
+            const string searchPattern = @"[:._\-\\\*\$\w]";
+            var fragment = GetFragment(text, searchPattern);
+            Assert.AreEqual(expect, fragment);
+        }
+
+        [DataTestMethod]
         [DataRow(
             @"{routing:{settings:{rules:[{},{}]},balancers:[{},{}],rules:[{},{}]}}",
             @"routing:{},routing.settings:{},routing.settings.rules:[],routing.settings.rules.0:{},routing.settings.rules.1:{},routing.balancers:[],routing.balancers.0:{},routing.balancers.1:{},routing.rules:[],routing.rules.0:{},routing.rules.1:{}")]

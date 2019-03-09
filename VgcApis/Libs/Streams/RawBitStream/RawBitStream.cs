@@ -14,7 +14,6 @@ namespace VgcApis.Libs.Streams.RawBitStream
         {
             var numbers = new Numbers();
             var bytes = new Bytes();
-
             var uuids = new Uuids();
             var address = new Address();
 

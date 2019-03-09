@@ -11,7 +11,7 @@ namespace VgcApis.Models.Interfaces
 
         TContainer GetContainer();
 
-        void Bind(TContainer container);
+        void BindTo(TContainer container);
 
         IReadOnlyCollection<object> GetAllComponents();
 

@@ -212,6 +212,17 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似  wsSettings
+        /// v2raygcon
+        /// 的本地化字符串。
+        /// </summary>
+        internal static string ConfigJsonKeywords {
+            get {
+                return ResourceManager.GetString("ConfigJsonKeywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 v3.26 的本地化字符串。
         /// </summary>
         internal static string DefCoreVersion {

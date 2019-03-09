@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\Caches\JsonAcm.cs" />
     <Compile Include="Controller\ConfigerComponent\MenuUpdater.cs" />
     <Compile Include="Controller\CoreServerComponent\Configer.cs" />
     <Compile Include="Controller\CoreServerComponent\CoreCtrl.cs" />
@@ -183,6 +184,8 @@
     <Compile Include="Model\Data\ImportItem.cs" />
     <Compile Include="Model\VeeShareLinks\Utils.cs" />
     <Compile Include="Model\VeeShareLinks\Ver1a.cs" />
+    <Compile Include="Service\Caches\JsonBestMatchItems.cs" />
+    <Compile Include="Service\Caches\JsonKeywordItems.cs" />
     <Compile Include="Service\ConfigMgr.cs" />
     <Compile Include="Service\Launcher.cs" />
     <Compile Include="Service\PluginsServer.cs" />
@@ -459,6 +462,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon_dark.ico" />
+    <Content Include="Resource\Files\ConfigJsonKeywords.txt" />
     <None Include="Resource\Icon\TaskTray\Module_16x.png" />
     <None Include="Resource\Icon\ServerUI\StepOverArrow_16x.png" />
     <None Include="Resource\Icon\ServerUI\StepBackArrow_16x.png" />
@@ -487,7 +491,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resource\Files\" />
     <Folder Include="Resource\Icon\FormMainToolStrip\" />
   </ItemGroup>
   <ItemGroup>
