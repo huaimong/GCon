@@ -236,39 +236,19 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
-
-
-        public static string GetFragment(string text, string searchPattern)
-        {
-            if (string.IsNullOrEmpty(text)
-                || string.IsNullOrEmpty(searchPattern))
-            {
-                return @"";
-            }
-
-            var regex = new Regex(searchPattern);
-            int i = text.Length - 1;
-            while (i >= 0)
-            {
-                if (!regex.IsMatch(text[i].ToString()))
-                {
-                    return text.Substring(i + 1);
-                }
-                i--;
-            }
-            return text;
-        }
-
         public static bool PartialMatchCi(string source, string partial) =>
             PartialMatch(source.ToLower(), partial.ToLower());
 
         public static bool PartialMatch(string source, string partial) =>
             MeasureSimilarity(source, partial) > 0;
 
+        public static long MeasureSimilarityCi(string source, string partial) =>
+            MeasureSimilarity(source.ToLower(), partial.ToLower());
+
         /// <summary>
         /// -1: not match 1: equal >=2: the smaller the value, the more similar
         /// </summary>
-        public static int MeasureSimilarity(string source, string partial)
+        public static long MeasureSimilarity(string source, string partial)
         {
             if (string.IsNullOrEmpty(partial))
             {
@@ -280,13 +260,14 @@ namespace VgcApis.Libs
                 return -1;
             }
 
-            int marks = 1;
+            long marks = 1;
 
             var s = source;
             var p = partial;
 
             int idxS = 0, idxP = 0;
-            while (idxS < s.Length && idxP < p.Length)
+            int lenS = s.Length, lenP = p.Length;
+            while (idxS < lenS && idxP < lenP)
             {
                 if (s[idxS] == p[idxP])
                 {
@@ -294,17 +275,17 @@ namespace VgcApis.Libs
                 }
                 else
                 {
-                    marks += idxP + 1;
+                    marks += lenP - idxP;
                 }
                 idxS++;
             }
 
-            if (idxP != p.Length)
+            if (idxP != lenP)
             {
                 return -1;
             }
 
-            return marks;
+            return marks + lenS - idxS;
         }
 
         public static string GetLinkPrefix(string shareLink)
