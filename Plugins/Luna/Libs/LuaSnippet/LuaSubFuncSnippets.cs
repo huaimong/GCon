@@ -2,7 +2,7 @@
 
 namespace Luna.Libs.LuaSnippet
 {
-    internal sealed class LuaSubFuncSnippets : AutocompleteItem
+    internal sealed class LuaSubFuncSnippets : MatchItemBase
     {
         const string seperator = @".";
 

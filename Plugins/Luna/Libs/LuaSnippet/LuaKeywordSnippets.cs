@@ -2,7 +2,7 @@
 
 namespace Luna.Libs.LuaSnippet
 {
-    internal sealed class LuaKeywordSnippets : AutocompleteItem
+    internal sealed class LuaKeywordSnippets : MatchItemBase
     {
         string lowerText;
 

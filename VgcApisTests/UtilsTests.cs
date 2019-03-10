@@ -16,14 +16,14 @@ namespace VgcApisTests
     {
         [DataTestMethod]
         [DataRow(@"abeec", @"abc", 3)]
-        [DataRow(@"abeecee", @"abc", 5)]
+        [DataRow(@"abeecee", @"abc", 3)]
         [DataRow(@"eabec", @"abc", 5)]
         [DataRow(@"aeebc", @"abc", 5)]
         [DataRow(@"eeabc", @"abc", 7)]
         [DataRow(@"", @"", 1)]
         [DataRow(@"abc", @"", 1)]
         [DataRow(@"abc", @"abc", 1)]
-        public void PartialMatchCounterTest(
+        public void MeasureSimilarityTest(
             string source, string partial, long expect)
         {
             var result = MeasureSimilarity(source, partial);

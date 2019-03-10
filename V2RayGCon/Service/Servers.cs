@@ -323,6 +323,7 @@ namespace V2RayGCon.Service
                     .Select(s => s.GetCoreStates().GetMark())
                     .Distinct()
                     .Where(s => !string.IsNullOrEmpty(s))
+                    .OrderBy(s => s)
                     .ToList();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ScintillaNET;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -236,6 +237,61 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
+        public static string GetFragment(
+            Scintilla editor,
+            string searchPattern)
+        {
+            // https://github.com/Ahmad45123/AutoCompleteMenu-ScintillaNET
+
+            var selectedText = editor.SelectedText;
+            if (selectedText.Length > 0)
+            {
+                return selectedText;
+            }
+
+            string text = editor.Text;
+            var regex = new Regex(searchPattern);
+
+            var startPos = editor.CurrentPosition;
+
+            //go forward
+            int i = startPos;
+            while (i >= 0 && i < text.Length)
+            {
+                if (!regex.IsMatch(text[i].ToString()))
+                    break;
+                i++;
+            }
+
+            var endPos = i;
+
+            //go backward
+            i = startPos;
+            while (i > 0 && (i - 1) < text.Length)
+            {
+                if (!regex.IsMatch(text[i - 1].ToString()))
+                    break;
+                i--;
+            }
+            startPos = i;
+
+            return GetSubString(startPos, endPos, text);
+        }
+
+        static string GetSubString(int start, int end, string text)
+        {
+            // https://github.com/Ahmad45123/AutoCompleteMenu-ScintillaNET
+
+            if (string.IsNullOrEmpty(text))
+                return "";
+            if (start >= text.Length)
+                return "";
+            if (end > text.Length)
+                return "";
+
+            return text.Substring(start, end - start);
+        }
+
         public static bool PartialMatchCi(string source, string partial) =>
             PartialMatch(source.ToLower(), partial.ToLower());
 
@@ -285,7 +341,7 @@ namespace VgcApis.Libs
                 return -1;
             }
 
-            return marks + lenS - idxS;
+            return marks;
         }
 
         public static string GetLinkPrefix(string shareLink)

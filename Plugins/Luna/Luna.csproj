@@ -63,6 +63,8 @@
     <Compile Include="Controllers\TabEditorCtrl.cs" />
     <Compile Include="Controllers\LuaCoreCtrl.cs" />
     <Compile Include="Controllers\TabGeneralCtrl.cs" />
+    <Compile Include="Libs\LuaSnippet\BestMatchSnippets.cs" />
+    <Compile Include="Libs\LuaSnippet\MatchItemBase.cs" />
     <Compile Include="Libs\LuaSnippet\LuaKeywordSnippets.cs" />
     <Compile Include="Libs\LuaSnippet\LuaFuncSnippets.cs" />
     <Compile Include="Libs\LuaSnippet\LuaSubFuncSnippets.cs" />
