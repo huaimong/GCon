@@ -440,19 +440,21 @@ namespace V2RayGCon.Controller.ConfigerComponet
 
         string LoadExample(int index)
         {
-            var example = Model.Data.Table.examples[preSection][index];
-            switch (preSection)
+            var keyword = GetExampleKeyword();
+            var example = Model.Data.Table.examples[keyword][index];
+
+            switch (keyword)
             {
                 case "inbound":
                     return LoadInOutBoundExample(example, true);
                 case "outbound":
                     return LoadInOutBoundExample(example, false);
                 case "inbounds":
-                    return
-                        string.Format("[{0}]", LoadInOutBoundExample(example, true));
+                    var inbsCfg = LoadInOutBoundExample(example, true);
+                    return JArray.Parse($"[{inbsCfg}]").ToString();
                 case "outbounds":
-                    return
-                        string.Format("[{0}]", LoadInOutBoundExample(example, false));
+                    var outbsCfg = LoadInOutBoundExample(example, false);
+                    return JArray.Parse($"[{outbsCfg}]").ToString();
                 default:
                     return cache.tpl.LoadExample(example[1]).ToString();
             }
@@ -471,22 +473,33 @@ namespace V2RayGCon.Controller.ConfigerComponet
 
         List<string> GetExampleItemList()
         {
-            var list = new List<string>();
+            string keyword = GetExampleKeyword();
 
             var examples = Model.Data.Table.examples;
+            return
+                examples.ContainsKey(keyword) ?
+                examples[keyword]
+                .Select(item => item[0])  // description
+                .ToList() :
+                new List<string>();
+        }
 
-            if (!examples.ContainsKey(preSection))
+        private string GetExampleKeyword()
+        {
+            var specialCase = new Dictionary<string, string> {
+                { @"inbounds.", @"inbound" },
+                { @"outbounds.", @"outbound" },
+            };
+
+            foreach (var kv in specialCase)
             {
-                return list;
+                if (preSection.StartsWith(kv.Key))
+                {
+                    return kv.Value;
+                }
             }
 
-            foreach (var example in examples[preSection])
-            {
-                // 0.description 1.keyString
-                list.Add(example[0]);
-            }
-
-            return list;
+            return preSection;
         }
 
         void FormatCurrentContent()

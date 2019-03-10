@@ -22,9 +22,8 @@ namespace V2RayGCon.Test
             // and i had no idea what goes wrong.
             // temporary disable these tests.
 
-            return;
-            var exe = core.GetExecutablePath();
-            Assert.AreEqual(false, string.IsNullOrEmpty(exe));
+            // var exe = core.GetExecutablePath();
+            // Assert.AreEqual(false, string.IsNullOrEmpty(exe));
 #endif
 
         }
@@ -34,8 +33,8 @@ namespace V2RayGCon.Test
         {
 #if DEBUG
             return;
-            var exist = core.IsExecutableExist();
-            Assert.AreEqual(true, exist);
+            //var exist = core.IsExecutableExist();
+            //Assert.AreEqual(true, exist);
 #endif
         }
 
@@ -45,8 +44,8 @@ namespace V2RayGCon.Test
 
 #if DEBUG
             return;
-            var ver = core.GetCoreVersion();
-            Assert.AreEqual(false, string.IsNullOrEmpty(ver));
+            //var ver = core.GetCoreVersion();
+            //Assert.AreEqual(false, string.IsNullOrEmpty(ver));
 #endif
         }
 

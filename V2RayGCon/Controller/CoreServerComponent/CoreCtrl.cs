@@ -26,12 +26,11 @@ namespace V2RayGCon.Controller.CoreServerComponent
         CoreStates coreStates;
         Configer configer;
         Logger logger;
-        CoreServerCtrl container;
+
         public override void Prepare()
         {
             this.coreServ = new V2RayGCon.Lib.V2Ray.Core(setting);
 
-            container = GetContainer();
             coreStates = container.GetComponent<CoreStates>();
             configer = container.GetComponent<Configer>();
             logger = container.GetComponent<Logger>();

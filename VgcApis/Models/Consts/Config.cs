@@ -18,6 +18,9 @@ namespace VgcApis.Models.Consts
 
         public static Dictionary<string, int> ConfigSectionDefSetting = new Dictionary<string, int>
         {
+            { $"{ConfigSectionDefRootKey}.api", 0 },
+            { $"{ConfigSectionDefRootKey}.inbound", 0 },
+            { $"{ConfigSectionDefRootKey}.outbound", 0 },
             { $"{ConfigSectionDefRootKey}.routing", 2 },
             { $"{ConfigSectionDefRootKey}.routing.settings", 2 },
         };

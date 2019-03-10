@@ -15,7 +15,6 @@ namespace V2RayGCon.Controller.CoreServerComponent
         VgcApis.Models.Datas.CoreInfo coreInfo;
 
         CoreStates states;
-        CoreServerCtrl container;
         Logger logger;
         CoreCtrl coreCtrl;
 
@@ -35,7 +34,6 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         public override void Prepare()
         {
-            container = GetContainer();
             states = container.GetComponent<CoreStates>();
             logger = container.GetComponent<Logger>();
             coreCtrl = container.GetComponent<CoreCtrl>();

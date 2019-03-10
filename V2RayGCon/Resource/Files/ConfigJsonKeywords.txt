@@ -52,6 +52,7 @@ default
 description
 destOverride
 detour
+direct
 disable
 disableInsecureEncryption
 disableSystemRoot
