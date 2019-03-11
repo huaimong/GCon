@@ -10,7 +10,8 @@ namespace V2RayGCon.Service.Caches
         IEnumerable<AutocompleteItem>
     {
         Scintilla editor;
-        string searchPattern = VgcApis.Models.Consts.Patterns.JsonSnippetSearchPattern;
+        string searchPattern =
+            VgcApis.Models.Consts.Patterns.JsonSnippetSearchPattern;
 
         List<string> keywords;
 

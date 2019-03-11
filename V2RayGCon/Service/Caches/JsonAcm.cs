@@ -14,7 +14,8 @@ namespace V2RayGCon.Service.Caches
         #region public methods
         public void BindToEditor(Scintilla editor)
         {
-            const string SearchPattern = @"[:._\-\\\*\$\w]";
+            const string SearchPattern =
+            VgcApis.Models.Consts.Patterns.JsonSnippetSearchPattern;
 
             var acm = new AutocompleteMenu()
             {

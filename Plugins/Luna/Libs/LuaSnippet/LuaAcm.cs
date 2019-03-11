@@ -11,7 +11,8 @@ namespace Luna.Libs.LuaSnippet
     internal sealed class LuaAcm :
         VgcApis.Models.BaseClasses.Disposable
     {
-        const string SearchPattern = @"[\w\.:]";
+        const string SearchPattern =
+            VgcApis.Models.Consts.Patterns.LuaSnippetSearchPattern;
 
         List<LuaKeywordSnippets> keywordCache;
         List<LuaFuncSnippets> functionCache;
