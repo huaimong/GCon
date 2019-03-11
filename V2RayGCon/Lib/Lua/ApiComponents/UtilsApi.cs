@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -8,6 +9,62 @@ namespace V2RayGCon.Lib.Lua.ApiComponents
         VgcApis.Models.BaseClasses.Disposable,
         VgcApis.Models.IServices.IUtilsService
     {
+        #region json
+        public void SetValue<T>(JToken json, string path, T value) =>
+            Utils.SetValue<T>(json, path, value);
+
+        public string GetString(JToken json, string path) =>
+            Utils.GetValue<string>(json, path);
+
+        public JToken GetKey(JToken json, string path) =>
+            Utils.GetKey(json, path);
+
+        public string GetProtocol(JObject config) =>
+            Utils.GetProtocolFromConfig(config);
+
+        public string JTokenToString(JToken jtoken) =>
+            jtoken.ToString();
+
+        public void Replace(JToken node, JToken value) =>
+            node.Replace(value);
+
+        public void Union(JObject body, JObject mixin) =>
+            Lib.Utils.UnionJson(ref body, mixin);
+
+        public void Merge(JObject body, JObject mixin) =>
+            Utils.MergeJson(ref body, mixin);
+
+        public void CombineWithRoutingInTheEnd(JObject body, JObject mixin) =>
+            Utils.CombineConfigWithRoutingInTheEnd(ref body, mixin);
+
+        public void CombineWithRoutingInFront(JObject body, JObject mixin) =>
+            Utils.CombineConfigWithRoutingInFront(ref body, mixin);
+
+        public JObject ToJObject(JToken jtoken) =>
+            jtoken as JObject;
+
+        public JArray ToJArray(JToken jtoken) =>
+            jtoken as JArray;
+
+        public JToken ParseJToken(string json)
+        {
+            try
+            {
+                return JToken.Parse(json);
+            }
+            catch { }
+            return null;
+        }
+
+        public JArray ParseJArray(string json) =>
+            ParseJToken(json) as JArray;
+
+        public JObject ParseJObject(string json) =>
+            ParseJToken(json) as JObject;
+
+        #endregion
+
+        #region ui
         public string ScanQrcode()
         {
             var shareLink = @"";
@@ -28,7 +85,9 @@ namespace V2RayGCon.Lib.Lua.ApiComponents
             are.WaitOne();
             return shareLink;
         }
+        #endregion
 
+        #region sys
         public void ExecuteInParallel<TParam>(
             IEnumerable<TParam> source, Action<TParam> worker) =>
             Lib.Utils.ExecuteInParallel(source, worker);
@@ -36,6 +95,7 @@ namespace V2RayGCon.Lib.Lua.ApiComponents
         public void ExecuteInParallel<TParam, TResult>(
             IEnumerable<TParam> source, Func<TParam, TResult> worker) =>
             Lib.Utils.ExecuteInParallel(source, worker);
+        #endregion
 
     }
 }

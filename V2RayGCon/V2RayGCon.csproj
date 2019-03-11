@@ -458,11 +458,20 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resource\Files\lua\Example.lua" />
+    <None Include="Resource\Files\lua\libs\utils.lua" />
+    <None Include="Resource\Files\lua\modules\logger.lua" />
+    <None Include="Resource\Files\lua\modules\reader.lua" />
+    <None Include="Resource\Files\lua\modules\set.lua" />
+    <None Include="Resource\Files\lua\modules\writer.lua" />
+    <None Include="Resource\Files\lua\UnitTests.lua" />
+    <None Include="Resource\Files\templates\basic\basic.json" />
+    <None Include="Resource\Files\templates\routing\whitelist.json" />
     <None Include="V2RayGCon.ruleset" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon_dark.ico" />
-    <Content Include="Resource\Files\ConfigJsonKeywords.txt" />
+    <Content Include="Resource\Files\CSharp\ConfigJsonKeywords.txt" />
     <None Include="Resource\Icon\TaskTray\Module_16x.png" />
     <None Include="Resource\Icon\ServerUI\StepOverArrow_16x.png" />
     <None Include="Resource\Icon\ServerUI\StepBackArrow_16x.png" />
@@ -491,6 +500,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resource\Files\templates\custom\" />
     <Folder Include="Resource\Icon\FormMainToolStrip\" />
   </ItemGroup>
   <ItemGroup>

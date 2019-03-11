@@ -153,10 +153,12 @@ namespace Luna.Controllers
             var luaApis = new Models.Apis.LuaApis(settings, api);
             luaApis.SetRedirectLogWorker(Log);
 
+            var luaJson = new Models.Apis.LuaJson(api);
+
             var coreSettings = new Models.Data.LuaCoreSetting();
 
             var ctrl = new LuaCoreCtrl();
-            ctrl.Run(settings, coreSettings, luaApis);
+            ctrl.Run(settings, coreSettings, luaApis, luaJson);
             return ctrl;
         }
 

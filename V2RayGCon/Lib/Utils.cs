@@ -106,9 +106,9 @@ namespace V2RayGCon.Lib
             var result = empty;
             foreach (var c in configList)
             {
-                Lib.Utils.CombineConfig(ref result, c);
+                Lib.Utils.CombineConfigWithRoutingInFront(ref result, c);
             }
-            Lib.Utils.CombineConfig(ref result, config);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref result, config);
 
             return result;
         }
@@ -327,7 +327,7 @@ namespace V2RayGCon.Lib
             return result as JObject;
         }
 
-        public static bool SetValue<T>(JObject json, string path, T value)
+        public static bool SetValue<T>(JToken json, string path, T value)
         {
             var parts = ParsePathIntoParentAndKey(path);
             var r = json;
@@ -433,7 +433,7 @@ namespace V2RayGCon.Lib
 
         }
 
-        public static void CombineConfigWithOutRouting(ref JObject body, JObject mixin)
+        public static void CombineConfigWithRoutingInTheEnd(ref JObject body, JObject mixin)
         {
             List<string> keys = new List<string>
             {
@@ -445,7 +445,7 @@ namespace V2RayGCon.Lib
             CombineConfigWorker(ref body, mixin, keys);
         }
 
-        public static void CombineConfig(ref JObject body, JObject mixin)
+        public static void CombineConfigWithRoutingInFront(ref JObject body, JObject mixin)
         {
             List<string> keys = new List<string>
             {
@@ -467,6 +467,7 @@ namespace V2RayGCon.Lib
         {
             JObject backup = JObject.Parse(@"{}");
 
+            // add to front
             foreach (var key in keys)
             {
                 if (TryExtractJObjectPart(body, key, out JObject nodeBody))
@@ -524,30 +525,6 @@ namespace V2RayGCon.Lib
                 MergeArrayHandling = MergeArrayHandling.Merge,
                 MergeNullValueHandling = MergeNullValueHandling.Merge
             });
-        }
-
-        /// <summary>
-        /// Return 0 if not exist.
-        /// </summary>
-        /// <param name="json"></param>
-        /// <returns></returns>
-        public static int GetAlterIdFromVmessConfig(JObject json)
-        {
-            var paths = new string[] {
-                "outbound.settings.vnext.0.users.0.alterId",
-                "outbounds.0.settings.vnext.0.users.0.alterId",
-            };
-
-            foreach (var path in paths)
-            {
-                var id = Lib.Utils.GetValue<int>(json, path);
-                if (id > 0)
-                {
-                    return VgcApis.Libs.Utils.Clamp(id, 0, 65535);
-                }
-            }
-
-            return 0;
         }
 
         /// <summary>
@@ -610,7 +587,8 @@ namespace V2RayGCon.Lib
                         curPos = curPos[keys[depth]];
                     }
                 }
-                catch {
+                catch
+                {
                     return null;
                 }
             }

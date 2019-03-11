@@ -212,9 +212,50 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似  wsSettings
-        /// v2raygcon
-        /// 的本地化字符串。
+        ///   查找类似 AsIs
+        ///Connection
+        ///Host
+        ///IPIfNonMatch
+        ///IPOnDemand
+        ///Pragma
+        ///UseIP
+        ///UseIPv4
+        ///UseIPv6
+        ///V2RAY_BUF_READV
+        ///V2RAY_LOCATION_ASSET
+        ///V2RAY_LOCATION_CONFIG
+        ///V2RAY_RAY_BUFFER_SIZE
+        ///access
+        ///accounts
+        ///address
+        ///aes-128-cfb
+        ///aes-128-gcm
+        ///aes-256-cfb
+        ///aes-256-gcm
+        ///agentin
+        ///agentout
+        ///alias
+        ///allocate
+        ///allowInsecure
+        ///allowTransparent
+        ///alpn
+        ///alterId
+        ///api
+        ///attrs
+        ///auth
+        ///auto
+        ///balancerTag
+        ///balancers
+        ///bittorrent
+        ///blackhole
+        ///bridges
+        ///bufferSize
+        ///certificate
+        ///certificateFile
+        ///certificates
+        ///chacha20
+        ///chacha20-ietf
+        ///chacha20-ietf-poly13 [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string ConfigJsonKeywords {
             get {

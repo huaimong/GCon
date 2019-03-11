@@ -360,7 +360,6 @@ namespace V2RayGCon.Service
 
         public string PackSelectedServersIntoV4Package(string orgUid, string pkgName)
         {
-
             var servList = new List<VgcApis.Models.Interfaces.ICoreServCtrl>();
             lock (serverListWriteLock)
             {

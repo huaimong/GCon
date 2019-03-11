@@ -95,6 +95,7 @@
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ICoreStates.cs" />
     <Compile Include="Models\Interfaces\ILuaApis.cs" />
     <Compile Include="Models\Interfaces\IComponentOf.cs" />
+    <Compile Include="Models\Interfaces\ILuaJson.cs" />
     <Compile Include="Models\Interfaces\IShareLinkDecoder.cs" />
     <Compile Include="Models\IServices\IApiServices.cs" />
     <Compile Include="Models\Interfaces\IPlugin.cs" />

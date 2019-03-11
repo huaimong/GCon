@@ -14,6 +14,7 @@ namespace Luna.Controllers
         Services.Settings settings;
         Models.Data.LuaCoreSetting coreSetting;
         Models.Apis.LuaApis luaApis;
+        Models.Apis.LuaJson luaJson;
         VgcApis.Models.BaseClasses.LuaSignal luaSignal;
 
         Thread luaCoreThread;
@@ -26,11 +27,13 @@ namespace Luna.Controllers
         public void Run(
             Services.Settings settings,
             Models.Data.LuaCoreSetting luaCoreState,
-            Models.Apis.LuaApis luaApis)
+            Models.Apis.LuaApis luaApis,
+            Models.Apis.LuaJson luaJson)
         {
             this.settings = settings;
             this.coreSetting = luaCoreState;
             this.luaApis = luaApis;
+            this.luaJson = luaJson;
             this.luaSignal = new VgcApis.Models.BaseClasses.LuaSignal();
         }
 
@@ -186,6 +189,8 @@ namespace Luna.Controllers
 
             lua["Api"] = luaApis; // bug: lua can access all public functions
             lua["Signal"] = luaSignal;
+            lua["Json"] = luaJson;
+
             lua.DoString(luaApis.PredefinedFunctions());
             return lua;
         }

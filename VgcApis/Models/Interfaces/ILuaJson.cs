@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
 
-namespace VgcApis.Models.IServices
+namespace VgcApis.Models.Interfaces
 {
-    public interface IUtilsService
+    public interface ILuaJson
     {
-        #region json
-        void SetValue<T>(JToken json, string path, T value);
+        void SetIntValue(JToken json, string path, int value);
+        void SetBoolValue(JToken json, string path, bool value);
+        void SetStringValue(JToken json, string path, string value);
+
         string GetString(JToken json, string path);
 
         void CombineWithRoutingInFront(JObject body, JObject mixin);
@@ -23,16 +23,5 @@ namespace VgcApis.Models.IServices
         JArray ToJArray(JToken jtoken);
         JObject ToJObject(JToken jtoken);
         void Union(JObject body, JObject mixin);
-
-        #endregion
-
-
-        string ScanQrcode();
-
-        void ExecuteInParallel<TParam>(
-            IEnumerable<TParam> source, Action<TParam> worker);
-
-        void ExecuteInParallel<TParam, TResult>(
-            IEnumerable<TParam> source, Func<TParam, TResult> worker);
     }
 }

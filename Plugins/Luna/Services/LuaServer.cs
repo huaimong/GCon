@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Luna.Services
 {
-    public class LuaServer:
+    public class LuaServer :
         VgcApis.Models.BaseClasses.Disposable
     {
         public EventHandler OnLuaCoreCtrlListChange;
@@ -12,6 +12,7 @@ namespace Luna.Services
         Settings settings;
         List<Controllers.LuaCoreCtrl> luaCoreCtrls;
         Models.Apis.LuaApis luaApis;
+        Models.Apis.LuaJson luaJson;
 
         public LuaServer() { }
 
@@ -21,6 +22,7 @@ namespace Luna.Services
         {
             this.settings = settings;
             this.luaApis = new Models.Apis.LuaApis(settings, api);
+            this.luaJson = new Models.Apis.LuaJson(api);
 
             luaCoreCtrls = InitLuaCores(settings, luaApis);
             WakeUpAutoRunScripts();
@@ -81,7 +83,7 @@ namespace Luna.Services
 
             coreCtrl = new Controllers.LuaCoreCtrl();
             luaCoreCtrls.Add(coreCtrl);
-            coreCtrl.Run(settings, coreState, luaApis);
+            coreCtrl.Run(settings, coreState, luaApis, luaJson);
             Save();
             InvokeOnLuaCoreCtrlListChangeIgnoreError();
             return true;
@@ -137,7 +139,7 @@ namespace Luna.Services
             foreach (var luaCoreState in settings.GetLuaCoreSettings())
             {
                 var luaCtrl = new Controllers.LuaCoreCtrl();
-                luaCtrl.Run(settings, luaCoreState, luaApis);
+                luaCtrl.Run(settings, luaCoreState, luaApis, luaJson);
                 cores.Add(luaCtrl);
             }
             return cores;

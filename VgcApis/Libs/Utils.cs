@@ -125,7 +125,16 @@ namespace VgcApis.Libs
             }
         }
 
-
+        public static string TrimConfig(string config)
+        {
+            try
+            {
+                var cfg = JObject.Parse(config);
+                return cfg?.ToString(Formatting.None);
+            }
+            catch { }
+            return null;
+        }
 
         public static bool TryParseJObject(
            string jsonString, out JObject json)

@@ -765,6 +765,7 @@
 365bh.cc
 365bj.com
 365cgw.com
+365dmp.com
 365exam.com
 365heart.com
 365jilin.com
@@ -867,6 +868,7 @@
 488u.com
 49you.com
 4gfy.com
+4paradigm.com
 4yang.com
 500.com
 50018.com
@@ -2790,6 +2792,7 @@ chushan.com
 chutou.net
 ci-bo.org
 ci123.com
+cibntv.net
 ciceme.com
 cidu.net
 cieccpa.org
@@ -3170,6 +3173,7 @@ cqyun.net
 cqzls.com
 cqzx.net
 cqzx.org
+cr-nielsen.com
 cr173.com
 cr18g.com
 crabchina.com
@@ -3331,6 +3335,7 @@ dance888.com
 dandanplay.com
 dang3.com
 dangdang.com
+dangdeshenghuo.com
 dangjian.com
 danzhaowang.com
 daocloud.io
@@ -3514,6 +3519,7 @@ dodonew.com
 dog126.com
 doido.com
 dolcn.com
+doloqo.com
 donews.com
 dongao.com
 dongbeiol.com
@@ -4448,6 +4454,7 @@ h-ui.net
 h0591.com
 h2o-china.com
 h2os.com
+h5data,com
 habctv.com
 hacdn.net
 hackhome.com
@@ -5397,6 +5404,7 @@ jianguoyun.com
 jiangxia.cc
 jiangxirc.com
 jiankang.com
+jiankangfund.com
 jiankangzu.com
 jianke.com
 jiankongbao.com
@@ -5848,6 +5856,7 @@ kmxsedu.com
 knownsec.com
 knowsky.com
 koeoo.com
+komect.com
 kongfz.com
 kongzhong.com
 konka.com
@@ -6357,6 +6366,7 @@ materializecss.cn
 mathtag.com
 maxfox.me
 mayi.com
+mayihot.com
 mayiw.com
 mayiyou.com
 mb5u.com
@@ -6407,6 +6417,7 @@ meitanwang.com
 meitu.com
 meituan.com
 meituan.net
+meixiumeike.com
 meixun.org
 meiya.com
 meiyuanchun.com
@@ -6496,6 +6507,7 @@ mnsfh.com
 mnwan.com
 mnwww.com
 mob.com
+mobaders.com
 mobao.com
 mobiletrain.org
 moe.im
@@ -6533,7 +6545,9 @@ mplife.com
 mr91.com
 mshw.net
 msn.com
+msshysy.com
 mstxx.com
+msweekly.com
 msxf.net
 mtime.com
 mtnets.com
@@ -6970,6 +6984,7 @@ pengyou.com
 pengzerencai.com
 pengzhou.tv
 people258.com
+peopleapp.com
 peoplerail.com
 pethr.com
 petzp.com
@@ -7364,6 +7379,7 @@ qusu.org
 qutouzi.com
 quweiwu.com
 quxiu.com
+quyaoya.com
 quzhouwang.com
 qvbuy.com
 qvod.com
@@ -7895,6 +7911,7 @@ smjy.net
 smrcw.com
 smswike.com
 smtcdns.com
+smucdn.com
 smvtc.com
 smweekly.com
 smwrc.com
@@ -7909,6 +7926,7 @@ snedu.com
 snfox.com
 snjt.com
 snrtv.com
+snssdk.com
 snsyedu.com
 snupg.com
 snyu.com
@@ -8422,6 +8440,8 @@ tourzj.com
 toushibao.com
 toutiao.com
 toutiao.io
+toutiaoapp.com
+toutiaocdn.com
 touzhijia.com
 tower.im
 toybaba.com
@@ -8914,6 +8934,7 @@ wjedu.net
 wjnin.com
 wjshw.com
 wjx.top
+wjxcdn.com
 wkepu.com
 wkimg.com
 wlgyy.com
@@ -9647,6 +9668,7 @@ yododo.com
 yofus.com
 yoher.com
 yohobuy.com
+yoholm.com
 yohoshow.com
 yoka.com
 yokacdn.com
@@ -10169,6 +10191,7 @@ zkpeace.org
 zkxww.com
 zlhome.com
 zljob.net
+zlongad.com
 zlt365.com
 zmd5.com
 zmingcx.com

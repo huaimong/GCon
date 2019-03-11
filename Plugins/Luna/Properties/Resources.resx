@@ -131,7 +131,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.17</value>
-    <comment>Snippets fine-tuning.</comment>
+    <value>0.0.18</value>
+    <comment>Introduce ILuaJson.</comment>
   </data>
 </root>

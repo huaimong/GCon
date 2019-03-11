@@ -121,12 +121,15 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
         public void SetConfig(string newConfig)
         {
-            if (coreInfo.config == newConfig)
+            var trimed = VgcApis.Libs.Utils.TrimConfig(newConfig);
+
+            if (string.IsNullOrEmpty(trimed)
+                || coreInfo.config == trimed)
             {
                 return;
             }
 
-            coreInfo.config = newConfig;
+            coreInfo.config = trimed;
             container.InvokeEventOnPropertyChange();
             UpdateSummaryThen(() =>
             {
@@ -196,11 +199,11 @@ namespace V2RayGCon.Controller.CoreServerComponent
 
             var result = cache.tpl.LoadTemplate("statsApiV4Inb") as JObject;
             result["inbounds"][0]["port"] = freePort;
-            Lib.Utils.CombineConfig(ref result, config);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref result, config);
             result["inbounds"][0]["tag"] = "agentin";
 
             var statsTpl = cache.tpl.LoadTemplate("statsApiV4Tpl") as JObject;
-            Lib.Utils.CombineConfig(ref result, statsTpl);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref result, statsTpl);
             config = result;
         }
 

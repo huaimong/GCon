@@ -170,7 +170,7 @@ namespace V2RayGCon.Service
             }
 
             // put dns/routing settings in front of user settings
-            Lib.Utils.CombineConfig(ref config, c);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref config, c);
 
             // put outbounds after user settings
             var hasOutbounds = Lib.Utils.GetKey(config, "outbounds") != null;
@@ -188,7 +188,7 @@ namespace V2RayGCon.Service
 
             if (!Lib.Utils.Contains(config, o))
             {
-                Lib.Utils.CombineConfig(ref o, config);
+                Lib.Utils.CombineConfigWithRoutingInFront(ref o, config);
                 config = o;
             }
         }
@@ -327,7 +327,7 @@ namespace V2RayGCon.Service
             try
             {
                 var finalConfig = GetGlobalImportConfigForPacking();
-                Lib.Utils.CombineConfigWithOutRouting(ref finalConfig, package);
+                Lib.Utils.CombineConfigWithRoutingInTheEnd(ref finalConfig, package);
                 return finalConfig;
             }
             catch

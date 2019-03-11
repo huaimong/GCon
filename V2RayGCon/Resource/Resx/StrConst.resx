@@ -191,6 +191,6 @@
     <value>api --server="127.0.0.1:{0}" StatsService.GetStats "name: """"inbound&gt;&gt;&gt;agentin&gt;&gt;&gt;traffic&gt;&gt;&gt;{1}"""" reset: true"</value>
   </data>
   <data name="ConfigJsonKeywords" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Files\ConfigJsonKeywords.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\Files\CSharp\ConfigJsonKeywords.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>
