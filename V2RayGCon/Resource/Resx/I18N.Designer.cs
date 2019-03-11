@@ -233,6 +233,15 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Are you sure to clear logs? 的本地化字符串。
+        /// </summary>
+        internal static string ConfirmClearLog {
+            get {
+                return ResourceManager.GetString("ConfirmClearLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Clear system proxy setting? 的本地化字符串。
         /// </summary>
         internal static string ConfirmClearSysProxy {
@@ -643,7 +652,7 @@ namespace V2RayGCon.Resource.Resx {
         /// <summary>
         ///   查找类似 No example for this part. 的本地化字符串。
         /// </summary>
-        internal static string EditorNoExampleForThisSection {
+        internal static string EditorNoExample {
             get {
                 return ResourceManager.GetString("EditorNoExample", resourceCulture);
             }

@@ -391,7 +391,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
                 }
                 catch
                 {
-                    MessageBox.Show(I18N.EditorNoExampleForThisSection);
+                    MessageBox.Show(I18N.EditorNoExample);
                 }
             };
         }

@@ -11,6 +11,8 @@ namespace V2RayGCon.Views.WinForms
         VgcApis.Libs.Sys.QueueLogger qLogger;
         VgcApis.Libs.Views.RepaintCtrl repaintCtrl;
 
+        bool isPaused = false;
+
         public FormSingleServerLog(
             string title,
             VgcApis.Libs.Sys.QueueLogger logger)
@@ -57,6 +59,42 @@ namespace V2RayGCon.Views.WinForms
         {
             logUpdater.Dispose();
             qLogger.Dispose();
+        }
+
+        private void clearToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (VgcApis.Libs.UI.Confirm(I18N.ConfirmClearLog))
+            {
+                qLogger.Reset();
+            }
+        }
+
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isPaused)
+            {
+                return;
+            }
+            isPaused = true;
+            pauseToolStripMenuItem.Checked = isPaused;
+            logUpdater.Pause();
+        }
+
+        private void resumeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!isPaused)
+            {
+                return;
+            }
+
+            isPaused = false;
+            pauseToolStripMenuItem.Checked = isPaused;
+            logUpdater.Run();
         }
     }
 }
