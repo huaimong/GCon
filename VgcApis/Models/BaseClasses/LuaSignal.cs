@@ -1,6 +1,6 @@
 ﻿namespace VgcApis.Models.BaseClasses
 {
-    public class LuaSignal : Models.Interfaces.ILuaSignal
+    public class LuaSignal : Models.Interfaces.Lua.ILuaSignal
     {
         bool signalStop;
 

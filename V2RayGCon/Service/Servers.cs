@@ -323,6 +323,7 @@ namespace V2RayGCon.Service
                     .Select(s => s.GetCoreStates().GetMark())
                     .Distinct()
                     .Where(s => !string.IsNullOrEmpty(s))
+                    .OrderBy(s => s)
                     .ToList();
             }
         }
@@ -359,7 +360,6 @@ namespace V2RayGCon.Service
 
         public string PackSelectedServersIntoV4Package(string orgUid, string pkgName)
         {
-
             var servList = new List<VgcApis.Models.Interfaces.ICoreServCtrl>();
             lock (serverListWriteLock)
             {

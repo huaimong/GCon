@@ -38,7 +38,7 @@ namespace VgcApis.Libs.Sys
         {
             lock (logWriteLocker)
             {
-                logCache.Enqueue(message);
+                logCache.Enqueue(message??@"");
                 updateTimestamp = DateTime.Now.Ticks;
                 if (logCache.Count() > 2 * maxLogLineNumber)
                 {

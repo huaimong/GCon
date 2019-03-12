@@ -31,8 +31,19 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.9.1")]
+[assembly: AssemblyVersion("1.1.9.11")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
-/* v1.1.9.1 升级NLua至v1.4.9
+/*
+ * v1.1.9.11 Update config editor snippet keywords.
+ * v1.1.9.10 Split LuaApis into several components.
+ * v1.1.9.9 Introduce ILuaJson.
+ * v1.1.9.8 Luna snippets fine-tunning.
+ * v1.1.9.7 Config editor subsection fine-tuning.
+ * v1.1.9.6 Config editor support snippets.
+ * v1.1.9.5 Reduce resource consumption when batch speed testing.
+ * v1.1.9.4 Introduce IPlugable.
+ * v1.1.9.3 配置编辑器支持二级分节
+ * v1.1.9.2 Reduce FormConfig and FormQrcode loading time.
+ * v1.1.9.1 升级NLua至v1.4.9
  */

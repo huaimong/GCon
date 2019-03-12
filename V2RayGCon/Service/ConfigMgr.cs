@@ -19,9 +19,9 @@ namespace V2RayGCon.Service
 
         #region public methods
         public long RunSpeedTest(string rawConfig) =>
-           SpeedTestWorker(rawConfig, "testing", false, false, false, null);
+           RunSpeedTest(rawConfig, "testing", false, false, false, null);
 
-        public long SpeedTestWorker(
+        public long RunSpeedTest(
             string rawConfig,
             string title,
             bool isUseCache,
@@ -39,7 +39,7 @@ namespace V2RayGCon.Service
                 return long.MaxValue;
             }
 
-            return DoSpeedTest(
+            return RunSpeedTestWorker(
                 speedTestConfig,
                 title,
                 VgcApis.Models.Consts.Webs.GoogleDotCom,
@@ -170,7 +170,7 @@ namespace V2RayGCon.Service
             }
 
             // put dns/routing settings in front of user settings
-            Lib.Utils.CombineConfig(ref config, c);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref config, c);
 
             // put outbounds after user settings
             var hasOutbounds = Lib.Utils.GetKey(config, "outbounds") != null;
@@ -188,7 +188,7 @@ namespace V2RayGCon.Service
 
             if (!Lib.Utils.Contains(config, o))
             {
-                Lib.Utils.CombineConfig(ref o, config);
+                Lib.Utils.CombineConfigWithRoutingInFront(ref o, config);
                 config = o;
             }
         }
@@ -294,7 +294,7 @@ namespace V2RayGCon.Service
         {
             var package = cache.tpl.LoadPackage("pkgV4Tpl");
             var outbounds = package["outbounds"] as JArray;
-            var description = "";
+            var description = new List<string>();
 
             for (var i = 0; i < servList.Count; i++)
             {
@@ -314,18 +314,20 @@ namespace V2RayGCon.Service
                 }
                 else
                 {
-                    description += $" {i}.[{name}]";
+                    description.Add($"{i}.[{name}]");
                     setting.SendLog(I18N.PackageSuccess + ": " + name);
                 }
             }
 
             package["v2raygcon"]["alias"] = string.IsNullOrEmpty(packageName) ? "PackageV4" : packageName;
-            package["v2raygcon"]["description"] = description;
+            package["v2raygcon"]["description"] =
+                $"[Total: {description.Count()}] " +
+                string.Join(" ", description);
 
             try
             {
                 var finalConfig = GetGlobalImportConfigForPacking();
-                Lib.Utils.CombineConfigWithOutRouting(ref finalConfig, package);
+                Lib.Utils.CombineConfigWithRoutingInTheEnd(ref finalConfig, package);
                 return finalConfig;
             }
             catch
@@ -356,7 +358,7 @@ namespace V2RayGCon.Service
             return ParseImport(imports.ToString());
         }
 
-        long DoSpeedTest(
+        long RunSpeedTestWorker(
             string speedTestableConfig,
             string title,
             string testUrl,
@@ -372,9 +374,29 @@ namespace V2RayGCon.Service
             {
                 speedTester.OnLog += logDeliever;
             }
-            speedTester.RestartCore(speedTestableConfig);
+
+            speedTester.WaitForToken();
+            try
+            {
+                speedTester.RestartCore(speedTestableConfig);
+            }
+            finally
+            {
+                speedTester.ReleaseToken();
+            }
+
             long testResult = Lib.Utils.VisitWebPageSpeedTest(testUrl, testPort);
-            speedTester.StopCore();
+
+            speedTester.WaitForTokenHurry();
+            try
+            {
+                speedTester.StopCore();
+            }
+            finally
+            {
+                speedTester.ReleaseToken();
+            }
+
             if (logDeliever != null)
             {
                 speedTester.OnLog -= logDeliever;

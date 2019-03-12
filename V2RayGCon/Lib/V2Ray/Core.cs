@@ -24,6 +24,8 @@ namespace V2RayGCon.Lib.V2Ray
         Service.Setting setting;
         string config;
 
+        static VgcApis.Libs.Tasks.Bar globalCoreStartStopToken = new VgcApis.Libs.Tasks.Bar();
+
         public Core(Service.Setting setting)
         {
             isRunning = false;
@@ -159,6 +161,25 @@ namespace V2RayGCon.Lib.V2Ray
             return folders;
         }
 
+        VgcApis.Libs.Tasks.Bar coreStartStopToken = null;
+        public void WaitForTokenHurry() =>
+            WaitForTokenWorker(VgcApis.Models.Consts.Intervals.GetCoreTokenIntervalFast);
+
+        public void WaitForToken() =>
+            WaitForTokenWorker(VgcApis.Models.Consts.Intervals.GetCoreTokenIntervalSlow);
+
+        public void ReleaseToken()
+        {
+            if (coreStartStopToken == null)
+            {
+                throw new ArgumentNullException(@"Token is null!");
+            }
+
+            var token = coreStartStopToken;
+            coreStartStopToken = null;
+            token.Remove();
+        }
+
         // blocking
         public void RestartCore(
             string config,
@@ -218,6 +239,14 @@ namespace V2RayGCon.Lib.V2Ray
         #endregion
 
         #region private method
+        void WaitForTokenWorker(int requestInterval)
+        {
+            while (!globalCoreStartStopToken.Install())
+            {
+                Thread.Sleep(requestInterval);
+            }
+            coreStartStopToken = globalCoreStartStopToken;
+        }
 
         void InvokeEventOnCoreReady()
         {

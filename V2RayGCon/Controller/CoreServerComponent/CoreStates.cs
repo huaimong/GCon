@@ -19,12 +19,10 @@ namespace V2RayGCon.Controller.CoreServerComponent
             this.coreInfo = coreInfo;
         }
 
-        CoreServerCtrl container;
         CoreCtrl coreCtrl;
         Configer configer;
         public override void Prepare()
         {
-            container = GetContainer();
             coreCtrl = container.GetComponent<CoreCtrl>();
             configer = container.GetComponent<Configer>();
         }

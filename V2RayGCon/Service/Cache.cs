@@ -14,9 +14,19 @@
             core = new Caches.CoreCache();
         }
 
-        public void Run(Service.Setting setting)
+        public void Run(Setting setting)
         {
             core.Run(setting);
+        }
+
+        Caches.JsonAcm _jsonAcm = null;
+        public Caches.JsonAcm GetJsonAcm()
+        {
+            if (_jsonAcm == null)
+            {
+                _jsonAcm = new Caches.JsonAcm();
+            }
+            return _jsonAcm;
         }
 
         #region public method

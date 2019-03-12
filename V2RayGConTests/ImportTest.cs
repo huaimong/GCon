@@ -176,7 +176,7 @@ namespace V2RayGCon.Test
             var body = JObject.Parse(left);
             var mixin = JObject.Parse(right);
 
-            Lib.Utils.CombineConfig(ref body, mixin);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref body, mixin);
 
             var e = JObject.Parse(expect);
             var dbg = body.ToString();

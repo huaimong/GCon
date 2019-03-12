@@ -641,4 +641,7 @@ Switch to direct download.</value>
   <data name="InjectPackagingImportsFail" xml:space="preserve">
     <value>Inject packageing imports fail, ignore imports.</value>
   </data>
+  <data name="ConfirmClearLog" xml:space="preserve">
+    <value>Are you sure to clear logs?</value>
+  </data>
 </root>

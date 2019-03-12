@@ -184,9 +184,17 @@ namespace Luna.Controllers
 
             lua.State.Encoding = Encoding.UTF8;
 
-            lua["Api"] = luaApis; // bug: lua can access all public functions
+            // bug: lua can access all public functions
+            var misc = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaMisc>();
+
             lua["Signal"] = luaSignal;
-            lua.DoString(luaApis.PredefinedFunctions());
+
+            lua["Json"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaJson>();
+            lua["Misc"] = misc;
+            lua["Server"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaServer>();
+            lua["Web"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaWeb>();
+
+            lua.DoString(misc.PredefinedFunctions());
             return lua;
         }
 

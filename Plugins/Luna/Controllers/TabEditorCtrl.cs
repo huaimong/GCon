@@ -145,12 +145,12 @@ namespace Luna.Controllers
             return true;
         }
 
-
         LuaCoreCtrl CreateLuaCoreCtrl(
             Services.Settings settings,
             VgcApis.Models.IServices.IApiService api)
         {
             var luaApis = new Models.Apis.LuaApis(settings, api);
+            luaApis.Prepare();
             luaApis.SetRedirectLogWorker(Log);
 
             var coreSettings = new Models.Data.LuaCoreSetting();
@@ -237,7 +237,7 @@ namespace Luna.Controllers
                     || cline.EndsWith("else")
                     || Regex.IsMatch(curLineText, "{\\s*$"))
                 {
-                    e.Text = (e.Text + "\t");
+                    e.Text = (e.Text + @"    "); // 4 spaces
                 }
             }
         }

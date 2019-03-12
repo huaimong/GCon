@@ -2,6 +2,10 @@
 {
     public static class Patterns
     {
+        public const string JsonSnippetSearchPattern = @"[:/,_\.\-\\\*\$\w]";
+
+        public const string LuaSnippetSearchPattern = @"[\w\.:]";
+
         public const string NonAlphabets = @"[^0-9a-zA-Z]";
 
         public const string Base64NonStandard = @"[A-Za-z0-9+/]+";

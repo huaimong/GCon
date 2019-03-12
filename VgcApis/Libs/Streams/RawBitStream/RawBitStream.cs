@@ -3,7 +3,7 @@
 namespace VgcApis.Libs.Streams.RawBitStream
 {
     public sealed class RawBitStream :
-        Models.BaseClasses.ContainerOf<RawBitStream>
+        Models.BaseClasses.ComponentOf<RawBitStream>
     {
         int readPos = 0;
         List<bool> bitStream = new List<bool>();
@@ -14,14 +14,13 @@ namespace VgcApis.Libs.Streams.RawBitStream
         {
             var numbers = new Numbers();
             var bytes = new Bytes();
-
             var uuids = new Uuids();
             var address = new Address();
 
-            Plug(numbers);
-            Plug(bytes);
-            Plug(uuids);
-            Plug(address);
+            Plug(this, numbers);
+            Plug(this, bytes);
+            Plug(this, uuids);
+            Plug(this, address);
 
             bytes.Run(numbers);
             uuids.Run(bytes);
@@ -88,8 +87,6 @@ namespace VgcApis.Libs.Streams.RawBitStream
         #endregion
 
         #region private methods
-        void Plug(Models.BaseClasses.ComponentOf<RawBitStream> component) =>
-            Plug(this, component);
         #endregion
 
     }

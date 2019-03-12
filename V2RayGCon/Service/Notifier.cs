@@ -202,15 +202,15 @@ namespace V2RayGCon.Service
                         new ToolStripMenuItem(
                             I18N.GenQRCode,
                             Properties.Resources.AzureVirtualMachineExtension_16x,
-                            (s,a)=>Views.WinForms.FormQRCode.GetForm()),
+                            (s,a)=>Views.WinForms.FormQRCode.ShowForm()),
                         new ToolStripMenuItem(
                             I18N.Log,
                             Properties.Resources.FSInteractiveWindow_16x,
-                            (s,a)=>Views.WinForms.FormLog.GetForm() ),
+                            (s,a)=>Views.WinForms.FormLog.ShowForm() ),
                         new ToolStripMenuItem(
                             I18N.Options,
                             Properties.Resources.Settings_16x,
-                            (s,a)=>Views.WinForms.FormOption.GetForm() ),
+                            (s,a)=>Views.WinForms.FormOption.ShowForm() ),
                     }),
 
                 new ToolStripMenuItem(

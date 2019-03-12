@@ -54,7 +54,7 @@
         #endregion
 
         #region protected methods
-        protected override void Cleanup()
+        protected override void AfterComponentsDisposed()
         {
             logForm?.Close();
             qLogger.Dispose();

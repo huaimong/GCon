@@ -105,7 +105,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
                 user["secret"] = Lib.Utils.RandomHex(32);
             }
 
-            Lib.Utils.CombineConfig(ref mtproto, config);
+            Lib.Utils.CombineConfigWithRoutingInFront(ref mtproto, config);
             config = mtproto;
         }
         #endregion

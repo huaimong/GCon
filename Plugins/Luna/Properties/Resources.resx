@@ -131,7 +131,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.16</value>
-    <comment>Upgrade NLua to v1.4.9</comment>
+    <value>0.0.19</value>
+    <comment>Split LuaApis.</comment>
   </data>
 </root>
