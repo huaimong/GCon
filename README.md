@@ -5,7 +5,7 @@
 [3]: https://img.shields.io/github/release/UudrSgMEZ/V2RayGCon.svg "Release Badge"
 [4]: https://github.com/UudrSgMEZ/V2RayGCon/releases/latest "Releases"
 [5]: https://img.shields.io/github/downloads/UudrSgMEZ/V2RayGCon/total.svg "Total Downloads Badge"
-[6]: http://www.somsubhra.com/github-release-stats/?username=UudrSgMEZ&repository=V2RayGCon "Downloads Detail"
+[6]: https://github.com/UudrSgMEZ/V2RayGCon/releases/latest "Releases"
 [7]: https://img.shields.io/github/license/UudrSgMEZ/V2RayGCon.svg "Licence Badge"
 [8]: https://github.com/UudrSgMEZ/V2RayGCon/blob/master/LICENSE "Licence"
 
