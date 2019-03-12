@@ -1,13 +1,15 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Luna.Models.Apis
+namespace Luna.Models.Apis.Components
+
 {
-    public sealed class LuaJson :
-        VgcApis.Models.Interfaces.ILuaJson
+    public sealed class Json :
+        VgcApis.Models.BaseClasses.ComponentOf<LuaApis>,
+        VgcApis.Models.Interfaces.Lua.ILuaJson
     {
         VgcApis.Models.IServices.IUtilsService vgcUtils;
 
-        public LuaJson(
+        public Json(
             VgcApis.Models.IServices.IApiService api)
         {
             this.vgcUtils = api.GetUtilsService();

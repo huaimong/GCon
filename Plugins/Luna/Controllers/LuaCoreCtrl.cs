@@ -14,7 +14,6 @@ namespace Luna.Controllers
         Services.Settings settings;
         Models.Data.LuaCoreSetting coreSetting;
         Models.Apis.LuaApis luaApis;
-        Models.Apis.LuaJson luaJson;
         VgcApis.Models.BaseClasses.LuaSignal luaSignal;
 
         Thread luaCoreThread;
@@ -27,13 +26,11 @@ namespace Luna.Controllers
         public void Run(
             Services.Settings settings,
             Models.Data.LuaCoreSetting luaCoreState,
-            Models.Apis.LuaApis luaApis,
-            Models.Apis.LuaJson luaJson)
+            Models.Apis.LuaApis luaApis)
         {
             this.settings = settings;
             this.coreSetting = luaCoreState;
             this.luaApis = luaApis;
-            this.luaJson = luaJson;
             this.luaSignal = new VgcApis.Models.BaseClasses.LuaSignal();
         }
 
@@ -187,11 +184,17 @@ namespace Luna.Controllers
 
             lua.State.Encoding = Encoding.UTF8;
 
-            lua["Api"] = luaApis; // bug: lua can access all public functions
-            lua["Signal"] = luaSignal;
-            lua["Json"] = luaJson;
+            // bug: lua can access all public functions
+            var misc = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaMisc>();
 
-            lua.DoString(luaApis.PredefinedFunctions());
+            lua["Signal"] = luaSignal;
+
+            lua["Json"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaJson>();
+            lua["Misc"] = misc;
+            lua["Server"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaServer>();
+            lua["Web"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaWeb>();
+
+            lua.DoString(misc.PredefinedFunctions());
             return lua;
         }
 

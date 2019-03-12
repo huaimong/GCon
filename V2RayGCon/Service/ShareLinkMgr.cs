@@ -68,6 +68,33 @@ namespace V2RayGCon.Service
         #endregion
 
         #region public methods
+        /// <summary>
+        /// <para>linkList=List(string[]{0: text, 1: mark}>)</para>
+        /// <para>decoders = List(IShareLinkDecoder)</para>
+        /// </summary>
+        public List<string[]> ImportLinksBatchMode(
+            IEnumerable<string[]> linkList,
+            IEnumerable<VgcApis.Models.Interfaces.IShareLinkDecoder> decoders) =>
+            ImportLinksBatchModeSync(linkList, decoders);
+
+        public List<VgcApis.Models.Interfaces.IShareLinkDecoder> GenDecoderList(
+            bool isIncludeV2cfgDecoder)
+        {
+            var decoders = new List<VgcApis.Models.Interfaces.IShareLinkDecoder>
+            {
+                codecs.GetComponent<ShareLinkComponents.SsDecoder>(),
+                codecs.GetComponent<ShareLinkComponents.VmessDecoder>(),
+                codecs.GetComponent<ShareLinkComponents.VeeDecoder>(),
+            };
+
+            if (isIncludeV2cfgDecoder)
+            {
+                decoders.Add(codecs.GetComponent<ShareLinkComponents.V2cfgDecoder>());
+            }
+
+            return decoders;
+        }
+
         public int UpdateSubscriptions(int proxyPort)
         {
             var subs = setting.GetSubscriptionItems();
@@ -78,7 +105,7 @@ namespace V2RayGCon.Service
             var decoders = GenDecoderList(false);
             var results = ImportLinksBatchModeSync(links, decoders);
             return results
-                .Where(r => IsImportResultSuccess(r))
+                .Where(r => VgcApis.Libs.Utils.IsImportResultSuccess(r))
                 .Count();
         }
 
@@ -135,24 +162,6 @@ namespace V2RayGCon.Service
                 }
 
             });
-        }
-
-        List<VgcApis.Models.Interfaces.IShareLinkDecoder> GenDecoderList(
-            bool isIncludeV2cfgDecoder)
-        {
-            var decoders = new List<VgcApis.Models.Interfaces.IShareLinkDecoder>
-            {
-                codecs.GetComponent<ShareLinkComponents.SsDecoder>(),
-                codecs.GetComponent<ShareLinkComponents.VmessDecoder>(),
-                codecs.GetComponent<ShareLinkComponents.VeeDecoder>(),
-            };
-
-            if (isIncludeV2cfgDecoder)
-            {
-                decoders.Add(codecs.GetComponent<ShareLinkComponents.V2cfgDecoder>());
-            }
-
-            return decoders;
         }
 
         /// <summary>
@@ -230,7 +239,7 @@ namespace V2RayGCon.Service
         {
             foreach (var result in importResults)
             {
-                if (IsImportResultSuccess(result))
+                if (VgcApis.Libs.Utils.IsImportResultSuccess(result))
                 {
                     return true;
                 }
@@ -250,9 +259,6 @@ namespace V2RayGCon.Service
             var reason = isSuccess ? I18N.Success : I18N.DuplicateServer;
             return new Tuple<bool, string>(isSuccess, reason);
         }
-
-        bool IsImportResultSuccess(string[] result) =>
-            result[3] == VgcApis.Models.Consts.Import.MarkImportSuccess;
 
         string[] GenImportResult(
             string link,

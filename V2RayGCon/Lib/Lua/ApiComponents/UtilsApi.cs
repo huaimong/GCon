@@ -64,7 +64,19 @@ namespace V2RayGCon.Lib.Lua.ApiComponents
 
         #endregion
 
-        #region ui
+        #region misc
+        public string AddLinkPrefix(string linkBody, VgcApis.Models.Datas.Enum.LinkTypes type) =>
+            Utils.AddLinkPrefix(linkBody, type);
+
+        public string Base64Encode(string plainText) =>
+            Utils.Base64Encode(plainText);
+
+        public string Base64Decode(string b64String) =>
+            Utils.Base64Decode(b64String);
+
+        public string GetLinkBody(string link) =>
+            Utils.GetLinkBody(link);
+
         public string ScanQrcode()
         {
             var shareLink = @"";
@@ -85,9 +97,7 @@ namespace V2RayGCon.Lib.Lua.ApiComponents
             are.WaitOne();
             return shareLink;
         }
-        #endregion
 
-        #region sys
         public void ExecuteInParallel<TParam>(
             IEnumerable<TParam> source, Action<TParam> worker) =>
             Lib.Utils.ExecuteInParallel(source, worker);

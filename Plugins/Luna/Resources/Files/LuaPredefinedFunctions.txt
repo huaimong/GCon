@@ -1,5 +1,5 @@
 ﻿import = function () end
-print = function(...) Api:Print(...) end
+print = function(...) Misc:Print(...) end
                 
 -- copy from NLua
 function Each(o)

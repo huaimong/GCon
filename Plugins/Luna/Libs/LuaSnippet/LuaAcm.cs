@@ -108,9 +108,11 @@ namespace Luna.Libs.LuaSnippet
         {
             var apis = new List<Tuple<string, Type>>
             {
-                new Tuple<string,Type>("Json", typeof(VgcApis.Models.Interfaces.ILuaJson)),
-                new Tuple<string,Type>("Api", typeof(VgcApis.Models.Interfaces.ILuaApis)),
-                new Tuple<string,Type>("Signal", typeof(VgcApis.Models.Interfaces.ILuaSignal)),
+                new Tuple<string,Type>("Json", typeof(VgcApis.Models.Interfaces.Lua.ILuaJson)),
+                new Tuple<string,Type>("Misc", typeof(VgcApis.Models.Interfaces.Lua.ILuaMisc)),
+                new Tuple<string,Type>("Server", typeof(VgcApis.Models.Interfaces.Lua.ILuaServer)),
+                new Tuple<string,Type>("Web", typeof(VgcApis.Models.Interfaces.Lua.ILuaWeb)),
+                new Tuple<string,Type>("Signal", typeof(VgcApis.Models.Interfaces.Lua.ILuaSignal)),
                 new Tuple<string, Type>("coreServ",typeof(VgcApis.Models.Interfaces.ICoreServCtrl)),
                 new Tuple<string, Type>("coreConfiger",typeof(VgcApis.Models.Interfaces.CoreCtrlComponents.IConfiger)),
                 new Tuple<string, Type>("coreCtrl",typeof(VgcApis.Models.Interfaces.CoreCtrlComponents.ICoreCtrl)),

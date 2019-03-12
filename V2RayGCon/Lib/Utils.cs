@@ -792,7 +792,9 @@ namespace V2RayGCon.Lib
 
         public static string Base64PadRight(string base64)
         {
-            return base64.PadRight(base64.Length + (4 - base64.Length % 4) % 4, '=');
+            var str = base64.Replace("\r", "").Replace("\n", "");
+            var len = str.Length;
+            return str.PadRight(len + (4 - len % 4) % 4, '=');
         }
 
         public static string Base64Decode(string base64EncodedData)
@@ -838,14 +840,12 @@ namespace V2RayGCon.Lib
                 }
 
                 var links = new List<string>();
-                var matches = Regex.Matches(
-                    subsString,
-                    VgcApis.Models.Consts.Patterns.Base64NonStandard);
-                foreach (Match match in matches)
+                foreach (var substr in VgcApis.Libs.Utils.ExtractBase64Strings(subsString))
                 {
                     try
                     {
-                        links.Add(Lib.Utils.Base64Decode(match.Value));
+                        var text = Base64Decode(substr);
+                        links.Add(text);
                     }
                     catch { }
                 }

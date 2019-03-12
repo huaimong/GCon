@@ -93,10 +93,12 @@
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ICoreCtrl.cs" />
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ILogger.cs" />
     <Compile Include="Models\Interfaces\CoreCtrlComponents\ICoreStates.cs" />
-    <Compile Include="Models\Interfaces\ILuaApis.cs" />
     <Compile Include="Models\Interfaces\IComponentOf.cs" />
-    <Compile Include="Models\Interfaces\ILuaJson.cs" />
+    <Compile Include="Models\Interfaces\Lua\ILuaJson.cs" />
     <Compile Include="Models\Interfaces\IShareLinkDecoder.cs" />
+    <Compile Include="Models\Interfaces\Lua\ILuaServer.cs" />
+    <Compile Include="Models\Interfaces\Lua\ILuaMisc.cs" />
+    <Compile Include="Models\Interfaces\Lua\ILuaWeb.cs" />
     <Compile Include="Models\IServices\IApiServices.cs" />
     <Compile Include="Models\Interfaces\IPlugin.cs" />
     <Compile Include="Libs\Tasks\CancelableTimeout.cs" />
@@ -107,7 +109,7 @@
     <Compile Include="Models\Datas\DataEvent.cs" />
     <Compile Include="Models\Interfaces\ICoreServCtrl.cs" />
     <Compile Include="Models\Interfaces\IDropableControl.cs" />
-    <Compile Include="Models\Interfaces\ILuaSignal.cs" />
+    <Compile Include="Models\Interfaces\Lua\ILuaSignal.cs" />
     <Compile Include="Models\IServices\IShareLinkMgr.cs" />
     <Compile Include="Models\IServices\IConfigMgr.cs" />
     <Compile Include="Models\IServices\IServersService.cs" />

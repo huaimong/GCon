@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace VgcApis.Models.Interfaces
+namespace VgcApis.Models.Interfaces.Lua
 {
     public interface ILuaJson
     {

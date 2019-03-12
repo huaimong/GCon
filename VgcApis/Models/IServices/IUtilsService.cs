@@ -26,13 +26,19 @@ namespace VgcApis.Models.IServices
 
         #endregion
 
-
-        string ScanQrcode();
+        #region misc        
+        string AddLinkPrefix(string linkBody, VgcApis.Models.Datas.Enum.LinkTypes type);
+        string Base64Encode(string plainText);
+        string Base64Decode(string b64String);
+        string GetLinkBody(string link);
 
         void ExecuteInParallel<TParam>(
             IEnumerable<TParam> source, Action<TParam> worker);
 
         void ExecuteInParallel<TParam, TResult>(
             IEnumerable<TParam> source, Func<TParam, TResult> worker);
+
+        string ScanQrcode();
+        #endregion
     }
 }

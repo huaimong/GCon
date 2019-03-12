@@ -151,14 +151,13 @@ namespace Luna.Controllers
             VgcApis.Models.IServices.IApiService api)
         {
             var luaApis = new Models.Apis.LuaApis(settings, api);
+            luaApis.Prepare();
             luaApis.SetRedirectLogWorker(Log);
-
-            var luaJson = new Models.Apis.LuaJson(api);
 
             var coreSettings = new Models.Data.LuaCoreSetting();
 
             var ctrl = new LuaCoreCtrl();
-            ctrl.Run(settings, coreSettings, luaApis, luaJson);
+            ctrl.Run(settings, coreSettings, luaApis);
             return ctrl;
         }
 

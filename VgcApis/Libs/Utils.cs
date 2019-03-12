@@ -246,6 +246,19 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
+        public static List<string> ExtractBase64Strings(string text)
+        {
+            var b64s = new List<string>();
+            var matches = Regex.Matches(
+                text,
+                Models.Consts.Patterns.Base64NonStandard);
+            foreach (Match match in matches)
+            {
+                b64s.Add(match.Value);
+            }
+            return b64s;
+        }
+
         public static string GetFragment(
             Scintilla editor,
             string searchPattern)
@@ -415,6 +428,9 @@ namespace VgcApis.Libs
         #endregion
 
         #region Misc
+        public static bool IsImportResultSuccess(string[] result) =>
+           result[3] == VgcApis.Models.Consts.Import.MarkImportSuccess;
+
         public static void TrimDownConcurrentQueue<T>(
             ConcurrentQueue<T> queue,
             int maxLines,

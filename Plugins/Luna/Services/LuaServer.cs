@@ -12,7 +12,6 @@ namespace Luna.Services
         Settings settings;
         List<Controllers.LuaCoreCtrl> luaCoreCtrls;
         Models.Apis.LuaApis luaApis;
-        Models.Apis.LuaJson luaJson;
 
         public LuaServer() { }
 
@@ -22,7 +21,7 @@ namespace Luna.Services
         {
             this.settings = settings;
             this.luaApis = new Models.Apis.LuaApis(settings, api);
-            this.luaJson = new Models.Apis.LuaJson(api);
+            this.luaApis.Prepare();
 
             luaCoreCtrls = InitLuaCores(settings, luaApis);
             WakeUpAutoRunScripts();
@@ -83,7 +82,7 @@ namespace Luna.Services
 
             coreCtrl = new Controllers.LuaCoreCtrl();
             luaCoreCtrls.Add(coreCtrl);
-            coreCtrl.Run(settings, coreState, luaApis, luaJson);
+            coreCtrl.Run(settings, coreState, luaApis);
             Save();
             InvokeOnLuaCoreCtrlListChangeIgnoreError();
             return true;
@@ -139,7 +138,7 @@ namespace Luna.Services
             foreach (var luaCoreState in settings.GetLuaCoreSettings())
             {
                 var luaCtrl = new Controllers.LuaCoreCtrl();
-                luaCtrl.Run(settings, luaCoreState, luaApis, luaJson);
+                luaCtrl.Run(settings, luaCoreState, luaApis);
                 cores.Add(luaCtrl);
             }
             return cores;
