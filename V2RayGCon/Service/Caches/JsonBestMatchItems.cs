@@ -40,7 +40,7 @@ namespace V2RayGCon.Service.Caches
                 var marks = VgcApis.Libs.Utils.MeasureSimilarityCi(
                     keyword, fragment);
 
-                if (marks > 0)
+                if (marks > 0 && !table.ContainsKey(keyword))
                 {
                     table.Add(keyword, marks);
                 }

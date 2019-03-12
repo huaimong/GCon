@@ -39,9 +39,9 @@ namespace V2RayGCon.Service.Caches
             if (keywordCache == null)
             {
                 keywordCache = Resource.Resx.StrConst.ConfigJsonKeywords
-                    .Replace("\r", " ")
-                    .Replace("\n", " ")
-                    .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Replace("\r", "\0")
+                    .Replace("\n", "\0")
+                    .Split(new char[] { '\0' }, StringSplitOptions.RemoveEmptyEntries)
                     .ToList();
             }
 

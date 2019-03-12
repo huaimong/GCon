@@ -1,8 +1,25 @@
-﻿AsIs
+﻿0.0.0.0
+0.0.0.0/8
+1.1
+1.1.1.1
+10.0.0.0/8
+1080
+127.0.0.1
+192.168.1.1
+200
+53
+8.8.8.8
+8080
+Accept-Encoding
+AsIs
 Connection
+GET
 Host
 IPIfNonMatch
 IPOnDemand
+Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36
+Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.109 Mobile/14A456 Safari/601.1.46
+OK
 Pragma
 UseIP
 UseIPv4
@@ -23,11 +40,17 @@ agentout
 alias
 allocate
 allowInsecure
+allowInsecureCiphers
 allowTransparent
 alpn
 alterId
+always
 api
+application/octet-stream
 attrs
+attrs[':method'] == 'GET'
+attrs[':path'].startswith('/test')
+attrs['accept'].index('text/html') >= 0
 auth
 auto
 balancerTag
@@ -43,11 +66,13 @@ chacha20
 chacha20-ietf
 chacha20-ietf-poly1305
 chacha20-poly1305
+chunked
 clientIp
 clients
 concurrency
 congestion
 connIdle
+debug
 default
 description
 destOverride
@@ -72,9 +97,12 @@ enable
 enabled
 encipherment
 env
+env:PORT
 error
 ext:file:tag
 false
+fc00::/7
+fe80::/10
 field
 followRedirect
 freedom
@@ -89,21 +117,25 @@ geosite:geolocation-cn
 geosite:google
 geosite:speedtest
 geosite:tld-cn
+gzip, deflate
 handshake
 header
 headers
 host
 hosts
 http
+http/1.1
 httpSettings
 id
 import
 inboundTag
 inbounds
+info
 ip
 issue
 kcp
 kcpSettings
+keep-alive
 key
 keyFile
 level
@@ -117,6 +149,8 @@ mtproto
 mtu
 mux
 network
+no-cache
+noauth
 none
 off
 ota
@@ -132,6 +166,7 @@ protocol
 proxySettings
 quic
 quicSettings
+random
 readBufferSize
 reason
 redirect
@@ -194,8 +229,10 @@ v2ray.ray.buffer.size
 v2raygcon
 verify
 version
+video/mpeg
 vmess
 vnext
+warning
 wechat-video
 wireguard
 writeBufferSize

@@ -2,7 +2,7 @@
 {
     public static class Patterns
     {
-        public const string JsonSnippetSearchPattern = @"[:,_\.\-\\\*\$\w]";
+        public const string JsonSnippetSearchPattern = @"[:/,_\.\-\\\*\$\w]";
 
         public const string LuaSnippetSearchPattern = @"[\w\.:]";
 
