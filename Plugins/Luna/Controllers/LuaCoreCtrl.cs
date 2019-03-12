@@ -167,7 +167,8 @@ namespace Luna.Controllers
             try
             {
                 var core = CreateLuaCore();
-                var script = Encoding.UTF8.GetBytes(coreSetting.script);
+                var script = coreSetting.script;
+
                 core.DoString(script);
             }
             catch (Exception e)
@@ -179,11 +180,22 @@ namespace Luna.Controllers
 
         Lua CreateLuaCore()
         {
-            var state = new Lua();
-            state["Api"] = luaApis; // bug: lua can access all public functions
-            state["Signal"] = luaSignal;
-            state.DoString(luaApis.PredefinedFunctions());
-            return state;
+            var lua = new Lua();
+
+            lua.State.Encoding = Encoding.UTF8;
+
+            // bug: lua can access all public functions
+            var misc = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaMisc>();
+
+            lua["Signal"] = luaSignal;
+
+            lua["Json"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaJson>();
+            lua["Misc"] = misc;
+            lua["Server"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaServer>();
+            lua["Web"] = luaApis.GetComponent<VgcApis.Models.Interfaces.Lua.ILuaWeb>();
+
+            lua.DoString(misc.PredefinedFunctions());
+            return lua;
         }
 
         void Save() => settings.SaveSettings();

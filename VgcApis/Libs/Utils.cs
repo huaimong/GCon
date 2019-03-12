@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using ScintillaNET;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace VgcApis.Libs
 {
     public static class Utils
     {
+
         #region net
         static readonly IPEndPoint _defaultLoopbackEndpoint = new IPEndPoint(IPAddress.Loopback, port: 0);
         static readonly object getFreeTcpPortLocker = new object();
@@ -43,6 +45,97 @@ namespace VgcApis.Libs
         #endregion
 
         #region Json
+        public static Dictionary<string, string> GetterJsonSections(
+            JToken jtoken)
+        {
+            var rootKey = Models.Consts.Config.ConfigSectionDefRootKey;
+            var defDepth = Models.Consts.Config.ConfigSectionDefDepth;
+            var setting = Models.Consts.Config.ConfigSectionDefSetting;
+
+            var ds = new Dictionary<string, string>();
+
+            GetterJsonDataStructRecursively(
+                ref ds, jtoken, rootKey, defDepth, setting);
+
+            ds.Remove(rootKey);
+
+            int index = rootKey.Length + 1;
+            return ds
+                .Select(kv => new KeyValuePair<string, string>(kv.Key.Substring(index), kv.Value))
+                .ToDictionary(kv => kv.Key, kv => kv.Value);
+        }
+
+        static bool IsValidJobjectKey(string key)
+        {
+            if (string.IsNullOrEmpty(key)
+                || int.TryParse(key, out int blackhole))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        static void GetterJsonDataStructRecursively(
+            ref Dictionary<string, string> sections,
+            JToken jtoken,
+            string root,
+            int depth,
+            Dictionary<string, int> setting)
+        {
+            if (depth < 0)
+            {
+                return;
+            }
+
+            if (setting.ContainsKey(root))
+            {
+                depth = setting[root];
+            }
+
+            switch (jtoken)
+            {
+                case JObject jobject:
+                    sections[root] = Models.Consts.Config.JsonObject;
+                    foreach (var prop in jobject.Properties())
+                    {
+                        var key = prop.Name;
+                        if (!IsValidJobjectKey(key))
+                        {
+                            continue;
+                        }
+                        var subRoot = $"{root}.{key}";
+                        GetterJsonDataStructRecursively(
+                           ref sections, jobject[key], subRoot, depth - 1, setting);
+                    }
+                    break;
+
+                case JArray jarry:
+                    sections[root] = Models.Consts.Config.JsonArray;
+                    for (int i = 0; i < jarry.Count(); i++)
+                    {
+                        var key = i;
+                        var subRoot = $"{root}.{key}";
+                        GetterJsonDataStructRecursively(
+                            ref sections, jarry[key], subRoot, depth - 1, setting);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static string TrimConfig(string config)
+        {
+            try
+            {
+                var cfg = JObject.Parse(config);
+                return cfg?.ToString(Formatting.None);
+            }
+            catch { }
+            return null;
+        }
+
         public static bool TryParseJObject(
            string jsonString, out JObject json)
         {
@@ -153,25 +246,124 @@ namespace VgcApis.Libs
         #endregion
 
         #region string processor
+        public static List<string> ExtractBase64Strings(string text)
+        {
+            var b64s = new List<string>();
+            var matches = Regex.Matches(
+                text,
+                Models.Consts.Patterns.Base64NonStandard);
+            foreach (Match match in matches)
+            {
+                b64s.Add(match.Value);
+            }
+            return b64s;
+        }
+
+        public static string GetFragment(
+            Scintilla editor,
+            string searchPattern)
+        {
+            // https://github.com/Ahmad45123/AutoCompleteMenu-ScintillaNET
+
+            var selectedText = editor.SelectedText;
+            if (selectedText.Length > 0)
+            {
+                return selectedText;
+            }
+
+            string text = editor.Text;
+            var regex = new Regex(searchPattern);
+
+            var startPos = editor.CurrentPosition;
+
+            //go forward
+            int i = startPos;
+            while (i >= 0 && i < text.Length)
+            {
+                if (!regex.IsMatch(text[i].ToString()))
+                    break;
+                i++;
+            }
+
+            var endPos = i;
+
+            //go backward
+            i = startPos;
+            while (i > 0 && (i - 1) < text.Length)
+            {
+                if (!regex.IsMatch(text[i - 1].ToString()))
+                    break;
+                i--;
+            }
+            startPos = i;
+
+            return GetSubString(startPos, endPos, text);
+        }
+
+        static string GetSubString(int start, int end, string text)
+        {
+            // https://github.com/Ahmad45123/AutoCompleteMenu-ScintillaNET
+
+            if (string.IsNullOrEmpty(text))
+                return "";
+            if (start >= text.Length)
+                return "";
+            if (end > text.Length)
+                return "";
+
+            return text.Substring(start, end - start);
+        }
 
         public static bool PartialMatchCi(string source, string partial) =>
             PartialMatch(source.ToLower(), partial.ToLower());
 
-        public static bool PartialMatch(string source,string partial)
+        public static bool PartialMatch(string source, string partial) =>
+            MeasureSimilarity(source, partial) > 0;
+
+        public static long MeasureSimilarityCi(string source, string partial) =>
+            MeasureSimilarity(source.ToLower(), partial.ToLower());
+
+        /// <summary>
+        /// -1: not match 1: equal >=2: the smaller the value, the more similar
+        /// </summary>
+        public static long MeasureSimilarity(string source, string partial)
         {
+            if (string.IsNullOrEmpty(partial))
+            {
+                return 1;
+            }
+
+            if (string.IsNullOrEmpty(source))
+            {
+                return -1;
+            }
+
+            long marks = 1;
+
             var s = source;
             var p = partial;
 
             int idxS = 0, idxP = 0;
-            while (idxS < s.Length && idxP < p.Length)
+            int lenS = s.Length, lenP = p.Length;
+            while (idxS < lenS && idxP < lenP)
             {
                 if (s[idxS] == p[idxP])
                 {
                     idxP++;
                 }
+                else
+                {
+                    marks += lenP - idxP;
+                }
                 idxS++;
             }
-            return idxP == p.Length;
+
+            if (idxP != lenP)
+            {
+                return -1;
+            }
+
+            return marks;
         }
 
         public static string GetLinkPrefix(string shareLink)
@@ -236,6 +428,9 @@ namespace VgcApis.Libs
         #endregion
 
         #region Misc
+        public static bool IsImportResultSuccess(string[] result) =>
+           result[3] == VgcApis.Models.Consts.Import.MarkImportSuccess;
+
         public static void TrimDownConcurrentQueue<T>(
             ConcurrentQueue<T> queue,
             int maxLines,

@@ -7,7 +7,10 @@ namespace VgcApis.Models.Consts
     {
         public const string LuaModules = "require module";
 
-        public const string LuaKeywords = "Api Signal and break do else elseif end for function if in local nil not or repeat return then until while false true goto";
+        public const string LuaKeywords =
+            "Signal Json Misc Server Web"
+            // + " coreServ coreConfiger coreCtrl coreState coreLogger" 
+            + " and break do else elseif end for function if in local nil not or repeat return then until while false true goto";
 
         public static string ApiFuncNames = string.Join(@" ", GetterApiFuncNames());
 
@@ -39,8 +42,11 @@ namespace VgcApis.Models.Consts
 
             var types = new List<Type>
             {
-                typeof(Interfaces.ILuaSignal),
-                typeof(Interfaces.ILuaApis),
+                typeof(Interfaces.Lua.ILuaSignal),
+                typeof(Interfaces.Lua.ILuaJson),
+                typeof(Interfaces.Lua.ILuaMisc),
+                typeof(Interfaces.Lua.ILuaServer),
+                typeof(Interfaces.Lua.ILuaWeb),
                 typeof(Interfaces.ICoreServCtrl),
                 typeof(Interfaces.CoreCtrlComponents.IConfiger),
                 typeof(Interfaces.CoreCtrlComponents.ICoreCtrl),

@@ -10,15 +10,10 @@ namespace V2RayGCon.Views.WinForms
     public partial class FormQRCode : Form
     {
         #region Sigleton
-        static FormQRCode _instant;
-        public static FormQRCode GetForm()
-        {
-            if (_instant == null || _instant.IsDisposed)
-            {
-                _instant = new FormQRCode();
-            }
-            return _instant;
-        }
+        static readonly VgcApis.Models.BaseClasses.AuxSiWinForm<FormQRCode> auxSiForm =
+            new VgcApis.Models.BaseClasses.AuxSiWinForm<FormQRCode>();
+        static public FormQRCode GetForm() => auxSiForm.GetForm();
+        static public void ShowForm() => auxSiForm.ShowForm();
         #endregion
 
         Service.Servers servers;
@@ -28,7 +23,9 @@ namespace V2RayGCon.Views.WinForms
         VgcApis.Models.Datas.Enum.LinkTypes linkType;
         List<string> serverList;
 
-        FormQRCode()
+        VgcApis.Libs.Tasks.LazyGuy servListUpdater;
+
+        public FormQRCode()
         {
             servers = Service.Servers.Instance;
             slinkMgr = Service.ShareLinkMgr.Instance;
@@ -39,29 +36,39 @@ namespace V2RayGCon.Views.WinForms
             InitializeComponent();
 
             VgcApis.Libs.UI.AutoSetFormIcon(this);
-            this.Show();
         }
-
-
 
         private void FormQRCode_Shown(object sender, EventArgs e)
         {
             ClearServerList();
-            RefreshServerList();
-            cboxLinkType.SelectedIndex = LinkTypeToComboBoxSelectedIndex(linkType);
+
+            cboxLinkType.SelectedIndex =
+                LinkTypeToComboBoxSelectedIndex(linkType);
+
             picQRCode.InitialImage = null;
+            SetPicZoomMode();
 
             this.FormClosed += (s, a) =>
             {
                 servers.OnRequireMenuUpdate -= OnSettingChangeHandler;
+                servListUpdater?.ForgetIt();
+                servListUpdater?.Quit();
             };
 
+            servListUpdater = new VgcApis.Libs.Tasks.LazyGuy(
+                () =>
+                {
+                    try
+                    {
+                        VgcApis.Libs.Utils.RunInBackground(RefreshServerList);
+                    }
+                    catch { }
+                },
+                VgcApis.Models.Consts.Intervals.FormQrcodeMenuUpdateDelay);
+
             servers.OnRequireMenuUpdate += OnSettingChangeHandler;
-            SetPicZoomMode();
-            if (cboxServList.Items.Count > 0)
-            {
-                cboxServList.SelectedIndex = 0;
-            }
+
+            servListUpdater.DoItLater();
         }
 
         #region private methods
@@ -106,35 +113,40 @@ namespace V2RayGCon.Views.WinForms
                 PictureBoxSizeMode.Zoom;
         }
 
-        void OnSettingChangeHandler(object sender, EventArgs args)
-        {
-            try
-            {
-                VgcApis.Libs.UI.RunInUiThread(cboxServList, () =>
-                {
-                    RefreshServerList();
-                });
-            }
-            catch { }
-        }
+        void OnSettingChangeHandler(object sender, EventArgs args) =>
+            servListUpdater?.DoItLater();
 
-        void RefreshServerList(int index = -1)
+        void RefreshServerList()
         {
-            cboxServList.Items.Clear();
-
-            var allServers = servers.GetAllServersOrderByIndex();
             ClearServerList();
+            var summaryList = new List<string>();
+            var allServers = servers.GetAllServersOrderByIndex();
             foreach (var serv in allServers)
             {
                 var summary = serv.GetCoreStates().GetTitle();
                 var config = serv.GetConfiger().GetConfig();
-                cboxServList.Items.Add(summary);
+                summaryList.Add(summary);
                 this.serverList.Add(config);
             }
 
-            Lib.UI.ResetComboBoxDropdownMenuWidth(cboxServList);
+            VgcApis.Libs.UI.RunInUiThread(cboxServList,
+                () =>
+                {
+                    cboxServList.Items.Clear();
+                    cboxServList.Items.AddRange(summaryList.ToArray());
+                    Lib.UI.ResetComboBoxDropdownMenuWidth(cboxServList);
 
-            servIndex = -2;
+                    if (summaryList.Count <= 0)
+                    {
+                        cboxServList.SelectedIndex = -1;
+                        return;
+                    }
+
+                    var oldIndex = servIndex;
+                    servIndex = -1;
+                    cboxServList.SelectedIndex = VgcApis.Libs.Utils.Clamp(
+                        oldIndex, 0, summaryList.Count);
+                });
         }
 
         void UpdateTboxLink()

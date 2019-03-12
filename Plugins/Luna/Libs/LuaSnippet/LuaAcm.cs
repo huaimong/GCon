@@ -10,13 +10,18 @@ namespace Luna.Libs.LuaSnippet
 {
     internal sealed class LuaAcm :
         VgcApis.Models.BaseClasses.Disposable
-
     {
-        List<AutocompleteItem> snippets;
+        const string SearchPattern =
+            VgcApis.Models.Consts.Patterns.LuaSnippetSearchPattern;
+
+        List<LuaKeywordSnippets> keywordCache;
+        List<LuaFuncSnippets> functionCache;
+        List<LuaSubFuncSnippets> subFunctionCache;
+        List<ApiFunctionSnippets> apiFunctionCache;
 
         public LuaAcm()
         {
-            snippets = GenSnippetItems();
+            GenSnippetCaches();
         }
 
         #region public methods
@@ -29,31 +34,44 @@ namespace Luna.Libs.LuaSnippet
 
             var acm = new AutocompleteMenu()
             {
-                SearchPattern = @"[\w\.:]",
+                SearchPattern = SearchPattern,
                 MaximumSize = new Size(300, 200),
                 ToolTipDuration = 20000,
                 ImageList = imageList,
             };
 
             acm.TargetControlWrapper = new ScintillaWrapper(editor);
-            acm.SetAutocompleteItems(snippets);
+
+            acm.SetAutocompleteItems(
+                new BestMatchSnippets(
+                    editor,
+                    SearchPattern,
+                    apiFunctionCache,
+                    functionCache,
+                    keywordCache,
+                    subFunctionCache));
         }
 
         #endregion
 
         #region private methods
+        string GetFilteredLuaKeywords() =>
+            VgcApis.Models.Consts.Lua.LuaKeywords
+            .Replace("do", "")
+            .Replace("then", "")
+            .Replace("end", "");
 
         List<string> GenKeywords(IEnumerable<string> initValues) =>
             new StringBuilder(VgcApis.Models.Consts.Lua.LuaModules)
             .Append(@" ")
-            .Append(VgcApis.Models.Consts.Lua.LuaKeywords)
+            .Append(GetFilteredLuaKeywords())
             .ToString()
             .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
             .Union(initValues)
             .OrderBy(e => e)
             .ToList();
 
-        List<AutocompleteItem> GenLuaFunctionSnippet() =>
+        List<LuaFuncSnippets> GenLuaFunctionSnippet() =>
             VgcApis.Models.Consts.Lua.LuaFunctions
             .Replace("dofile", "")
             .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
@@ -62,8 +80,7 @@ namespace Luna.Libs.LuaSnippet
             {
                 try
                 {
-                    var item = new LuaFuncSnippets(e);
-                    return item as AutocompleteItem;
+                    return new LuaFuncSnippets(e);
                 }
                 catch { }
                 return null;
@@ -71,7 +88,7 @@ namespace Luna.Libs.LuaSnippet
             .Where(e => e != null)
             .ToList();
 
-        List<AutocompleteItem> GenLuaSubFunctionSnippet() =>
+        List<LuaSubFuncSnippets> GenLuaSubFunctionSnippet() =>
             VgcApis.Models.Consts.Lua.LuaSubFunctions
             .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
             .OrderBy(s => s)
@@ -79,8 +96,7 @@ namespace Luna.Libs.LuaSnippet
             {
                 try
                 {
-                    var item = new LuaSubFuncSnippets(e);
-                    return item as AutocompleteItem;
+                    return new LuaSubFuncSnippets(e);
                 }
                 catch { }
                 return null;
@@ -88,12 +104,15 @@ namespace Luna.Libs.LuaSnippet
             .Where(e => e != null)
             .ToList();
 
-        List<AutocompleteItem> GenSnippetItems()
+        void GenSnippetCaches()
         {
             var apis = new List<Tuple<string, Type>>
             {
-                new Tuple<string,Type>("Api", typeof(VgcApis.Models.Interfaces.ILuaApis)),
-                new Tuple<string,Type>("Signal", typeof(VgcApis.Models.Interfaces.ILuaSignal)),
+                new Tuple<string,Type>("Json", typeof(VgcApis.Models.Interfaces.Lua.ILuaJson)),
+                new Tuple<string,Type>("Misc", typeof(VgcApis.Models.Interfaces.Lua.ILuaMisc)),
+                new Tuple<string,Type>("Server", typeof(VgcApis.Models.Interfaces.Lua.ILuaServer)),
+                new Tuple<string,Type>("Web", typeof(VgcApis.Models.Interfaces.Lua.ILuaWeb)),
+                new Tuple<string,Type>("Signal", typeof(VgcApis.Models.Interfaces.Lua.ILuaSignal)),
                 new Tuple<string, Type>("coreServ",typeof(VgcApis.Models.Interfaces.ICoreServCtrl)),
                 new Tuple<string, Type>("coreConfiger",typeof(VgcApis.Models.Interfaces.CoreCtrlComponents.IConfiger)),
                 new Tuple<string, Type>("coreCtrl",typeof(VgcApis.Models.Interfaces.CoreCtrlComponents.ICoreCtrl)),
@@ -101,21 +120,21 @@ namespace Luna.Libs.LuaSnippet
                 new Tuple<string, Type>("coreLogger",typeof(VgcApis.Models.Interfaces.CoreCtrlComponents.ILogger)),
             };
 
-            return GenKeywordSnippetItems(GenKeywords(apis.Select(e => e.Item1)))
-                .Concat(GenLuaFunctionSnippet())
-                .Concat(GenLuaSubFunctionSnippet())
-                .Concat(apis.SelectMany(
-                    api => GenApiFunctionSnippetItems(api.Item1, api.Item2)))
-                .ToList();
+            keywordCache = GenKeywordSnippetItems(GenKeywords(apis.Select(e => e.Item1)));
+            functionCache = GenLuaFunctionSnippet();
+            subFunctionCache = GenLuaSubFunctionSnippet();
+            apiFunctionCache = apis
+               .SelectMany(api => GenApiFunctionSnippetItems(api.Item1, api.Item2))
+               .ToList();
         }
 
-        List<AutocompleteItem> GenKeywordSnippetItems(IEnumerable<string> keywords) =>
+        List<LuaKeywordSnippets> GenKeywordSnippetItems(IEnumerable<string> keywords) =>
             keywords
             .OrderBy(k => k)
-            .Select(e => new LuaKeywordSnippets(e) as AutocompleteItem)
+            .Select(e => new LuaKeywordSnippets(e))
             .ToList();
 
-        List<AutocompleteItem> GenApiFunctionSnippetItems(
+        IEnumerable<ApiFunctionSnippets> GenApiFunctionSnippetItems(
             string apiName, Type type) =>
             VgcApis.Libs.Utils.GetPublicMethodNameAndParam(type)
             .OrderBy(info => info.Item2)  // item2 = method name
@@ -125,9 +144,8 @@ namespace Luna.Libs.LuaSnippet
                 info.Item2, // methodName,
                 info.Item3, // paramStr,
                 info.Item4, // paramWithType,
-                @"") as AutocompleteItem
-            )
-            .ToList();
+                @"")
+            );
 
         #endregion
 

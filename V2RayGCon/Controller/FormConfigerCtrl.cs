@@ -24,11 +24,18 @@ namespace V2RayGCon.Controller
         }
 
         #region public method
+        public void UpdateServerMenusLater() =>
+            GetComponent<ConfigerComponet.MenuUpdater>()?.UpdateMenusLater();
+
+        public void Cleanup()
+        {
+            GetComponent<ConfigerComponet.MenuUpdater>()?.Cleanup();
+        }
 
         public void Prepare()
         {
             editor = GetComponent<ConfigerComponet.Editor>();
-            editor.ShowSection();
+            editor.Prepare();
             Update();
         }
 
@@ -155,8 +162,8 @@ namespace V2RayGCon.Controller
                 }
                 config = o;
                 Update();
-                editor.ShowSection();
                 MarkOriginalFile();
+                editor.ReloadSection();
                 return true;
             }
             catch { }
@@ -166,10 +173,10 @@ namespace V2RayGCon.Controller
         public void LoadServer(string configString)
         {
             editor.DiscardChanges();
-            editor.SelectSection(0);
+            editor.ShowEntireConfig();
             LoadConfig(configString);
             Update();
-            editor.ShowSection();
+            editor.ReloadSection();
         }
 
         public void InjectConfigHelper(Action lambda)
@@ -182,7 +189,7 @@ namespace V2RayGCon.Controller
             lambda?.Invoke();
 
             Update();
-            editor.ShowSection();
+            editor.ReloadSection();
         }
 
         #endregion

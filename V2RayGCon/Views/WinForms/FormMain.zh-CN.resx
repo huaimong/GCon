@@ -293,31 +293,31 @@
     <value />
   </data>
   <data name="toolMenuItemSimAddVmessServer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 30</value>
+    <value>252, 30</value>
   </data>
   <data name="toolMenuItemSimAddVmessServer.Text" xml:space="preserve">
     <value>添加vmess客户端</value>
   </data>
   <data name="toolMenuItemImportLinkFromClipboard.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 30</value>
+    <value>252, 30</value>
   </data>
   <data name="toolMenuItemImportLinkFromClipboard.Text" xml:space="preserve">
     <value>从剪切板导入</value>
   </data>
   <data name="toolMenuItemImportLinkFromClipboard.ToolTipText" xml:space="preserve">
-    <value>含v2ray://...链接</value>
+    <value>含v2cfg://...链接</value>
   </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>220, 6</value>
+    <value>249, 6</value>
   </data>
   <data name="toolMenuItemExportAllServerToFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 30</value>
+    <value>252, 30</value>
   </data>
   <data name="toolMenuItemExportAllServerToFile.Text" xml:space="preserve">
     <value>导出到文件</value>
   </data>
   <data name="toolMenuItemImportFromFile.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 30</value>
+    <value>252, 30</value>
   </data>
   <data name="toolMenuItemImportFromFile.Text" xml:space="preserve">
     <value>从文件导入</value>
@@ -326,10 +326,10 @@
     <value>含v2ray://...链接</value>
   </data>
   <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>220, 6</value>
+    <value>249, 6</value>
   </data>
   <data name="closeWindowToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 30</value>
+    <value>252, 30</value>
   </data>
   <data name="closeWindowToolStripMenuItem.Text" xml:space="preserve">
     <value>关闭窗口</value>
@@ -338,7 +338,7 @@
     <value>关闭此窗口</value>
   </data>
   <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>223, 30</value>
+    <value>252, 30</value>
   </data>
   <data name="exitToolStripMenuItem.Text" xml:space="preserve">
     <value>退出程序</value>
@@ -575,25 +575,40 @@
     <value>完整的服务器面板</value>
   </data>
   <data name="toolStripMenuItemModifySelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItemModifySelected.Text" xml:space="preserve">
     <value>调整选中</value>
   </data>
+  <data name="toolStripMenuItemCopyAsV2cfgLink.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 30</value>
+  </data>
   <data name="toolStripMenuItemCopyAsV2cfgLink.ToolTipText" xml:space="preserve">
     <value>包含全部配置信息</value>
+  </data>
+  <data name="toolStripMenuItemCopyAsVmessLink.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 30</value>
   </data>
   <data name="toolStripMenuItemCopyAsVmessLink.ToolTipText" xml:space="preserve">
     <value>包含主要配置信息</value>
   </data>
+  <data name="toolStripMenuItemCopyAsVeeLink.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 30</value>
+  </data>
   <data name="toolStripMenuItemCopyAsVeeLink.ToolTipText" xml:space="preserve">
     <value>包含主要配置信息</value>
+  </data>
+  <data name="toolStripMenuItemCopyAsVmessSubscription.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 30</value>
   </data>
   <data name="toolStripMenuItemCopyAsVmessSubscription.Text" xml:space="preserve">
     <value>Vmess订阅内容</value>
   </data>
   <data name="toolStripMenuItemCopyAsVmessSubscription.ToolTipText" xml:space="preserve">
     <value>将选中的服务器编码为订阅内容（仅支持vmess服务器）</value>
+  </data>
+  <data name="toolStripMenuItemCopyAsVeeSubscription.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 30</value>
   </data>
   <data name="toolStripMenuItemCopyAsVeeSubscription.Text" xml:space="preserve">
     <value>Vee订阅内容</value>
@@ -602,16 +617,16 @@
     <value>将选中的服务器编码为订阅内容（支持vmess及shadowsocks服务器）</value>
   </data>
   <data name="toolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItem1.Text" xml:space="preserve">
     <value>复制选中</value>
   </data>
   <data name="toolStripSeparator12.Size" type="System.Drawing.Size, System.Drawing">
-    <value>249, 6</value>
+    <value>175, 6</value>
   </data>
   <data name="toolStripMenuItemRestartSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItemRestartSelected.Text" xml:space="preserve">
     <value>重启选中</value>
@@ -620,7 +635,7 @@
     <value>重启选中的服务器</value>
   </data>
   <data name="toolStripMenuItemStopSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItemStopSelected.Text" xml:space="preserve">
     <value>停止选中</value>
@@ -629,7 +644,7 @@
     <value>停止选中的服务器</value>
   </data>
   <data name="toolStripMenuItemSpeedTestOnSelected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItemSpeedTestOnSelected.Text" xml:space="preserve">
     <value>速度测试</value>
@@ -638,7 +653,7 @@
     <value>对选中的服务器运行速度测试</value>
   </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>249, 6</value>
+    <value>175, 6</value>
   </data>
   <data name="toolStripMenuItemDeleteAllServer.Size" type="System.Drawing.Size, System.Drawing">
     <value>160, 30</value>
@@ -659,13 +674,13 @@
     <value>删除选中的服务器</value>
   </data>
   <data name="toolStripMenuItemDeleteServers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItemDeleteServers.Text" xml:space="preserve">
     <value>删除服务器</value>
   </data>
   <data name="refreshSummaryToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="refreshSummaryToolStripMenuItem.Text" xml:space="preserve">
     <value>刷新摘要</value>
@@ -677,34 +692,34 @@
     <value>服务器</value>
   </data>
   <data name="toolMenuItemConfigEditor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolMenuItemConfigEditor.Text" xml:space="preserve">
     <value>配置编辑器</value>
   </data>
   <data name="toolMenuItemQRCode.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolMenuItemQRCode.Text" xml:space="preserve">
     <value>二维码</value>
   </data>
   <data name="toolMenuItemLog.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolMenuItemLog.Text" xml:space="preserve">
     <value>日志</value>
   </data>
   <data name="toolMenuItemOptions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolMenuItemOptions.Text" xml:space="preserve">
     <value>选项</value>
   </data>
   <data name="toolStripMenuItem4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>249, 6</value>
+    <value>175, 6</value>
   </data>
   <data name="toolStripMenuItemResize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>252, 30</value>
+    <value>178, 30</value>
   </data>
   <data name="toolStripMenuItemResize.Text" xml:space="preserve">
     <value>调整大小</value>

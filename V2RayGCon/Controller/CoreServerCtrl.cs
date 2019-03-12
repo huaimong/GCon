@@ -4,7 +4,7 @@ using VgcApis.Models.Interfaces.CoreCtrlComponents;
 namespace V2RayGCon.Controller
 {
     public class CoreServerCtrl :
-        VgcApis.Models.BaseClasses.ContainerOf<CoreServerCtrl>,
+        VgcApis.Models.BaseClasses.ComponentOf<CoreServerCtrl>,
         VgcApis.Models.Interfaces.ICoreServCtrl
     {
         public event EventHandler
@@ -42,13 +42,17 @@ namespace V2RayGCon.Controller
             configer = new CoreServerComponent.Configer(
                 setting, cache, configMgr, servers, coreInfo);
 
-            Plug(coreCtrl);
-            Plug(states);
-            Plug(logger);
-            Plug(configer);
+            Plug(this, coreCtrl);
+            Plug(this, states);
+            Plug(this, logger);
+            Plug(this, configer);
 
             //inter-container dependency injection
-            InitComponents();
+            coreCtrl.Prepare();
+            states.Prepare();
+            logger.Prepare();
+            configer.Prepare();
+
 
             //other initializiations
             coreCtrl.BindEvents();
@@ -86,9 +90,6 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region private method
-        void Plug(VgcApis.Models.Interfaces.IComponent<CoreServerCtrl> component)
-            => Plug(this, component);
-
         void InvokeEmptyEvent(EventHandler evHandler)
         {
             evHandler?.Invoke(null, EventArgs.Empty);
@@ -105,12 +106,11 @@ namespace V2RayGCon.Controller
         #endregion
 
         #region protected methods
-        protected override void Cleanup()
+        protected override void BeforeComponentsDispose()
         {
             InvokeEventOnCoreClosing();
             coreCtrl?.StopCore();
             coreCtrl?.ReleaseEvents();
-            base.Cleanup();
         }
         #endregion
     }

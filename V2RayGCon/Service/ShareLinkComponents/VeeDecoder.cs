@@ -10,7 +10,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
     {
         Cache cache;
         Setting setting;
-        VeeCodecs.VeeCodecs veeCodecs;
+
 
         public VeeDecoder(
             Cache cache,
@@ -18,8 +18,6 @@ namespace V2RayGCon.Service.ShareLinkComponents
         {
             this.cache = cache;
             this.setting = setting;
-            veeCodecs = new VeeCodecs.VeeCodecs(cache);
-            veeCodecs.Run();
         }
 
         #region properties
@@ -27,12 +25,21 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region public methods
+        public override void Prepare()
+        {
+            var v0a = new VeeCodecs.Vee0a(cache);
+            var v1a = new VeeCodecs.Vee1a(cache);
+
+            Plug(this, v0a);
+            Plug(this, v1a);
+        }
+
         public Tuple<JObject, JToken> Decode(string shareLink)
         {
             string message = null;
             try
             {
-                return veeCodecs.Decode(shareLink);
+                return DecodeWorker(shareLink);
             }
             catch (Exception e)
             {
@@ -51,7 +58,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
             string message = null;
             try
             {
-                return veeCodecs.Encode(config);
+                return EncodeWorker(config);
             }
             catch (Exception e)
             {
@@ -71,14 +78,77 @@ namespace V2RayGCon.Service.ShareLinkComponents
         #endregion
 
         #region private methods
+        Tuple<JObject, JToken> DecodeWorker(string shareLink)
+        {
+            var bytes = VeeLink2Bytes(shareLink);
+            var linkVersion = VgcApis.Libs.Streams.BitStream.ReadVersion(bytes);
+
+            foreach (var component in GetAllComponents())
+            {
+                var decoder = component as VeeCodecs.IVeeDecoder;
+                if (decoder.GetSupportedVersion() == linkVersion)
+                {
+                    return decoder.Bytes2Config(bytes);
+                }
+            }
+
+            throw new NotSupportedException(
+                $"Not supported vee share link version {linkVersion}");
+        }
+
+        string EncodeWorker(string config)
+        {
+            if (!VgcApis.Libs.Utils.TryParseJObject(
+                config, out JObject json))
+            {
+                return null;
+            }
+
+            VeeCodecs.IVeeDecoder encoder;
+            var protocol = Lib.Utils.GetProtocolFromConfig(json);
+            switch (protocol)
+            {
+                case VgcApis.Models.Consts.Config.ProtocolNameVmess:
+                    encoder = GetComponent<VeeCodecs.Vee0a>();
+                    break;
+                case VgcApis.Models.Consts.Config.ProtocolNameSs:
+                    encoder = GetComponent<VeeCodecs.Vee1a>();
+                    break;
+                default:
+                    return null;
+            }
+
+            var bytes = encoder?.Config2Bytes(json);
+            return Bytes2VeeLink(bytes);
+        }
+
+        byte[] VeeLink2Bytes(string veeLink)
+        {
+            // Do not use Lib.Utils.Base64Decode() 
+            // Unicode encoder can not handle all possible byte values.
+
+            string b64Body = Lib.Utils.GetLinkBody(veeLink);
+            string b64Padded = Lib.Utils.Base64PadRight(b64Body);
+            return Convert.FromBase64String(b64Padded);
+        }
+
+        string Bytes2VeeLink(byte[] bytes)
+        {
+            if (bytes == null)
+            {
+                throw new NullReferenceException(
+                    @"Bytes is null!");
+            }
+
+            var b64Str = Convert.ToBase64String(bytes);
+            return Lib.Utils.AddLinkPrefix(
+                b64Str,
+                VgcApis.Models.Datas.Enum.LinkTypes.v);
+        }
 
         #endregion
 
         #region protected methods
-        protected override void Cleanup()
-        {
-            veeCodecs?.Dispose();
-        }
         #endregion
     }
 }

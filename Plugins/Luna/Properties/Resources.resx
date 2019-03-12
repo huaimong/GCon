@@ -131,7 +131,7 @@
     <value>Luna</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>0.0.15</value>
-    <comment>Full return type name.</comment>
+    <value>0.0.19</value>
+    <comment>Split LuaApis.</comment>
   </data>
 </root>

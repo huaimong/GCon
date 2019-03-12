@@ -632,4 +632,7 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="InjectPackagingImportsFail" xml:space="preserve">
     <value>注入打包import失败，忽略相应import项</value>
   </data>
+  <data name="ConfirmClearLog" xml:space="preserve">
+    <value>确定要清空日志？</value>
+  </data>
 </root>

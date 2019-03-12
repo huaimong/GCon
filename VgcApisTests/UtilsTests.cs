@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,6 +14,66 @@ namespace VgcApisTests
     [TestClass]
     public class UtilsTests
     {
+        [DataTestMethod]
+        [DataRow(@"abeec", @"abc", 3)]
+        [DataRow(@"abeecee", @"abc", 3)]
+        [DataRow(@"eabec", @"abc", 5)]
+        [DataRow(@"aeebc", @"abc", 5)]
+        [DataRow(@"eeabc", @"abc", 7)]
+        [DataRow(@"", @"", 1)]
+        [DataRow(@"abc", @"", 1)]
+        [DataRow(@"abc", @"abc", 1)]
+        public void MeasureSimilarityTest(
+            string source, string partial, long expect)
+        {
+            var result = MeasureSimilarity(source, partial);
+            Assert.AreEqual(expect, result);
+        }
+
+        [DataTestMethod]
+        [DataRow(
+            @"{routing:{settings:{rules:[{},{}]},balancers:[{},{}],rules:[{},{}]}}",
+            @"routing:{},routing.settings:{},routing.settings.rules:[],routing.settings.rules.0:{},routing.settings.rules.1:{},routing.balancers:[],routing.balancers.0:{},routing.balancers.1:{},routing.rules:[],routing.rules.0:{},routing.rules.1:{}")]
+        [DataRow(
+            @"{1:[[],[]],'':{},b:123,c:{}}",
+            @"c:{}")]
+        [DataRow(
+            @"{a:[{},{}],b:{}}",
+            @"a:[],b:{},a.0:{},a.1:{}")]
+        [DataRow(
+            @"{a:[[[],[],[]],[[]]],b:{}}",
+            @"a:[],b:{},a.0:[],a.1:[]")]
+        [DataRow(
+            @"{a:[[[],[],[]],[[]]],b:'abc',c:{a:[],b:{d:1}}}",
+            @"a:[],a.0:[],a.1:[],c:{},c.a:[],c.b:{}")]
+        public void GetterJsonDataStructWorkerTest(string jsonString, string expect)
+        {
+            var expDict = expect
+                .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(part => part.Split(
+                    new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries))
+                .ToDictionary(v => v[0], v => v[1]);
+
+            var jobject = JObject.Parse(jsonString);
+            var sections = GetterJsonSections(jobject);
+
+            foreach (var kv in expDict)
+            {
+                if (kv.Value != sections[kv.Key])
+                {
+                    Assert.Fail();
+                }
+            }
+
+            foreach (var kv in sections)
+            {
+                if (kv.Value != expDict[kv.Key])
+                {
+                    Assert.Fail();
+                }
+            }
+        }
+
         [DataTestMethod]
         [DataRow("EvABk文,tv字vvc", "字文", false)]
         [DataRow("EvABk文,tv字vvc", "ab字", true)]
