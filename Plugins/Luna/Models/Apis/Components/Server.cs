@@ -7,28 +7,18 @@ namespace Luna.Models.Apis.Components
         VgcApis.Models.BaseClasses.ComponentOf<LuaApis>,
         VgcApis.Models.Interfaces.Lua.ILuaServer
     {
-        Services.Settings settings;
-
         VgcApis.Models.IServices.IServersService vgcServers;
         VgcApis.Models.IServices.IConfigMgrService vgcConfigMgr;
 
         public Server(
-             Services.Settings settings,
              VgcApis.Models.IServices.IApiService api)
         {
-            this.settings = settings;
             vgcServers = api.GetServersService();
             vgcConfigMgr = api.GetConfigMgrService();
         }
 
         public void UpdateAllSummary() =>
             vgcServers.UpdateAllServersSummarySync();
-
-        public void WriteLocalStorage(string key, string value) =>
-            settings.SetLuaShareMemory(key, value);
-
-        public string ReadLocalStorage(string key) =>
-            settings.GetLuaShareMemory(key);
 
         public void ResetIndexQuiet() =>
             vgcServers.ResetIndexQuiet();

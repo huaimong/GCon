@@ -2,6 +2,9 @@
 {
     public interface ILuaMisc
     {
+        string ReadLocalStorage(string key);
+        void WriteLocalStorage(string key, string value);
+
         #region encode decode
         string AddV2cfgPrefix(string b64Str);
         string AddVeePrefix(string b64Str);

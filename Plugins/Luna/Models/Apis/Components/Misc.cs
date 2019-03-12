@@ -6,11 +6,15 @@ namespace Luna.Models.Apis.Components
          VgcApis.Models.BaseClasses.ComponentOf<LuaApis>,
         VgcApis.Models.Interfaces.Lua.ILuaMisc
     {
+        Services.Settings settings;
         VgcApis.Models.IServices.IUtilsService vgcUtils;
         VgcApis.Models.IServices.IShareLinkMgrService vgcSlinkMgr;
 
-        public Misc(VgcApis.Models.IServices.IApiService api)
+        public Misc(
+            Services.Settings settings,
+            VgcApis.Models.IServices.IApiService api)
         {
+            this.settings = settings;
             vgcUtils = api.GetUtilsService();
             vgcSlinkMgr = api.GetShareLinkMgrService();
         }
@@ -41,6 +45,12 @@ namespace Luna.Models.Apis.Components
         #endregion
 
         #region ILuaMisc thinggy
+        public void WriteLocalStorage(string key, string value) =>
+          settings.SetLuaShareMemory(key, value);
+
+        public string ReadLocalStorage(string key) =>
+            settings.GetLuaShareMemory(key);
+
         public string Config2VeeLink(string config) =>
             vgcSlinkMgr.EncodeConfigToShareLink(
                 config, VgcApis.Models.Datas.Enum.LinkTypes.v);

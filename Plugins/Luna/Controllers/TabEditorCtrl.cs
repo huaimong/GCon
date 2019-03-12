@@ -145,7 +145,6 @@ namespace Luna.Controllers
             return true;
         }
 
-
         LuaCoreCtrl CreateLuaCoreCtrl(
             Services.Settings settings,
             VgcApis.Models.IServices.IApiService api)
@@ -238,7 +237,7 @@ namespace Luna.Controllers
                     || cline.EndsWith("else")
                     || Regex.IsMatch(curLineText, "{\\s*$"))
                 {
-                    e.Text = (e.Text + "\t");
+                    e.Text = (e.Text + @"    "); // 4 spaces
                 }
             }
         }

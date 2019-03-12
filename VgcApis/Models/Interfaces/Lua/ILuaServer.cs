@@ -6,7 +6,6 @@ namespace VgcApis.Models.Interfaces.Lua
     {
         List<ICoreServCtrl> GetAllServers();
         string PackSelectedServers(string orgUid, string pkgName);
-        string ReadLocalStorage(string key);
         void RequireFormMainReload();
         void ResetIndexQuiet();
         long RunSpeedTest(string rawConfig);
@@ -14,6 +13,5 @@ namespace VgcApis.Models.Interfaces.Lua
         void SortSelectedServersBySpeedTest();
         void SortSelectedServersBySummary();
         void UpdateAllSummary();
-        void WriteLocalStorage(string key, string value);
     }
 }
