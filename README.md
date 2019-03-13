@@ -17,6 +17,9 @@ Self-use only!
   
 Please backup servers config first!  
 This version use a new data format, original servers config will lost.  
+
+### 演示 Demo
+![Demo v1.1.10 GIF](https://github.com/UudrSgMEZ/V2RayGCon/raw/master/screenshot/demo1.1.10.gif)  
   
 ### 引用按字母排序 References in alphabetical order  
 [2dust/v2rayN](https://github.com/2dust/v2rayN) vmess分享链接及订阅格式  
