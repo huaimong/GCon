@@ -90,7 +90,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://github.com/nobody3u/V2RayGCon/wiki/Release 的本地化字符串。
+        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon/wiki/V2RayGCon-update-log 的本地化字符串。
         /// </summary>
         internal static string ChangeLogUrl {
             get {
@@ -178,7 +178,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://github.com/nobody3u/V2RayGCon/issues 的本地化字符串。
+        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon/issues 的本地化字符串。
         /// </summary>
         internal static string IssueLink {
             get {
@@ -187,7 +187,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://raw.githubusercontent.com/nobody3u/V2RayGCon/version/latest.json 的本地化字符串。
+        ///   查找类似 https://raw.githubusercontent.com/UudrSgMEZ/V2RayGCon/version/latest.json 的本地化字符串。
         /// </summary>
         internal static string LatestVersionInfoUrl {
             get {
@@ -233,7 +233,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://github.com/nobody3u/V2RayGCon/wiki/Release 的本地化字符串。
+        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon/wiki/Release-notes 的本地化字符串。
         /// </summary>
         internal static string ReleaseNoteUrl {
             get {
@@ -291,7 +291,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://github.com/nobody3u/V2RayGCon/wiki 的本地化字符串。
+        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon/wiki 的本地化字符串。
         /// </summary>
         internal static string WikiLink {
             get {
