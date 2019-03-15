@@ -443,8 +443,7 @@ namespace V2RayGCon.Lib.V2Ray
             v2rayCore.BeginErrorReadLine();
             v2rayCore.BeginOutputReadLine();
 
-            // Assume core ready after 3.5 seconds, in case log set to none.
-            ready.WaitOne(VgcApis.Models.Consts.Core.WaitUntilReadyTimeout);
+            ready.WaitOne();
             OnCoreReady -= onCoreReady;
             isCheckCoreReady = false;
         }
@@ -468,9 +467,10 @@ namespace V2RayGCon.Lib.V2Ray
 
         bool MatchAllReadyMarks(string message)
         {
+            var lowerMsg = message.ToLower();
             foreach (var mark in VgcApis.Models.Consts.Core.ReadyLogMarks)
             {
-                if (!message.Contains(mark))
+                if (!lowerMsg.Contains(mark))
                 {
                     return false;
                 }
