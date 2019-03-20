@@ -71,11 +71,21 @@ namespace V2RayGCon.Service.ShareLinkComponents
 
             prefix = root + "." + "streamSettings";
             vmess.net = GetStr(prefix, "network");
-            vmess.type = GetStr(prefix, "kcpSettings.header.type");
             vmess.tls = GetStr(prefix, "security");
 
             switch (vmess.net)
             {
+                case "quic":
+                    vmess.type = GetStr(prefix, "quicSettings.header.type");
+                    vmess.host = GetStr(prefix, "quicSettings.security");
+                    vmess.path = GetStr(prefix, "quicSettings.key");
+                    break;
+                case "tcp":
+                    vmess.type = GetStr(prefix, "tcpSettings.header.type");
+                    break;
+                case "kcp":
+                    vmess.type = GetStr(prefix, "kcpSettings.header.type");
+                    break;
                 case "ws":
                     vmess.path = GetStr(prefix, "wsSettings.path");
                     vmess.host = GetStr(prefix, "wsSettings.headers.Host");
@@ -90,6 +100,8 @@ namespace V2RayGCon.Service.ShareLinkComponents
                         vmess.host = Lib.Utils.JArray2Str(hosts as JArray);
                     }
                     catch { }
+                    break;
+                default:
                     break;
             }
             return vmess;
@@ -118,7 +130,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         JToken GenStreamSetting(Model.Data.Vmess vmess)
         {
             // insert stream type
-            string[] streamTypes = { "ws", "tcp", "kcp", "h2" };
+            string[] streamTypes = { "ws", "tcp", "kcp", "h2", "quic" };
             string streamType = vmess.net.ToLower();
 
             if (!streamTypes.Contains(streamType))
@@ -126,16 +138,26 @@ namespace V2RayGCon.Service.ShareLinkComponents
                 return JToken.Parse(@"{}");
             }
 
+            var cmin = Resource.Resx.StrConst.config_min;
             var streamToken = cache.tpl.LoadTemplate(streamType);
             try
             {
                 switch (streamType)
                 {
+                    case "quic":
+                        streamToken["quicSettings"]["header"]["type"] = vmess.type; // quic.type
+                        streamToken["quicSettings"]["security"] = vmess.host; // quic.security
+                        streamToken["quicSettings"]["key"] = vmess.path; // quic.key
+                        break;
+                    case "tcp":
+                        streamToken["tcpSettings"]["header"]["type"] = vmess.type;
+                        break;
                     case "kcp":
                         streamToken["kcpSettings"]["header"]["type"] = vmess.type;
                         break;
                     case "ws":
-                        streamToken["wsSettings"]["path"] = string.IsNullOrEmpty(vmess.v) ? vmess.host : vmess.path;
+                        streamToken["wsSettings"]["path"] =
+                            string.IsNullOrEmpty(vmess.v) ? vmess.host : vmess.path;
                         if (vmess.v == "2" && !string.IsNullOrEmpty(vmess.host))
                         {
                             streamToken["wsSettings"]["headers"]["Host"] = vmess.host;

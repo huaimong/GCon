@@ -456,6 +456,17 @@ namespace V2RayGCon.Service
                 return empty;
             }
 
+            // inject log config
+            var nodeLog = Lib.Utils.GetKey(config, "log");
+            if (nodeLog != null && nodeLog is JObject)
+            {
+                nodeLog["loglevel"] = "warning";
+            }
+            else
+            {
+                config["log"] = JToken.Parse("{'loglevel': 'warning'}");
+            }
+
             if (!ModifyInboundByCustomSetting(
                 ref config,
                 (int)Model.Data.Enum.ProxyTypes.HTTP,
@@ -465,7 +476,10 @@ namespace V2RayGCon.Service
                 return empty;
             }
 
-            return config.ToString(Formatting.None);
+            // debug
+            var configString = config.ToString(Formatting.None);
+
+            return configString;
         }
 
         string GetRoutingTplName(JObject config, bool useV4)
