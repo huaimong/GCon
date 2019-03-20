@@ -31,10 +31,11 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.10.3")]
+[assembly: AssemblyVersion("1.1.10.4")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.10.4 Supports quic in vmess share link.
  * v1.1.10.3 Set loglevel to warning when speed testing.
  * v1.1.10.2 Update urls.
  * v1.1.10.1 Adjust FormConfiger.

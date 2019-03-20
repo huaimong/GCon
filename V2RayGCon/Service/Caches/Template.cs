@@ -13,6 +13,8 @@ namespace V2RayGCon.Service.Caches
             template = JObject.Parse(StrConst.config_tpl);
             example = JObject.Parse(StrConst.config_example);
             package = JObject.Parse(StrConst.config_pkg);
+
+            example["cfgMin"] = LoadMinConfig();
         }
 
         #region public method
