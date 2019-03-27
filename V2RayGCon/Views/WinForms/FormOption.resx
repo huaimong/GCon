@@ -442,7 +442,7 @@
     <value>4</value>
   </data>
   <data name="groupBox2.Text" xml:space="preserve">
-    <value>Auto upgrade</value>
+    <value>Update</value>
   </data>
   <data name="groupBox2.Visible" type="System.Boolean, mscorlib">
     <value>False</value>
@@ -616,16 +616,16 @@
     <value>22, 27</value>
   </data>
   <data name="chkSetServAutotrack.Size" type="System.Drawing.Size, System.Drawing">
-    <value>124, 22</value>
+    <value>151, 22</value>
   </data>
   <data name="chkSetServAutotrack.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="chkSetServAutotrack.Text" xml:space="preserve">
-    <value>Auto track</value>
+    <value>Auto tracking</value>
   </data>
   <data name="chkSetServAutotrack.ToolTip" xml:space="preserve">
-    <value>Activate servers that were running before last shutdown when this software started.</value>
+    <value>Activate servers that were running before last shutdown after this software starts.</value>
   </data>
   <data name="&gt;&gt;chkSetServAutotrack.Name" xml:space="preserve">
     <value>chkSetServAutotrack</value>
