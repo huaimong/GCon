@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
@@ -110,17 +109,19 @@ namespace V2RayGCon.Service
                 (s, a) => OnApplicationExitHandler(true);
 
             Application.ThreadException +=
-                (s, a) => SaveExceptionAndExit(
+                (s, a) => ShowExceptionDetailAndExit(
                     a.Exception.ToString());
 
             AppDomain.CurrentDomain.UnhandledException +=
-                (s, a) => SaveExceptionAndExit(
+                (s, a) => ShowExceptionDetailAndExit(
                     (a.ExceptionObject as Exception).ToString());
         }
 
         readonly object cleanupLocker = new object();
         void OnApplicationExitHandler(bool isShutdown)
         {
+            // throw new NullReferenceException("for debugging");
+
             lock (cleanupLocker)
             {
                 if (isCleanupDone)
@@ -172,45 +173,28 @@ namespace V2RayGCon.Service
         #endregion
 
         #region unhandle exception
-        void ShowExceptionDetails()
+        void ShowExceptionDetailAndExit(string detail)
         {
-            System.Diagnostics.Process.Start(GetBugLogFileName());
-            MessageBox.Show(I18N.LooksLikeABug
-                + System.Environment.NewLine
-                + GetBugLogFileName());
-        }
-
-        void SaveExceptionAndExit(string msg)
-        {
-            var log = msg;
+            var log = detail;
             try
             {
                 log += Environment.NewLine
                     + Environment.NewLine
                     + setting.GetLogContent();
             }
-            catch { }
-            SaveBugLog(log);
-            ShowExceptionDetails();
+            catch
+            {
+                // Why must I write sth. here?
+            }
+
+            if (!setting.isShutdown)
+            {
+                VgcApis.Libs.Sys.NotepadHelper.ShowMessage(log, "V2RayGCon bug report");
+                MessageBox.Show(I18N.LooksLikeABug);
+            }
             Application.Exit();
         }
 
-        string GetBugLogFileName()
-        {
-            var appData = Lib.Utils.GetSysAppDataFolder();
-            return Path.Combine(appData, StrConst.BugFileName);
-        }
-
-        void SaveBugLog(string content)
-        {
-            try
-            {
-                var bugFileName = GetBugLogFileName();
-                Lib.Utils.CreateAppDataFolder();
-                File.WriteAllText(bugFileName, content);
-            }
-            catch { }
-        }
         #endregion
     }
 }

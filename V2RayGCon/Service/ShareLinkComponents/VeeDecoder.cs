@@ -136,7 +136,7 @@ namespace V2RayGCon.Service.ShareLinkComponents
         {
             if (bytes == null)
             {
-                throw new NullReferenceException(
+                throw new ArgumentNullException(
                     @"Bytes is null!");
             }
 

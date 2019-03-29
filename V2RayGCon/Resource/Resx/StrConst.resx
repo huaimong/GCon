@@ -169,9 +169,6 @@
   <data name="VlinkWiki" xml:space="preserve">
     <value>https://github.com/nobody3u/V2RayGCon/wiki/vlink</value>
   </data>
-  <data name="BugFileName" xml:space="preserve">
-    <value>bug.txt</value>
-  </data>
   <data name="config_pkg" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Config\config_pkg.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>

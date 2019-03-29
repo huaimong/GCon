@@ -108,7 +108,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             if (editor == null)
             {
-                throw new NullReferenceException("Editor not ready!");
+                throw new ArgumentNullException("Editor not ready!");
             }
             return editor;
         }

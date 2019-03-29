@@ -34,7 +34,7 @@ namespace VgcApis.Libs.Streams.RawBitStream
             var cache = GetContainer().Read(len);
             if (cache.Count != len)
             {
-                throw new NullReferenceException("Read overflow!");
+                throw new ArgumentNullException("Read overflow!");
             }
             var result = Utils.BoolList2Int(cache);
             return result;
