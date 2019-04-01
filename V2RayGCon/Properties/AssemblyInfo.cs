@@ -31,10 +31,11 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.11.5")]
+[assembly: AssemblyVersion("1.1.11.6")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.11.6 Add plug-in icons.
  * v1.1.11.5 Add a tooltip for plug-in.
  * v1.1.11.4 Menu load server and replace server in FormConfiger support auto grouping.
  * v1.1.11.3 Show bug report directly without saving to disk.

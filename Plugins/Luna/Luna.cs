@@ -1,4 +1,5 @@
 ﻿using Luna.Resources.Langs;
+using System.Drawing;
 
 namespace Luna
 {
@@ -13,6 +14,9 @@ namespace Luna
         public override string Name => Properties.Resources.Name;
         public override string Version => Properties.Resources.Version;
         public override string Description => I18N.Description;
+
+        // icon from http://lua-users.org/wiki/LuaLogo
+        public override Image Icon => Properties.Resources.Lua_Logo_32x32;
         #endregion
 
         #region protected overrides

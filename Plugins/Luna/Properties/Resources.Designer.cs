@@ -83,6 +83,16 @@ namespace Luna.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap Lua_Logo_32x32 {
+            get {
+                object obj = ResourceManager.GetObject("Lua_Logo_32x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap Method_16x {
             get {
                 object obj = ResourceManager.GetObject("Method_16x", resourceCulture);

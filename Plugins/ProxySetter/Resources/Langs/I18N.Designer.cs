@@ -215,11 +215,39 @@ namespace ProxySetter.Resources.Langs {
         }
         
         /// <summary>
+        ///   查找类似 // this is a comment
+        ///
+        ///// add domain or IP or CIDR
+        ///example.com
+        ///192.168.1.1
+        ///192.168.1.0/24
+        ///
+        ///// remove domain or IP or CIDR
+        ///-example.com
+        ///-192.168.1.1
+        ///-192.168.1.0/24 的本地化字符串。
+        /// </summary>
+        internal static string UsageReadme {
+            get {
+                return ResourceManager.GetString("UsageReadme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Visit PAC debugger webpage? 的本地化字符串。
         /// </summary>
         internal static string VisitPacDebugger {
             get {
                 return ResourceManager.GetString("VisitPacDebugger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Visit txthinking/blackwhite github page? 的本地化字符串。
+        /// </summary>
+        internal static string VisitTxthinkingGithub {
+            get {
+                return ResourceManager.GetString("VisitTxthinkingGithub", resourceCulture);
             }
         }
         

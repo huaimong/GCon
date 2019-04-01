@@ -154,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Files\LuaPredefinedFunctions.txt" />
+    <Content Include="Resources\Icons\App\Lua-Logo_32x32.png" />
     <None Include="Resources\Icons\editor\Method_16x.png" />
     <None Include="Resources\Icons\editor\KeyDown_16x.png" />
     <None Include="Resources\Icons\editor\Class_16x.png" />

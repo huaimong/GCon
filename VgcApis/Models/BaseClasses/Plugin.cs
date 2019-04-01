@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace VgcApis.Models.BaseClasses
 {
@@ -7,6 +8,7 @@ namespace VgcApis.Models.BaseClasses
         public virtual string Name => throw new NotImplementedException();
         public virtual string Version => throw new NotImplementedException();
         public virtual string Description => throw new NotImplementedException();
+        public virtual Image Icon => throw new NotImplementedException();
 
         protected virtual void Start(Models.IServices.IApiService api) { }
         protected virtual void Stop() { }

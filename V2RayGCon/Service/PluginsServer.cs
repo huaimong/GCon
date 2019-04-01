@@ -87,15 +87,15 @@ namespace V2RayGCon.Service
             var children = new List<ToolStripMenuItem>();
             foreach (var fileName in enabledList)
             {
-                if (plugins.ContainsKey(fileName))
+                if (!plugins.ContainsKey(fileName))
                 {
-                    var plugin = plugins[fileName];
-                    children.Add(
-                        new ToolStripMenuItem(
-                            fileName,
-                            null,
-                            (s, a) => plugin.Show()));
+                    continue;
                 }
+
+                var plugin = plugins[fileName];
+                var mi = new ToolStripMenuItem(fileName, plugin.Icon, (s, a) => plugin.Show());
+                mi.ImageScaling = ToolStripItemImageScaling.SizeToFit;
+                children.Add(mi);
             }
 
             notifier.UpdatePluginMenu(children.Count > 0 ?
