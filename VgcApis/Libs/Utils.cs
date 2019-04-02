@@ -48,44 +48,37 @@ namespace VgcApis.Libs
         /// <summary>
         /// a<b: -, a=b: 0, a>b: +
         /// </summary>     
-        public static int KeyComparer(string a, string b)
+        public static int JsonKeyComparer(string a, string b)
         {
-            if (string.IsNullOrEmpty(a + b))
+            if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
             {
-                return 0;
-            }
-
-            if (string.IsNullOrEmpty(a))
-            {
-                return -1;
-            }
-
-            if (string.IsNullOrEmpty(b))
-            {
-                return 1;
+                return a.CompareTo(b);
             }
 
             var listA = a.Split('.').ToList();
             var listB = b.Split('.').ToList();
+            var lenA = listA.Count;
+            var lenB = listB.Count;
 
-            var maxLen = listA.Count < listB.Count ? listA.Count : listB.Count;
+            var maxLen = Math.Min(lenA, lenB);
             var result = 0;
             for (int i = 0; i < maxLen && result == 0; i++)
             {
-                var strA = listA[i];
-                var strB = listB[i];
-                if (int.TryParse(strA, out int numA)
-                    && int.TryParse(strB, out int numB))
+                var itemA = listA[i];
+                var itemB = listB[i];
+                if (int.TryParse(itemA, out int numA)
+                    && int.TryParse(itemB, out int numB))
                 {
-                    result = numA - numB;
+                    result = numA.CompareTo(numB);
                 }
                 else
                 {
-                    result = strA.CompareTo(strB);
+                    result = itemA.CompareTo(itemB);
                 }
 
             }
-            return result;
+
+            return result == 0 ? lenA - lenB : result;
         }
 
         public static Dictionary<string, string> GetterJsonSections(

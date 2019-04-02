@@ -310,15 +310,11 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             var oldText = cboxSection.Text;
             var keys = sections.Keys.ToList();
-            keys.Sort((a, b) => VgcApis.Libs.Utils.KeyComparer(a, b));
+            keys.Sort((a, b) => VgcApis.Libs.Utils.JsonKeyComparer(a, b));
             keys.Insert(0, ConfigDotJson);
 
             cboxSection.Items.Clear();
-            foreach (var key in keys)
-            {
-                cboxSection.Items.Add(key);
-            }
-
+            cboxSection.Items.AddRange(keys.ToArray());
             Lib.UI.ResetComboBoxDropdownMenuWidth(cboxSection);
             cboxSection.Text = oldText;
         }
