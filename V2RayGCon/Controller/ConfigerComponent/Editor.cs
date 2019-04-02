@@ -309,10 +309,11 @@ namespace V2RayGCon.Controller.ConfigerComponet
         void RefreshCboxSectionsItems()
         {
             var oldText = cboxSection.Text;
-            cboxSection.Items.Clear();
-            var keys = sections.Keys.OrderBy(k => k).ToList();
+            var keys = sections.Keys.ToList();
+            keys.Sort((a, b) => VgcApis.Libs.Utils.KeyComparer(a, b));
             keys.Insert(0, ConfigDotJson);
 
+            cboxSection.Items.Clear();
             foreach (var key in keys)
             {
                 cboxSection.Items.Add(key);
