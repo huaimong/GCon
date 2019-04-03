@@ -26,6 +26,9 @@ namespace Luna.Models.Apis.Components
         public long RunSpeedTest(string rawConfig) =>
             vgcConfigMgr.RunSpeedTest(rawConfig);
 
+        public long RunCustomSpeedTest(string rawConfig, string testUrl, int testTimeout) =>
+            vgcConfigMgr.RunCustomSpeedTest(rawConfig, testUrl, testTimeout);
+
         public List<VgcApis.Models.Interfaces.ICoreServCtrl> GetAllServers() =>
             vgcServers.GetAllServersOrderByIndex().ToList();
 

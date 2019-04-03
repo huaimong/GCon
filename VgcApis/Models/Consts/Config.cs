@@ -4,6 +4,8 @@ namespace VgcApis.Models.Consts
 {
     public static class Config
     {
+        public static int SeverNumPerSubmenu = 30;
+
         public const string ProtocolNameVmess = @"vmess";
         public const string ProtocolNameSs = @"shadowsocks";
 

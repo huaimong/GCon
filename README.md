@@ -17,6 +17,9 @@ Self-use only!
   
 Please backup servers config first!  
 This version use a new data format, original servers config will lost.  
+
+### 演示 Demo
+![Demo v1.1.10 GIF](https://github.com/UudrSgMEZ/V2RayGCon/raw/master/screenshot/demo1.1.10.gif)  
   
 ### 引用按字母排序 References in alphabetical order  
 [2dust/v2rayN](https://github.com/2dust/v2rayN) vmess分享链接及订阅格式  
@@ -30,5 +33,5 @@ This version use a new data format, original servers config will lost.
 [PoseidonM4A4/v2rayP](https://github.com/PoseidonM4A4/v2rayP) Launcher等多处代码参(抄)考(习)来源  
 [ravibpatel/AutoUpdater.NET](https://github.com/ravibpatel/AutoUpdater.NET) 自动更新功能  
 [shadowsocksr-backup/shadowsocksr-csharp](https://github.com/shadowsocksr-backup/shadowsocksr-csharp) 屏幕扫码实现代码  
-[txthinking/pac](https://github.com/txthinking/pac) ProxySetter插件中的默认PAC  
+[txthinking/blackwhite](https://github.com/txthinking/blackwhite) ProxySetter插件中的默认PAC  
 [v2ray/v2ray-core](https://github.com/v2ray/v2ray-core) v2ray-core服务端  

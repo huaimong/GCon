@@ -922,19 +922,23 @@ namespace V2RayGCon.Lib
 
         public static string UrlEncode(string value) => HttpUtility.UrlEncode(value);
 
-        public static long VisitWebPageSpeedTest(string url, int port)
+        public static long VisitWebPageSpeedTest(
+            string url, 
+            int port,
+            int timeout)
         {
             if (string.IsNullOrEmpty(url))
             {
                 throw new ArgumentNullException("URL must not null!");
             }
 
-            var timeout = VgcApis.Models.Consts.Intervals.SpeedTestTimeout;
+            var maxTimeout =timeout>0?timeout: VgcApis.Models.Consts.Intervals.SpeedTestTimeout;
+
             long elasped = long.MaxValue;
             Stopwatch sw = new Stopwatch();
             sw.Reset();
             sw.Start();
-            var html = Fetch(url, port, timeout);
+            var html = Fetch(url, port, maxTimeout);
             sw.Stop();
             if (!string.IsNullOrEmpty(html))
             {

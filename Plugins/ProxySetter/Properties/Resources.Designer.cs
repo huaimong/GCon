@@ -70,6 +70,16 @@ namespace ProxySetter.Properties {
         }
         
         /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap VBDynamicWeb_16x {
+            get {
+                object obj = ResourceManager.GetObject("VBDynamicWeb_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 0.0.7 的本地化字符串。
         /// </summary>
         internal static string Version {

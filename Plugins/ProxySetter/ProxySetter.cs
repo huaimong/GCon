@@ -1,4 +1,5 @@
 ﻿using ProxySetter.Resources.Langs;
+using System.Drawing;
 
 namespace ProxySetter
 {
@@ -16,6 +17,8 @@ namespace ProxySetter
         public override string Name => Properties.Resources.Name;
         public override string Version => Properties.Resources.Version;
         public override string Description => I18N.Description;
+
+        public override Image Icon => Properties.Resources.VBDynamicWeb_16x;
         #endregion
 
         #region protected overrides

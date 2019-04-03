@@ -18,34 +18,17 @@ namespace V2RayGCon.Service
         ConfigMgr() { }
 
         #region public methods
-        public long RunSpeedTest(string rawConfig) =>
-           RunSpeedTest(rawConfig, "testing", false, false, false, null);
+        public long RunCustomSpeedTest(string rawConfig, string testUrl, int testTimeout) =>
+            RunSpeedTestWorker(rawConfig, "Custom speed-test", testUrl, testTimeout, false, false, false, null);
 
-        public long RunSpeedTest(
+        public long RunSpeedTest(string rawConfig) =>
+           RunSpeedTestWorker(rawConfig, "Default speed-test", "", -1, false, false, false, null);
+
+        public long RunDefaultSpeedTest(
             string rawConfig,
             string title,
-            bool isUseCache,
-            bool isInjectSpeedTestTpl,
-            bool isInjectActivateTpl,
-            EventHandler<VgcApis.Models.Datas.StrEvent> logDeliever)
-        {
-            var port = VgcApis.Libs.Utils.GetFreeTcpPort();
-            var speedTestConfig = CreateSpeedTestConfig(
-                rawConfig, port, isUseCache, isInjectSpeedTestTpl, isInjectActivateTpl);
-
-            if (string.IsNullOrEmpty(speedTestConfig))
-            {
-                logDeliever?.Invoke(this, new VgcApis.Models.Datas.StrEvent(I18N.DecodeImportFail));
-                return long.MaxValue;
-            }
-
-            return RunSpeedTestWorker(
-                speedTestConfig,
-                title,
-                VgcApis.Models.Consts.Webs.GoogleDotCom,
-                port,
-                logDeliever);
-        }
+            EventHandler<VgcApis.Models.Datas.StrEvent> logDeliever) =>
+            RunSpeedTestWorker(rawConfig, title, "", -1, true, true, false, logDeliever);
 
         public string InjectImportTpls(
             string config,
@@ -359,12 +342,29 @@ namespace V2RayGCon.Service
         }
 
         long RunSpeedTestWorker(
-            string speedTestableConfig,
-            string title,
-            string testUrl,
-            int testPort,
-            EventHandler<VgcApis.Models.Datas.StrEvent> logDeliever)
+          string rawConfig,
+          string title,
+          string testUrl,
+          int testTimeout,
+          bool isUseCache,
+          bool isInjectSpeedTestTpl,
+          bool isInjectActivateTpl,
+          EventHandler<VgcApis.Models.Datas.StrEvent> logDeliever)
         {
+            var port = VgcApis.Libs.Utils.GetFreeTcpPort();
+            var speedTestConfig = CreateSpeedTestConfig(
+                rawConfig, port, isUseCache, isInjectSpeedTestTpl, isInjectActivateTpl);
+
+            if (string.IsNullOrEmpty(speedTestConfig))
+            {
+                logDeliever?.Invoke(this, new VgcApis.Models.Datas.StrEvent(I18N.DecodeImportFail));
+                return long.MaxValue;
+            }
+
+            var url = string.IsNullOrEmpty(testUrl) ?
+                VgcApis.Models.Consts.Webs.GoogleDotCom :
+                testUrl;
+
             var speedTester = new V2RayGCon.Lib.V2Ray.Core(setting)
             {
                 title = title
@@ -378,14 +378,14 @@ namespace V2RayGCon.Service
             speedTester.WaitForToken();
             try
             {
-                speedTester.RestartCore(speedTestableConfig);
+                speedTester.RestartCore(speedTestConfig);
             }
             finally
             {
                 speedTester.ReleaseToken();
             }
 
-            long testResult = Lib.Utils.VisitWebPageSpeedTest(testUrl, testPort);
+            long testResult = Lib.Utils.VisitWebPageSpeedTest(url, port, testTimeout);
 
             speedTester.WaitForTokenHurry();
             try
@@ -456,6 +456,17 @@ namespace V2RayGCon.Service
                 return empty;
             }
 
+            // inject log config
+            var nodeLog = Lib.Utils.GetKey(config, "log");
+            if (nodeLog != null && nodeLog is JObject)
+            {
+                nodeLog["loglevel"] = "warning";
+            }
+            else
+            {
+                config["log"] = JToken.Parse("{'loglevel': 'warning'}");
+            }
+
             if (!ModifyInboundByCustomSetting(
                 ref config,
                 (int)Model.Data.Enum.ProxyTypes.HTTP,
@@ -465,7 +476,10 @@ namespace V2RayGCon.Service
                 return empty;
             }
 
-            return config.ToString(Formatting.None);
+            // debug
+            var configString = config.ToString(Formatting.None);
+
+            return configString;
         }
 
         string GetRoutingTplName(JObject config, bool useV4)

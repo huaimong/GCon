@@ -520,7 +520,7 @@ https://github.com/v2ray/v2ray-core</value>
     <value>请先选择要进行此操作的服务器</value>
   </data>
   <data name="LooksLikeABug" xml:space="preserve">
-    <value>看来你遇到bug了,请将以下文件发给作者：</value>
+    <value>看来你遇到bug了,请将bug report发给作者。</value>
   </data>
   <data name="PackageFail" xml:space="preserve">
     <value>打包失败</value>

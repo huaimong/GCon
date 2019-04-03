@@ -182,10 +182,12 @@ namespace V2RayGCon.Service
             Controller.CoreServerCtrl coreServCtrl,
             bool isStart)
         {
+            var config = coreServCtrl?.GetConfiger()?.GetConfig();
+
             var curTrackerSetting =
                 configMgr.GenCurTrackerSetting(
                     coreServList.AsReadOnly(),
-                    coreServCtrl.GetConfiger().GetConfig(),
+                    config ?? string.Empty,
                     isStart);
 
             setting.SaveServerTrackerSetting(curTrackerSetting);
@@ -266,12 +268,8 @@ namespace V2RayGCon.Service
             }
         }
 
-        public void UpdateTrackerSettingNow()
-        {
-            var fakeCtrl = new Controller.CoreServerCtrl(
-                new VgcApis.Models.Datas.CoreInfo());
-            ServerTrackingUpdateWorker(fakeCtrl, false);
-        }
+        public void OnAutoTrackingOptionChanged() =>
+            ServerTrackingUpdateWorker(null, false);
 
         public int CountSelectedServers()
         {

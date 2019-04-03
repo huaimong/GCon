@@ -45,6 +45,42 @@ namespace VgcApis.Libs
         #endregion
 
         #region Json
+        /// <summary>
+        /// a<b: -, a=b: 0, a>b: +
+        /// </summary>     
+        public static int JsonKeyComparer(string a, string b)
+        {
+            if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b))
+            {
+                return a.CompareTo(b);
+            }
+
+            var listA = a.Split('.').ToList();
+            var listB = b.Split('.').ToList();
+            var lenA = listA.Count;
+            var lenB = listB.Count;
+
+            var maxLen = Math.Min(lenA, lenB);
+            var result = 0;
+            for (int i = 0; i < maxLen && result == 0; i++)
+            {
+                var itemA = listA[i];
+                var itemB = listB[i];
+                if (int.TryParse(itemA, out int numA)
+                    && int.TryParse(itemB, out int numB))
+                {
+                    result = numA.CompareTo(numB);
+                }
+                else
+                {
+                    result = itemA.CompareTo(itemB);
+                }
+
+            }
+
+            return result == 0 ? lenA - lenB : result;
+        }
+
         public static Dictionary<string, string> GetterJsonSections(
             JToken jtoken)
         {

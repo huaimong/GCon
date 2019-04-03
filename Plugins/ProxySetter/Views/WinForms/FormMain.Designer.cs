@@ -65,6 +65,13 @@
             this.rtboxPacWhiteList = new System.Windows.Forms.RichTextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.rtboxPacBlackList = new System.Windows.Forms.RichTextBox();
+            this.tabUsage = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.tboxUsageReadMe = new System.Windows.Forms.TextBox();
+            this.linkLabelUsageTxthinkingPac = new System.Windows.Forms.LinkLabel();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
@@ -79,6 +86,9 @@
             this.tableLayoutPanel3.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.tabUsage.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,6 +105,7 @@
             resources.ApplyResources(this.tabControl1, "tabControl1");
             this.tabControl1.Controls.Add(this.tabBasic);
             this.tabControl1.Controls.Add(this.tabPac);
+            this.tabControl1.Controls.Add(this.tabUsage);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.toolTip1.SetToolTip(this.tabControl1, resources.GetString("tabControl1.ToolTip"));
@@ -361,6 +372,58 @@
             this.rtboxPacBlackList.Name = "rtboxPacBlackList";
             this.toolTip1.SetToolTip(this.rtboxPacBlackList, resources.GetString("rtboxPacBlackList.ToolTip"));
             // 
+            // tabUsage
+            // 
+            resources.ApplyResources(this.tabUsage, "tabUsage");
+            this.tabUsage.Controls.Add(this.panel2);
+            this.tabUsage.Name = "tabUsage";
+            this.toolTip1.SetToolTip(this.tabUsage, resources.GetString("tabUsage.ToolTip"));
+            this.tabUsage.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.Controls.Add(this.groupBox5);
+            this.panel2.Name = "panel2";
+            this.toolTip1.SetToolTip(this.panel2, resources.GetString("panel2.ToolTip"));
+            // 
+            // groupBox5
+            // 
+            resources.ApplyResources(this.groupBox5, "groupBox5");
+            this.groupBox5.Controls.Add(this.label5);
+            this.groupBox5.Controls.Add(this.tboxUsageReadMe);
+            this.groupBox5.Controls.Add(this.linkLabelUsageTxthinkingPac);
+            this.groupBox5.Controls.Add(this.label7);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.TabStop = false;
+            this.toolTip1.SetToolTip(this.groupBox5, resources.GetString("groupBox5.ToolTip"));
+            // 
+            // label5
+            // 
+            resources.ApplyResources(this.label5, "label5");
+            this.label5.Name = "label5";
+            this.toolTip1.SetToolTip(this.label5, resources.GetString("label5.ToolTip"));
+            // 
+            // tboxUsageReadMe
+            // 
+            resources.ApplyResources(this.tboxUsageReadMe, "tboxUsageReadMe");
+            this.tboxUsageReadMe.Name = "tboxUsageReadMe";
+            this.tboxUsageReadMe.ReadOnly = true;
+            this.toolTip1.SetToolTip(this.tboxUsageReadMe, resources.GetString("tboxUsageReadMe.ToolTip"));
+            // 
+            // linkLabelUsageTxthinkingPac
+            // 
+            resources.ApplyResources(this.linkLabelUsageTxthinkingPac, "linkLabelUsageTxthinkingPac");
+            this.linkLabelUsageTxthinkingPac.Name = "linkLabelUsageTxthinkingPac";
+            this.linkLabelUsageTxthinkingPac.TabStop = true;
+            this.toolTip1.SetToolTip(this.linkLabelUsageTxthinkingPac, resources.GetString("linkLabelUsageTxthinkingPac.ToolTip"));
+            // 
+            // label7
+            // 
+            resources.ApplyResources(this.label7, "label7");
+            this.label7.Name = "label7";
+            this.toolTip1.SetToolTip(this.label7, resources.GetString("label7.ToolTip"));
+            // 
             // panel1
             // 
             resources.ApplyResources(this.panel1, "panel1");
@@ -405,6 +468,10 @@
             this.tableLayoutPanel3.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.tabUsage.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -451,5 +518,12 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnBasicClearSysProxy;
         private System.Windows.Forms.Button btnBasicViewInNotepad;
+        private System.Windows.Forms.TabPage tabUsage;
+        private System.Windows.Forms.TextBox tboxUsageReadMe;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.LinkLabel linkLabelUsageTxthinkingPac;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.GroupBox groupBox5;
     }
 }

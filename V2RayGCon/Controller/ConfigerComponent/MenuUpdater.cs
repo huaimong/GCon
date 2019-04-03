@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -30,11 +32,15 @@ namespace V2RayGCon.Controller.ConfigerComponet
                {
                    try
                    {
-                       VgcApis.Libs.Utils.RunInBackground(UpdateServerMenus);
+                       VgcApis.Libs.Utils.RunInBackground(
+                           UpdateServerMenus);
                    }
-                   catch { }
+                   catch
+                   {
+                       // Do not hurt me.
+                   }
                },
-                VgcApis.Models.Consts.Intervals.FormConfigerMenuUpdateDelay);
+               VgcApis.Models.Consts.Intervals.FormConfigerMenuUpdateDelay);
         }
 
         #region properties
@@ -50,12 +56,16 @@ namespace V2RayGCon.Controller.ConfigerComponet
 
             for (int i = 0; i < serverList.Count; i++)
             {
+                var coreServ = serverList[i];
+                var coreState = coreServ.GetCoreStates();
+
                 var name = string.Format(
                     "{0}.{1}",
-                    i + 1,
-                    serverList[i].GetCoreStates().GetName());
+                    coreState.GetIndex(),
+                    coreState.GetName());
 
-                var org = serverList[i].GetConfiger().GetConfig();
+
+                var org = coreServ.GetConfiger().GetConfig();
                 loadServMiList.Add(GenMenuItemLoad(name, org));
                 replaceServMiList.Add(GenMenuItemReplace(name, org));
             }
@@ -68,36 +78,57 @@ namespace V2RayGCon.Controller.ConfigerComponet
                     {
                         ReplaceOldMenus(loadServMiList, replaceServMiList);
                     }
-                    catch { }
+                    catch
+                    {
+                        // Do not hurt me.
+                    }
                 });
         }
 
-        private void ReplaceOldMenus(List<ToolStripMenuItem> loadServMiList, List<ToolStripMenuItem> replaceServMiList)
+        private void ReplaceOldMenus(
+            List<ToolStripMenuItem> loadServMiList,
+            List<ToolStripMenuItem> replaceServMiList)
         {
-            var misReplaceServer = miReplaceServer.DropDownItems;
-            var misLoadServer = miLoadServer.DropDownItems;
+            var miRootReplace = miReplaceServer.DropDownItems;
+            var miRootLoad = miLoadServer.DropDownItems;
 
-            misReplaceServer.Clear();
-            misLoadServer.Clear();
+            miRootReplace.Clear();
+            miRootLoad.Clear();
 
-            if (loadServMiList.Count > 0)
-            {
-                misLoadServer.AddRange(loadServMiList.ToArray());
-                miLoadServer.Enabled = true;
-            }
-            else
-            {
-                miLoadServer.Enabled = false;
-            }
-
-            if (replaceServMiList.Count > 0)
-            {
-                misReplaceServer.AddRange(replaceServMiList.ToArray());
-                miReplaceServer.Enabled = true;
-            }
-            else
+            if (loadServMiList.Count <= 0)
             {
                 miReplaceServer.Enabled = false;
+                miLoadServer.Enabled = false;
+                return;
+            }
+
+            miLoadServer.Enabled = true;
+            miReplaceServer.Enabled = true;
+
+            var miPerSubmenu = VgcApis.Models.Consts.Config.SeverNumPerSubmenu;
+            var isUseSubMenu = loadServMiList.Count > miPerSubmenu;
+            if (!isUseSubMenu)
+            {
+                miRootLoad.AddRange(loadServMiList.ToArray());
+                miRootReplace.AddRange(replaceServMiList.ToArray());
+                return;
+            }
+
+            int submenuCount = (int)(Math.Ceiling(1.0 * loadServMiList.Count / miPerSubmenu));
+            for (int i = 0; i < submenuCount; i++)
+            {
+                var skip = i * miPerSubmenu;
+                var submenuTitle = string.Format(
+                    "{0,3} - {1,3}", skip + 1, skip + miPerSubmenu);
+
+                var submenuLoad = new ToolStripMenuItem(submenuTitle);
+                var submenuReplace = new ToolStripMenuItem(submenuTitle);
+                var partialMisLoad = loadServMiList.Skip(skip).Take(miPerSubmenu).ToArray();
+                var partialMisReplace = replaceServMiList.Skip(skip).Take(miPerSubmenu).ToArray();
+                submenuLoad.DropDownItems.AddRange(partialMisLoad);
+                submenuReplace.DropDownItems.AddRange(partialMisReplace);
+                miRootLoad.Add(submenuLoad);
+                miRootReplace.Add(submenuReplace);
             }
         }
 

@@ -50,6 +50,7 @@
     <Compile Include="Controllers\FormVGCPluginCtrl.cs" />
     <Compile Include="Controllers\VGCPluginComponents\ComponentCtrl.cs" />
     <Compile Include="Controllers\VGCPluginComponents\TabBasicSetting.cs" />
+    <Compile Include="Controllers\VGCPluginComponents\TabUsage.cs" />
     <Compile Include="Controllers\VGCPluginComponents\TabStatus.cs" />
     <Compile Include="Controllers\VGCPluginComponents\TabPacCustomList.cs" />
     <Compile Include="GlobalSuppressions.cs" />
@@ -146,6 +147,7 @@
     <None Include="Resources\PAC\black_cidr.txt" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Icons\App\VBDynamicWeb_16x.png" />
     <Content Include="Resources\PAC\PacDebuggerTpl.txt" />
     <Content Include="Resources\PAC\PacJsTpl.txt" />
     <None Include="Resources\PAC\white_cidr.txt" />

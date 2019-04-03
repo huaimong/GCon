@@ -103,6 +103,10 @@ namespace ProxySetter.Views.WinForms
         {
             var ctrl = new Controllers.FormVGCPluginCtrl();
 
+            ctrl.Plug(new Controllers.VGCPluginComponents.TabUsage(
+                linkLabelUsageTxthinkingPac,
+                tboxUsageReadMe));
+
             ctrl.Plug(new Controllers.VGCPluginComponents.TabStatus(
                 setting,
                 pacServer,

@@ -57,6 +57,7 @@
             this.cboxSettingLanguage = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPagePlugins = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
             this.flyPluginsItemsContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.btnBakBackup = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -282,10 +283,16 @@
             // 
             // tabPagePlugins
             // 
+            this.tabPagePlugins.Controls.Add(this.label4);
             this.tabPagePlugins.Controls.Add(this.flyPluginsItemsContainer);
             resources.ApplyResources(this.tabPagePlugins, "tabPagePlugins");
             this.tabPagePlugins.Name = "tabPagePlugins";
             this.tabPagePlugins.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            resources.ApplyResources(this.label4, "label4");
+            this.label4.Name = "label4";
             // 
             // flyPluginsItemsContainer
             // 
@@ -349,6 +356,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabPagePlugins.ResumeLayout(false);
+            this.tabPagePlugins.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -388,5 +396,6 @@
         private System.Windows.Forms.RadioButton rbtnSetUpgradeToVgcFull;
         private System.Windows.Forms.CheckBox chkSetUpgradeUseProxy;
         private System.Windows.Forms.CheckBox chkSubsIsUseProxy;
+        private System.Windows.Forms.Label label4;
     }
 }

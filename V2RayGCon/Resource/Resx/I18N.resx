@@ -525,7 +525,7 @@ Are you sure you want to continue?</value>
   </data>
   <data name="LooksLikeABug" xml:space="preserve">
     <value>Looks like you found a bug.
-Please send the following file to the author.</value>
+Please send bug report to the author.</value>
   </data>
   <data name="PackageFail" xml:space="preserve">
     <value>Package failed</value>
