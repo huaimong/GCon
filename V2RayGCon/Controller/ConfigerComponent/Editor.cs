@@ -108,7 +108,7 @@ namespace V2RayGCon.Controller.ConfigerComponet
         {
             if (editor == null)
             {
-                throw new NullReferenceException("Editor not ready!");
+                throw new ArgumentNullException("Editor not ready!");
             }
             return editor;
         }
@@ -309,15 +309,12 @@ namespace V2RayGCon.Controller.ConfigerComponet
         void RefreshCboxSectionsItems()
         {
             var oldText = cboxSection.Text;
-            cboxSection.Items.Clear();
-            var keys = sections.Keys.OrderBy(k => k).ToList();
+            var keys = sections.Keys.ToList();
+            keys.Sort((a, b) => VgcApis.Libs.Utils.JsonKeyComparer(a, b));
             keys.Insert(0, ConfigDotJson);
 
-            foreach (var key in keys)
-            {
-                cboxSection.Items.Add(key);
-            }
-
+            cboxSection.Items.Clear();
+            cboxSection.Items.AddRange(keys.ToArray());
             Lib.UI.ResetComboBoxDropdownMenuWidth(cboxSection);
             cboxSection.Text = oldText;
         }

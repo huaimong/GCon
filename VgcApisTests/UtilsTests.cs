@@ -15,6 +15,25 @@ namespace VgcApisTests
     public class UtilsTests
     {
         [DataTestMethod]
+        [DataRow(@"o,o.14,o.11,o.1,o.3,o.4", @"o,o.1,o.3,o.4,o.11,o.14")]
+        [DataRow(@"b3.2,b3.1.3,a1", @"a1,b3.1.3,b3.2")]
+        [DataRow(@"b3,b10,a1", @"a1,b10,b3")]
+        [DataRow(@"b,a,1,,", @",,1,a,b")]
+        [DataRow(@"c.10.a,a,c.3.b,c.3.a", @"a,c.3.a,c.3.b,c.10.a")]
+        public void JsonKeyComparerTest(string rawKeys, string rawExpects)
+        {
+            var keyList = rawKeys.Split(',').ToList();
+            var expect = rawExpects.Split(',');
+
+            keyList.Sort((a, b) => JsonKeyComparer(a, b));
+
+            for (int i = 0; i < keyList.Count; i++)
+            {
+                Assert.AreEqual(expect[i], keyList[i]);
+            }
+        }
+
+        [DataTestMethod]
         [DataRow(@"abeec", @"abc", 3)]
         [DataRow(@"abeecee", @"abc", 3)]
         [DataRow(@"eabec", @"abc", 5)]

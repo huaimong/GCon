@@ -1,4 +1,5 @@
 ﻿using Statistics.Resources.Langs;
+using System.Drawing;
 
 namespace Statistics
 {
@@ -14,6 +15,8 @@ namespace Statistics
         public override string Name => Properties.Resources.Name;
         public override string Version => Properties.Resources.Version;
         public override string Description => I18N.Description;
+
+        public override Image Icon => Properties.Resources.ClientStatistcs_16x;
         #endregion
 
         #region protected override methods

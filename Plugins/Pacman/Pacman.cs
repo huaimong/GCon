@@ -1,4 +1,5 @@
 ﻿using Pacman.Resources.Langs;
+using System.Drawing;
 
 namespace Pacman
 {
@@ -17,6 +18,10 @@ namespace Pacman
         public override string Name => Properties.Resources.Name;
         public override string Version => Properties.Resources.Version;
         public override string Description => I18N.Description;
+
+        // png from https://www.flaticon.com/free-icon/pacman_1191124#term=pacman&page=1&position=31
+        public override Image Icon => Properties.Resources.pacman_x32;
+
         #endregion
 
         #region protected overrides

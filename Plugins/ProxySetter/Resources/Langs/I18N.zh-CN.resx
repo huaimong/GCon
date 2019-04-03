@@ -168,8 +168,24 @@
   <data name="SystemProxySettingUpdated" xml:space="preserve">
     <value>系统代理设置已更新</value>
   </data>
+  <data name="UsageReadme" xml:space="preserve">
+    <value>// 这是一行注释
+
+// 添加域名、IP、CIDR
+example.com
+192.168.1.1
+192.168.1.0/24
+
+// 删除域名、IP、CIDR
+-example.com
+-192.168.1.1
+-192.168.1.0/24</value>
+  </data>
   <data name="VisitPacDebugger" xml:space="preserve">
     <value>打开PAC调试器页面？</value>
+  </data>
+  <data name="VisitTxthinkingGithub" xml:space="preserve">
+    <value>访问txthinking/blackwhite的github主页？</value>
   </data>
   <data name="WriteFileFail" xml:space="preserve">
     <value>写入文件错误！</value>

@@ -70,7 +70,17 @@ namespace Pacman.Properties {
         }
         
         /// <summary>
-        ///   查找类似 0.0.2 的本地化字符串。
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap pacman_x32 {
+            get {
+                object obj = ResourceManager.GetObject("pacman_x32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 0.0.3 的本地化字符串。
         /// </summary>
         internal static string Version {
             get {

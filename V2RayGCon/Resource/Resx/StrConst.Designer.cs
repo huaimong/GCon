@@ -61,15 +61,6 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 bug.txt 的本地化字符串。
-        /// </summary>
-        internal static string BugFileName {
-            get {
-                return ResourceManager.GetString("BugFileName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 {
         ///  &quot;reverseDefault&quot;: {
         ///    &quot;bridges&quot;: [
@@ -112,28 +103,33 @@ namespace V2RayGCon.Resource.Resx {
         ///  &quot;log&quot;: {
         ///    &quot;loglevel&quot;: &quot;warning&quot;
         ///  },
-        ///  &quot;inbound&quot;: {
-        ///    &quot;port&quot;: 1080,
-        ///    &quot;listen&quot;: &quot;127.0.0.1&quot;,
-        ///    &quot;protocol&quot;: &quot;socks&quot;,
-        ///    &quot;settings&quot;: {
-        ///      &quot;auth&quot;: &quot;noauth&quot;,
-        ///      &quot;udp&quot;: false,
-        ///      &quot;ip&quot;: &quot;127.0.0.1&quot;
+        ///  &quot;inbounds&quot;: [
+        ///    {
+        ///      &quot;port&quot;: 1080,
+        ///      &quot;listen&quot;: &quot;127.0.0.1&quot;,
+        ///      &quot;protocol&quot;: &quot;socks&quot;,
+        ///      &quot;settings&quot;: {
+        ///        &quot;auth&quot;: &quot;noauth&quot;,
+        ///        &quot;udp&quot;: false,
+        ///        &quot;ip&quot;: &quot;127.0.0.1&quot;
+        ///      }
         ///    }
-        ///  },
-        ///  &quot;outbound&quot;: {
-        ///    &quot;protocol&quot;: &quot;freedom&quot;,
-        ///    &quot;settings&quot;: {},
-        ///    &quot;tag&quot;: &quot;direct&quot;
-        ///  },
+        ///  ],
+        ///  &quot;outbounds&quot;: [
+        ///    {
+        ///      &quot;protocol&quot;: &quot;freedom&quot;,
+        ///      &quot;settings&quot;: {},
+        ///      &quot;tag&quot;: &quot;direct&quot;
+        ///    }
+        ///  ],
         ///  &quot;policy&quot;: {
         ///    &quot;levels&quot;: {
-        ///      &quot;0&quot;: {&quot;uplinkOnly&quot;: 0}
+        ///      &quot;0&quot;: {
+        ///        &quot;uplinkOnly&quot;: 0
+        ///      }
         ///    }
         ///  }
-        ///}
-        /// 的本地化字符串。
+        ///} 的本地化字符串。
         /// </summary>
         internal static string config_min {
             get {
@@ -212,50 +208,35 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 AsIs
+        ///   查找类似 0.0.0.0
+        ///0.0.0.0/8
+        ///1.1
+        ///1.1.1.1
+        ///10.0.0.0/8
+        ///1080
+        ///127.0.0.1
+        ///192.168.1.1
+        ///200
+        ///53
+        ///8.8.8.8
+        ///8080
+        ///Accept-Encoding
+        ///AsIs
         ///Connection
+        ///GET
         ///Host
         ///IPIfNonMatch
         ///IPOnDemand
+        ///Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36
+        ///Mozilla/5.0 (iPhone; CPU iPhone OS 10_0_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.109 Mobile/14A456 Safari/601.1.46
+        ///OK
         ///Pragma
         ///UseIP
         ///UseIPv4
         ///UseIPv6
         ///V2RAY_BUF_READV
         ///V2RAY_LOCATION_ASSET
-        ///V2RAY_LOCATION_CONFIG
-        ///V2RAY_RAY_BUFFER_SIZE
-        ///access
-        ///accounts
-        ///address
-        ///aes-128-cfb
-        ///aes-128-gcm
-        ///aes-256-cfb
-        ///aes-256-gcm
-        ///agentin
-        ///agentout
-        ///alias
-        ///allocate
-        ///allowInsecure
-        ///allowTransparent
-        ///alpn
-        ///alterId
-        ///api
-        ///attrs
-        ///auth
-        ///auto
-        ///balancerTag
-        ///balancers
-        ///bittorrent
-        ///blackhole
-        ///bridges
-        ///bufferSize
-        ///certificate
-        ///certificateFile
-        ///certificates
-        ///chacha20
-        ///chacha20-ietf
-        ///chacha20-ietf-poly13 [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        ///V2RAY_ [字符串的其余部分被截断]&quot;; 的本地化字符串。
         /// </summary>
         internal static string ConfigJsonKeywords {
             get {

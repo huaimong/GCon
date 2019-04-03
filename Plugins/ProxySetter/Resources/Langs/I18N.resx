@@ -169,8 +169,24 @@ Please check port setting.</value>
   <data name="SystemProxySettingUpdated" xml:space="preserve">
     <value>System proxy setting updated.</value>
   </data>
+  <data name="UsageReadme" xml:space="preserve">
+    <value>// this is a comment
+
+// add domain or IP or CIDR
+example.com
+192.168.1.1
+192.168.1.0/24
+
+// remove domain or IP or CIDR
+-example.com
+-192.168.1.1
+-192.168.1.0/24</value>
+  </data>
   <data name="VisitPacDebugger" xml:space="preserve">
     <value>Visit PAC debugger webpage?</value>
+  </data>
+  <data name="VisitTxthinkingGithub" xml:space="preserve">
+    <value>Visit txthinking/blackwhite github page?</value>
   </data>
   <data name="WriteFileFail" xml:space="preserve">
     <value>Write file fail!</value>

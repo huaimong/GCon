@@ -73,7 +73,9 @@ namespace V2RayGCon.Controller.OptionComponent
             if (IsIndexValide(index) && ((int)setting.culture != index))
             {
                 setting.culture = (Model.Data.Enum.Cultures)index;
-                MessageBox.Show("Language change has not yet taken effect.\n"
+                MessageBox.Show(
+                    "Language change has not taken effect yet."
+                    + System.Environment.NewLine
                     + "Please restart this application.");
             }
 
@@ -84,7 +86,7 @@ namespace V2RayGCon.Controller.OptionComponent
                 trackerSetting.isTrackerOn = keepTracking;
                 setting.SaveServerTrackerSetting(trackerSetting);
                 setting.isServerTrackerOn = keepTracking;
-                servers.UpdateTrackerSettingNow();
+                servers.OnAutoTrackingOptionChanged();
             }
 
             setting.isUpdateUseProxy = chkSetUpdateUseProxy.Checked;

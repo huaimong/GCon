@@ -111,7 +111,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\icons\" />
+    <Content Include="Resources\icons\App\pacman_x32.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\VgcApis\VgcApis.csproj">
