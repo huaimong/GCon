@@ -10,7 +10,7 @@
         public PacUrlParams()
         {
             mime = "html";  // html,js,pac default pac
-            ip = VgcApis.Models.Consts.Webs.LoopbackIP;
+            ip = VgcApis.Models.Consts.Webs.LoopBackIP;
             isSocks = false;
             isWhiteList = true;
             isDebug = false;

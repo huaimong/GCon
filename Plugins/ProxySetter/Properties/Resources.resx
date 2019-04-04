@@ -126,6 +126,6 @@
   </data>
   <data name="Version" xml:space="preserve">
     <value>0.0.8</value>
-    <comment>Refactoring.</comment>
+    <comment>Fix a bug in veeeeery old win7 system.</comment>
   </data>
 </root>

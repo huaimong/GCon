@@ -649,7 +649,7 @@ namespace V2RayGCon.Lib
 
         public static string GetAddr(JObject json, string prefix, string keyIP, string keyPort)
         {
-            var ip = GetValue<String>(json, prefix, keyIP) ?? VgcApis.Models.Consts.Webs.LoopbackIP;
+            var ip = GetValue<String>(json, prefix, keyIP) ?? VgcApis.Models.Consts.Webs.LoopBackIP;
             var port = GetValue<string>(json, prefix, keyPort);
             return string.Join(":", ip, port);
         }
@@ -972,7 +972,7 @@ namespace V2RayGCon.Lib
             {
                 if (proxyPort > 0 && proxyPort < 65536)
                 {
-                    wc.Proxy = new WebProxy(VgcApis.Models.Consts.Webs.LoopbackIP, proxyPort);
+                    wc.Proxy = new WebProxy(VgcApis.Models.Consts.Webs.LoopBackIP, proxyPort);
                 }
 
                 AutoResetEvent dlCompleted = new AutoResetEvent(false);
@@ -1240,7 +1240,7 @@ namespace V2RayGCon.Lib
 
         public static bool TryParseIPAddr(string address, out string ip, out int port)
         {
-            ip = VgcApis.Models.Consts.Webs.LoopbackIP;
+            ip = VgcApis.Models.Consts.Webs.LoopBackIP;
             port = 1080;
 
             int index = address.LastIndexOf(':');

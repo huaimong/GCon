@@ -67,7 +67,7 @@
     <Compile Include="Model\Data\Enum.cs" />
     <Compile Include="Model\Data\CustomPacHeader.cs" />
     <Compile Include="Model\Data\PacUrlParams.cs" />
-    <Compile Include="Model\Data\ProxyRegKeyValue.cs" />
+    <Compile Include="Model\Data\ProxySettings.cs" />
     <Compile Include="Model\Data\QueryParams.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
     <Compile Include="Resources\Langs\StrConst.Designer.cs">

@@ -45,21 +45,6 @@ namespace ProxySetter.Lib
             return Model.Data.Enum.Overlaps.None;
         }
 
-        public static bool IsProxyNotSet(Model.Data.ProxyRegKeyValue proxySetting)
-        {
-            if (!string.IsNullOrEmpty(proxySetting.autoConfigUrl))
-            {
-                return false;
-            }
-
-            if (proxySetting.proxyEnable)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         /// <summary>
         /// return null if fail
         /// </summary>

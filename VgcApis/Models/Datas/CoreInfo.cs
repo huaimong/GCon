@@ -43,7 +43,7 @@
 
 
             customInbType = 1;
-            inbIp = VgcApis.Models.Consts.Webs.LoopbackIP;
+            inbIp = VgcApis.Models.Consts.Webs.LoopBackIP;
             inbPort = 1080;
         }
     }

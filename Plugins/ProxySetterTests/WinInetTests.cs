@@ -9,21 +9,41 @@ namespace ProxySetterTests
         [TestMethod]
         public void GeneralTests()
         {
+            // for debug only 
+            // WinInetDebugWorker();
+        }
+
+        void WinInetDebugWorker()
+        {
             var orgSettings = WinInet.GetProxySettings();
-            var testSettings = new ProxySetter.Model.Data.ProxyRegKeyValue
+            ProxySetter.Model.Data.ProxySettings curSettings;
+            bool success;
+
+            // set proxy server
+            var proxySetting = new ProxySetter.Model.Data.ProxySettings
             {
-                proxyEnable = true,
-                proxyServer = "192.168.1.1",
+                proxyMode = (int)WinInet.ProxyModes.Proxy,
+                proxyAddr = "192.168.1.1:1234",
             };
 
-            var success = WinInet.UpdateProxySettings(testSettings);
+            success = WinInet.SetProxySettings(proxySetting);
             Assert.AreEqual(true, success);
+            curSettings = WinInet.GetProxySettings();
+            Assert.AreEqual(true, proxySetting.IsEqualTo(curSettings));
 
-            var curSettings = WinInet.GetProxySettings();
+            // set pac proxy
+            var pacSetting = new ProxySetter.Model.Data.ProxySettings
+            {
+                proxyMode = (int)WinInet.ProxyModes.PAC,
+                pacUrl = "http://localhost/pac/a.pac",
+            };
 
-            Assert.AreEqual(true, testSettings.IsEqualTo(curSettings));
+            success = WinInet.SetProxySettings(pacSetting);
+            Assert.AreEqual(true, success);
+            curSettings = WinInet.GetProxySettings();
+            Assert.AreEqual(true, pacSetting.IsEqualTo(curSettings));
 
-            WinInet.UpdateProxySettings(orgSettings);
+            WinInet.SetProxySettings(orgSettings);
             curSettings = WinInet.GetProxySettings();
             Assert.AreEqual(true, orgSettings.IsEqualTo(curSettings));
         }

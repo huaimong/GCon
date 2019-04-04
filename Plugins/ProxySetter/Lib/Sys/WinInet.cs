@@ -7,14 +7,17 @@ namespace ProxySetter.Lib.Sys
     // https://github.com/NoNeil/ProxySetting/blob/master/MyProxy/ProxySetting.cs
     public static class WinInet
     {
-        const int QueryOptionCount = 4;
+        const int QueryOptionCount = 3;
+        const int QueryIndexProxyMode = 0;
+        const int QueryIndexProxyServer = 1;
+        const int QueryIndexPacUrl = 2;
 
         #region public methods
-        public static Model.Data.ProxyRegKeyValue GetProxySettings()
+        public static Model.Data.ProxySettings GetProxySettings()
         {
-            var query = GenOptionQurey(true);
+            var query = GenQureyOption(true);
             var success = false;
-            var result = new Model.Data.ProxyRegKeyValue();
+            var result = new Model.Data.ProxySettings();
 
             void action(IntPtr _listPtr, int _listSize)
             {
@@ -23,86 +26,28 @@ namespace ProxySetter.Lib.Sys
                     IntPtr.Zero,
                     InternetOption.INTERNET_OPTION_PER_CONNECTION_OPTION,
                     _listPtr, ref newSize);
+
                 if (success)
                 {
-                    InternetPerConnOptionList list =
+                    InternetPerConnOptionList optList =
                         (InternetPerConnOptionList)Marshal.PtrToStructure(
-                            _listPtr,
-                            typeof(InternetPerConnOptionList));
-
-                    var options = IntPtrToOptionArray(list.options, QueryOptionCount);
-
-                    var proxyServer = Marshal.PtrToStringAuto(options[1].m_Value.m_StringPtr);
-                    var autoConfigUrl = Marshal.PtrToStringAuto(options[2].m_Value.m_StringPtr);
-                    result.proxyEnable = !(string.IsNullOrEmpty(proxyServer) && string.IsNullOrEmpty(autoConfigUrl));
-                    result.proxyServer = proxyServer ?? string.Empty;
-                    result.autoConfigUrl = autoConfigUrl ?? string.Empty;
+                            _listPtr, typeof(InternetPerConnOptionList));
+                    result = IntPtrToProxySettings(optList.options);
                 }
             }
 
-            SystemProxyHandler(GenOptionQurey(true), action);
+            SystemProxyHandler(GenQureyOption(true), action);
             if (!success)
             {
-                // try again
-                SystemProxyHandler(GenOptionQurey(false), action);
+                SystemProxyHandler(GenQureyOption(false), action);
             }
             return result;
         }
 
-        static InternetConnectionOption[] IntPtrToOptionArray(IntPtr ptr, int size)
+        public static bool SetProxySettings(
+            Model.Data.ProxySettings proxySettings)
         {
-            var result = new List<InternetConnectionOption>();
-
-            int optSize = Marshal.SizeOf(typeof(InternetConnectionOption));
-
-            // copy the array over into that spot in memory ...
-            for (int i = 0; i < size; ++i)
-            {
-                IntPtr opt = new IntPtr(ptr.ToInt32() + (i * optSize));
-                var option =
-                    (InternetConnectionOption)Marshal.PtrToStructure(
-                        opt,
-                        typeof(InternetConnectionOption));
-                result.Add(option);
-            }
-
-            return result.ToArray();
-        }
-
-        public static bool UpdateProxySettings(Model.Data.ProxyRegKeyValue proxySettings)
-        {
-            var result = false;
-
-            if (!proxySettings.proxyEnable)
-            {
-                result = SetProxyOption(false, null, null);
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(proxySettings.proxyServer))
-                {
-                    result = SetProxyOption(false, proxySettings.proxyServer, null);
-                }
-                else
-                {
-                    result = SetProxyOption(true, proxySettings.autoConfigUrl, null);
-                }
-            }
-            ForceSysProxyRefresh();
-            return result;
-        }
-
-        public static void ForceSysProxyRefresh()
-        {
-            InternetSetOption(IntPtr.Zero, InternetOption.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
-            InternetSetOption(IntPtr.Zero, InternetOption.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
-        }
-        #endregion
-
-        #region helper functions
-        static bool SetProxyOption(bool isPac, string proxy, string bypass)
-        {
-            var options = GenOptionProxy(isPac, proxy, bypass);
+            var options = GenProxyOption(proxySettings);
             var result = false;
 
             void action(IntPtr listPtr, int listSize)
@@ -115,55 +60,73 @@ namespace ProxySetter.Lib.Sys
             }
 
             SystemProxyHandler(options, action);
+            ForceSysProxyRefresh();
             return result;
         }
 
-        static InternetConnectionOption[] GenOptionQurey(bool isWin7OrNewer)
+        public static void ForceSysProxyRefresh()
+        {
+            InternetSetOption(IntPtr.Zero, InternetOption.INTERNET_OPTION_SETTINGS_CHANGED, IntPtr.Zero, 0);
+            InternetSetOption(IntPtr.Zero, InternetOption.INTERNET_OPTION_REFRESH, IntPtr.Zero, 0);
+        }
+        #endregion
+
+        #region helper functions
+        static Model.Data.ProxySettings IntPtrToProxySettings(IntPtr ptr)
+        {
+            var options = new List<InternetConnectionOption>();
+            int optSize = Marshal.SizeOf(typeof(InternetConnectionOption));
+
+            for (int i = 0; i < QueryOptionCount; ++i)
+            {
+                IntPtr opt = new IntPtr(ptr.ToInt64() + (i * optSize));
+                options.Add(
+                    (InternetConnectionOption)Marshal.PtrToStructure(
+                        opt, typeof(InternetConnectionOption)));
+            }
+
+            var result = new Model.Data.ProxySettings
+            {
+                proxyMode = options[QueryIndexProxyMode].m_Value.m_Int,
+
+                proxyAddr = Marshal.PtrToStringAuto(
+                    options[QueryIndexProxyServer].m_Value.m_StringPtr)
+                    ?? string.Empty,
+
+                pacUrl = Marshal.PtrToStringAuto(
+                    options[QueryIndexPacUrl].m_Value.m_StringPtr)
+                    ?? string.Empty,
+            };
+            return result;
+        }
+
+        static InternetConnectionOption[] GenQureyOption(bool isWin7OrNewer)
         {
             InternetConnectionOption[] options = new InternetConnectionOption[QueryOptionCount];
-            options[0].m_Option = isWin7OrNewer ? PerConnOption.INTERNET_PER_CONN_FLAGS_UI : PerConnOption.INTERNET_PER_CONN_FLAGS;
-            options[1].m_Option = PerConnOption.INTERNET_PER_CONN_PROXY_SERVER;
-            options[2].m_Option = PerConnOption.INTERNET_PER_CONN_AUTOCONFIG_URL;
-            options[3].m_Option = PerConnOption.INTERNET_PER_CONN_PROXY_BYPASS;
+            options[QueryIndexProxyMode].m_Option = isWin7OrNewer ? PerConnOption.INTERNET_PER_CONN_FLAGS_UI : PerConnOption.INTERNET_PER_CONN_FLAGS;
+            options[QueryIndexProxyServer].m_Option = PerConnOption.INTERNET_PER_CONN_PROXY_SERVER;
+            options[QueryIndexPacUrl].m_Option = PerConnOption.INTERNET_PER_CONN_AUTOCONFIG_URL;
             return options;
         }
 
-        static InternetConnectionOption[] GenOptionDirect()
+        static InternetConnectionOption[] GenProxyOption(
+            Model.Data.ProxySettings proxySettings)
         {
-            InternetConnectionOption[] options = new InternetConnectionOption[1];
-            options[0].m_Option = PerConnOption.INTERNET_PER_CONN_FLAGS;
-            options[0].m_Value.m_Int = (int)(PerConnFlags.PROXY_TYPE_DIRECT);
-            return options;
-        }
-
-        static InternetConnectionOption[] GenOptionProxy(bool isPac, string proxy, string bypass)
-        {
-            if (string.IsNullOrEmpty(proxy))
-            {
-                return GenOptionDirect();
-            }
-
-            bool isBypassEmpty = string.IsNullOrEmpty(bypass);
-            InternetConnectionOption[] options =
-                new InternetConnectionOption[isBypassEmpty ? 2 : 3];
+            InternetConnectionOption[] options = new InternetConnectionOption[QueryOptionCount];
 
             // USE a proxy server ...
-            options[0].m_Option = PerConnOption.INTERNET_PER_CONN_FLAGS;
-            options[0].m_Value.m_Int = (int)(isPac ?
-                (PerConnFlags.PROXY_TYPE_AUTO_PROXY_URL | PerConnFlags.PROXY_TYPE_DIRECT) :
-                (PerConnFlags.PROXY_TYPE_DIRECT | PerConnFlags.PROXY_TYPE_PROXY));
+            options[QueryIndexProxyMode].m_Option = PerConnOption.INTERNET_PER_CONN_FLAGS;
+            options[QueryIndexProxyMode].m_Value.m_Int = proxySettings.proxyMode;
 
-            options[1].m_Option = isPac ?
-                PerConnOption.INTERNET_PER_CONN_AUTOCONFIG_URL :
+            options[QueryIndexProxyServer].m_Option =
                 PerConnOption.INTERNET_PER_CONN_PROXY_SERVER;
+            options[QueryIndexProxyServer].m_Value.m_StringPtr =
+                Marshal.StringToHGlobalAuto(proxySettings.proxyAddr ?? @"");
 
-            options[1].m_Value.m_StringPtr = Marshal.StringToHGlobalAuto(proxy);
-
-            if (!isBypassEmpty)
-            {
-                options[2].m_Option = PerConnOption.INTERNET_PER_CONN_PROXY_BYPASS;
-                options[2].m_Value.m_StringPtr = Marshal.StringToHGlobalAuto(bypass);
-            }
+            options[QueryIndexPacUrl].m_Option =
+                PerConnOption.INTERNET_PER_CONN_AUTOCONFIG_URL;
+            options[QueryIndexPacUrl].m_Value.m_StringPtr =
+                Marshal.StringToHGlobalAuto(proxySettings.pacUrl ?? @"");
 
             return options;
         }
@@ -184,7 +147,7 @@ namespace ProxySetter.Lib.Sys
             // copy the array over into that spot in memory ...
             for (int i = 0; i < options.Length; ++i)
             {
-                IntPtr opt = new IntPtr(optionsPtr.ToInt32() + (i * optSize));
+                IntPtr opt = new IntPtr(optionsPtr.ToInt64() + (i * optSize));
                 Marshal.StructureToPtr(options[i], opt, false);
             }
 
@@ -242,6 +205,13 @@ namespace ProxySetter.Lib.Sys
         #endregion
 
         #region WinInet enums
+        public enum ProxyModes : int
+        {
+            Direct = PerConnFlags.PROXY_TYPE_DIRECT,
+            Proxy = PerConnFlags.PROXY_TYPE_PROXY | PerConnFlags.PROXY_TYPE_DIRECT,
+            PAC = PerConnFlags.PROXY_TYPE_AUTO_PROXY_URL | PerConnFlags.PROXY_TYPE_DIRECT,
+        }
+
         public enum OperationType
         {
             GetProxyOption,

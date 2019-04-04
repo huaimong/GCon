@@ -113,7 +113,7 @@ namespace ProxySetter.Controllers.VGCPluginComponents
             return new Model.Data.BasicSettings
             {
                 pacProtocol = Clamp(cboxBasicPacProtocol.SelectedIndex, 0, 2),
-                sysProxyMode = Clamp(cboxBasicSysProxyMode.SelectedIndex, 0, 3),
+                sysProxyMode = Clamp(cboxBasicSysProxyMode.SelectedIndex, 0, 4),
                 proxyPort = Str2Int(tboxBasicProxyPort.Text),
                 pacServPort = Str2Int(tboxBaiscPacPort.Text),
                 pacMode = Clamp(cboxBasicPacMode.SelectedIndex, 0, 2),
@@ -151,7 +151,7 @@ namespace ProxySetter.Controllers.VGCPluginComponents
             var s = basicSettings;
 
             cboxBasicPacProtocol.SelectedIndex = Clamp(s.pacProtocol, 0, 2);
-            cboxBasicSysProxyMode.SelectedIndex = Clamp(s.sysProxyMode, 0, 3);
+            cboxBasicSysProxyMode.SelectedIndex = Clamp(s.sysProxyMode, 0, 4);
             tboxBasicProxyPort.Text = s.proxyPort.ToString();
             tboxBaiscPacPort.Text = s.pacServPort.ToString();
             cboxBasicPacMode.SelectedIndex = Clamp(s.pacMode, 0, 2);

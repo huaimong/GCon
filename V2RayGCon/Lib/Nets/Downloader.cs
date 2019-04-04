@@ -246,7 +246,7 @@ namespace V2RayGCon.Lib.Nets
             if (proxyPort > 0)
             {
                 webClient.Proxy = new WebProxy(
-                    VgcApis.Models.Consts.Webs.LoopbackIP, proxyPort);
+                    VgcApis.Models.Consts.Webs.LoopBackIP, proxyPort);
             }
 
             webClient.DownloadProgressChanged += (s, a) =>

@@ -470,7 +470,7 @@ namespace V2RayGCon.Service
             if (!ModifyInboundByCustomSetting(
                 ref config,
                 (int)Model.Data.Enum.ProxyTypes.HTTP,
-                VgcApis.Models.Consts.Webs.LoopbackIP,
+                VgcApis.Models.Consts.Webs.LoopBackIP,
                 port))
             {
                 return empty;
