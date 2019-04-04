@@ -55,7 +55,7 @@ namespace ProxySetter.Model.Data
         {
             return new PacUrlParams
             {
-                ip = (Lib.Utils.IsIP(ip) ? ip : "127.0.0.1"),
+                ip = (Lib.Utils.IsIP(ip) ? ip : VgcApis.Models.Consts.Webs.LoopbackIP),
                 port = VgcApis.Libs.Utils.Clamp(
                     VgcApis.Libs.Utils.Str2Int(port), 0, 65536),
                 isSocks = proto?.ToLower() == pacProtocolName[Enum.PacProtocols.SOCKS],

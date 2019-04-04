@@ -58,6 +58,7 @@
     <Compile Include="Lib\Sys\CancelableTask.cs" />
     <Compile Include="Lib\Sys\CancelableTimeout.cs" />
     <Compile Include="Lib\Sys\ProxySetter.cs" />
+    <Compile Include="Lib\Sys\WinInet.cs" />
     <Compile Include="Lib\Utils.cs" />
     <Compile Include="Model\BaseClass\FormComponentController.cs" />
     <Compile Include="Model\BaseClass\FormController.cs" />
