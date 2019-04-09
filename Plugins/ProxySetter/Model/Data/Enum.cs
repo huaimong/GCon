@@ -28,9 +28,10 @@
 
         public enum SystemProxyModes
         {
-            None = 0,
+            None = 0,  // keep current system proxy settings
             PAC = 1,
             Global = 2,
+            Direct = 3,
         }
 
         public enum OnOff

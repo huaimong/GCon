@@ -2,6 +2,8 @@
 {
     public static class Webs
     {
+        public static string LoopBackIP = System.Net.IPAddress.Loopback.ToString();
+
         public const string FakeRequestUrl = @"http://localhost:3000/pac/?&t=abc1234";
         public const string GoogleDotCom = @"https://www.google.com";
 

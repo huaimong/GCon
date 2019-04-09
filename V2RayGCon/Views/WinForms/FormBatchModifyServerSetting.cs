@@ -70,7 +70,7 @@ namespace V2RayGCon.Views.WinForms
             }
             else
             {
-                tboxInIP.Text = "127.0.0.1";
+                tboxInIP.Text = VgcApis.Models.Consts.Webs.LoopBackIP;
             }
             tboxInIP.Enabled = !isChecked;
         }

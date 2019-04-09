@@ -48,6 +48,10 @@ namespace ProxySetter.Services
                     isStartPacServer = true;
                     Lib.Sys.ProxySetter.SetPacProxy(pacServer.GetPacUrl());
                     break;
+                case Model.Data.Enum.SystemProxyModes.Direct:
+                    isStartTracker = false;
+                    Lib.Sys.ProxySetter.ClearSysProxy();
+                    break;
                 default:
                     isStartTracker = false;
                     break;

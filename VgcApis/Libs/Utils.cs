@@ -542,6 +542,9 @@ namespace VgcApis.Libs
 
         public static string GetAppDir() => appDirCache;
 
+        /// <summary>
+        /// min to max - 1
+        /// </summary>
         public static int Clamp(int value, int min, int max)
         {
             return Math.Max(Math.Min(value, max - 1), min);

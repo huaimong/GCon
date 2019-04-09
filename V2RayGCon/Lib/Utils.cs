@@ -649,7 +649,7 @@ namespace V2RayGCon.Lib
 
         public static string GetAddr(JObject json, string prefix, string keyIP, string keyPort)
         {
-            var ip = GetValue<String>(json, prefix, keyIP) ?? "127.0.0.1";
+            var ip = GetValue<String>(json, prefix, keyIP) ?? VgcApis.Models.Consts.Webs.LoopBackIP;
             var port = GetValue<string>(json, prefix, keyPort);
             return string.Join(":", ip, port);
         }
@@ -923,7 +923,7 @@ namespace V2RayGCon.Lib
         public static string UrlEncode(string value) => HttpUtility.UrlEncode(value);
 
         public static long VisitWebPageSpeedTest(
-            string url, 
+            string url,
             int port,
             int timeout)
         {
@@ -932,7 +932,7 @@ namespace V2RayGCon.Lib
                 throw new ArgumentNullException("URL must not null!");
             }
 
-            var maxTimeout =timeout>0?timeout: VgcApis.Models.Consts.Intervals.SpeedTestTimeout;
+            var maxTimeout = timeout > 0 ? timeout : VgcApis.Models.Consts.Intervals.SpeedTestTimeout;
 
             long elasped = long.MaxValue;
             Stopwatch sw = new Stopwatch();
@@ -972,7 +972,7 @@ namespace V2RayGCon.Lib
             {
                 if (proxyPort > 0 && proxyPort < 65536)
                 {
-                    wc.Proxy = new WebProxy("127.0.0.1", proxyPort);
+                    wc.Proxy = new WebProxy(VgcApis.Models.Consts.Webs.LoopBackIP, proxyPort);
                 }
 
                 AutoResetEvent dlCompleted = new AutoResetEvent(false);
@@ -1240,7 +1240,7 @@ namespace V2RayGCon.Lib
 
         public static bool TryParseIPAddr(string address, out string ip, out int port)
         {
-            ip = "127.0.0.1";
+            ip = VgcApis.Models.Consts.Webs.LoopBackIP;
             port = 1080;
 
             int index = address.LastIndexOf(':');
