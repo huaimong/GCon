@@ -196,6 +196,15 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Click help button to see release note. 的本地化字符串。
+        /// </summary>
+        internal static string ClickHelpToSeeReleaseNote {
+            get {
+                return ResourceManager.GetString("ClickHelpToSeeReleaseNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Config Editor 的本地化字符串。
         /// </summary>
         internal static string ConfigEditor {
@@ -387,8 +396,7 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Newer V2RayGCon v{0} is available, upgrade now?
-        ///Click help button to see release note. 的本地化字符串。
+        ///   查找类似 Newer V2RayGCon v{0} is available, upgrade now? 的本地化字符串。
         /// </summary>
         internal static string ConfirmUpgradeVgc {
             get {
@@ -1485,6 +1493,15 @@ namespace V2RayGCon.Resource.Resx {
         internal static string UnsetPortableModeFail {
             get {
                 return ResourceManager.GetString("UnsetPortableModeFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Checking for update, please wait... 的本地化字符串。
+        /// </summary>
+        internal static string UpdatingPleaseWait {
+            get {
+                return ResourceManager.GetString("UpdatingPleaseWait", resourceCulture);
             }
         }
         

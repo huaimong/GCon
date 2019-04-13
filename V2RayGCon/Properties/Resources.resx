@@ -193,8 +193,7 @@
     <comment>auto updater version/latest.json</comment>
   </data>
   <data name="ReleaseNoteKeyWord" xml:space="preserve">
-    <value>最近发布记录</value>
-    <comment>"最近发布记录"</comment>
+    <value>update-logs</value>
   </data>
   <data name="ReleaseNoteUrl" xml:space="preserve">
     <value>https://github.com/UudrSgMEZ/V2RayGCon/wiki/Release-notes</value>

@@ -11,6 +11,7 @@ namespace V2RayGCon.Service
     {
         Setting setting;
         Servers servers;
+        Updater updater;
 
         bool isCleanupDone = false;
         List<IDisposable> services = new List<IDisposable>();
@@ -22,6 +23,8 @@ namespace V2RayGCon.Service
         {
             setting = Setting.Instance;
             servers = Servers.Instance;
+            updater = Updater.Instance;
+
             SetCulture(setting.culture);
 
             Prepare();
@@ -37,6 +40,18 @@ namespace V2RayGCon.Service
             else
             {
                 servers.WakeupServersInBootList();
+            }
+
+            if (setting.isCheckUpdateWhenAppStart)
+            {
+                VgcApis.Libs.Utils.RunInBackground(() =>
+                {
+#if DEBUG
+#else
+                    Thread.Sleep(VgcApis.Models.Consts.Webs.CheckForUpdateDelay);
+#endif
+                    updater.CheckForUpdate(false);
+                });
             }
 
 #if DEBUG
@@ -83,6 +98,7 @@ namespace V2RayGCon.Service
 
             // by dispose order
             services = new List<IDisposable> {
+                updater,
                 slinkMgr,
                 configMgr,
                 pluginsServ,
@@ -98,6 +114,7 @@ namespace V2RayGCon.Service
             configMgr.Run(setting, cache, servers);
             notifier.Run(setting, servers, slinkMgr);
             pluginsServ.Run(setting, servers, configMgr, slinkMgr, notifier);
+            updater.Run(setting, servers, notifier);
         }
 
         void BindEvents()

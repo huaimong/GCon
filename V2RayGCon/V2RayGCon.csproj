@@ -129,6 +129,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Data\UpdateInfo.cs" />
     <Compile Include="Service\Caches\JsonAcm.cs" />
     <Compile Include="Controller\ConfigerComponent\MenuUpdater.cs" />
     <Compile Include="Controller\CoreServerComponent\Configer.cs" />
@@ -174,7 +175,6 @@
     <Compile Include="Controller\ConfigerComponent\ConfigerComponentController.cs" />
     <Compile Include="Model\Data\PluginInfoItem.cs" />
     <Compile Include="Model\Data\ServerTracker.cs" />
-    <Compile Include="Model\Data\UpdateInfo.cs" />
     <Compile Include="Model\Data\UserSettings.cs" />
     <Compile Include="Lib\V2Ray\Core.cs" />
     <Compile Include="Model\BaseClass\ICacheComponent.cs" />
@@ -201,6 +201,7 @@
     <Compile Include="Service\ShareLinkComponents\SsDecoder.cs" />
     <Compile Include="Service\ShareLinkComponents\V2cfgDecoder.cs" />
     <Compile Include="Service\ShareLinkMgr.cs" />
+    <Compile Include="Service\Updater.cs" />
     <Compile Include="Views\UserControls\ImportUI.cs">
       <SubType>UserControl</SubType>
     </Compile>

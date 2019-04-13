@@ -303,8 +303,7 @@ Load new config?</value>
     <value>Download cancelled!</value>
   </data>
   <data name="ConfirmUpgradeVgc" xml:space="preserve">
-    <value>Newer V2RayGCon v{0} is available, upgrade now?
-Click help button to see release note.</value>
+    <value>Newer V2RayGCon v{0} is available, upgrade now?</value>
   </data>
   <data name="GetVGCVerFail" xml:space="preserve">
     <value>Get V2RayGCon latest version number fail!</value>
@@ -643,5 +642,11 @@ Switch to direct download.</value>
   </data>
   <data name="ConfirmClearLog" xml:space="preserve">
     <value>Are you sure to clear logs?</value>
+  </data>
+  <data name="UpdatingPleaseWait" xml:space="preserve">
+    <value>Checking for update, please wait...</value>
+  </data>
+  <data name="ClickHelpToSeeReleaseNote" xml:space="preserve">
+    <value>Click help button to see release note.</value>
   </data>
 </root>

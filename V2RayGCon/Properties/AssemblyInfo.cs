@@ -31,10 +31,11 @@ using System.Runtime.InteropServices;
 // 可以指定所有值，也可以使用以下所示的 "*" 预置版本号和修订号
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.12.3")]
+[assembly: AssemblyVersion("1.1.12.4")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 /*
+ * v1.1.12.4 Supports auto-update.
  * v1.1.12.3 Fix bugs in subscription updating.
  * v1.1.12.2 Fix ProxySetter may not work in veeeery old windows 7.
  * v1.1.12.1 Refactoring.

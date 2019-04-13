@@ -81,12 +81,12 @@ namespace V2RayGCon.Service
             }
         }
 
-        public bool isUpdateToVgcFull
+        public bool isCheckUpdateWhenAppStart
         {
-            get => userSettings.isUpdateToVgcFull;
+            get => userSettings.isCheckUpdateWhenAppStart;
             set
             {
-                userSettings.isUpdateToVgcFull = value;
+                userSettings.isCheckUpdateWhenAppStart = value;
                 LazySaveUserSettings();
             }
         }

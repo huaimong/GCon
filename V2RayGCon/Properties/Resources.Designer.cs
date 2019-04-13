@@ -224,7 +224,7 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 最近发布记录 的本地化字符串。
+        ///   查找类似 update-logs 的本地化字符串。
         /// </summary>
         internal static string ReleaseNoteKeyWord {
             get {
