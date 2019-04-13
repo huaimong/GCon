@@ -1377,12 +1377,13 @@ namespace V2RayGCon.Lib
         /*
          * ChainActionHelper loops from [count - 1] to [0]
          * 
-         * These integers will pass into function worker 
-         * through the first parameter,
-         * which is index in this example one by one.
+         * These integers, which is index in this example,
+         * will be transfered into worker function one by one.
          * 
-         * The second parameter (next) of function worker
-         * is generated automatically for chaining up these actions.
+         * The second parameter "next" is generated automatically
+         * for chaining up all workers.
+         * 
+         * e.g. 
          * 
          * Action<int,Action> worker = (index, next)=>{
          * 
