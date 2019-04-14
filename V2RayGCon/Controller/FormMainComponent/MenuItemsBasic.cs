@@ -8,6 +8,7 @@ namespace V2RayGCon.Controller.FormMainComponent
     {
         Service.Servers servers;
         Service.ShareLinkMgr slinkMgr;
+        Service.Updater updater;
 
         public MenuItemsBasic(
             ToolStripMenuItem miSimVmessServer,
@@ -21,14 +22,16 @@ namespace V2RayGCon.Controller.FormMainComponent
             ToolStripMenuItem miFormLog,
             ToolStripMenuItem miFormOptions,
             ToolStripMenuItem miDownloadV2rayCore,
-            ToolStripMenuItem miRemoveV2rayCore)
+            ToolStripMenuItem miRemoveV2rayCore,
+            ToolStripMenuItem miCheckVgcUpdate)
         {
             servers = Service.Servers.Instance;
             slinkMgr = Service.ShareLinkMgr.Instance;
+            updater = Service.Updater.Instance;
 
             InitMenuFile(miSimVmessServer, miImportLinkFromClipboard, miExportAllServer, miImportFromFile);
             InitMenuWindows(miFormConfigEditor, miFormQRCode, miFormLog, miFormOptions);
-            InitMenuAbout(miAbout, miHelp, miDownloadV2rayCore, miRemoveV2rayCore);
+            InitMenuAbout(miAbout, miHelp, miDownloadV2rayCore, miRemoveV2rayCore, miCheckVgcUpdate);
         }
 
         #region public method
@@ -77,7 +80,12 @@ namespace V2RayGCon.Controller.FormMainComponent
         #region private method
 
 
-        private void InitMenuAbout(ToolStripMenuItem aboutVGC, ToolStripMenuItem help, ToolStripMenuItem downloadV2rayCore, ToolStripMenuItem removeV2rayCore)
+        private void InitMenuAbout(
+            ToolStripMenuItem aboutVGC,
+            ToolStripMenuItem help,
+            ToolStripMenuItem downloadV2rayCore,
+            ToolStripMenuItem removeV2rayCore,
+            ToolStripMenuItem miCheckVgcUpdate)
         {
             // menu about
             downloadV2rayCore.Click += (s, a) => Views.WinForms.FormDownloadCore.GetForm();
@@ -89,6 +97,8 @@ namespace V2RayGCon.Controller.FormMainComponent
 
             help.Click += (s, a) =>
                 Lib.UI.VisitUrl(I18N.VistWikiPage, Properties.Resources.WikiLink);
+
+            miCheckVgcUpdate.Click += (s, a) => updater.CheckForUpdate(true);
         }
 
         private void InitMenuFile(ToolStripMenuItem simVmessServer, ToolStripMenuItem importLinkFromClipboard, ToolStripMenuItem exportAllServer, ToolStripMenuItem importFromFile)

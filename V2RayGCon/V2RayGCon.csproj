@@ -149,7 +149,6 @@
     <Compile Include="Controller\FormMainComponent\MenuItemsSelect.cs" />
     <Compile Include="Controller\FormMainComponent\MenuItemsServer.cs" />
     <Compile Include="Controller\FormMainComponent\MenuItemsBasic.cs" />
-    <Compile Include="Controller\FormMainComponent\MenuItemVgcAutoUpdate.cs" />
     <Compile Include="Controller\FormMainCtrl.cs" />
     <Compile Include="Controller\ConfigerComponent\Quick.cs" />
     <Compile Include="Controller\OptionComponent\OptionComponentController.cs" />
