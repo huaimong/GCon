@@ -99,22 +99,22 @@ namespace V2RayGCon.Service
             // by dispose order
             services = new List<IDisposable> {
                 updater,
-                slinkMgr,
-                configMgr,
                 pluginsServ,
                 notifier,
+                slinkMgr,
                 servers,
+                configMgr,
                 setting,
             };
 
             // dependency injection
             cache.Run(setting);
-            slinkMgr.Run(setting, servers, cache);
-            servers.Run(setting, cache, configMgr);
             configMgr.Run(setting, cache, servers);
+            servers.Run(setting, cache, configMgr);
+            slinkMgr.Run(setting, servers, cache);
             notifier.Run(setting, servers, slinkMgr);
             pluginsServ.Run(setting, servers, configMgr, slinkMgr, notifier);
-            updater.Run(setting, servers, notifier);
+            updater.Run(setting, servers);
         }
 
         void BindEvents()

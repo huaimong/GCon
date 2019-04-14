@@ -13,7 +13,6 @@ namespace V2RayGCon.Service
     {
         Setting setting;
         Servers servers;
-        Notifier notifier;
 
         VgcApis.Libs.Tasks.Bar updateBar = new VgcApis.Libs.Tasks.Bar();
         readonly string LoopBackIP = VgcApis.Models.Consts.Webs.LoopBackIP;
@@ -37,10 +36,8 @@ namespace V2RayGCon.Service
 
         public void Run(
             Setting setting,
-            Servers servers,
-            Notifier notifier)
+            Servers servers)
         {
-            this.notifier = notifier;
             this.setting = setting;
             this.servers = servers;
             InitAutoUpdater();
