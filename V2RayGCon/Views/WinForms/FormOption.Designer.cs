@@ -41,10 +41,9 @@
             this.flySubsUrlContainer = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageSetting = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.rbtnIdontCare = new System.Windows.Forms.RadioButton();
-            this.rbtnSetUpgradeToVgcFull = new System.Windows.Forms.RadioButton();
-            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.chkSetCheckWhenStart = new System.Windows.Forms.CheckBox();
             this.chkSetUpgradeUseProxy = new System.Windows.Forms.CheckBox();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.chkSetUseV4 = new System.Windows.Forms.CheckBox();
             this.chkSetSysPortable = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -158,35 +157,17 @@
             // groupBox2
             // 
             resources.ApplyResources(this.groupBox2, "groupBox2");
-            this.groupBox2.Controls.Add(this.rbtnIdontCare);
-            this.groupBox2.Controls.Add(this.rbtnSetUpgradeToVgcFull);
+            this.groupBox2.Controls.Add(this.chkSetCheckWhenStart);
+            this.groupBox2.Controls.Add(this.chkSetUpgradeUseProxy);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.TabStop = false;
             // 
-            // rbtnIdontCare
+            // chkSetCheckWhenStart
             // 
-            resources.ApplyResources(this.rbtnIdontCare, "rbtnIdontCare");
-            this.rbtnIdontCare.Checked = true;
-            this.rbtnIdontCare.Name = "rbtnIdontCare";
-            this.rbtnIdontCare.TabStop = true;
-            this.toolTip1.SetToolTip(this.rbtnIdontCare, resources.GetString("rbtnIdontCare.ToolTip"));
-            this.rbtnIdontCare.UseVisualStyleBackColor = true;
-            // 
-            // rbtnSetUpgradeToVgcFull
-            // 
-            resources.ApplyResources(this.rbtnSetUpgradeToVgcFull, "rbtnSetUpgradeToVgcFull");
-            this.rbtnSetUpgradeToVgcFull.Name = "rbtnSetUpgradeToVgcFull";
-            this.toolTip1.SetToolTip(this.rbtnSetUpgradeToVgcFull, resources.GetString("rbtnSetUpgradeToVgcFull.ToolTip"));
-            this.rbtnSetUpgradeToVgcFull.UseVisualStyleBackColor = true;
-            // 
-            // groupBox6
-            // 
-            resources.ApplyResources(this.groupBox6, "groupBox6");
-            this.groupBox6.Controls.Add(this.chkSetUpgradeUseProxy);
-            this.groupBox6.Controls.Add(this.chkSetUseV4);
-            this.groupBox6.Controls.Add(this.chkSetSysPortable);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.TabStop = false;
+            resources.ApplyResources(this.chkSetCheckWhenStart, "chkSetCheckWhenStart");
+            this.chkSetCheckWhenStart.Name = "chkSetCheckWhenStart";
+            this.toolTip1.SetToolTip(this.chkSetCheckWhenStart, resources.GetString("chkSetCheckWhenStart.ToolTip"));
+            this.chkSetCheckWhenStart.UseVisualStyleBackColor = true;
             // 
             // chkSetUpgradeUseProxy
             // 
@@ -194,6 +175,14 @@
             this.chkSetUpgradeUseProxy.Name = "chkSetUpgradeUseProxy";
             this.toolTip1.SetToolTip(this.chkSetUpgradeUseProxy, resources.GetString("chkSetUpgradeUseProxy.ToolTip"));
             this.chkSetUpgradeUseProxy.UseVisualStyleBackColor = true;
+            // 
+            // groupBox6
+            // 
+            resources.ApplyResources(this.groupBox6, "groupBox6");
+            this.groupBox6.Controls.Add(this.chkSetUseV4);
+            this.groupBox6.Controls.Add(this.chkSetSysPortable);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.TabStop = false;
             // 
             // chkSetUseV4
             // 
@@ -392,10 +381,9 @@
         private System.Windows.Forms.FlowLayoutPanel flyPluginsItemsContainer;
         private System.Windows.Forms.CheckBox chkSetServStatistics;
         private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.RadioButton rbtnIdontCare;
-        private System.Windows.Forms.RadioButton rbtnSetUpgradeToVgcFull;
         private System.Windows.Forms.CheckBox chkSetUpgradeUseProxy;
         private System.Windows.Forms.CheckBox chkSubsIsUseProxy;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox chkSetCheckWhenStart;
     }
 }

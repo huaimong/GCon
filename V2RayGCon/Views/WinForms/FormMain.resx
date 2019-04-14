@@ -1011,9 +1011,6 @@
   <data name="toolMenuItemCheckUpdate.Text" xml:space="preserve">
     <value>Check V2RayGCon update</value>
   </data>
-  <data name="toolMenuItemCheckUpdate.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
   <data name="toolMenuItemAbout.Size" type="System.Drawing.Size, System.Drawing">
     <value>286, 30</value>
   </data>
@@ -1025,9 +1022,6 @@
   </data>
   <data name="toolMenuItemHelp.Text" xml:space="preserve">
     <value>Help</value>
-  </data>
-  <data name="toolMenuItemHelp.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
   </data>
   <data name="aboutToolStripMenuItem1.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 22</value>

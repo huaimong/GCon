@@ -65,12 +65,16 @@ namespace ProxySetter.Views.WinForms
         void UpdateSysProxyInfo(object sender, EventArgs args)
         {
             var proxySetting = Lib.Sys.ProxySetter.GetProxySetting();
-            var proxyUrl = proxySetting.autoConfigUrl;
-            if (string.IsNullOrEmpty(proxyUrl))
+            string proxyUrl = "Direct";
+
+            switch (proxySetting.proxyMode)
             {
-                proxyUrl = proxySetting.proxyEnable ?
-                    "http://" + proxySetting.proxyServer :
-                    "Direct";
+                case (int)Lib.Sys.WinInet.ProxyModes.PAC:
+                    proxyUrl = proxySetting.pacUrl;
+                    break;
+                case (int)Lib.Sys.WinInet.ProxyModes.Proxy:
+                    proxyUrl = "http://" + proxySetting.proxyAddr;
+                    break;
             }
 
             if (lbBasicProxyLink.Text != proxyUrl)

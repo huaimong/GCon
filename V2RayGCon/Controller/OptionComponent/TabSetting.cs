@@ -12,8 +12,8 @@ namespace V2RayGCon.Controller.OptionComponent
             chkPortableMode = null,
             chkSetUseV4 = null,
             chkSetEnableStat = null,
-            chkSetUpdateUseProxy = null;
-        RadioButton rbtnSetUpdateVgcFull = null;
+            chkSetUpdateUseProxy = null,
+            chkSetCheckWhenAppStart = null;
 
         public TabSetting(
             ComboBox cboxLanguage,
@@ -22,8 +22,8 @@ namespace V2RayGCon.Controller.OptionComponent
             CheckBox chkPortableMode,
             CheckBox chkSetUseV4,
             CheckBox chkSetEnableStat,
-            RadioButton rbtnSetUpdateVgcFull,
-            CheckBox chkSetUpdateUseProxy)
+            CheckBox chkSetUpdateUseProxy,
+            CheckBox chkSetCheckWhenAppStart)
         {
             this.setting = Service.Setting.Instance;
             this.servers = Service.Servers.Instance;
@@ -35,7 +35,7 @@ namespace V2RayGCon.Controller.OptionComponent
             this.chkPortableMode = chkPortableMode;
             this.chkSetUseV4 = chkSetUseV4;
             this.chkSetEnableStat = chkSetEnableStat;
-            this.rbtnSetUpdateVgcFull = rbtnSetUpdateVgcFull;
+            this.chkSetCheckWhenAppStart = chkSetCheckWhenAppStart;
             this.chkSetUpdateUseProxy = chkSetUpdateUseProxy;
 
             InitElement();
@@ -44,7 +44,8 @@ namespace V2RayGCon.Controller.OptionComponent
         private void InitElement()
         {
             chkSetUpdateUseProxy.Checked = setting.isUpdateUseProxy;
-            rbtnSetUpdateVgcFull.Checked = setting.isUpdateToVgcFull;
+            chkSetCheckWhenAppStart.Checked = setting.isCheckUpdateWhenAppStart;
+
             chkSetEnableStat.Checked = setting.isEnableStatistics;
             chkSetUseV4.Checked = setting.isUseV4;
             chkPortableMode.Checked = setting.isPortable;
@@ -90,7 +91,7 @@ namespace V2RayGCon.Controller.OptionComponent
             }
 
             setting.isUpdateUseProxy = chkSetUpdateUseProxy.Checked;
-            setting.isUpdateToVgcFull = rbtnSetUpdateVgcFull.Checked;
+            setting.isCheckUpdateWhenAppStart = chkSetCheckWhenAppStart.Checked;
             setting.isPortable = chkPortableMode.Checked;
             setting.isUseV4 = chkSetUseV4.Checked;
 
@@ -106,7 +107,7 @@ namespace V2RayGCon.Controller.OptionComponent
         {
             if (setting.isUseV4 != chkSetUseV4.Checked
                 || setting.isUpdateUseProxy != chkSetUpdateUseProxy.Checked
-                || setting.isUpdateToVgcFull != rbtnSetUpdateVgcFull.Checked
+                || setting.isCheckUpdateWhenAppStart != chkSetCheckWhenAppStart.Checked
                 || setting.isEnableStatistics != chkSetEnableStat.Checked
                 || setting.isPortable != chkPortableMode.Checked
                 || Lib.Utils.Str2Int(cboxPageSize.Text) != setting.serverPanelPageSize)

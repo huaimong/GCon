@@ -15,7 +15,7 @@ namespace V2RayGCon.Model.Data
         public bool isUseV4Format { get; set; }
         public bool CfgShowToolPanel { get; set; }
         public bool isPortable { get; set; }
-        public bool isUpdateToVgcFull { get; set; }
+        public bool isCheckUpdateWhenAppStart { get; set; }
         public bool isUpdateUseProxy { get; set; }
 
         public string ImportUrls { get; set; }
@@ -37,11 +37,7 @@ namespace V2RayGCon.Model.Data
         {
             ServerPanelPageSize = 7;
 
-#if V2RAYGCON_LITE
-            isUpdateToVgcFull = false;
-#else
-            isUpdateToVgcFull = true;
-#endif
+            isCheckUpdateWhenAppStart = false;
 
             isUpdateUseProxy = false;
             isUseV4Format = true;

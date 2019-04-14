@@ -539,6 +539,8 @@ namespace V2RayGCon.Service
         public void UpdateAllServersSummarySync()
         {
             var list = coreServList;
+            AutoResetEvent isFinished = new AutoResetEvent(false);
+
             void worker(int index, Action next)
             {
                 try
@@ -558,9 +560,11 @@ namespace V2RayGCon.Service
                 serverSaver.DoItLater();
                 RequireFormMainUpdate();
                 InvokeEventOnRequireMenuUpdate(this, EventArgs.Empty);
+                isFinished.Set();
             }
 
             Lib.Utils.ChainActionHelper(list.Count, worker, done);
+            isFinished.WaitOne();
         }
 
         public void UpdateAllServersSummaryBg()
@@ -607,29 +611,38 @@ namespace V2RayGCon.Service
 
         public bool AddServer(string config, string mark, bool quiet = false)
         {
-            // duplicate
-
+            // first check
             if (IsServerExist(config))
             {
                 return false;
             }
 
-            var coreInfo = new VgcApis.Models.Datas.CoreInfo
-            {
-                config = config,
-                customMark = mark,
-            };
+            var newServer = new Controller.CoreServerCtrl(
+                new VgcApis.Models.Datas.CoreInfo
+                {
+                    config = config,
+                    customMark = mark,
+                });
+            newServer.Run(cache, setting, configMgr, this);
 
-            var newServer = new Controller.CoreServerCtrl(coreInfo);
+            bool duplicated = true;
             lock (serverListWriteLock)
             {
-                coreServList.Add(newServer);
+                // double check
+                if (!IsServerExist(config))
+                {
+                    coreServList.Add(newServer);
+                    duplicated = false;
+                }
             }
 
-            newServer.Run(cache, setting, configMgr, this);
+            if (duplicated)
+            {
+                newServer.Dispose();
+                return false;
+            }
+
             BindEventsTo(newServer);
-
-
             if (!quiet)
             {
                 newServer.GetConfiger().UpdateSummaryThen(() =>
@@ -638,7 +651,6 @@ namespace V2RayGCon.Service
                     RequireFormMainUpdate();
                 });
             }
-
             setting.LazyGC();
             serverSaver.DoItLater();
             return true;

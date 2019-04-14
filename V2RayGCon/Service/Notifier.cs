@@ -56,6 +56,9 @@ namespace V2RayGCon.Service
         }
 
         #region public method
+        public void RunInUiThread(Action updater) =>
+            VgcApis.Libs.UI.RunInUiThread(ni.ContextMenuStrip, updater);
+
 #if DEBUG
         public void InjectDebugMenuItem(ToolStripMenuItem menu)
         {
@@ -86,8 +89,7 @@ namespace V2RayGCon.Service
         #endregion
 
         #region private method
-        void RunInUiThread(Action updater) =>
-            VgcApis.Libs.UI.RunInUiThread(ni.ContextMenuStrip, updater);
+
 
         private void RemoveOldPluginMenu()
         {

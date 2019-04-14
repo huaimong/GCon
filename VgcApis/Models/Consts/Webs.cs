@@ -2,6 +2,13 @@
 {
     public static class Webs
     {
+        public static int CheckForUpdateDelay = 15 * 1000;
+
+        public static string ReleaseDownloadUrlTpl =
+            @"https://github.com/UudrSgMEZ/V2RayGCon/releases/download/{0}/V2RayGCon.zip";
+
+        public static string LoopBackIP = System.Net.IPAddress.Loopback.ToString();
+
         public const string FakeRequestUrl = @"http://localhost:3000/pac/?&t=abc1234";
         public const string GoogleDotCom = @"https://www.google.com";
 

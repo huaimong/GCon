@@ -54,8 +54,10 @@
     <Compile Include="CancelableTaskTests.cs" />
     <Compile Include="PacTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WinInetTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

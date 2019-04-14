@@ -185,7 +185,8 @@
             this.cboxBasicSysProxyMode.Items.AddRange(new object[] {
             resources.GetString("cboxBasicSysProxyMode.Items"),
             resources.GetString("cboxBasicSysProxyMode.Items1"),
-            resources.GetString("cboxBasicSysProxyMode.Items2")});
+            resources.GetString("cboxBasicSysProxyMode.Items2"),
+            resources.GetString("cboxBasicSysProxyMode.Items3")});
             this.cboxBasicSysProxyMode.Name = "cboxBasicSysProxyMode";
             this.toolTip1.SetToolTip(this.cboxBasicSysProxyMode, resources.GetString("cboxBasicSysProxyMode.ToolTip"));
             // 
