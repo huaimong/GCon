@@ -1,14 +1,11 @@
 {
-  "version": "1.1.12.0",
-  "md5": "4d005094cc80d05ea7c806be30b12160",
+  "version": "1.1.13.0",
+  "md5": "d316ca9c68862dbc66dc991dfdaf925b",
   "warnings": [
-      "This is a test update information.",
-      "这只是个测试信息",
   ],
   "changes": [
-      "Fix a program-crash issue when auto-tracking option changes.",
-      "Add icons for plug-in.",
-      "Sort section names by numeric value in FormConfiger.",
-      "Group servers by 30 in the menu of FormConfiger."
+      "Re-support auto-update.",
+      "Fix bugs of subscription.",
+      "ProxySetter plug-in supports veeeery old windows 7 system."
   ]
 }
