@@ -90,15 +90,6 @@ namespace V2RayGCon.Properties {
         }
         
         /// <summary>
-        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon/wiki/V2RayGCon-update-log 的本地化字符串。
-        /// </summary>
-        internal static string ChangeLogUrl {
-            get {
-                return ResourceManager.GetString("ChangeLogUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
         internal static System.Drawing.Bitmap CloseSolution_16x {
@@ -220,24 +211,6 @@ namespace V2RayGCon.Properties {
         internal static string ProjectLink {
             get {
                 return ResourceManager.GetString("ProjectLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 update-logs 的本地化字符串。
-        /// </summary>
-        internal static string ReleaseNoteKeyWord {
-            get {
-                return ResourceManager.GetString("ReleaseNoteKeyWord", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查找类似 https://github.com/UudrSgMEZ/V2RayGCon/wiki/Release-notes 的本地化字符串。
-        /// </summary>
-        internal static string ReleaseNoteUrl {
-            get {
-                return ResourceManager.GetString("ReleaseNoteUrl", resourceCulture);
             }
         }
         

@@ -637,7 +637,10 @@ https://github.com/v2ray/v2ray-core</value>
   <data name="UpdatingPleaseWait" xml:space="preserve">
     <value>正在检查更新，请稍等！</value>
   </data>
-  <data name="ClickHelpToSeeReleaseNote" xml:space="preserve">
-    <value>点"帮助"按钮查看发布说明。</value>
+  <data name="ChangesColon" xml:space="preserve">
+    <value>变动：</value>
+  </data>
+  <data name="WarningColon" xml:space="preserve">
+    <value>警告：</value>
   </data>
 </root>

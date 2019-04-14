@@ -196,11 +196,11 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Click help button to see release note. 的本地化字符串。
+        ///   查找类似 Changes: 的本地化字符串。
         /// </summary>
-        internal static string ClickHelpToSeeReleaseNote {
+        internal static string ChangesColon {
             get {
-                return ResourceManager.GetString("ClickHelpToSeeReleaseNote", resourceCulture);
+                return ResourceManager.GetString("ChangesColon", resourceCulture);
             }
         }
         
@@ -1584,6 +1584,15 @@ namespace V2RayGCon.Resource.Resx {
         internal static string WarnIENotSupportPac {
             get {
                 return ResourceManager.GetString("WarnIENotSupportPac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Warning: 的本地化字符串。
+        /// </summary>
+        internal static string WarningColon {
+            get {
+                return ResourceManager.GetString("WarningColon", resourceCulture);
             }
         }
         

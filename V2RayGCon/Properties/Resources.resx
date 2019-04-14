@@ -184,19 +184,8 @@
   <data name="Module_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resource\Icon\TaskTray\Module_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ChangeLogUrl" xml:space="preserve">
-    <value>https://github.com/UudrSgMEZ/V2RayGCon/wiki/V2RayGCon-update-log</value>
-    <comment>auto updater need this</comment>
-  </data>
   <data name="LatestVersionInfoUrl" xml:space="preserve">
     <value>https://raw.githubusercontent.com/UudrSgMEZ/V2RayGCon/version/latest.json</value>
     <comment>auto updater version/latest.json</comment>
-  </data>
-  <data name="ReleaseNoteKeyWord" xml:space="preserve">
-    <value>update-logs</value>
-  </data>
-  <data name="ReleaseNoteUrl" xml:space="preserve">
-    <value>https://github.com/UudrSgMEZ/V2RayGCon/wiki/Release-notes</value>
-    <comment>github wiki release note</comment>
   </data>
 </root>

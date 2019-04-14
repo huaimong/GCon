@@ -646,7 +646,10 @@ Switch to direct download.</value>
   <data name="UpdatingPleaseWait" xml:space="preserve">
     <value>Checking for update, please wait...</value>
   </data>
-  <data name="ClickHelpToSeeReleaseNote" xml:space="preserve">
-    <value>Click help button to see release note.</value>
+  <data name="ChangesColon" xml:space="preserve">
+    <value>Changes:</value>
+  </data>
+  <data name="WarningColon" xml:space="preserve">
+    <value>Warning:</value>
   </data>
 </root>

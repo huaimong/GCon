@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Net;
+using System.Text;
 using System.Windows.Forms;
 using V2RayGCon.Resource.Resx;
 
@@ -16,6 +17,7 @@ namespace V2RayGCon.Service
 
         VgcApis.Libs.Tasks.Bar updateBar = new VgcApis.Libs.Tasks.Bar();
         readonly string LoopBackIP = VgcApis.Models.Consts.Webs.LoopBackIP;
+        Model.Data.UpdateInfo rawUpdateInfo = null;
 
         Updater() { }
 
@@ -47,7 +49,7 @@ namespace V2RayGCon.Service
 
         #region private methods
         bool flagShowErrorWithMsgbox = true;
-        bool CheckArgs(UpdateInfoEventArgs args)
+        bool CheckUpdateInfoArgs(UpdateInfoEventArgs args)
         {
             if (args != null && args.IsUpdateAvailable)
             {
@@ -80,8 +82,8 @@ namespace V2RayGCon.Service
 
         void AutoUpdaterOnCheckForUpdateEvent(UpdateInfoEventArgs args)
         {
-            if (!CheckArgs(args)
-                || !ConfirmUpdate(args.CurrentVersion.ToString()))
+            if (!CheckUpdateInfoArgs(args)
+                || !ConfirmUpdate())
             {
                 updateBar.Remove();
                 return;
@@ -105,47 +107,53 @@ namespace V2RayGCon.Service
             }
         }
 
-        bool ConfirmUpdate(string version)
+        bool ConfirmUpdate()
         {
-            var tag = Lib.Utils.TrimVersionString(version);
-            var msg = string.Format(I18N.ConfirmUpgradeVgc, tag);
-
-            if (!flagShowErrorWithMsgbox)
+            if (rawUpdateInfo == null)
             {
-                return VgcApis.Libs.UI.Confirm(msg);
+                return false;
             }
 
-            msg += Environment.NewLine + I18N.ClickHelpToSeeReleaseNote;
-            var result = MessageBox.Show(
-                msg,
-                I18N.Confirm,
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Information,
-                MessageBoxDefaultButton.Button2,
-                0,
-                Properties.Resources.ReleaseNoteUrl,
-                Properties.Resources.ReleaseNoteKeyWord);
-            return result == DialogResult.Yes;
+            var tag = Lib.Utils.TrimVersionString(rawUpdateInfo.version);
+            StringBuilder msg = new StringBuilder(
+                string.Format(I18N.ConfirmUpgradeVgc, tag));
+
+            var warnings = rawUpdateInfo.warnings;
+            var changes = rawUpdateInfo.changes;
+            var nl = Environment.NewLine;
+
+            if (warnings != null && warnings.Count > 0)
+            {
+                msg.Append(nl + nl + I18N.WarningColon + nl);
+                msg.Append(string.Join(nl, warnings));
+            }
+
+            if (changes != null && changes.Count > 0)
+            {
+                msg.Append(nl + nl + I18N.ChangesColon + nl);
+                msg.Append(string.Join(nl, changes));
+            }
+
+            return VgcApis.Libs.UI.Confirm(msg.ToString());
         }
 
         void AutoUpdaterOnParseUpdateInfoEvent(ParseUpdateInfoEventArgs args)
         {
-            var updateInfo = JsonConvert
+            rawUpdateInfo = JsonConvert
                 .DeserializeObject<Model.Data.UpdateInfo>(
                     args.RemoteData);
 
             var url = string.Format(
                 VgcApis.Models.Consts.Webs.ReleaseDownloadUrlTpl,
-                Lib.Utils.TrimVersionString(updateInfo.version));
+                Lib.Utils.TrimVersionString(rawUpdateInfo.version));
 
             args.UpdateInfo = new UpdateInfoEventArgs
             {
-                CurrentVersion = new Version(updateInfo.version),
-                ChangelogURL = Properties.Resources.ChangeLogUrl,
+                CurrentVersion = new Version(rawUpdateInfo.version),
                 Mandatory = false,
                 DownloadURL = url,
                 HashingAlgorithm = "MD5",
-                Checksum = updateInfo.md5,
+                Checksum = rawUpdateInfo.md5,
             };
         }
 
