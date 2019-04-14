@@ -196,6 +196,15 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Changes: 的本地化字符串。
+        /// </summary>
+        internal static string ChangesColon {
+            get {
+                return ResourceManager.GetString("ChangesColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Config Editor 的本地化字符串。
         /// </summary>
         internal static string ConfigEditor {
@@ -387,8 +396,7 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
-        ///   查找类似 Newer V2RayGCon v{0} is available, upgrade now?
-        ///Click help button to see release note. 的本地化字符串。
+        ///   查找类似 Newer V2RayGCon v{0} is available, upgrade now? 的本地化字符串。
         /// </summary>
         internal static string ConfirmUpgradeVgc {
             get {
@@ -1489,6 +1497,15 @@ namespace V2RayGCon.Resource.Resx {
         }
         
         /// <summary>
+        ///   查找类似 Checking for update, please wait... 的本地化字符串。
+        /// </summary>
+        internal static string UpdatingPleaseWait {
+            get {
+                return ResourceManager.GetString("UpdatingPleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Use decode cache. 的本地化字符串。
         /// </summary>
         internal static string UsingDecodeCache {
@@ -1567,6 +1584,15 @@ namespace V2RayGCon.Resource.Resx {
         internal static string WarnIENotSupportPac {
             get {
                 return ResourceManager.GetString("WarnIENotSupportPac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Warning: 的本地化字符串。
+        /// </summary>
+        internal static string WarningColon {
+            get {
+                return ResourceManager.GetString("WarningColon", resourceCulture);
             }
         }
         

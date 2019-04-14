@@ -160,11 +160,8 @@ namespace V2RayGCon.Views.WinForms
                 toolMenuItemLog,
                 toolMenuItemOptions,
                 toolStripMenuItemDownLoadV2rayCore,
-                toolStripMenuItemRemoveV2rayCore));
-
-            ctrl.Plug(new Controller.FormMainComponent.MenuItemVgcAutoUpdate(
-                toolMenuItemCheckUpdate
-                ));
+                toolStripMenuItemRemoveV2rayCore,
+                toolMenuItemCheckUpdate));
 
             ctrl.Plug(new Controller.FormMainComponent.MenuItemsSelect(
                 /*
